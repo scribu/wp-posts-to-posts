@@ -10,9 +10,9 @@ Create connections between posts
 
 == Description ==
 
-This plugin allows you to create relationships between posts of different types.
+This plugin allows you to create relationships between posts of different types. The relationships are stored in the postmeta table.
 
-To create a relationship type, write:
+To register a connection type, write:
 
 `
 function my_connection_types() {
@@ -42,3 +42,5 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 = 0.1 =
 * initial release
+* [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-1.html)
+
