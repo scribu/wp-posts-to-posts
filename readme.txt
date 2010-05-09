@@ -20,8 +20,9 @@ function my_connection_types() {
 }
 add_action('init', 'my_connection_types', 100);
 `
+<br/>
 
-Refer to /api.php for available functions.
+See [available functions](http://plugins.trac.wordpress.org/browser/posts-to-posts/trunk/api.php).
 
 
 == Installation ==
