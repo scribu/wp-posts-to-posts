@@ -1,9 +1,13 @@
 <?php
 /*
 Plugin Name: Posts 2 Posts
-Plugin Author: scribu
-Description: Create connections between posts
 Version: 0.1
+Plugin Author: scribu
+Description: Create connections between posts of different types
+Author URI: http://scribu.net/
+Plugin URI: http://scribu.net/wordpress/posts-to-posts
+Text Domain: posts-to-posts
+Domain Path: /lang
 
 
 Copyright (C) 2010 scribu.net (scribu AT gmail DOT com)
