@@ -32,6 +32,10 @@ class scbUtil {
 		echo "</script>";
 	}
 
+	// Enable delayed activation (to be used with scb_init())
+	static function add_activation_hook($plugin, $callback) {
+		add_action('scb_activation_' . plugin_basename($plugin), $callback);
+	}
 
 	// Have more than one uninstall hooks; also prevents an UPDATE query on each page load
 	static function add_uninstall_hook($plugin, $callback) {

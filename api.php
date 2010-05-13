@@ -2,15 +2,21 @@
 
 function p2p_register_connection_type($post_type_a, $post_type_b, $bydirectional = false) {
 	if ( !$ptype = get_post_type_object($post_type_a) )
-		return false;
+		return;
 
-	$ptype->can_connect_to[] = $post_type_b;
-	$ptype->can_connect_to = array_unique($ptype->can_connect_to);
+	if ( empty($post_type_b) )
+		return;
 
-	if ( $bydirectional && $post_type_a != $post_type_b )
-		p2p_register_connection_type($post_type_b, $post_type_a, false);
+	if ( empty($ptype->can_connect_to) )
+		$ptype->can_connect_to = array();
 
-	return true;
+	$post_type_b = (array) $post_type_b;
+
+	$ptype->can_connect_to = array_merge($ptype->can_connect_to, $post_type_b);
+
+	if ( $bydirectional )
+		foreach ( $post_type_b as $ptype_b )
+			p2p_register_connection_type($ptype_b, $post_type_a, false);
 }
 
 function p2p_get_connection_types($post_type_a) {
@@ -41,7 +47,15 @@ function p2p_is_connected($post_a, $post_b, $bydirectional = false) {
 	return $r;
 }
 
-function p2p_get_connected($direction, $post_id, $post_type = '') {
+function p2p_get_connected($post_type, $direction, $post_id) {
+	if ( empty($post_type) )
+		$post_type = 'any';
+
+	$post_id = absint($post_id);
+
+	if ( !$post_id || ('any' != $post_type && !is_post_type($post_type)) )
+		return false;
+
 	if ( 'to' == $direction ) {
 		$col_a = 'post_id';
 		$col_b = 'meta_value';
@@ -50,14 +64,9 @@ function p2p_get_connected($direction, $post_id, $post_type = '') {
 		$col_a = 'meta_value';
 	}
 
-	$post_id = absint($post_id);
-
-	if ( !$post_id || (!empty($post_type) && !is_post_type($post_type)) )
-		return false;
-
 	global $wpdb;
 
-	if ( !empty($post_type) ) {
+	if ( 'any' != $post_type ) {
 		$query = $wpdb->prepare("
 			SELECT $col_a
 			FROM $wpdb->postmeta

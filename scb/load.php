@@ -1,69 +1,82 @@
 <?php
-if ( !class_exists('scbLoad3') ) :
-class scbLoad3 {
+
+$GLOBALS['_scb_data'] = array(17, __FILE__, array(
+	'scbUtil', 'scbOptions', 'scbForms', 'scbTable', 'scbDebug',
+	'scbWidget', 'scbAdminPage', 'scbBoxesPage',
+	'scbQuery', 'scbRewrite', 'scbCron',
+));
+
+if ( !class_exists('scbLoad4') ) :
+class scbLoad4 {
 
 	private static $candidates;
+	private static $classes;
+	private static $callbacks;
+	
 	private static $loaded;
-	private static $initial_load;
 
-	static function init($rev, $file, $classes) {
-		if ( $path = get_option('scb-framework') && !self::$initial_load ) {
-			if ( $path != __FILE__ )
-				include $path;
-
-			self::$initial_load = true;
-		}
+	static function init($callback) {
+		list($rev, $file, $classes) = $GLOBALS['_scb_data'];
 
 		self::$candidates[$file] = $rev;
+		self::$classes[$file] = $classes;
+		self::$callbacks[$file] = $callback;
 
-		self::load(dirname($file) . '/', $classes);
+		add_action('activate_plugin',  array(__CLASS__, 'delayed_activation'));
 
-		add_action('deactivate_plugin', array(__CLASS__, 'deactivate'));
-		add_action('update_option_active_plugins', array(__CLASS__, 'reorder'));
+		// TODO: don't load when activating a plugin ?
+		add_action('plugins_loaded', array(__CLASS__, 'load'), 10, 0);
 	}
 
-	static function deactivate($plugin) {
-		$plugin = dirname($plugin);
-
-		if ( '.' == $plugin )
-			return;
-
-		foreach ( self::$candidates as $path => $rev )
-			if ( plugin_basename(dirname(dirname($path))) == $plugin )
-				unset(self::$candidates[$path]);
-	}
-
-	static function reorder() {
+	static function load($do_callbacks = true) {
 		arsort(self::$candidates);
 
-		update_option('scb-framework', key(self::$candidates));
-	}
+		$file = key(self::$candidates);
 
-	private static function load($path, $classes) {
-		foreach ( $classes as $class_name ) {
+		$path = dirname($file) . '/';
+
+		foreach ( self::$classes[$file] as $class_name ) {
 			if ( class_exists($class_name) )
 				continue;
-
+			
 			$fpath = $path . substr($class_name, 3) . '.php';
-
 			if ( file_exists($fpath) ) {
-				self::$loaded[$class_name] = $fpath;
 				include $fpath;
+				self::$loaded[] = $fpath;
 			}
 		}
+
+		if ( $do_callbacks )
+			foreach ( self::$callbacks as $callback )
+				call_user_func($callback);
+	}
+
+	static function delayed_activation($plugin) {
+		$plugin_dir = dirname($plugin);
+
+		if ( '.' == $plugin_dir )
+			return;
+
+		foreach ( self::$callbacks as $file => $callback )
+			if ( plugin_basename(dirname(dirname($file))) == $plugin_dir ) {
+				self::load(false);
+				call_user_func($callback);
+				do_action('scb_activation_' . $plugin);
+				return;
+			}
 	}
 
 	static function get_info() {
 		arsort(self::$candidates);
 
-		return array(get_option('scb-framework'), self::$loaded, self::$candidates);
+		return array(self::$loaded, self::$candidates);
 	}
 }
 endif;
 
-scbLoad3::init(14, __FILE__, array(
-	'scbUtil', 'scbOptions', 'scbForms', 'scbTable', 'scbDebug',
-	'scbWidget', 'scbAdminPage', 'scbBoxesPage',
-	'scbQuery', 'scbRewrite', 'scbCron',
-));
+if ( !function_exists('scb_init') ) :
+function scb_init($callback) {
+	scbLoad4::init($callback);
+}
+endif;
 

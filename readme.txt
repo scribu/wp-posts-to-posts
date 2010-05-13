@@ -1,10 +1,10 @@
 === Posts 2 Posts ===
 Contributors: scribu
 Donate link: http://scribu.net/paypal
-Tags: custom post types, relationships, graph, many-to-many
+Tags: custom post types, relationships, many-to-many
 Requires at least: 3.0
 Tested up to: 3.0
-Stable tag: trunk
+Stable tag: 0.1
 
 Create connections between posts
 
@@ -20,7 +20,7 @@ function my_connection_types() {
 }
 add_action('init', 'my_connection_types', 100);
 `
-<br/>
+<br>
 
 See [available functions](http://plugins.trac.wordpress.org/browser/posts-to-posts/trunk/api.php).
 
