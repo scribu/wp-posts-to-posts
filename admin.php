@@ -2,9 +2,17 @@
 
 class P2P_Box {
 
-	function init() {
+	function init($file) {
 		add_action('add_meta_boxes', array(__CLASS__, 'register'));
 		add_action('save_post', array(__CLASS__, 'save'), 10, 2);
+
+		scbUtil::add_uninstall_hook($file, array(__CLASS__, 'uninstall'));
+	}
+
+	function uninstall() {
+		global $wpdb;
+
+		var_dump($wpdb->query("DELETE FROM $wpdb->postmeta WHERE meta_key = '" . P2P_META_KEY . "'"));
 	}
 
 	function save($post_a, $post) {
@@ -44,7 +52,7 @@ class P2P_Box {
 
 			$out .= 
 			html('li', 
-				 get_post_type_object($post_type)->singular_label . ' '
+				 get_post_type_object($post_type)->labels->singular_name . ' '
 				.scbForms::input(array(
 					'type' => 'select',
 					'name' => "p2p[$post_type]",
@@ -68,5 +76,4 @@ class P2P_Box {
 		return scbUtil::objects_to_assoc(get_posts($args), 'ID', 'post_title');
 	}
 }
-P2P_Box::init();
 

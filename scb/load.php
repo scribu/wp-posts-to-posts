@@ -11,18 +11,21 @@ class scbLoad4 {
 
 	private static $candidates;
 	private static $classes;
-	private static $callbacks;
+	private static $callbacks = array();
 	
 	private static $loaded;
 
-	static function init($callback) {
+	static function init($callback = '') {
 		list($rev, $file, $classes) = $GLOBALS['_scb_data'];
 
 		self::$candidates[$file] = $rev;
 		self::$classes[$file] = $classes;
-		self::$callbacks[$file] = $callback;
 
-		add_action('activate_plugin',  array(__CLASS__, 'delayed_activation'));
+		if ( !empty($callback) ) {
+			self::$callbacks[$file] = $callback;
+
+			add_action('activate_plugin',  array(__CLASS__, 'delayed_activation'));
+		}
 
 		// TODO: don't load when activating a plugin ?
 		add_action('plugins_loaded', array(__CLASS__, 'load'), 10, 0);
@@ -62,7 +65,7 @@ class scbLoad4 {
 				self::load(false);
 				call_user_func($callback);
 				do_action('scb_activation_' . $plugin);
-				return;
+				break;
 			}
 	}
 
@@ -75,7 +78,7 @@ class scbLoad4 {
 endif;
 
 if ( !function_exists('scb_init') ) :
-function scb_init($callback) {
+function scb_init($callback = '') {
 	scbLoad4::init($callback);
 }
 endif;

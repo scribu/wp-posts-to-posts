@@ -28,15 +28,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 define('P2P_META_KEY', '_p2p');
 
-function _p2p_init() {
-	require dirname(__FILE__) . '/scb/load.php';
+require dirname(__FILE__) . '/scb/load.php';
 
+function _p2p_init() {
 	require dirname(__FILE__) . '/api.php';
 	require dirname(__FILE__) . '/template-tags.php';
 
 	if ( is_admin() ) {
 		require dirname(__FILE__) . '/admin.php';
+		P2P_Box::init(__FILE__);
 	}
 }
-_p2p_init();
+scb_init('_p2p_init');
 
