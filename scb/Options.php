@@ -139,7 +139,7 @@ class scbOptions {
 	}
 
 	// Get one, more or all fields from an array
-	private function _get($field, $data) {
+	private function &_get($field, $data) {
 		if ( empty($field) )
 			return $data;
 

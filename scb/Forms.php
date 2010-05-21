@@ -230,7 +230,7 @@ class scbForms {
 
 		if ( 'textarea' == $type ) {
 			$value = esc_html($value);
-			$input = "<textarea name='{$name}'{$extra}>\n{$value}\n</textarea>\n";
+			$input = "<textarea name='{$name}'{$extra}>{$value}</textarea>\n";
 		}
 		else {
 			$value = esc_attr($value);

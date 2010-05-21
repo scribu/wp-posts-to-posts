@@ -25,10 +25,10 @@ function p2p_get_connection_types($post_type_a) {
 
 
 function p2p_connect($post_a, $post_b, $bydirectional = false) {
-	add_post_meta($post_a, P2P_META_KEY, $post_b, true);
+	add_post_meta($post_a, P2P_META_KEY, $post_b);
 
 	if ( $bydirectional )
-		add_post_meta($post_b, P2P_META_KEY, $post_a, true);
+		add_post_meta($post_b, P2P_META_KEY, $post_a);
 }
 
 function p2p_disconnect($post_a, $post_b, $bydirectional = false) {
