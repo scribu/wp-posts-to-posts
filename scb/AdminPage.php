@@ -156,7 +156,7 @@ abstract class scbAdminPage {
 		$this->formdata = $this->validate($new_data, $this->formdata);
 
 		if ( isset($this->options) )
-			$this->options->update($this->formdata);
+			$this->options->set($this->formdata);
 
 		$this->admin_msg();
 	}

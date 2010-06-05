@@ -12,7 +12,7 @@ class P2P_Box {
 	function uninstall() {
 		global $wpdb;
 
-		var_dump($wpdb->query("DELETE FROM $wpdb->postmeta WHERE meta_key = '" . P2P_META_KEY . "'"));
+		$wpdb->query("DELETE FROM $wpdb->postmeta WHERE meta_key = '" . P2P_META_KEY . "'");
 	}
 
 	function save($post_a, $post) {
