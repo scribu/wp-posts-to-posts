@@ -1,0 +1,76 @@
+# Translation of the WordPress plugin Posts 2 Posts 0.2-alpha2 by scribu.
+# Copyright (C) 2010 scribu
+# This file is distributed under the same license as the Posts 2 Posts package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts 2 Posts 0.2-alpha2\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-to-posts\n"
+"POT-Creation-Date: 2010-07-12 19:04+0300\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin/admin.php:51
+msgid "connections"
+msgstr ""
+
+#: admin/admin.php:70
+msgid "No connections."
+msgstr ""
+
+#: admin/admin.php:72
+msgid "Connected"
+msgstr ""
+
+#: admin/admin.php:84
+msgid ""
+"Enter IDs of connected post types separated by commas, or turn on JavaScript!"
+msgstr ""
+
+#: admin/admin.php:88
+msgid "Search"
+msgstr ""
+
+#: admin/admin.php:96
+msgid ""
+"Start typing name of connected post type and click on it if you want to "
+"connect it."
+msgstr ""
+
+#: scb/AdminPage.php:167
+msgid "Settings <strong>saved</strong>."
+msgstr ""
+
+#: scb/AdminPage.php:179 scb/AdminPage.php:189
+msgid "Save Changes"
+msgstr ""
+
+#: scb/AdminPage.php:371
+msgid "Settings"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Posts 2 Posts"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://scribu.net/wordpress/posts-to-posts"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Create connections between posts of different types"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "scribu"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://scribu.net/"
+msgstr ""

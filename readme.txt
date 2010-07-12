@@ -45,7 +45,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 == Changelog ==
 
 = 0.2 =
-* UI that supports multiple related posts. props Patrik Bón
+* UI that supports multiple related posts. props [Patrik Bón](http://www.mrhead.sk/)
 
 = 0.1 =
 * initial release
