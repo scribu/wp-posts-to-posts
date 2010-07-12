@@ -4,7 +4,7 @@ jQuery(document).ready(function($) {
 		if(delayed != undefined) {
 			clearTimeout(delayed);
 		}
-		
+
 		var $this = this;
 			delayed = setTimeout(function() {
 				var post_type = $($this).attr('name').split('_')[2];
@@ -15,25 +15,18 @@ jQuery(document).ready(function($) {
 					results.html('');
 					return;
 				}		
-				$.post(ajaxurl, {action: 'p2p_search', q: $($this).val(), post_type: post_type}, function(data) {
-					
+				$.getJSON(ajaxurl, {action: 'p2p_search', q: $($this).val(), post_type: post_type}, function(data) {
 					results.html('');
-		
-					if(data.length == 0) {
-						return;
-					}
-					
-					var lines = data.split("\n");
-					var line;
-					for(var i in lines) {
-						line = lines[i].split('|');
-						results.append('<li><a href="#" name="' + line[0] + '">' + line[1] + '</a></li>');
-					}
+
+					$.each(data, function(id, title) {
+						results.append('<li><a href="#" name="' + id + '">' + title + '</a></li>');
+					});
+
 					$('a', results).click(function() {
 						checkboxes = this_metabox.find('.checkboxes');
 						checkbox = checkboxes.find('input[value=' + $(this).attr('name') + ']');
-						if(checkbox.length != 0) {
-					
+						if ( checkbox.length != 0 ) {
+
 						} else {
 							checkboxes.append('<input type="checkbox" checked="checked" id="p2p_checkbox_' + $(this).attr('name') + '" value="' + $(this).attr('name') + '" /> <label for="p2p_checkbox_' + $(this).attr('name') + '">' + $(this).html() + '</label><br />');
 						}
@@ -45,7 +38,7 @@ jQuery(document).ready(function($) {
 				});
 			}, 400);
 	});
-	
+
 	function update_event_handlers() {
 		$('.p2p_metabox .checkboxes input').change(function() {
 			update_input($(this).parents('.p2p_metabox'));

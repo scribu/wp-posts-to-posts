@@ -3,18 +3,20 @@
 class P2P_Box {
 
 	function init( $file ) {
+		add_action( 'admin_print_styles-post.php', array( __CLASS__, 'scripts') );
+		add_action( 'admin_print_styles-post-new.php', array( __CLASS__, 'scripts') );
+
 		add_action( 'add_meta_boxes', array( __CLASS__, 'register' ) );
+
 		add_action( 'save_post', array( __CLASS__, 'save' ), 10, 2 );
-		add_action( 'admin_menu', array( __CLASS__, 'add_admin_js') );
-		add_action( 'admin_menu', array( __CLASS__, 'add_admin_css') );
-		
+		add_action('wp_ajax_p2p_search', array( __CLASS__, 'ajax_search' ) );
+
 		scbUtil::add_uninstall_hook( $file, array( __CLASS__, 'uninstall' ) );
 	}
 
-	function uninstall() {
-		global $wpdb;
-
-		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key = '" . P2P_META_KEY . "'" );
+	function scripts() {
+		wp_enqueue_style( 'p2p-admin-css', plugins_url( 'css/admin.css', __FILE__ ) );
+		wp_enqueue_script( 'p2p-admin-js', plugins_url( 'js/admin.js', __FILE__ ), array( 'jquery' ), '0.2', true );
 	}
 
 	function save( $post_a, $post ) {
@@ -26,20 +28,16 @@ class P2P_Box {
 		foreach ( p2p_get_connection_types( $post->post_type ) as $post_type ) {
 			if ( !isset( $_POST['p2p_connected_ids_' . $post_type] ) )
 				continue;
-				
-			$connected_ids = explode(',', $_POST['p2p_connected_ids_' . $post_type]);
-			
-			if(empty($connections[$post_type]))
-				$connections[$post_type] = array();
-			
-			foreach ( $connections[$post_type] as $post_b ) {
-				if(array_search($post_b, $connected_ids) === false)
+
+			$connected_ids = explode(',', $_POST[ 'p2p_connected_ids_' . $post_type ] );
+
+			foreach ( (array) $connections[ $post_type ] as $post_b ) {
+				if ( false === array_search( $post_b, $connected_ids ) )
 					p2p_disconnect( $post_a, $post_b );
 			}
-			
 
-			foreach($connected_ids as $post_b) {
-				if(array_search($post_b, $connections[$post_type]) === false) {
+			foreach( $connected_ids as $post_b ) {
+				if ( false === array_search( $post_b, $connections[ $post_type ] ) ) {
 					p2p_connect( $post_a, $post_b );
 				}
 			}
@@ -47,41 +45,20 @@ class P2P_Box {
 	}
 
 	function register( $post_type ) {
-		$connection_types = p2p_get_connection_types( $post_type );
-
-		if ( empty( $connection_types ) )
-			return;
-			
-		foreach ( $connection_types as $type ) {
-			add_meta_box('p2p-connections-' . $type, get_post_type_object( $type )->labels->name . ' ' . __('connections', 'p2p-textdomain'), array(__CLASS__, 'new_box'), $post_type, 'side', 'default', $type);
-		}
-		//add_meta_box( 'p2p-connections', __( 'Connections', 'p2p-textdomain' ), array( __CLASS__, 'box' ), $post_type, 'side' );
-	}
-
-	function box( $post ) {
-		$connections = p2p_get_connected( 'any', 'from', $post->ID );
-
-		$out = '';
-		foreach ( p2p_get_connection_types( $post->post_type ) as $post_type ) {
-			$posts = self::get_post_list( $post_type );
-			$selected = reset( array_intersect( (array) @$connections[$post_type], array_keys( $posts ) ) );
-
-			$out .=
-			html( 'li',
-				 get_post_type_object( $post_type )->labels->singular_name . ' '
-				.scbForms::input( array(
-					'type' => 'select',
-					'name' => "p2p[$post_type]",
-					'values' => self::get_post_list( $post_type ),
-					'selected' => $selected,
-				) )
+		foreach ( p2p_get_connection_types( $post_type ) as $type ) {
+			add_meta_box( 
+				'p2p-connections-' . $type, 
+				get_post_type_object( $type )->labels->name . ' ' . __( 'connections', 'p2p-textdomain' ), 
+				array( __CLASS__, 'box' ),
+				$post_type,
+				'side',
+				'default',
+				$type
 			);
 		}
-
-		echo html( 'ul', $out );
 	}
-	
-	function new_box($post, $args) { 
+
+	function box($post, $args) { 
 		$post_type = $args['args'];
 		$connected_ids = p2p_get_connected($post_type, 'from', $post->ID);
 		?>
@@ -121,6 +98,22 @@ class P2P_Box {
 		</div>
 	<?php }
 
+	function ajax_search() {
+		$posts = new WP_Query( array(
+			'posts_per_page' => 5,
+			's' => $_GET['q'],
+			'post_type' => $_GET['post_type']
+		) );
+
+		$results = array();
+		while ( $posts->have_posts() ) {
+			$posts->the_post();
+			$results[ get_the_ID() ] = get_the_title();
+		}
+
+		die( json_encode( $results ) );
+	}
+
 	private function get_post_list( $post_type ) {
 		$args = array(
 			'post_type' => $post_type,
@@ -131,32 +124,11 @@ class P2P_Box {
 
 		return scbUtil::objects_to_assoc( get_posts( $args ), 'ID', 'post_title' );
 	}
-	
-	function add_admin_js() {
-		global $pagenow;
-		if($pagenow == 'post.php' || $pagenow == 'post-new.php') {
-			wp_enqueue_script('p2p-admin-js', WP_PLUGIN_URL . '/posts-to-posts/js/admin.js');
-		}	
-	}
-	
-	function add_admin_css() {
-		global $pagenow;
-		if($pagenow == 'post.php' || $pagenow == 'post-new.php') {
-			wp_enqueue_style('p2p-admin-css', WP_PLUGIN_URL . '/posts-to-posts/css/admin.css');
-		}	
-	}
 
+	function uninstall() {
+		global $wpdb;
+
+		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key = '" . P2P_META_KEY . "'" );
+	}
 }
 
-function p2p_search_callback() {
-	$posts = new WP_Query('showposts=3&s=' . $_POST['q'] . '&post_type=' . $_POST['post_type']);
-	
-	$results = array();
-	while($posts->have_posts()) { 
-		$posts->the_post();
-		$results[] = get_the_ID() . '|' . get_the_title();
-	}
-	echo implode("\n", $results);
-	exit;
-}
-add_action('wp_ajax_p2p_search', 'p2p_search_callback');
