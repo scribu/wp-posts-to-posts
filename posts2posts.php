@@ -35,7 +35,7 @@ function _p2p_init() {
 	require dirname( __FILE__ ) . '/template-tags.php';
 
 	if ( is_admin() ) {
-		require dirname( __FILE__ ) . '/admin.php';
+		require dirname( __FILE__ ) . '/admin/admin.php';
 		P2P_Box::init( __FILE__ );
 	}
 }
