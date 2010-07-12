@@ -48,7 +48,7 @@ class P2P_Box {
 		foreach ( p2p_get_connection_types( $post_type ) as $type ) {
 			add_meta_box(
 				'p2p-connections-' . $type,
-				get_post_type_object( $type )->labels->singular_name . ' ' . __( 'connections', 'posts-to-posts' ),
+				__( 'Connected', 'posts-to-posts' ) . ' ' . get_post_type_object( $type )->labels->singular_name,
 				array( __CLASS__, 'box' ),
 				$post_type,
 				'side',
@@ -64,38 +64,41 @@ class P2P_Box {
 		$connected_ids = p2p_get_connected( $post_type, 'from', $post->ID );
 ?>
 
-		<div class="p2p_metabox">
-			<div class="hide-if-no-js checkboxes">
-			<?php if ( empty( $connected_ids ) ) { ?>
-				<p class="howto"><?php _e( 'No connections.', 'posts-to-posts' ); ?></p>
-			<?php } else { ?>
-				<p><?php _e( 'Connected', 'posts-to-posts' ); ?> <?php echo $ptype_name; ?>:</p>
-				<div>
-					<?php foreach ( $connected_ids as $id ) { ?>
-						<?php $id_name = "p2p_checkbox_$id"; ?>
-						<input type="checkbox" name="<?php echo $id_name; ?>" id="<?php echo $id_name; ?>" value="<?php echo $id;?>" checked="checked"> <label for="<?php echo $id_name;?>"><?php echo get_the_title( $id )?></label><br/>
-					<?php } ?>
-				</div>
-			<?php } ?>
-			</div>
+<div class="p2p_metabox">
+	<div class="hide-if-no-js checkboxes">
+	<?php if ( empty( $connected_ids ) ) { ?>
+		<p class="howto"><?php _e( 'No connections.', 'posts-to-posts' ); ?></p>
+	<?php } else { ?>
+		<ul class="p2p_connected">
+			<?php foreach ( $connected_ids as $id ) {
+				echo html( 'li', scbForms::input( array(
+					'type' => 'checkbox',
+					'name' => "p2p_checkbox_$id",
+					'value' => $id,
+					'checked' => true,
+					'desc' => get_the_title( $id )
+				) ) );
+			} ?>
+		</ul>
+	<?php } ?>
 
-			<div class="hide-if-js">
-			<input type="text" class="p2p_connected_ids" name="p2p_connected_ids_<?php echo $post_type; ?>" value="<?php echo implode( ',', $connected_ids );?>" />
-			<p class="howto"><?php _e( 'Enter IDs of connected post types separated by commas, or turn on JavaScript!', 'posts-to-posts' ); ?></p>
-			</div>
-			<div class="hide-if-no-js">
-				<p>
-				<label><?php _e( 'Search', 'posts-to-posts' ); ?> <?php echo $ptype_name; ?>:</label>
-				<input type="text" name="p2p_search_<?php echo $post_type;?>" id="p2p_search_<?php echo $post_type;?>" class="p2p_search" />
-				</p>
-				<div>
-					<ul class="results">
+		<?php echo html( 'p', scbForms::input( array(
+			'type' => 'text',
+			'name' => 'p2p_search_' . $post_type,
+			'desc' => __( 'Search', 'posts-to-posts' ) . ':',
+			'desc_pos' => 'before',
+			'extra' => array( 'class' => 'p2p_search', 'autocomplete' => 'off' ),
+		) ) ); ?>
 
-					</ul>
-				</div>
-				<p class="howto"><?php _e( 'Start typing name of connected post type and click on it if you want to connect it.', 'posts-to-posts' ); ?></p>
-			</div>
-		</div>
+		<ul class="p2p_results"></ul>
+		<p class="howto"><?php _e( 'Start typing name of connected post type and click on it if you want to connect it.', 'posts-to-posts' ); ?></p>
+	</div>
+
+	<div class="hide-if-js">
+		<input type="text" class="p2p_connected_ids" name="p2p_connected_ids_<?php echo $post_type; ?>" value="<?php echo implode( ',', $connected_ids );?>" />
+		<p class="howto"><?php _e( 'Enter IDs of connected post types separated by commas, or turn on JavaScript!', 'posts-to-posts' ); ?></p>
+	</div>
+</div>
 <?php
 	}
 

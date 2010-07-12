@@ -1,42 +1,46 @@
 jQuery(document).ready(function($) {
 	var delayed = undefined;
-	$('.p2p_metabox input.p2p_search').keyup(function() {
-		if(delayed != undefined) {
-			clearTimeout(delayed);
-		}
 
-		var $this = this;
+	$('.p2p_metabox input.p2p_search').keyup(function() {
+
+		if ( delayed != undefined )
+			clearTimeout(delayed);
+
+		var $self = $(this);
+			$metabox = $self.parents('.p2p_metabox'),
+			$results = $metabox.find('.p2p_results'),
+			post_type = $self.attr('name').split('_')[2],
+			old_value = '';
 			delayed = setTimeout(function() {
-				var post_type = $($this).attr('name').split('_')[2];
-				var this_metabox = $($this).parents('.p2p_metabox');
-				var results = this_metabox.find('.results');
-				
-				if($($this).val().length == 0) {
-					results.html('');
+				if ( !$self.val().length ) {
+					$results.html('');
 					return;
-				}		
-				$.getJSON(ajaxurl, {action: 'p2p_search', q: $($this).val(), post_type: post_type}, function(data) {
-					results.html('');
+				}
+
+				if ( $self.val() == old_value )
+					return;
+				old_value = $self.val();
+
+				$.getJSON(ajaxurl, {action: 'p2p_search', q: $self.val(), post_type: post_type}, function(data) {
+					$results.html('');
 
 					$.each(data, function(id, title) {
-						results.append('<li><a href="#" name="' + id + '">' + title + '</a></li>');
-					});
-
-					$('a', results).click(function() {
-						checkboxes = this_metabox.find('.checkboxes');
-						checkbox = checkboxes.find('input[value=' + $(this).attr('name') + ']');
-						if ( checkbox.length != 0 ) {
-
-						} else {
-							checkboxes.append('<input type="checkbox" checked="checked" id="p2p_checkbox_' + $(this).attr('name') + '" value="' + $(this).attr('name') + '" /> <label for="p2p_checkbox_' + $(this).attr('name') + '">' + $(this).html() + '</label><br />');
-						}
-		
-						update_input(this_metabox);
-						update_event_handlers();
-						return false;
+						$results.append('<li><a href="#" name="' + id + '">' + title + '</a></li>');
 					});
 				});
 			}, 400);
+
+		$results.delegate('a', 'click', function() {
+			var $list = $metabox.find('.p2p_connected');
+
+			if ( !$list.find('input[value=' + $(this).attr('name') + ']').length != 0 ) {
+				$list.append('<li><input type="checkbox" checked="checked" id="p2p_checkbox_' + $(this).attr('name') + '" value="' + $(this).attr('name') + '" /> <label for="p2p_checkbox_' + $(this).attr('name') + '">' + $(this).html() + '</label></li>');
+			}
+
+			update_input($metabox);
+			update_event_handlers();
+			return false;
+		});
 	});
 
 	function update_event_handlers() {
@@ -45,13 +49,13 @@ jQuery(document).ready(function($) {
 		});
 	}
 	update_event_handlers();
-	
-	function update_input(metabox) {
-		metabox.find('.p2p_connected_ids').val('');
+
+	function update_input($metabox) {
+		$metabox.find('.p2p_connected_ids').val('');
 		var ids = new Array();
-		metabox.find('.checkboxes input:checked').each(function() {
+		$metabox.find('.checkboxes input:checked').each(function() {
 			ids.push($(this).val());
 		});
-		metabox.find('.p2p_connected_ids').val(ids.join(','));
+		$metabox.find('.p2p_connected_ids').val(ids.join(','));
 	}
 });

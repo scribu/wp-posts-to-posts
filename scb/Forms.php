@@ -188,8 +188,11 @@ class scbForms {
 
 		// Set constant args
 		$const_args = self::array_extract( self::$args, array( 'type', 'desc_pos', 'checked' ) );
-		if ( isset( $extra ) )
-			$const_args['extra'] = explode( ' ', $extra );
+		if ( isset( $extra ) ) {
+			if ( !is_array( $extra ) )
+				$extra = self::attr_to_array( $extra );
+			$const_args['extra'] = $extra;
+		}
 
 		$i = 0;
 		foreach ( $a as $name => $val ) {
@@ -245,9 +248,9 @@ class scbForms {
 			$checked = true;
 
 		if ( $checked )
-			$extra[] = 'checked="checked"';
+			$extra['checked'] = 'checked';
 
-		if ( $desc === NULL && !is_bool( $value ) )
+		if ( is_null( $desc ) && !is_bool( $value ) )
 			$desc = str_replace( '[]', '', $value );
 
 		return self::_input_gen( $args );
@@ -258,7 +261,7 @@ class scbForms {
 		$args = wp_parse_args( $args, array( 
 			'value' => $data,
 			'desc_pos' => 'after',
-			'extra' => array( 'class="regular-text"' ),
+			'extra' => array( 'class' => 'regular-text' ),
 		) );
 
 		foreach ( $args as $key => &$val )
@@ -266,7 +269,7 @@ class scbForms {
 		unset( $val );
 
 		if ( FALSE === strpos( $name, '[' ) )
-			$extra[] = "id='{$name}'";
+			$extra['id'] = $name;
 
 		return self::_input_gen( $args );
 	}
@@ -280,7 +283,7 @@ class scbForms {
 			'extra' => array()
 		) ) );
 
-		$extra = self::validate_extra( $extra, $name );
+		$extra = self::array_to_attr( $extra );
 
 		if ( 'textarea' == $type ) {
 			$value = esc_html( $value );
@@ -300,7 +303,7 @@ class scbForms {
 			'value' => array(),
 			'text' => '',
 			'selected' => array( 'foo' ),	// hack to make default blank
-			'extra' => '',
+			'extra' => array(),
 			'numeric' => false,	// use numeric array instead of associative
 			'desc' => '',
 			'desc_pos' => '',
@@ -333,7 +336,7 @@ class scbForms {
 			$opts .= "\t<option value='{$key}'" . selected( (string) $key, (string) $cur_val, false) . '>' . $value . "</option>\n";
 		}
 
-		$extra = self::validate_extra( $extra, $name );
+		$extra = self::array_to_attr( $extra );
 
 		$input =  "<select name='{$name}'$extra>\n{$opts}</select>";
 		
@@ -364,17 +367,21 @@ class scbForms {
 		return $output;
 	}
 
-	private static function validate_extra( $extra, $name, $implode = true ) {
-		if ( !is_array( $extra ) )
-			$extra = explode( ' ', $extra );
-
-		if ( empty( $extra ) )
-			return '';
-
-		return ' ' . ltrim( implode( ' ', $extra ) );
-	}
 
 // Utilities
+
+
+	private static function attr_to_array( $html ) {
+		return shortcode_parse_atts( $html );
+	}
+
+	private static function array_to_attr( $attr ) {
+		$out = '';
+		foreach ( $attr as $key => $value )
+			$out .= ' ' . $key . '=' . '"' . esc_attr( $value ) . '"';
+
+		return $out;
+	}
 
 	private static function is_associative( $array ) {
 		if ( !is_array( $array ) || empty( $array ) )
