@@ -23,24 +23,20 @@ class P2P_Box {
 		if ( defined( 'DOING_AJAX' ) || defined( 'DOING_CRON' ) || empty( $_POST ) || 'revision' == $post->post_type )
 			return;
 
-		$connections = p2p_get_connected( 'any', 'from', $post->ID );
+		$connections = p2p_get_connected( 'any', 'from', $post_a );
 
 		foreach ( p2p_get_connection_types( $post->post_type ) as $post_type ) {
 			if ( !isset( $_POST['p2p_connected_ids_' . $post_type] ) )
 				continue;
 
-			$connected_ids = explode( ',', $_POST[ 'p2p_connected_ids_' . $post_type ] );
+			$old_connections = (array) $connections[ $post_type ];
+			$new_connections = explode( ',', $_POST[ 'p2p_connected_ids_' . $post_type ] );
 
-			foreach ( (array) $connections[ $post_type ] as $post_b ) {
-				if ( false === array_search( $post_b, $connected_ids ) )
-					p2p_disconnect( $post_a, $post_b );
-			}
+			foreach ( array_diff( $old_connections, $new_connections ) as $post_b )
+				p2p_disconnect( $post_a, $post_b );
 
-			foreach ( $connected_ids as $post_b ) {
-				if ( false === array_search( $post_b, $connections[ $post_type ] ) ) {
-					p2p_connect( $post_a, $post_b );
-				}
-			}
+			foreach ( array_diff( $new_connections, $old_connections ) as $post_b )
+				p2p_connect( $post_a, $post_b );
 		}
 	}
 
@@ -76,7 +72,8 @@ class P2P_Box {
 					'name' => "p2p_checkbox_$id",
 					'value' => $id,
 					'checked' => true,
-					'desc' => get_the_title( $id )
+					'desc' => get_the_title( $id ),
+					'extra' => array( 'autocomplete' => 'off' ),
 				) ) );
 			} ?>
 		</ul>
