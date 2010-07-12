@@ -5,7 +5,9 @@ class P2P_Box {
 	function init( $file ) {
 		add_action( 'add_meta_boxes', array( __CLASS__, 'register' ) );
 		add_action( 'save_post', array( __CLASS__, 'save' ), 10, 2 );
-
+		add_action( 'admin_menu', array( __CLASS__, 'add_admin_js') );
+		add_action( 'admin_menu', array( __CLASS__, 'add_admin_css') );
+		
 		scbUtil::add_uninstall_hook( $file, array( __CLASS__, 'uninstall' ) );
 	}
 
@@ -22,14 +24,25 @@ class P2P_Box {
 		$connections = p2p_get_connected( 'any', 'from', $post->ID );
 
 		foreach ( p2p_get_connection_types( $post->post_type ) as $post_type ) {
-			if ( !isset( $_POST['p2p'][$post_type] ) )
+			if ( !isset( $_POST['p2p_connected_ids_' . $post_type] ) )
 				continue;
+				
+			$connected_ids = explode(',', $_POST['p2p_connected_ids_' . $post_type]);
+			
+			if(empty($connections[$post_type]))
+				$connections[$post_type] = array();
+			
+			foreach ( $connections[$post_type] as $post_b ) {
+				if(array_search($post_b, $connected_ids) === false)
+					p2p_disconnect( $post_a, $post_b );
+			}
+			
 
-			foreach ( $connections[$post_type] as $post_b )
-				p2p_disconnect( $post_a, $post_b );
-
-			if ( $post_b = absint( $_POST['p2p'][$post_type] ) )
-				p2p_connect( $post_a, $post_b );
+			foreach($connected_ids as $post_b) {
+				if(array_search($post_b, $connections[$post_type]) === false) {
+					p2p_connect( $post_a, $post_b );
+				}
+			}
 		}
 	}
 
@@ -38,8 +51,11 @@ class P2P_Box {
 
 		if ( empty( $connection_types ) )
 			return;
-
-		add_meta_box( 'p2p-connections', __( 'Connections', 'p2p-textdomain' ), array( __CLASS__, 'box' ), $post_type, 'side' );
+			
+		foreach ( $connection_types as $type ) {
+			add_meta_box('p2p-connections-' . $type, get_post_type_object( $type )->labels->name . ' ' . __('connections', 'p2p-textdomain'), array(__CLASS__, 'new_box'), $post_type, 'side', 'default', $type);
+		}
+		//add_meta_box( 'p2p-connections', __( 'Connections', 'p2p-textdomain' ), array( __CLASS__, 'box' ), $post_type, 'side' );
 	}
 
 	function box( $post ) {
@@ -64,6 +80,46 @@ class P2P_Box {
 
 		echo html( 'ul', $out );
 	}
+	
+	function new_box($post, $args) { 
+		$post_type = $args['args'];
+		$connected_ids = p2p_get_connected($post_type, 'from', $post->ID);
+		?>
+		
+		<div class="p2p_metabox">
+			<div class="hide-if-no-js checkboxes">
+			<?php if(empty($connected_ids)) { ?>
+				<p class="howto">No connections.</p>
+			<?php } else { ?>
+				<p><?php echo __('Connected', 'p2p-textdomain'); ?> <?php echo get_post_type_object( $post_type )->labels->name; ?>:</p>
+				<div class="">
+					<?php foreach($connected_ids as $id) { ?>
+						<?php $id_name = "p2p_checkbox_$id"; ?>
+						<input type="checkbox" name="<?php echo $id_name; ?>" id="<?php echo $id_name; ?>" value="<?php echo $id;?>" checked="checked"> <label for="<?php echo $id_name;?>"><?php echo get_the_title($id)?></label><br/>
+					<?php } ?>
+				</div>
+			<?php } ?> 
+			</div>
+			
+			
+			<div class="hide-if-js">
+			<input type="text" class="p2p_connected_ids" name="p2p_connected_ids_<?php echo $post_type; ?>" value="<?php echo implode(',', $connected_ids);?>" />
+			<p class="howto"><?php echo __('Enter IDs of connected post types separated by commas, or turn on JavaScript!', 'p2p-textdomain');?></p>
+			</div>
+			<div class="hide-if-no-js">
+				<p>
+				<label><?php echo __('Search', 'p2p-textdomain'); ?> <?php echo get_post_type_object( $post_type )->labels->name; ?>:</label>
+				<input type="text" name="p2p_search_<?php echo $post_type;?>" id="p2p_search_<?php echo $post_type;?>" class="p2p_search" />
+				</p>
+				<div>
+					<ul class="results">
+					
+					</ul>
+				</div>
+				<p class="howto"><?php echo __('Start typing name of connected post type and click on it if you want connect it.', 'p2p-textdomain')?></p>
+			</div>
+		</div>
+	<?php }
 
 	private function get_post_list( $post_type ) {
 		$args = array(
@@ -75,5 +131,32 @@ class P2P_Box {
 
 		return scbUtil::objects_to_assoc( get_posts( $args ), 'ID', 'post_title' );
 	}
+	
+	function add_admin_js() {
+		global $pagenow;
+		if($pagenow == 'post.php' || $pagenow == 'post-new.php') {
+			wp_enqueue_script('p2p-admin-js', WP_PLUGIN_URL . '/posts-to-posts/js/admin.js');
+		}	
+	}
+	
+	function add_admin_css() {
+		global $pagenow;
+		if($pagenow == 'post.php' || $pagenow == 'post-new.php') {
+			wp_enqueue_style('p2p-admin-css', WP_PLUGIN_URL . '/posts-to-posts/css/admin.css');
+		}	
+	}
+
 }
 
+function p2p_search_callback() {
+	$posts = new WP_Query('showposts=3&s=' . $_POST['q'] . '&post_type=' . $_POST['post_type']);
+	
+	$results = array();
+	while($posts->have_posts()) { 
+		$posts->the_post();
+		$results[] = get_the_ID() . '|' . get_the_title();
+	}
+	echo implode("\n", $results);
+	exit;
+}
+add_action('wp_ajax_p2p_search', 'p2p_search_callback');

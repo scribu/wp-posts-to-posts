@@ -1,5 +1,6 @@
 <?php
 
+
 function p2p_register_connection_type( $post_type_a, $post_type_b, $bydirectional = false ) {
 	if ( !$ptype = get_post_type_object( $post_type_a ) )
 		return;
@@ -53,7 +54,7 @@ function p2p_get_connected( $post_type, $direction, $post_id ) {
 
 	$post_id = absint( $post_id );
 
-	if ( !$post_id || ( 'any' != $post_type && !is_post_type( $post_type ) ) )
+	if ( !$post_id || ( 'any' != $post_type && !post_type_exists( $post_type ) ) )
 		return false;
 
 	if ( 'to' == $direction ) {
