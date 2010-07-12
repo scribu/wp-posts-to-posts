@@ -3,8 +3,8 @@
 class P2P_Box {
 
 	function init( $file ) {
-		add_action( 'admin_print_styles-post.php', array( __CLASS__, 'scripts') );
-		add_action( 'admin_print_styles-post-new.php', array( __CLASS__, 'scripts') );
+		add_action( 'admin_print_styles-post.php', array( __CLASS__, 'scripts' ) );
+		add_action( 'admin_print_styles-post-new.php', array( __CLASS__, 'scripts' ) );
 
 		add_action( 'add_meta_boxes', array( __CLASS__, 'register' ) );
 
@@ -29,14 +29,14 @@ class P2P_Box {
 			if ( !isset( $_POST['p2p_connected_ids_' . $post_type] ) )
 				continue;
 
-			$connected_ids = explode(',', $_POST[ 'p2p_connected_ids_' . $post_type ] );
+			$connected_ids = explode( ',', $_POST[ 'p2p_connected_ids_' . $post_type ] );
 
 			foreach ( (array) $connections[ $post_type ] as $post_b ) {
 				if ( false === array_search( $post_b, $connected_ids ) )
 					p2p_disconnect( $post_a, $post_b );
 			}
 
-			foreach( $connected_ids as $post_b ) {
+			foreach ( $connected_ids as $post_b ) {
 				if ( false === array_search( $post_b, $connections[ $post_type ] ) ) {
 					p2p_connect( $post_a, $post_b );
 				}
@@ -46,9 +46,9 @@ class P2P_Box {
 
 	function register( $post_type ) {
 		foreach ( p2p_get_connection_types( $post_type ) as $type ) {
-			add_meta_box( 
-				'p2p-connections-' . $type, 
-				get_post_type_object( $type )->labels->name . ' ' . __( 'connections', 'p2p-textdomain' ), 
+			add_meta_box(
+				'p2p-connections-' . $type,
+				get_post_type_object( $type )->labels->singular_name . ' ' . __( 'connections', 'posts-to-posts' ),
 				array( __CLASS__, 'box' ),
 				$post_type,
 				'side',
@@ -58,45 +58,46 @@ class P2P_Box {
 		}
 	}
 
-	function box($post, $args) { 
+	function box( $post, $args ) {
 		$post_type = $args['args'];
-		$connected_ids = p2p_get_connected($post_type, 'from', $post->ID);
-		?>
-		
+		$ptype_name = get_post_type_object( $post_type )->labels->name;
+		$connected_ids = p2p_get_connected( $post_type, 'from', $post->ID );
+?>
+
 		<div class="p2p_metabox">
 			<div class="hide-if-no-js checkboxes">
-			<?php if(empty($connected_ids)) { ?>
-				<p class="howto">No connections.</p>
+			<?php if ( empty( $connected_ids ) ) { ?>
+				<p class="howto"><?php _e( 'No connections.', 'posts-to-posts' ); ?></p>
 			<?php } else { ?>
-				<p><?php echo __('Connected', 'p2p-textdomain'); ?> <?php echo get_post_type_object( $post_type )->labels->name; ?>:</p>
-				<div class="">
-					<?php foreach($connected_ids as $id) { ?>
+				<p><?php _e( 'Connected', 'posts-to-posts' ); ?> <?php echo $ptype_name; ?>:</p>
+				<div>
+					<?php foreach ( $connected_ids as $id ) { ?>
 						<?php $id_name = "p2p_checkbox_$id"; ?>
-						<input type="checkbox" name="<?php echo $id_name; ?>" id="<?php echo $id_name; ?>" value="<?php echo $id;?>" checked="checked"> <label for="<?php echo $id_name;?>"><?php echo get_the_title($id)?></label><br/>
+						<input type="checkbox" name="<?php echo $id_name; ?>" id="<?php echo $id_name; ?>" value="<?php echo $id;?>" checked="checked"> <label for="<?php echo $id_name;?>"><?php echo get_the_title( $id )?></label><br/>
 					<?php } ?>
 				</div>
-			<?php } ?> 
+			<?php } ?>
 			</div>
-			
-			
+
 			<div class="hide-if-js">
-			<input type="text" class="p2p_connected_ids" name="p2p_connected_ids_<?php echo $post_type; ?>" value="<?php echo implode(',', $connected_ids);?>" />
-			<p class="howto"><?php echo __('Enter IDs of connected post types separated by commas, or turn on JavaScript!', 'p2p-textdomain');?></p>
+			<input type="text" class="p2p_connected_ids" name="p2p_connected_ids_<?php echo $post_type; ?>" value="<?php echo implode( ',', $connected_ids );?>" />
+			<p class="howto"><?php _e( 'Enter IDs of connected post types separated by commas, or turn on JavaScript!', 'posts-to-posts' ); ?></p>
 			</div>
 			<div class="hide-if-no-js">
 				<p>
-				<label><?php echo __('Search', 'p2p-textdomain'); ?> <?php echo get_post_type_object( $post_type )->labels->name; ?>:</label>
+				<label><?php _e( 'Search', 'posts-to-posts' ); ?> <?php echo $ptype_name; ?>:</label>
 				<input type="text" name="p2p_search_<?php echo $post_type;?>" id="p2p_search_<?php echo $post_type;?>" class="p2p_search" />
 				</p>
 				<div>
 					<ul class="results">
-					
+
 					</ul>
 				</div>
-				<p class="howto"><?php echo __('Start typing name of connected post type and click on it if you want connect it.', 'p2p-textdomain')?></p>
+				<p class="howto"><?php _e( 'Start typing name of connected post type and click on it if you want to connect it.', 'posts-to-posts' ); ?></p>
 			</div>
 		</div>
-	<?php }
+<?php
+	}
 
 	function ajax_search() {
 		$posts = new WP_Query( array(
