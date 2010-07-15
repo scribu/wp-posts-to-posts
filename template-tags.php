@@ -37,12 +37,3 @@ function _p2p_list_connected( $query ) {
 	endif;
 }
 
-if ( !function_exists( 'wp_reset_postdata' ) ) :
-function wp_reset_postdata() {
-	global $wp_query;
-	if ( !empty( $wp_query->post ) ) {
-		$GLOBALS['post'] = $wp_query->post;
-		setup_postdata( $wp_query->post );
-	}
-}
-endif;

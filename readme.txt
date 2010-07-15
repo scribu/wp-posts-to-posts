@@ -46,6 +46,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 = 0.2 =
 * UI that supports multiple related posts. props [Patrik Bón](http://www.mrhead.sk/)
+* [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-2.html)
 
 = 0.1 =
 * initial release
