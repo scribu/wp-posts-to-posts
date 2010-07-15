@@ -19,6 +19,8 @@ class P2P_Box {
 
 ?>
 <style type="text/css">
+.p2p_connected {margin: 10px 4px}
+.p2p_results {margin: -5px 6px 10px}
 .p2p_metabox .waiting {vertical-align: -.4em}
 </style>
 <?php
