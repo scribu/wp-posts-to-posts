@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Posts 2 Posts 0.2-alpha2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-to-posts\n"
-"POT-Creation-Date: 2010-07-12 19:04+0300\n"
+"POT-Creation-Date: 2010-07-15 18:49+0300\n"
 "PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,31 +16,27 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin/admin.php:51
-msgid "connections"
-msgstr ""
-
-#: admin/admin.php:70
-msgid "No connections."
-msgstr ""
-
-#: admin/admin.php:72
+#: admin/admin.php:54
 msgid "Connected"
 msgstr ""
 
-#: admin/admin.php:84
-msgid ""
-"Enter IDs of connected post types separated by commas, or turn on JavaScript!"
+#: admin/admin.php:73
+msgid "No connections."
 msgstr ""
 
-#: admin/admin.php:88
+#: admin/admin.php:92
 msgid "Search"
 msgstr ""
 
-#: admin/admin.php:96
+#: admin/admin.php:100
 msgid ""
 "Start typing name of connected post type and click on it if you want to "
 "connect it."
+msgstr ""
+
+#: admin/admin.php:110
+msgid ""
+"Enter IDs of connected post types separated by commas, or turn on JavaScript!"
 msgstr ""
 
 #: scb/AdminPage.php:167
