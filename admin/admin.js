@@ -1,38 +1,39 @@
 jQuery(document).ready(function($) {
-	var delayed = undefined;
+// TODO: add spinner
 
 	var update_input = function($metabox) {
-		var ids = [];
 		$metabox.find('.p2p_connected .howto').remove();
+
+		var ids = [];
 		$metabox.find('.p2p_connected input:checked').each(function() {
 			ids.push($(this).val());
 		});
 		$metabox.find('.p2p_connected_ids').val(ids.join(','));
 	};
 
-	$(document).delegate('.p2p_connected input', 'change', function() {
+	$('.p2p_connected').delegate('input', 'change', function() {
 		update_input($(this).parents('.p2p_metabox'));
 	});
-
 
 	$('.p2p_results').delegate('a', 'click', function() {
 		var $self = $(this);
 			$metabox = $self.parents('.p2p_metabox'),
 			$list = $metabox.find('.p2p_connected');
 
-		if ( !$list.find('input[value=' + $self.attr('name') + ']').length != 0 ) {
-			$list.append($('<li>')
-				.append($('<input>').attr({
-					'type': 'checkbox',
-					'checked': 'checked',
-					'id': 'p2p_checkbox_' + $self.attr('name'),
-					'value': $self.attr('name'), 
-					'autocomplete': 'off'
-				}))
-				.append($('<label>').attr({
-					'for': 'p2p_checkbox_' + $self.attr('name')
-				}).html($self.html()))
-			);
+		if ( !$list.find('input[value=' + $self.attr('name') + ']').length ) {
+			$list
+				.append($('<li>')
+					.append($('<input>').attr({
+						'type': 'checkbox',
+						'checked': 'checked',
+						'id': 'p2p_checkbox_' + $self.attr('name'),
+						'value': $self.attr('name'),
+						'autocomplete': 'off'
+					}))
+					.append($('<label>').attr({
+						'for': 'p2p_checkbox_' + $self.attr('name')
+					}).html($self.html()))
+				);
 		}
 
 		update_input($metabox);
@@ -40,9 +41,9 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 
-	'.p2p_metabox'
+	var delayed = undefined;
 
-	$('input.p2p_search').keyup(function() {
+	$('.p2p_search').keyup(function() {
 
 		if ( delayed != undefined )
 			clearTimeout(delayed);
