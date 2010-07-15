@@ -41,6 +41,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 `var_dump(PHP_VERSION);`
 <br>
 
+== Screenshots ==
+
+1. The metabox on the post editing screen
 
 == Changelog ==
 
