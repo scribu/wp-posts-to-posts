@@ -1,9 +1,18 @@
 <?php
 
-function p2p_list_connected( $post_type, $direction, $post_id = '', $callback = '' ) {
-	if ( empty( $post_type ) )
-		$post_type = 'any';
+//
+// Template tags are helper functions for displaying connections
+//
 
+/**
+ * Display the list of connected posts
+ *
+ * @param string $post_type The post type of the connected posts.
+ * @param string $direction The direction of the connection. Can be 'to' or 'from'
+ * @param int $post_id One end of the connection
+ * @param callback(WP_Query) $callback the function used to do the actual displaying
+ */
+function p2p_list_connected( $post_type = 'any', $direction = 'from', $post_id = '', $callback = '' ) {
 	if ( !$post_id )
 		$post_id = get_the_ID();
 
@@ -22,11 +31,17 @@ function p2p_list_connected( $post_type, $direction, $post_id = '', $callback = 
 	if ( empty( $callback ) )
 		$callback = '_p2p_list_connected';
 
-	$callback( $query );
+	call_user_func( $callback, $query );
 
 	wp_reset_postdata();
 }
 
+/**
+ * The default callback for p2p_list_connected()
+ * Lists the posts as an unordered list
+ *
+ * @param WP_Query
+ */
 function _p2p_list_connected( $query ) {
 	if ( $query->have_posts() ) :
 		echo '<ul>';

@@ -23,7 +23,7 @@ class P2P_Box {
 		if ( defined( 'DOING_AJAX' ) || defined( 'DOING_CRON' ) || empty( $_POST ) || 'revision' == $post->post_type )
 			return;
 
-		$connections = p2p_get_connected( 'any', 'from', $post_a );
+		$connections = p2p_get_connected( 'any', 'from', $post_a, true );
 
 		foreach ( p2p_get_connection_types( $post->post_type ) as $post_type ) {
 			if ( !isset( $_POST['p2p_connected_ids_' . $post_type] ) )

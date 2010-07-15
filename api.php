@@ -1,6 +1,17 @@
 <?php
 
+//
+// API functions deal only with connection manipulation
+//
 
+/**
+ * Register a connection between two post types. 
+ * This creates the appropriate meta box in the admin edit screen
+ *
+ * @param string $post_type_a The first end of the connection
+ * @param string $post_type_a The second end of the connection
+ * @param bool $bydirectional Wether the connection should be bydirectional
+ */
 function p2p_register_connection_type( $post_type_a, $post_type_b, $bydirectional = false ) {
 	if ( !$ptype = get_post_type_object( $post_type_a ) )
 		return;
@@ -20,11 +31,24 @@ function p2p_register_connection_type( $post_type_a, $post_type_b, $bydirectiona
 			p2p_register_connection_type( $ptype_b, $post_type_a, false );
 }
 
+/**
+ * Get the registered connection types for a certain post type
+ *
+ * @param string $post_type_a The first end of the connection
+ *
+ * @return array[string] A list of post types
+ */
 function p2p_get_connection_types( $post_type_a ) {
 	return (array) @get_post_type_object( $post_type_a )->can_connect_to;
 }
 
-
+/**
+ * Connect a post to another one
+ *
+ * @param int $post_a The first end of the connection
+ * @param int $post_b The second end of the connection
+ * @param bool $bydirectional Wether the connection should be bydirectional
+ */
 function p2p_connect( $post_a, $post_b, $bydirectional = false ) {
 	add_post_meta( $post_a, P2P_META_KEY, $post_b );
 
@@ -32,6 +56,13 @@ function p2p_connect( $post_a, $post_b, $bydirectional = false ) {
 		add_post_meta( $post_b, P2P_META_KEY, $post_a );
 }
 
+/**
+ * Disconnect a post from another one
+ *
+ * @param int $post_a The first end of the connection
+ * @param int $post_b The second end of the connection
+ * @param bool $bydirectional Wether the connection should be bydirectional
+ */
 function p2p_disconnect( $post_a, $post_b, $bydirectional = false ) {
 	delete_post_meta( $post_a, P2P_META_KEY, $post_b );
 
@@ -39,6 +70,15 @@ function p2p_disconnect( $post_a, $post_b, $bydirectional = false ) {
 		delete_post_meta( $post_b, P2P_META_KEY, $post_a );
 }
 
+/**
+ * See if a certain post is connected to another one
+ *
+ * @param int $post_a The first end of the connection
+ * @param int $post_b The second end of the connection
+ * @param bool $bydirectional Wether the connection should be bydirectional
+ *
+ * @return bool True if the connection exists, false otherwise
+ */
 function p2p_is_connected( $post_a, $post_b, $bydirectional = false ) {
 	$r = (bool) get_post_meta( $post_b, P2P_META_KEY, $post_a, true );
 
@@ -48,9 +88,19 @@ function p2p_is_connected( $post_a, $post_b, $bydirectional = false ) {
 	return $r;
 }
 
-function p2p_get_connected( $post_type, $direction, $post_id ) {
-	if ( empty( $post_type ) )
-		$post_type = 'any';
+/**
+ * Get the list of connected posts
+ *
+ * @param string $post_type The post type of the connected posts.
+ * @param string $direction The direction of the connection. Can be 'to' or 'from'
+ * @param int $post_id One end of the connection
+ * @param bool $grouped Wether the results should be grouped by post type
+ *
+ * @return array[int] if $grouped is True
+ * @return array[string => array[int]] if $grouped is False
+ */
+function p2p_get_connected( $post_type, $direction, $post_id, $grouped = false ) {
+	global $wpdb;
 
 	$post_id = absint( $post_id );
 
@@ -65,38 +115,47 @@ function p2p_get_connected( $post_type, $direction, $post_id ) {
 		$col_a = 'meta_value';
 	}
 
-	global $wpdb;
-
-	if ( 'any' != $post_type ) {
-		$query = $wpdb->prepare( "
-			SELECT $col_a
+	if ( 'any' == $post_type && $grouped ) {
+		$query = "
+			SELECT $col_a AS post_id, (
+				SELECT post_type
+				FROM $wpdb->posts
+				WHERE $wpdb->posts.ID = $col_a
+			) AS type
 			FROM $wpdb->postmeta
 			WHERE meta_key = '" . P2P_META_KEY . "'
 			AND $col_b = $post_id
-			AND $col_a IN (
-				SELECT ID
-				FROM $wpdb->posts
-				WHERE post_type = %s
-			)
-		", $post_type );
+		";
 
-		return $wpdb->get_col( $query );
+		$connections = array();
+		foreach ( $wpdb->get_results( $query ) as $row )
+			$connections[$row->type][] = $row->post_id;
+
+		return $connections;
 	}
 
-	$query = "
-		SELECT $col_a AS post_id, (
-			SELECT post_type
-			FROM $wpdb->posts
-			WHERE $wpdb->posts.ID = $col_a
-		) AS type
-		FROM $wpdb->postmeta
+	$where = "
 		WHERE meta_key = '" . P2P_META_KEY . "'
 		AND $col_b = $post_id
 	";
 
-	$connections = array();
-	foreach ( $wpdb->get_results( $query ) as $row )
-		$connections[$row->type][] = $row->post_id;
+	if ( 'any' != $post_type )
+		$where .= $wpdb->prepare( "
+		AND $col_a IN (
+			SELECT ID
+			FROM $wpdb->posts
+			WHERE post_type = %s
+		)
+		", $post_type );
+
+	$connections = $wpdb->get_col( "
+		SELECT $col_a 
+		FROM $wpdb->postmeta 
+		$where
+	" );
+
+	if ( $grouped )
+		return array( $post_type => $connections );
 
 	return $connections;
 }

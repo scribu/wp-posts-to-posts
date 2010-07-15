@@ -45,6 +45,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 == Changelog ==
 
 = 0.2 =
+* added p2p_list_connected() template tag
 * UI that supports multiple related posts. props [Patrik Bón](http://www.mrhead.sk/)
 * [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-2.html)
 
