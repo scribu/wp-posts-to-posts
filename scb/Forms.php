@@ -336,6 +336,8 @@ class scbForms {
 			$opts .= "\t<option value='{$key}'" . selected( (string) $key, (string) $cur_val, false) . '>' . $value . "</option>\n";
 		}
 
+		if ( !is_array( $extra ) )
+			$extra = self::attr_to_array( $extra );
 		$extra = self::array_to_attr( $extra );
 
 		$input =  "<select name='{$name}'$extra>\n{$opts}</select>";

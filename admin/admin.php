@@ -44,7 +44,7 @@ class P2P_Box {
 		foreach ( p2p_get_connection_types( $post_type ) as $type ) {
 			add_meta_box(
 				'p2p-connections-' . $type,
-				__( 'Connected', 'posts-to-posts' ) . ' ' . get_post_type_object( $type )->labels->singular_name,
+				__( 'Connected', 'posts-to-posts' ) . ' ' . get_post_type_object( $type )->labels->name,
 				array( __CLASS__, 'box' ),
 				$post_type,
 				'side',
@@ -56,16 +56,15 @@ class P2P_Box {
 
 	function box( $post, $args ) {
 		$post_type = $args['args'];
-		$ptype_name = get_post_type_object( $post_type )->labels->name;
 		$connected_ids = p2p_get_connected( $post_type, 'from', $post->ID );
 ?>
 
 <div class="p2p_metabox">
 	<div class="hide-if-no-js checkboxes">
-	<?php if ( empty( $connected_ids ) ) { ?>
-		<p class="howto"><?php _e( 'No connections.', 'posts-to-posts' ); ?></p>
-	<?php } else { ?>
 		<ul class="p2p_connected">
+		<?php if ( empty( $connected_ids ) ) { ?>
+			<li class="howto"><?php _e( 'No connections.', 'posts-to-posts' ); ?></li>
+		<?php } else { ?>
 			<?php foreach ( $connected_ids as $id ) {
 				echo html( 'li', scbForms::input( array(
 					'type' => 'checkbox',
@@ -76,8 +75,8 @@ class P2P_Box {
 					'extra' => array( 'autocomplete' => 'off' ),
 				) ) );
 			} ?>
+		<?php } ?>
 		</ul>
-	<?php } ?>
 
 		<?php echo html( 'p', scbForms::input( array(
 			'type' => 'text',
@@ -92,7 +91,12 @@ class P2P_Box {
 	</div>
 
 	<div class="hide-if-js">
-		<input type="text" class="p2p_connected_ids" name="p2p_connected_ids_<?php echo $post_type; ?>" value="<?php echo implode( ',', $connected_ids );?>" />
+		<?php echo scbForms::input( array(
+			'type' => 'text',
+			'name' => 'p2p_connected_ids_' . $post_type,
+			'value' => implode( ',', $connected_ids ),
+			'extra' => array( 'class' => 'p2p_connected_ids' ),
+		) ); ?>
 		<p class="howto"><?php _e( 'Enter IDs of connected post types separated by commas, or turn on JavaScript!', 'posts-to-posts' ); ?></p>
 	</div>
 </div>

@@ -70,18 +70,7 @@ abstract class scbWidget extends WP_Widget {
 		else
 			$args['name'] = $new_names;
 
-		// Remember $desc and replace with $title
-		$desc = '';
-		if ( isset( $args['title'] ) ) {
-			if ( isset( $args['desc'] ) )
-				$desc = "<small>{$args['desc']}</small>";
-			$args['desc'] = $args['title'];
-			unset( $args['title'] );
-		}
-
-		$input = scbForms::input( $args, $new_formdata );
-
-		return "<p>{$input}\n<br />\n$desc\n</p>\n";
+		return scbForms::input( $args, $new_formdata );
 	}
 
 
