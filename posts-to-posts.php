@@ -32,7 +32,6 @@ require dirname( __FILE__ ) . '/scb/load.php';
 
 function _p2p_init() {
 	require dirname( __FILE__ ) . '/api.php';
-	require dirname( __FILE__ ) . '/template-tags.php';
 
 	if ( is_admin() ) {
 		require dirname( __FILE__ ) . '/admin/admin.php';
