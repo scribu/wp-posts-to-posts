@@ -1,6 +1,4 @@
 jQuery(document).ready(function($) {
-// TODO: add spinner
-
 	var update_input = function($metabox) {
 		$metabox.find('.p2p_connected .howto').remove();
 
@@ -43,7 +41,7 @@ jQuery(document).ready(function($) {
 
 	var delayed = undefined;
 
-	$('.p2p_search').keyup(function() {
+	$('.p2p_search :text').keyup(function() {
 
 		if ( delayed != undefined )
 			clearTimeout(delayed);
@@ -52,7 +50,8 @@ jQuery(document).ready(function($) {
 			$metabox = $self.parents('.p2p_metabox'),
 			$results = $metabox.find('.p2p_results'),
 			post_type = $self.attr('name').split('_')[2],
-			old_value = '';
+			old_value = '',
+			$spinner = $metabox.find('.waiting');
 
 		var delayed = setTimeout(function() {
 			if ( !$self.val().length ) {
@@ -64,7 +63,10 @@ jQuery(document).ready(function($) {
 				return;
 			old_value = $self.val();
 
+			$spinner.show();
 			$.getJSON(ajaxurl, {action: 'p2p_search', q: $self.val(), post_type: post_type}, function(data) {
+				$spinner.hide();
+
 				$results.html('');
 
 				$.each(data, function(id, title) {

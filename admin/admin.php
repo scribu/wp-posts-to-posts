@@ -15,8 +15,13 @@ class P2P_Box {
 	}
 
 	function scripts() {
-		wp_enqueue_style( 'p2p-admin-css', plugins_url( 'admin.css', __FILE__ ) );
 		wp_enqueue_script( 'p2p-admin-js', plugins_url( 'admin.js', __FILE__ ), array( 'jquery' ), '0.2', true );
+
+?>
+<style type="text/css">
+.p2p_metabox .waiting {vertical-align: -.4em}
+</style>
+<?php
 	}
 
 	function save( $post_a, $post ) {
@@ -78,13 +83,16 @@ class P2P_Box {
 		<?php } ?>
 		</ul>
 
-		<?php echo html( 'p', scbForms::input( array(
-			'type' => 'text',
-			'name' => 'p2p_search_' . $post_type,
-			'desc' => __( 'Search', 'posts-to-posts' ) . ':',
-			'desc_pos' => 'before',
-			'extra' => array( 'class' => 'p2p_search', 'autocomplete' => 'off' ),
-		) ) ); ?>
+		<?php echo html( 'p class="p2p_search"',
+			scbForms::input( array(
+				'type' => 'text',
+				'name' => 'p2p_search_' . $post_type,
+				'desc' => __( 'Search', 'posts-to-posts' ) . ':',
+				'desc_pos' => 'before',
+				'extra' => array( 'autocomplete' => 'off' ),
+			) )
+			. '<img alt="" src="' . admin_url( 'images/wpspin_light.gif' ) . '" class="waiting" style="display: none;">'
+		); ?>
 
 		<ul class="p2p_results"></ul>
 		<p class="howto"><?php _e( 'Start typing name of connected post type and click on it if you want to connect it.', 'posts-to-posts' ); ?></p>
