@@ -4,7 +4,7 @@ Donate link: http://scribu.net/paypal
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.0
 Tested up to: 3.0
-Stable tag: 0.1
+Stable tag: 0.2
 
 Create connections between posts
 
@@ -12,7 +12,7 @@ Create connections between posts
 
 This plugin allows you to create relationships between posts of different types. The relationships are stored in the postmeta table.
 
-To register a connection type, write:
+To register a connection between two post types, write:
 
 `
 function my_connection_types() {
