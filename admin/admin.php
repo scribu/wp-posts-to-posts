@@ -114,11 +114,24 @@ class P2P_Box {
 	}
 
 	function ajax_search() {
-		$posts = new WP_Query( array(
-			'posts_per_page' => 5,
+		$post_type_name = $_GET['post_type'];
+
+		if ( !post_type_exists( $post_type_name ) )
+			die;
+
+		$args = array(
 			's' => $_GET['q'],
-			'post_type' => $_GET['post_type']
-		) );
+			'post_type' => $post_type_name,
+			'post_status' => 'any',
+			'posts_per_page' => 5,
+			'order' => 'ASC',
+			'orderby' => 'title',
+			'suppress_filters' => true,
+			'update_post_term_cache' => false,
+			'update_post_meta_cache' => false
+		);
+
+		$posts = new WP_Query( $args );
 
 		$results = array();
 		while ( $posts->have_posts() ) {
