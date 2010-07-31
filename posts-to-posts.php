@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Posts 2 Posts
-Version: 0.2.1-alpha
+Version: 0.3-alpha
 Plugin Author: scribu
 Description: Create connections between posts of different types
 Author URI: http://scribu.net/

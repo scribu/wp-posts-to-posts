@@ -5,10 +5,10 @@
  * This creates the appropriate meta box in the admin edit screen
  *
  * @param string $post_type_a The first end of the connection
- * @param string $post_type_a The second end of the connection
- * @param bool $bydirectional Wether the connection should be bydirectional
+ * @param string|array $post_type_b The second end of the connection
+ * @param bool $reciprocal Wether the connection should be reciprocal
  */
-function p2p_register_connection_type( $post_type_a, $post_type_b, $bydirectional = false ) {
+function p2p_register_connection_type( $post_type_a, $post_type_b, $reciprocal = false ) {
 	if ( !$ptype = get_post_type_object( $post_type_a ) )
 		return;
 
@@ -22,9 +22,27 @@ function p2p_register_connection_type( $post_type_a, $post_type_b, $bydirectiona
 
 	$ptype->can_connect_to = array_merge( $ptype->can_connect_to, $post_type_b );
 
-	if ( $bydirectional )
+	if ( $reciprocal )
 		foreach ( $post_type_b as $ptype_b )
 			p2p_register_connection_type( $ptype_b, $post_type_a, false );
+}
+
+/**
+ * Check wether a connection type is reciprocal
+ *
+ * @param string $post_type_a The first end of the connection
+ * @param string $post_type_b The second end of the connection
+ *
+ * @return bool
+ */
+function p2p_connection_type_is_reciprocal( $post_type_a, $post_type_b ) {
+	if ( !$ptype_a = get_post_type_object( $post_type_a ) )
+		return;
+
+	if ( !$ptype_b = get_post_type_object( $post_type_b ) )
+		return;
+
+	return in_array( $post_type_b, $ptype_a->can_connect_to ) && in_array( $post_type_a, $ptype_b->can_connect_to );
 }
 
 /**
@@ -43,12 +61,11 @@ function p2p_get_connection_types( $post_type_a ) {
  *
  * @param int $post_a The first end of the connection
  * @param int $post_b The second end of the connection
- * @param bool $bydirectional Wether the connection should be bydirectional
  */
-function p2p_connect( $post_a, $post_b, $bydirectional = false ) {
+function p2p_connect( $post_a, $post_b ) {
 	add_post_meta( $post_a, P2P_META_KEY, $post_b );
 
-	if ( $bydirectional )
+	if ( p2p_connection_type_is_reciprocal( get_post_type( $post_a ), get_post_type( $post_b ) ) )
 		add_post_meta( $post_b, P2P_META_KEY, $post_a );
 }
 
@@ -57,12 +74,11 @@ function p2p_connect( $post_a, $post_b, $bydirectional = false ) {
  *
  * @param int $post_a The first end of the connection
  * @param int $post_b The second end of the connection
- * @param bool $bydirectional Wether the connection should be bydirectional
  */
-function p2p_disconnect( $post_a, $post_b, $bydirectional = false ) {
+function p2p_disconnect( $post_a, $post_b ) {
 	delete_post_meta( $post_a, P2P_META_KEY, $post_b );
 
-	if ( $bydirectional )
+	if ( p2p_connection_type_is_reciprocal( get_post_type( $post_a ), get_post_type( $post_b ) ) )
 		delete_post_meta( $post_b, P2P_META_KEY, $post_a );
 }
 
@@ -71,14 +87,13 @@ function p2p_disconnect( $post_a, $post_b, $bydirectional = false ) {
  *
  * @param int $post_a The first end of the connection
  * @param int $post_b The second end of the connection
- * @param bool $bydirectional Wether the connection should be bydirectional
  *
  * @return bool True if the connection exists, false otherwise
  */
-function p2p_is_connected( $post_a, $post_b, $bydirectional = false ) {
+function p2p_is_connected( $post_a, $post_b ) {
 	$r = (bool) get_post_meta( $post_b, P2P_META_KEY, $post_a, true );
 
-	if ( $bydirectional )
+	if ( p2p_connection_type_is_reciprocal( get_post_type( $post_a ), get_post_type( $post_b ) ) )
 		$r = $r && p2p_is_connected( $post_b, $post_a );
 
 	return $r;
