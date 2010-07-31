@@ -124,7 +124,7 @@ function p2p_get_connected( $post_type, $direction, $post_id, $grouped = false )
 
 	if ( 'any' == $post_type && $grouped ) {
 		$query = "
-			SELECT $col_a AS post_id, (
+			SELECT DISTINCT($col_a) AS post_id, (
 				SELECT post_type
 				FROM $wpdb->posts
 				WHERE $wpdb->posts.ID = $col_a
@@ -156,7 +156,7 @@ function p2p_get_connected( $post_type, $direction, $post_id, $grouped = false )
 		", $post_type );
 
 	$connections = $wpdb->get_col( "
-		SELECT $col_a 
+		SELECT DISTINCT($col_a)
 		FROM $wpdb->postmeta 
 		$where
 	" );
