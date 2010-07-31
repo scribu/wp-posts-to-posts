@@ -28,24 +28,6 @@ function p2p_register_connection_type( $post_type_a, $post_type_b, $reciprocal =
 }
 
 /**
- * Check wether a connection type is reciprocal
- *
- * @param string $post_type_a The first end of the connection
- * @param string $post_type_b The second end of the connection
- *
- * @return bool
- */
-function p2p_connection_type_is_reciprocal( $post_type_a, $post_type_b ) {
-	if ( !$ptype_a = get_post_type_object( $post_type_a ) )
-		return;
-
-	if ( !$ptype_b = get_post_type_object( $post_type_b ) )
-		return;
-
-	return in_array( $post_type_b, $ptype_a->can_connect_to ) && in_array( $post_type_a, $ptype_b->can_connect_to );
-}
-
-/**
  * Get the registered connection types for a certain post type
  *
  * @param string $post_type_a The first end of the connection
@@ -54,6 +36,20 @@ function p2p_connection_type_is_reciprocal( $post_type_a, $post_type_b ) {
  */
 function p2p_get_connection_types( $post_type_a ) {
 	return (array) @get_post_type_object( $post_type_a )->can_connect_to;
+}
+
+/**
+ * Check wether a connection type is reciprocal
+ *
+ * @param string $post_type_a The first end of the connection
+ * @param string $post_type_b The second end of the connection
+ *
+ * @return bool
+ */
+function p2p_connection_type_is_reciprocal( $post_type_a, $post_type_b ) {
+	return
+		in_array( $post_type_b, p2p_get_connection_types( $post_type_a ) ) && 
+		in_array( $post_type_a, p2p_get_connection_types( $post_type_b );
 }
 
 /**

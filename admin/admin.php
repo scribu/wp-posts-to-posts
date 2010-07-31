@@ -62,6 +62,7 @@ class P2P_Box {
 	}
 
 	function box( $post, $args ) {
+		debug( get_post_meta($post->ID, '_p2p') );
 		$post_type = $args['args'];
 		$connected_ids = p2p_get_connected( $post_type, 'from', $post->ID );
 ?>
