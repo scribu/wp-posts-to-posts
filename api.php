@@ -49,7 +49,7 @@ function p2p_get_connection_types( $post_type_a ) {
 function p2p_connection_type_is_reciprocal( $post_type_a, $post_type_b ) {
 	return
 		in_array( $post_type_b, p2p_get_connection_types( $post_type_a ) ) && 
-		in_array( $post_type_a, p2p_get_connection_types( $post_type_b );
+		in_array( $post_type_a, p2p_get_connection_types( $post_type_b ) );
 }
 
 /**
