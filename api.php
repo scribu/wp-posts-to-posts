@@ -59,6 +59,9 @@ function p2p_connection_type_is_reciprocal( $post_type_a, $post_type_b ) {
  * @param int $post_b The second end of the connection
  */
 function p2p_connect( $post_a, $post_b ) {
+	if ( $post_a == $post_b )
+		return;
+
 	add_post_meta( $post_a, P2P_META_KEY, $post_b );
 
 	if ( p2p_connection_type_is_reciprocal( get_post_type( $post_a ), get_post_type( $post_b ) ) )
