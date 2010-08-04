@@ -10,7 +10,7 @@ Create connections between posts
 
 == Description ==
 
-This plugin allows you to create relationships between posts of different types. The relationships are stored in the postmeta table.
+This plugin allows you to create relationships between posts of different types. The relationships are stored in a hidden taxonomy.
 
 To register a connection between two post types, write:
 
@@ -47,9 +47,13 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 0.3 =
+* store connections using a taxonomy instead of postmeta
+* [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-3.html)
+
 = 0.2 =
-* added p2p_list_connected() template tag
 * UI that supports multiple related posts. props [Patrik Bón](http://www.mrhead.sk/)
+* added p2p_list_connected() template tag
 * [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-2.html)
 
 = 0.1 =

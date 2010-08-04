@@ -2,13 +2,15 @@
 
 class P2P_Box {
 
+	private static $connections;
+
 	function init( $file ) {
 		add_action( 'admin_print_styles-post.php', array( __CLASS__, 'scripts' ) );
 		add_action( 'admin_print_styles-post-new.php', array( __CLASS__, 'scripts' ) );
 
 		add_action( 'add_meta_boxes', array( __CLASS__, 'register' ) );
 
-		add_action( 'save_post', array( __CLASS__, 'save' ), 10, 2 );
+		add_action( 'save_post', array( __CLASS__, 'save' ), 10 );
 		add_action( 'wp_ajax_p2p_search', array( __CLASS__, 'ajax_search' ) );
 
 		scbUtil::add_uninstall_hook( $file, array( __CLASS__, 'uninstall' ) );
@@ -26,28 +28,42 @@ class P2P_Box {
 <?php
 	}
 
-	function save( $post_a, $post ) {
-		if ( defined( 'DOING_AJAX' ) || defined( 'DOING_CRON' ) || empty( $_POST ) || 'revision' == $post->post_type )
+	function save( $post_a ) {
+		$current_ptype = get_post_type( $post_a );
+		if ( defined( 'DOING_AJAX' ) || defined( 'DOING_CRON' ) || empty( $_POST ) || 'revision' == $current_ptype )
 			return;
 
-		$connections = p2p_get_connected( 'any', 'from', $post_a, true );
+		self::cache_connections( $post_a );
 
-		foreach ( p2p_get_connection_types( $post->post_type ) as $post_type ) {
+		foreach ( p2p_get_connection_types( $current_ptype ) as $post_type ) {
 			if ( !isset( $_POST['p2p_connected_ids_' . $post_type] ) )
 				continue;
 
-			$old_connections = (array) $connections[ $post_type ];
+			$reciprocal = p2p_connection_type_is_reciprocal( $current_ptype, $post_type );
+
+			$old_connections = (array) @self::$connections[ $post_type ];
 			$new_connections = explode( ',', $_POST[ 'p2p_connected_ids_' . $post_type ] );
 
-			foreach ( array_diff( $old_connections, $new_connections ) as $post_b )
-				p2p_disconnect( $post_a, $post_b );
-
-			foreach ( array_diff( $new_connections, $old_connections ) as $post_b )
-				p2p_connect( $post_a, $post_b );
+			p2p_disconnect( $post_a, array_diff( $old_connections, $new_connections ), $reciprocal );
+			p2p_connect( $post_a, array_diff( $new_connections, $old_connections ), $reciprocal );
 		}
 	}
 
+	private function cache_connections( $post_id ) {
+		$posts = p2p_get_connected( $post_id, 'from', 'any', 'objects' );
+
+		$connections = array();
+		foreach ( $posts as $post )
+			$connections[ $post->post_type ][] = $post->ID;
+
+		self::$connections = $connections;
+	}
+
 	function register( $post_type ) {
+		global $post;
+
+		self::cache_connections( $post->ID );
+
 		foreach ( p2p_get_connection_types( $post_type ) as $type ) {
 			add_meta_box(
 				'p2p-connections-' . $type,
@@ -63,7 +79,9 @@ class P2P_Box {
 
 	function box( $post, $args ) {
 		$post_type = $args['args'];
-		$connected_ids = p2p_get_connected( $post_type, 'from', $post->ID );
+
+		$connected_ids = @self::$connections[ $post_type ];
+
 ?>
 
 <div class="p2p_metabox">

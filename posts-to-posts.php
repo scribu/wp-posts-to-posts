@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Posts 2 Posts
-Version: 0.3-alpha
+Version: 0.3-alpha2
 Plugin Author: scribu
 Description: Create connections between posts of different types
 Author URI: http://scribu.net/
@@ -31,7 +31,10 @@ define( 'P2P_META_KEY', '_p2p' );
 require dirname( __FILE__ ) . '/scb/load.php';
 
 function _p2p_init() {
+	require dirname( __FILE__ ) . '/core.php';
 	require dirname( __FILE__ ) . '/api.php';
+
+	Posts2Posts::init();
 
 	if ( is_admin() ) {
 		require dirname( __FILE__ ) . '/admin/admin.php';

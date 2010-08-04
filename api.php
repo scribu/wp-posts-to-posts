@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Register a connection between two post types. 
+ * Register a connection between two post types.
  * This creates the appropriate meta box in the admin edit screen
  *
  * @param string $post_type_a The first end of the connection
@@ -48,7 +48,7 @@ function p2p_get_connection_types( $post_type_a ) {
  */
 function p2p_connection_type_is_reciprocal( $post_type_a, $post_type_b ) {
 	return
-		in_array( $post_type_b, p2p_get_connection_types( $post_type_a ) ) && 
+		in_array( $post_type_b, p2p_get_connection_types( $post_type_a ) ) &&
 		in_array( $post_type_a, p2p_get_connection_types( $post_type_b ) );
 }
 
@@ -56,29 +56,30 @@ function p2p_connection_type_is_reciprocal( $post_type_a, $post_type_b ) {
  * Connect a post to another one
  *
  * @param int $post_a The first end of the connection
- * @param int $post_b The second end of the connection
+ * @param int|array $post_b The second end of the connection
+ * @param bool $reciprocal Wether the connection is reciprocal or not
  */
-function p2p_connect( $post_a, $post_b ) {
-	if ( $post_a == $post_b )
-		return;
+function p2p_connect( $post_a, $post_b, $reciprocal = false ) {
+	Posts2Posts::connect( $post_a, $post_b );
 
-	add_post_meta( $post_a, P2P_META_KEY, $post_b );
-
-	if ( p2p_connection_type_is_reciprocal( get_post_type( $post_a ), get_post_type( $post_b ) ) )
-		add_post_meta( $post_b, P2P_META_KEY, $post_a );
+	if ( $reciprocal )
+		foreach ( $post_b as $single )
+			Posts2Posts::connect( $single, $post_a );
 }
 
 /**
  * Disconnect a post from another one
  *
- * @param int $post_a The first end of the connection
- * @param int $post_b The second end of the connection
+ * @param int|array $post_a The first end of the connection
+ * @param int|array $post_b The second end of the connection
+ * @param bool $reciprocal Wether the connection is reciprocal or not
  */
-function p2p_disconnect( $post_a, $post_b ) {
-	delete_post_meta( $post_a, P2P_META_KEY, $post_b );
+function p2p_disconnect( $post_a, $post_b, $reciprocal = false ) {
+	Posts2Posts::disconnect( $post_a, $post_b );
 
-	if ( p2p_connection_type_is_reciprocal( get_post_type( $post_a ), get_post_type( $post_b ) ) )
-		delete_post_meta( $post_b, P2P_META_KEY, $post_a );
+	if ( $reciprocal )
+		foreach ( $post_b as $single )
+			Posts2Posts::disconnect( $single, $post_a );
 }
 
 /**
@@ -89,11 +90,11 @@ function p2p_disconnect( $post_a, $post_b ) {
  *
  * @return bool True if the connection exists, false otherwise
  */
-function p2p_is_connected( $post_a, $post_b ) {
-	$r = (bool) get_post_meta( $post_b, P2P_META_KEY, $post_a, true );
+function p2p_is_connected( $post_a, $post_b, $reciprocal = false ) {
+	$r = Posts2Posts::is_connected( $post_a, $post_b );
 
-	if ( p2p_connection_type_is_reciprocal( get_post_type( $post_a ), get_post_type( $post_b ) ) )
-		$r = $r && p2p_is_connected( $post_b, $post_a );
+	if ( $reciprocal )
+		$r = $r && Posts2Posts::is_connected( $post_b, $post_a );
 
 	return $r;
 }
@@ -101,120 +102,58 @@ function p2p_is_connected( $post_a, $post_b ) {
 /**
  * Get the list of connected posts
  *
- * @param string $post_type The post type of the connected posts.
- * @param string $direction The direction of the connection. Can be 'to' or 'from'
  * @param int $post_id One end of the connection
- * @param bool $grouped Wether the results should be grouped by post type
- *
- * @return array[int] if $grouped is True
- * @return array[string => array[int]] if $grouped is False
- */
-function p2p_get_connected( $post_type, $direction, $post_id, $grouped = false ) {
-	global $wpdb;
-
-	$post_id = absint( $post_id );
-
-	if ( !$post_id || ( 'any' != $post_type && !post_type_exists( $post_type ) ) )
-		return false;
-
-	if ( 'to' == $direction ) {
-		$col_a = 'post_id';
-		$col_b = 'meta_value';
-	} else {
-		$col_b = 'post_id';
-		$col_a = 'meta_value';
-	}
-
-	if ( 'any' == $post_type && $grouped ) {
-		$query = "
-			SELECT DISTINCT($col_a) AS post_id, (
-				SELECT post_type
-				FROM $wpdb->posts
-				WHERE $wpdb->posts.ID = $col_a
-			) AS type
-			FROM $wpdb->postmeta
-			WHERE meta_key = '" . P2P_META_KEY . "'
-			AND $col_b = $post_id
-		";
-
-		$connections = array();
-		foreach ( $wpdb->get_results( $query ) as $row )
-			$connections[$row->type][] = $row->post_id;
-
-		return $connections;
-	}
-
-	$where = "
-		WHERE meta_key = '" . P2P_META_KEY . "'
-		AND $col_b = $post_id
-	";
-
-	if ( 'any' != $post_type )
-		$where .= $wpdb->prepare( "
-		AND $col_a IN (
-			SELECT ID
-			FROM $wpdb->posts
-			WHERE post_type = %s
-		)
-		", $post_type );
-
-	$connections = $wpdb->get_col( "
-		SELECT DISTINCT($col_a)
-		FROM $wpdb->postmeta 
-		$where
-	" );
-
-	if ( $grouped )
-		return array( $post_type => $connections );
-
-	return $connections;
-}
-
-/**
- * Display the list of connected posts
- *
- * @param string $post_type The post type of the connected posts.
  * @param string $direction The direction of the connection. Can be 'to' or 'from'
- * @param int $post_id One end of the connection
- * @param callback(WP_Query) $callback the function used to do the actual displaying
+ * @param string|array $post_type The post type of the connected posts.
+ * @param string $output Can be 'ids' or 'objects'
+ *
+ * @return array A list of post_ids if $output = 'ids'
+ * @return object A WP_Query instance otherwise
  */
-function p2p_list_connected( $post_type = 'any', $direction = 'from', $post_id = '', $callback = '' ) {
-	if ( !$post_id )
-		$post_id = get_the_ID();
+function p2p_get_connected( $post_id, $direction = 'to', $post_type = 'any', $output = 'ids' ) {
+	$ids = Posts2Posts::get_connected( $post_id, $direction );
 
-	$connected_post_ids = p2p_get_connected( $post_type, $direction, $post_id );
+	if ( empty( $ids ) )
+		return array();
 
-	if ( empty( $connected_post_ids ) )
-		return;
+	if ( 'any' == $post_type && 'ids' == $output )
+		return $ids;
 
 	$args = array(
-		'post__in' => $connected_post_ids,
+		'post__in' => $ids,
 		'post_type'=> $post_type,
+		'post_status' => 'any',
 		'nopaging' => true,
 	);
-	$query = new WP_Query( $args );
 
-	if ( empty( $callback ) )
-		$callback = '_p2p_list_connected';
+	$posts = get_posts( $args );
 
-	call_user_func( $callback, $query );
+	if ( 'objects' == $output )
+		return $posts;
 
-	wp_reset_postdata();
+	foreach ( $posts as &$post )
+		$post = $post->ID;
+
+	return $posts;
 }
 
 /**
- * The default callback for p2p_list_connected()
- * Lists the posts as an unordered list
+ * Display the list of connected posts as an unordered list
  *
- * @param WP_Query
+ * @param array $args See p2p_get_connected()
  */
-function _p2p_list_connected( $query ) {
-	if ( $query->have_posts() ) :
-		echo '<ul>';
-		while ( $query->have_posts() ) : $query->the_post();
-			echo html( 'li', html_link( get_permalink( get_the_ID() ), get_the_title() ) );
-		endwhile;
-		echo '</ul>';
-	endif;
+function p2p_list_connected( $args ) {
+	$args = wp_parse_args( $args );
+	$args['output'] = 'objects';
+
+	$posts = p2p_get_connected( $args );
+
+	if ( empty( $posts ) )
+		return;
+
+	echo '<ul>';
+	foreach ( $posts as $post )
+		echo html( 'li', html_link( get_permalink( $post->ID ), get_the_title( $post->ID ) ) );
+	echo '</ul>';
 }
 

@@ -117,8 +117,16 @@ class scbUtil {
 
 
 if ( ! function_exists( 'html' ) ):
-function html( $tag, $content = '' ) {
-	list( $closing ) = explode( ' ', $tag, 2 );
+function html($tag, $attributes = array(), $content = '') {
+	if ( is_array( $attributes ) ) {
+		$closing = $tag;
+		foreach ( $attributes as $key => $value ) {
+			$tag .= ' ' . $key . '="' . esc_attr( $value ) . '"';
+		}
+	} else {
+		$content = $attributes;
+		list($closing) = explode(' ', $tag, 2);
+	}
 
 	return "<{$tag}>{$content}</{$closing}>";
 }
