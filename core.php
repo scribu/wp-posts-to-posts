@@ -19,7 +19,7 @@ class Posts2Posts {
 	}
 
 	function connect( $post_a, $post_b ) {
-		if ( empty($post_a) )
+		if ( empty( $post_a ) )
 			return;
 
 		$terms = self::convert( 'term', $post_b );
@@ -31,7 +31,7 @@ class Posts2Posts {
 	}
 
 	function disconnect( $post_a, $post_b ) {
-		if ( empty($post_a) )
+		if ( empty( $post_a ) )
 			return;
 
 		$terms = self::convert( 'term', $post_b );
@@ -51,10 +51,13 @@ class Posts2Posts {
 	}
 
 	function get_connected( $post_id, $direction ) {
-		if ( 'from' == $direction )
-			return self::convert( 'post', wp_get_object_terms( $post_id, self::TAX, array( 'fields' => 'names' ) ) );
-		else
-			return get_objects_in_term( self::convert( 'term', $post_id ), self::TAX );
+		if ( 'from' == $direction ) {
+			$terms = wp_get_object_terms( $post_id, self::TAX, array( 'fields' => 'names' ) );
+			return self::convert( 'post', $terms );
+		} else {
+			$term = get_term_by( 'slug', reset( self::convert( 'term', $post_id ) ), self::TAX )->term_id;
+			return get_objects_in_term( $term, self::TAX );
+		}
 	}
 
 	// Add a 'p' to avoid confusion with term ids

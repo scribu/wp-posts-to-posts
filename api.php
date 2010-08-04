@@ -70,7 +70,7 @@ function p2p_connect( $post_a, $post_b, $reciprocal = false ) {
 /**
  * Disconnect a post from another one
  *
- * @param int|array $post_a The first end of the connection
+ * @param int $post_a The first end of the connection
  * @param int|array $post_b The second end of the connection
  * @param bool $reciprocal Wether the connection is reciprocal or not
  */

@@ -17,7 +17,7 @@ class P2P_Admin {
 	}
 
 	function migrate() {
-		if ( !isset( $_GET['p2p_migrate'] ) || !current_user_can( 'administrator' ) )
+		if ( !isset( $_GET['migrate_p2p'] ) || !current_user_can( 'administrator' ) )
 			return;
 
 		global $wpdb;
