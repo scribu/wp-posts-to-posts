@@ -1,6 +1,6 @@
 <?php
 
-class P2P_Box {
+class P2P_Admin {
 
 	private static $connections;
 
@@ -13,7 +13,31 @@ class P2P_Box {
 		add_action( 'save_post', array( __CLASS__, 'save' ), 10 );
 		add_action( 'wp_ajax_p2p_search', array( __CLASS__, 'ajax_search' ) );
 
-		scbUtil::add_uninstall_hook( $file, array( __CLASS__, 'uninstall' ) );
+		add_action( 'admin_notices', array( __CLASS__, 'migrate' ) );
+	}
+
+	function migrate() {
+		if ( !isset( $_GET['p2p_migrate'] ) || !current_user_can( 'administrator' ) )
+			return;
+
+		global $wpdb;
+
+		$rows = $wpdb->get_results( "
+			SELECT post_id as post_a, meta_value as post_b
+			FROM $wpdb->postmeta
+			WHERE meta_key = '_p2p'
+		" );
+
+		$grouped = array();
+		foreach ( $rows as $row )
+			$grouped[ $row->post_a ][] = $row->post_b;
+
+		foreach ( $grouped as $post_a => $post_b )
+			p2p_connect( $post_a, $post_b );
+
+		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key = '_p2p'" );
+
+		printf( "<div class='updated'><p>Migrated %s connections.</p></div>", count( $rows ) );
 	}
 
 	function scripts() {
@@ -169,12 +193,6 @@ class P2P_Box {
 		);
 
 		return scbUtil::objects_to_assoc( get_posts( $args ), 'ID', 'post_title' );
-	}
-
-	function uninstall() {
-		global $wpdb;
-
-		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key = '" . P2P_META_KEY . "'" );
 	}
 }
 

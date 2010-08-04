@@ -26,8 +26,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-define( 'P2P_META_KEY', '_p2p' );
-
 require dirname( __FILE__ ) . '/scb/load.php';
 
 function _p2p_init() {
@@ -38,7 +36,7 @@ function _p2p_init() {
 
 	if ( is_admin() ) {
 		require dirname( __FILE__ ) . '/admin/admin.php';
-		P2P_Box::init( __FILE__ );
+		P2P_Admin::init( __FILE__ );
 	}
 }
 scb_init( '_p2p_init' );
