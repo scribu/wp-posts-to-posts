@@ -142,11 +142,8 @@ function p2p_get_connected( $post_id, $direction = 'to', $post_type = 'any', $ou
  *
  * @param array $args See p2p_get_connected()
  */
-function p2p_list_connected( $args ) {
-	$args = wp_parse_args( $args );
-	$args['output'] = 'objects';
-
-	$posts = p2p_get_connected( $args );
+function p2p_list_connected( $post_id, $direction = 'to', $post_type = 'any' ) {
+	$posts = p2p_get_connected( $post_id, $direction, $post_type, 'objects' );
 
 	if ( empty( $posts ) )
 		return;
