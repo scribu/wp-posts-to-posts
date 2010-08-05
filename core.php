@@ -55,8 +55,11 @@ class Posts2Posts {
 			$terms = wp_get_object_terms( $post_id, self::TAX, array( 'fields' => 'names' ) );
 			return self::convert( 'post', $terms );
 		} else {
-			$term = get_term_by( 'slug', reset( self::convert( 'term', $post_id ) ), self::TAX )->term_id;
-			return get_objects_in_term( $term, self::TAX );
+			$term = get_term_by( 'slug', reset( self::convert( 'term', $post_id ) ), self::TAX );
+			if ( !$term )
+				return array();
+
+			return get_objects_in_term( $term->term_id, self::TAX );
 		}
 	}
 
