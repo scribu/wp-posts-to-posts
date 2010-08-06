@@ -12,13 +12,15 @@ Create connections between posts
 
 This plugin allows you to create relationships between posts of different types. The relationships are stored in a hidden taxonomy.
 
-To register a connection between two post types, write:
+To register a connection between two post types, add this code in your theme's functions.php file:
 
 `
-function my_connection_types() {
-    p2p_register_connection_type('book', 'author');
+if ( function_exists('p2p_register_connection_type') ) {
+	function my_connection_types() {
+		p2p_register_connection_type('book', 'author');
+	}
+	add_action('init', 'my_connection_types', 100);
 }
-add_action('init', 'my_connection_types', 100);
 `
 <br>
 
