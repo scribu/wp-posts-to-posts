@@ -49,7 +49,7 @@ jQuery(document).ready(function($) {
 		var $self = $(this);
 			$metabox = $self.parents('.p2p_metabox'),
 			$results = $metabox.find('.p2p_results'),
-			post_type = $self.attr('name').split('_')[2],
+			post_type = $self.attr('name').replace('p2p_search_', ''),
 			old_value = '',
 			$spinner = $metabox.find('.waiting');
 

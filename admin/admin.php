@@ -54,7 +54,7 @@ class P2P_Admin {
 	}
 
 	function scripts() {
-		wp_enqueue_script( 'p2p-admin-js', plugins_url( 'admin.js', __FILE__ ), array( 'jquery' ), '0.2', true );
+		wp_enqueue_script( 'p2p-admin-js', plugins_url( 'admin.js', __FILE__ ), array( 'jquery' ), '0.4-alpha2', true );
 
 ?>
 <style type="text/css">
