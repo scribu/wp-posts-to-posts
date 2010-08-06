@@ -14,6 +14,7 @@ class P2P_Admin {
 		add_action( 'wp_ajax_p2p_search', array( __CLASS__, 'ajax_search' ) );
 
 		add_action( 'admin_notices', array( __CLASS__, 'migrate' ) );
+		add_action( 'admin_notices', array( __CLASS__, 'uninstall' ) );
 	}
 
 	function migrate() {
@@ -38,6 +39,18 @@ class P2P_Admin {
 		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key = '_p2p'" );
 
 		printf( "<div class='updated'><p>Migrated %s connections.</p></div>", count( $rows ) );
+	}
+	
+	function uninstall() {
+		if ( !isset( $_GET['delete_p2p'] ) || !current_user_can( 'administrator' ) )
+			return;
+
+		$terms = get_terms( Posts2Posts::TAX, array( 'fields' => 'ids' ) );
+
+		foreach ( $terms as $term_id )
+			wp_delete_term( $term_id, Posts2Posts::TAX );
+
+		echo "<div class='updated'><p>Posts 2 Posts data deleted.</p></div>";
 	}
 
 	function scripts() {
