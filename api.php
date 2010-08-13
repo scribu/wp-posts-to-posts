@@ -103,7 +103,7 @@ function p2p_is_connected( $post_a, $post_b, $reciprocal = false ) {
  * Get the list of connected posts
  *
  * @param int $post_id One end of the connection
- * @param string $direction The direction of the connection. Can be 'to' or 'from'
+ * @param string $direction The direction of the connection. Can be 'to', 'from' or 'both'
  * @param string|array $post_type The post type of the connected posts.
  * @param string $output Can be 'ids' or 'objects'
  *
@@ -111,7 +111,13 @@ function p2p_is_connected( $post_a, $post_b, $reciprocal = false ) {
  * @return object A WP_Query instance otherwise
  */
 function p2p_get_connected( $post_id, $direction = 'to', $post_type = 'any', $output = 'ids' ) {
-	$ids = Posts2Posts::get_connected( $post_id, $direction );
+	if ( 'both' == $direction ) {
+		$to = Posts2Posts::get_connected( $post_id, 'to' );
+		$from = Posts2Posts::get_connected( $post_id, 'from' );
+		$ids = array_merge( $to, array_diff( $from, $to ) );
+	} else {
+		$ids = Posts2Posts::get_connected( $post_id, $direction );
+	}
 
 	if ( empty( $ids ) )
 		return array();
