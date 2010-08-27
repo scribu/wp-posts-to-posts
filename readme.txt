@@ -53,6 +53,13 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 0.4 =
+* introduced 'connected_from', 'connected_to', 'connected' vars for WP_Query
+* p2p_register_connection_type() takes an associative array as arguments
+* p2p_get_connected() only accepts 2 arguments now
+* removed p2p_list_connected()
+* [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-4.html)
+
 = 0.3 =
 * store connections using a taxonomy instead of postmeta
 * [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-3.html)

@@ -34,10 +34,9 @@ function _p2p_init() {
 	require dirname( __FILE__ ) . '/ui/ui.php';
 
 	P2P_Storage::init();
+	P2P_Query::init();
 	P2P_Connection_Types::init();
 	P2P_Box_Multiple::init();
 }
 scb_init( '_p2p_init' );
-
-// TODO: query_posts(array('connected_to' => array(1,2,3)));
 

@@ -34,7 +34,7 @@ class P2P_Connection_Types {
 				continue;
 
 			foreach ( $ctype->to as $to ) {
-				$title = empty($ctype->title) ? get_post_type_object($to)->labels->name : $ctype->title;
+				$title = empty( $ctype->title ) ? get_post_type_object( $to )->labels->name : $ctype->title;
 
 				add_meta_box(
 					'p2p-connections-' . $i++,
@@ -91,7 +91,7 @@ class P2P_Box_Multiple implements P2P_Box {
 		if ( !isset( $_POST['p2p_connected_ids_' . $to] ) )
 			return;
 
-		$old_connections = (array) p2p_get_connected( $post_a, 'from', $to, 'ids' );
+		$old_connections = self::get_connected_ids( $post_a, $to );
 		$new_connections = explode( ',', $_POST[ 'p2p_connected_ids_' . $to ] );
 
 		p2p_disconnect( $post_a, array_diff( $old_connections, $new_connections ) );
@@ -101,7 +101,7 @@ class P2P_Box_Multiple implements P2P_Box {
 	function box( $post, $args ) {
 		$post_type = $args['args'];
 
-		$connected_ids = p2p_get_connected( $post->ID, 'from', $post_type, 'ids' );
+		$connected_ids = self::get_connected_ids( $post->ID, $post_type );
 ?>
 
 <div class="p2p_metabox">
@@ -186,6 +186,18 @@ class P2P_Box_Multiple implements P2P_Box {
 		);
 
 		return scbUtil::objects_to_assoc( get_posts( $args ), 'ID', 'post_title' );
+	}
+
+	protected function get_connected_ids( $post_id, $post_type ) {
+		$args = array(
+			'connected_from' => $post_id,
+			'post_type'=> $post_type,
+			'post_status' => 'any',
+			'nopaging' => true,
+			'suppress_filters' => false,
+		);
+
+		return scbUtil::array_pluck( get_posts($args), 'ID' );
 	}
 }
 

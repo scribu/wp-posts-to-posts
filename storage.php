@@ -34,7 +34,7 @@ class P2P_Storage {
 
 		printf( "<div class='updated'><p>Migrated %s connections.</p></div>", count( $rows ) );
 	}
-	
+
 	function uninstall() {
 		if ( !isset( $_GET['delete_p2p'] ) || !current_user_can( 'administrator' ) )
 			return;

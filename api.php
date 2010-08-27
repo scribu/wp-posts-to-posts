@@ -10,6 +10,13 @@
  *  'title' string The box's title
  */
 function p2p_register_connection_type( $args ) {
+	$argv = func_get_args();
+
+	if ( count( $argv ) > 1 ) {
+		$args = array();
+		list( $args['from'], $args['to'] ) = $argv;
+	}
+
 	P2P_Connection_Types::register( $args );
 }
 
@@ -50,13 +57,10 @@ function p2p_is_connected( $post_a, $post_b ) {
  *
  * @param int $post_id One end of the connection
  * @param string $direction The direction of the connection. Can be 'to', 'from' or 'both'
- * @param string|array $post_type The post type of the connected posts.
- * @param string $output Can be 'ids' or 'objects'
  *
- * @return array A list of post_ids if $output = 'ids'
- * @return object A WP_Query instance otherwise
+ * @return array A list of post ids
  */
-function p2p_get_connected( $post_id, $direction = 'to', $post_type = 'any', $output = 'ids' ) {
+function p2p_get_connected( $post_id, $direction = 'to' ) {
 	if ( 'both' == $direction ) {
 		$to = P2P_Storage::get_connected( $post_id, 'to' );
 		$from = P2P_Storage::get_connected( $post_id, 'from' );
@@ -65,44 +69,33 @@ function p2p_get_connected( $post_id, $direction = 'to', $post_type = 'any', $ou
 		$ids = P2P_Storage::get_connected( $post_id, $direction );
 	}
 
-	if ( empty( $ids ) )
-		return array();
-
-	if ( 'any' == $post_type && 'ids' == $output )
-		return $ids;
-
-	$args = array(
-		'post__in' => $ids,
-		'post_type'=> $post_type,
-		'post_status' => 'any',
-		'nopaging' => true,
-	);
-
-	$posts = get_posts( $args );
-
-	if ( 'objects' == $output )
-		return $posts;
-
-	foreach ( $posts as &$post )
-		$post = $post->ID;
-
-	return $posts;
+	return $ids;
 }
 
-/**
- * Display the list of connected posts as an unordered list
- *
- * @param array $args See p2p_get_connected()
- */
-function p2p_list_connected( $post_id, $direction = 'to', $post_type = 'any' ) {
-	$posts = p2p_get_connected( $post_id, $direction, $post_type, 'objects' );
 
-	if ( empty( $posts ) )
-		return;
+// Allows you to write query_posts( array( 'connected' => 123 ) );
+class P2P_Query {
 
-	echo '<ul>';
-	foreach ( $posts as $post )
-		echo html( 'li', html_link( get_permalink( $post->ID ), get_the_title( $post->ID ) ) );
-	echo '</ul>';
+	function init() {
+		add_filter( 'posts_where', array( __CLASS__, 'posts_where' ), 10, 2 );
+	}
+
+	function posts_where( $where, $wp_query ) {
+		global $wpdb;
+
+		$map = array(
+			'connected' => 'any',
+			'connected_to' => 'to',
+			'connected_from' => 'from',
+		);
+
+		foreach ( $map as $qv => $direction ) {
+			if ( $id = $wp_query->get( $qv ) ) {
+				$where .= " AND $wpdb->posts.ID IN ( " . implode( ',', p2p_get_connected( $id, $direction ) ) . " )";
+			}
+		}
+
+		return $where;
+	}
 }
 
