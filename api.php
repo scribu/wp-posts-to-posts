@@ -84,7 +84,7 @@ class P2P_Query {
 		global $wpdb;
 
 		$map = array(
-			'connected' => 'any',
+			'connected' => 'both',
 			'connected_to' => 'to',
 			'connected_from' => 'from',
 		);
