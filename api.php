@@ -4,52 +4,13 @@
  * Register a connection between two post types.
  * This creates the appropriate meta box in the admin edit screen
  *
- * @param string $post_type_a The first end of the connection
- * @param string|array $post_type_b The second end of the connection
- * @param bool $reciprocal Wether the connection should be reciprocal
+ * @param array $args Can be:
+ *  'from' string|array The first end of the connection
+ *  'to' string|array The second end of the connection
+ *  'title' string The box's title
  */
-function p2p_register_connection_type( $post_type_a, $post_type_b, $reciprocal = false ) {
-	if ( !$ptype = get_post_type_object( $post_type_a ) )
-		return;
-
-	if ( empty( $post_type_b ) )
-		return;
-
-	if ( empty( $ptype->can_connect_to ) )
-		$ptype->can_connect_to = array();
-
-	$post_type_b = (array) $post_type_b;
-
-	$ptype->can_connect_to = array_merge( $ptype->can_connect_to, $post_type_b );
-
-	if ( $reciprocal )
-		foreach ( $post_type_b as $ptype_b )
-			p2p_register_connection_type( $ptype_b, $post_type_a, false );
-}
-
-/**
- * Get the registered connection types for a certain post type
- *
- * @param string $post_type_a The first end of the connection
- *
- * @return array[string] A list of post types
- */
-function p2p_get_connection_types( $post_type_a ) {
-	return (array) @get_post_type_object( $post_type_a )->can_connect_to;
-}
-
-/**
- * Check wether a connection type is reciprocal
- *
- * @param string $post_type_a The first end of the connection
- * @param string $post_type_b The second end of the connection
- *
- * @return bool
- */
-function p2p_connection_type_is_reciprocal( $post_type_a, $post_type_b ) {
-	return
-		in_array( $post_type_b, p2p_get_connection_types( $post_type_a ) ) &&
-		in_array( $post_type_a, p2p_get_connection_types( $post_type_b ) );
+function p2p_register_connection_type( $args ) {
+	P2P_Connection_Types::register( $args );
 }
 
 /**
@@ -57,14 +18,9 @@ function p2p_connection_type_is_reciprocal( $post_type_a, $post_type_b ) {
  *
  * @param int $post_a The first end of the connection
  * @param int|array $post_b The second end of the connection
- * @param bool $reciprocal Wether the connection is reciprocal or not
  */
-function p2p_connect( $post_a, $post_b, $reciprocal = false ) {
-	Posts2Posts::connect( $post_a, $post_b );
-
-	if ( $reciprocal )
-		foreach ( $post_b as $single )
-			Posts2Posts::connect( $single, $post_a );
+function p2p_connect( $post_a, $post_b ) {
+	P2P_Storage::connect( $post_a, $post_b );
 }
 
 /**
@@ -72,14 +28,9 @@ function p2p_connect( $post_a, $post_b, $reciprocal = false ) {
  *
  * @param int $post_a The first end of the connection
  * @param int|array $post_b The second end of the connection
- * @param bool $reciprocal Wether the connection is reciprocal or not
  */
-function p2p_disconnect( $post_a, $post_b, $reciprocal = false ) {
-	Posts2Posts::disconnect( $post_a, $post_b );
-
-	if ( $reciprocal )
-		foreach ( $post_b as $single )
-			Posts2Posts::disconnect( $single, $post_a );
+function p2p_disconnect( $post_a, $post_b ) {
+	P2P_Storage::disconnect( $post_a, $post_b );
 }
 
 /**
@@ -90,13 +41,8 @@ function p2p_disconnect( $post_a, $post_b, $reciprocal = false ) {
  *
  * @return bool True if the connection exists, false otherwise
  */
-function p2p_is_connected( $post_a, $post_b, $reciprocal = false ) {
-	$r = Posts2Posts::is_connected( $post_a, $post_b );
-
-	if ( $reciprocal )
-		$r = $r && Posts2Posts::is_connected( $post_b, $post_a );
-
-	return $r;
+function p2p_is_connected( $post_a, $post_b ) {
+	return P2P_Storage::is_connected( $post_a, $post_b );
 }
 
 /**
@@ -112,11 +58,11 @@ function p2p_is_connected( $post_a, $post_b, $reciprocal = false ) {
  */
 function p2p_get_connected( $post_id, $direction = 'to', $post_type = 'any', $output = 'ids' ) {
 	if ( 'both' == $direction ) {
-		$to = Posts2Posts::get_connected( $post_id, 'to' );
-		$from = Posts2Posts::get_connected( $post_id, 'from' );
+		$to = P2P_Storage::get_connected( $post_id, 'to' );
+		$from = P2P_Storage::get_connected( $post_id, 'from' );
 		$ids = array_merge( $to, array_diff( $from, $to ) );
 	} else {
-		$ids = Posts2Posts::get_connected( $post_id, $direction );
+		$ids = P2P_Storage::get_connected( $post_id, $direction );
 	}
 
 	if ( empty( $ids ) )

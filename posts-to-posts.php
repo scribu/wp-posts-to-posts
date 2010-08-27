@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Posts 2 Posts
-Version: 0.4-alpha2
+Version: 0.4-alpha3
 Plugin Author: scribu
 Description: Create connections between posts of different types
 Author URI: http://scribu.net/
@@ -10,7 +10,7 @@ Text Domain: posts-to-posts
 Domain Path: /lang
 
 
-Copyright ( C ) 2010 scribu.net ( scribu AT gmail DOT com )
+Copyright (C) 2010 scribu.net ( scribu AT gmail DOT com )
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,15 +29,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 require dirname( __FILE__ ) . '/scb/load.php';
 
 function _p2p_init() {
-	require dirname( __FILE__ ) . '/core.php';
+	require dirname( __FILE__ ) . '/storage.php';
 	require dirname( __FILE__ ) . '/api.php';
+	require dirname( __FILE__ ) . '/ui/ui.php';
 
-	Posts2Posts::init();
-
-	if ( is_admin() ) {
-		require dirname( __FILE__ ) . '/admin/admin.php';
-		P2P_Admin::init( __FILE__ );
-	}
+	P2P_Storage::init();
+	P2P_Connection_Types::init();
+	P2P_Box_Multiple::init();
 }
 scb_init( '_p2p_init' );
+
+// TODO: query_posts(array('connected_to' => array(1,2,3)));
 

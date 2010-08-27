@@ -19,7 +19,7 @@ class scbQueryManipulation {
 		$this->callback = $callback;
 
 		$this->enable();
-		
+
 		if ( !$once )
 			return;
 
