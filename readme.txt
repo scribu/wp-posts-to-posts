@@ -28,8 +28,7 @@ add_action('init', 'my_connection_types', 100);
 `
 <br>
 
-See [available functions](http://plugins.trac.wordpress.org/browser/posts-to-posts/trunk/api.php).
-
+Links: [API](http://plugins.trac.wordpress.org/browser/posts-to-posts/trunk/api.php) | [Plugin News](http://scribu.net/wordpress/posts-to-posts) | [Author's Site](http://scribu.net)
 
 == Installation ==
 
@@ -55,9 +54,10 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 = 0.4 =
 * introduced 'connected_from', 'connected_to', 'connected' vars for WP_Query
-* p2p_register_connection_type() takes an associative array as arguments
-* p2p_get_connected() only accepts 2 arguments now
 * removed p2p_list_connected()
+* p2p_get_connected() only accepts 2 arguments now
+* p2p_register_connection_type() can take an associative array as arguments
+* removed $reciprocal arg from all functions
 * [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-4.html)
 
 = 0.3 =

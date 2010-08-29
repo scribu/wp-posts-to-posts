@@ -10,12 +10,12 @@ Text Domain: posts-to-posts
 Domain Path: /lang
 
 
-Copyright (C) 2010 scribu.net ( scribu AT gmail DOT com )
+Copyright (C) 2010 Cristi Burcă (scribu@gmail.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 3 of the License, or
-( at your option ) any later version.
+(at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
