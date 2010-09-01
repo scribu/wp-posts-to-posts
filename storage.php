@@ -1,118 +1,170 @@
 <?php
 
-class P2P_Storage {
-	const TAX = 'p2p';
+class P2P_Connections {
 
-	function init() {
-		add_action( 'init', array( __CLASS__, 'setup' ) );
-		add_action( 'delete_post', array( __CLASS__, 'delete_post' ) );
-
-		add_action( 'admin_notices', array( __CLASS__, 'migrate' ) );
-		add_action( 'admin_notices', array( __CLASS__, 'uninstall' ) );
-	}
-
-	function migrate() {
-		if ( !isset( $_GET['migrate_p2p'] ) || !current_user_can( 'administrator' ) )
-			return;
-
-		global $wpdb;
-
-		$rows = $wpdb->get_results( "
-			SELECT post_id as post_a, meta_value as post_b
-			FROM $wpdb->postmeta
-			WHERE meta_key = '_p2p'
+	function init( $file ) {
+		$table = new scbTable( 'p2p', $file, "
+			p2p_id bigint(20) unsigned NOT NULL auto_increment,
+			p2p_from bigint(20) unsigned NOT NULL,
+			p2p_to bigint(20) unsigned NOT NULL,
+			PRIMARY KEY  (p2p_id),
+			KEY p2p_from (p2p_from),
+			KEY p2p_to (p2p_to)
 		" );
 
-		$grouped = array();
-		foreach ( $rows as $row )
-			$grouped[ $row->post_a ][] = $row->post_b;
+		$table2 = new scbTable( 'p2pmeta', $file, "
+			meta_id bigint(20) unsigned NOT NULL auto_increment,
+			p2p_id bigint(20) unsigned NOT NULL default '0',
+			meta_key varchar(255) default NULL,
+			meta_value longtext,
+			PRIMARY KEY  (meta_id),
+			KEY p2p_id (p2p_id),
+			KEY meta_key (meta_key)
+		" );
 
-		foreach ( $grouped as $post_a => $post_b )
-			p2p_connect( $post_a, $post_b );
+// FORCE UPDATE
+#add_action('init', array($table, 'install'));
+#add_action('init', array($table2, 'install'));
 
-		$wpdb->query( "DELETE FROM $wpdb->postmeta WHERE meta_key = '_p2p'" );
-
-		printf( "<div class='updated'><p>Migrated %s connections.</p></div>", count( $rows ) );
-	}
-
-	function uninstall() {
-		if ( !isset( $_GET['delete_p2p'] ) || !current_user_can( 'administrator' ) )
-			return;
-
-		$terms = get_terms( P2P_Storage::TAX, array( 'fields' => 'ids' ) );
-
-		foreach ( $terms as $term_id )
-			wp_delete_term( $term_id, P2P_Storage::TAX );
-
-		echo "<div class='updated'><p>Posts 2 Posts data deleted.</p></div>";
-	}
-
-	function setup() {
-		register_taxonomy( self::TAX, 'post', array( 'public' => false ) );
+		add_action( 'delete_post', array( __CLASS__, 'delete_post' ) );
 	}
 
 	function delete_post( $post_id ) {
-		wp_delete_term( self::convert( 'term', $post_id ), self::TAX );
+		self::delete( $post_id, 'from' );
+		self::delete( $post_id, 'to' );
 	}
 
-	function connect( $post_a, $post_b ) {
-		if ( empty( $post_a ) )
-			return;
+	/**
+	 * Get a list of posts connected to a certain post
+	 *
+	 * @param int $from post id
+	 * @param int|string $to post id or direction: 'from' or 'to'
+	 * @param array $data additional data about the connection
+	 *
+	 * @return array list of post ids if $out = 'array'
+	 * @return string SQL query if $out = 'sql'
+	 */
+	function get( $from, $to, $data = array(), $out = 'array' ) {
+		global $wpdb;
 
-		$terms = self::convert( 'term', $post_b );
+		$select = "";
+		$where = "";
 
-		if ( empty( $terms ) )
-			return;
-
-		wp_set_object_terms( $post_a, $terms, self::TAX, true );
-	}
-
-	function disconnect( $post_a, $post_b ) {
-		if ( empty( $post_a ) )
-			return;
-
-		$terms = self::convert( 'term', $post_b );
-
-		if ( empty( $terms ) )
-			return;
-
-		$list = wp_get_object_terms( $post_a, self::TAX, 'fields=names' );
-
-		wp_set_object_terms( $post_a, array_diff( $list, $terms ), self::TAX );
-	}
-
-	function is_connected( $post_a, $post_b ) {
-		$terms = self::convert( 'term', $post_b );
-
-		return is_object_in_term( $post_a, $terms, self::TAX );
-	}
-
-	function get_connected( $post_id, $direction ) {
-		if ( 'from' == $direction ) {
-			$terms = wp_get_object_terms( $post_id, self::TAX, array( 'fields' => 'names' ) );
-			return self::convert( 'post', $terms );
-		} else {
-			$term = get_term_by( 'slug', reset( self::convert( 'term', $post_id ) ), self::TAX );
-			if ( !$term )
-				return array();
-
-			return get_objects_in_term( $term->term_id, self::TAX );
+		switch ( $to ) {
+			case 'from':
+				$select .= "DISTINCT p2p_to";
+				$where .= $wpdb->prepare( "p2p_from = %d", $from );
+				break;
+			case 'to':
+				$select .= "DISTINCT p2p_from";
+				$where .= $wpdb->prepare( "p2p_to = %d", $from );
+				break;
+			default:
+				$select .= "p2p_id";
+				$where .= $wpdb->prepare( "p2p_from = %d AND p2p_to = %d", $from, $to );
 		}
+
+		if ( !empty( $data ) ) {
+			$clauses = array();
+			foreach ( $data as $key => $value ) {
+				$clauses[] = $wpdb->prepare( "WHEN %s THEN meta_value = %s ", $key, $value );
+			}
+
+			$where .= " AND p2p_id IN (
+				SELECT p2p_id
+				FROM $wpdb->p2pmeta
+				WHERE CASE meta_key 
+				" . implode( "\n", $clauses ) . "
+				END
+				GROUP BY p2p_id HAVING COUNT(p2p_id) = " . count($data) . "
+			)";
+		}
+
+		$query = "SELECT $select FROM $wpdb->p2p WHERE $where";
+
+#debug("SELECT * FROM $wpdb->p2pmeta", $wpdb->get_results("SELECT * FROM $wpdb->p2pmeta"));
+#debug($query);
+#dpb();
+
+		if ( 'sql' == $out )
+			return $query;
+
+		return $wpdb->get_col( $query );
 	}
 
-	// Add a 'p' to avoid confusion with term ids
-	private function convert( $to, $ids ) {
-		$ids = array_filter( (array) $ids );
+	/**
+	 * Connect two posts
+	 *
+	 * @param int $from post id
+	 * @param int $to post id
+	 * @param array $data additional data about the connection
+	 *
+	 * @return int|bool connection id or False on failure
+	 */
+	function add( $from, $to, $data = array() ) {
+		global $wpdb;
 
-		if ( 'term' == $to )
-			foreach ( $ids as &$id )
-				$id = 'p' . $id;
-		else
-			foreach ( $ids as &$id )
-				$id = substr( $id, 1 );
+		$from = absint($from);
+		$to = absint($to);
 
-		return $ids;
+		if ( !$from || !$to )
+			return false;
+
+		$ids = self::get( $from, $to, $data );
+
+		if ( !empty( $ids ) )
+			return $ids[0];
+
+		$wpdb->insert( $wpdb->p2p, array( 'p2p_from' => $from, 'p2p_to' => $to ), '%d' );
+
+		$p2p_id = $wpdb->insert_id;
+
+		foreach ( $data as $key => $value )
+			add_p2p_meta( $p2p_id, $key, $value );
+
+		return $p2p_id;
+	}
+
+	/**
+	 * Disconnect two posts
+	 *
+	 * @param int $from post id
+	 * @param int|string $to post id or direction: 'from' or 'to'
+	 * @param array $data additional data about the connection
+	 *
+	 * @return int Number of connections deleted
+	 */
+	function delete( $from, $to, $data = array() ) {
+		global $wpdb;
+
+		$ids = self::get( $from, $to, $data );
+
+		if ( empty( $ids ) )
+			return 0;
+
+		$where = "WHERE p2p_id IN (" . implode(',', $ids ) . ")";
+
+		$wpdb->query( "DELETE FROM $wpdb->p2p $where" );
+		$wpdb->query( "DELETE FROM $wpdb->p2pmeta $where" );
+
+		return count( $ids );
 	}
 }
 
-P2P_Storage::init();
+
+function get_p2p_meta($p2p_id, $key, $single = false) {
+	return get_metadata('p2p', $p2p_id, $key, $single);
+}
+
+function update_p2p_meta($p2p_id, $meta_key, $meta_value, $prev_value = '') {
+	return update_metadata('p2p', $p2p_id, $meta_key, $meta_value, $prev_value);
+}
+
+function add_p2p_meta($p2p_id, $meta_key, $meta_value, $unique = false) {
+	return add_metadata('p2p', $p2p_id, $meta_key, $meta_value, $unique);
+}
+
+function delete_p2p_meta($p2p_id, $meta_key, $meta_value = '') {
+	return delete_metadata('p2p', $p2p_id, $meta_key, $meta_value);
+}
+

@@ -383,7 +383,9 @@ abstract class scbAdminPage {
 		if ( is_object( $screen ) )
 			$screen = $screen->id;
 
-		if ( $screen == $this->pagehook && $actual_help = $this->page_help() )
+		$actual_help = $this->page_help();
+
+		if ( $screen == $this->pagehook && $actual_help )
 			return $actual_help;
 
 		return $help;

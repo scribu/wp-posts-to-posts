@@ -12,7 +12,7 @@ class P2P_Connection_Types {
 		$args = wp_parse_args( $args, array(
 			'from' => '',
 			'to' => '',
-			'box' => 'P2P_Box_Multiple',	// TODO: Use friendlier name
+			'box' => 'P2P_Box_Multiple',
 			'title' => '',
 		) );
 

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Posts 2 Posts
-Version: 0.4-alpha3
+Version: 0.4-alpha4
 Plugin Author: scribu
 Description: Create connections between posts of different types
 Author URI: http://scribu.net/
@@ -33,7 +33,7 @@ function _p2p_init() {
 	require dirname( __FILE__ ) . '/api.php';
 	require dirname( __FILE__ ) . '/ui/ui.php';
 
-	P2P_Storage::init();
+	P2P_Connections::init( __FILE__ );
 	P2P_Query::init();
 	P2P_Connection_Types::init();
 	P2P_Box_Multiple::init();

@@ -8,6 +8,7 @@
  *  'from' string|array The first end of the connection
  *  'to' string|array The second end of the connection
  *  'title' string The box's title
+ *  'box' string A class that implements the P2P_Box interface. Default: P2P_Box_Multiple
  */
 function p2p_register_connection_type( $args ) {
 	$argv = func_get_args();
@@ -21,35 +22,25 @@ function p2p_register_connection_type( $args ) {
 }
 
 /**
- * Connect a post to another one
+ * Connect a post to one or more other posts
  *
- * @param int $post_a The first end of the connection
- * @param int|array $post_b The second end of the connection
+ * @param int $from The first end of the connection
+ * @param int|array $to The second end of the connection
  */
-function p2p_connect( $post_a, $post_b ) {
-	P2P_Storage::connect( $post_a, $post_b );
+function p2p_connect( $from, $to, $data = array() ) {
+	foreach ( (array) $to as $to )
+		P2P_Connections::add( $from, $to, $data );
 }
 
 /**
- * Disconnect a post from another one
+ * Disconnect a post from or more other posts
  *
- * @param int $post_a The first end of the connection
- * @param int|array $post_b The second end of the connection
+ * @param int $from The first end of the connection
+ * @param int|array $to The second end of the connection
  */
-function p2p_disconnect( $post_a, $post_b ) {
-	P2P_Storage::disconnect( $post_a, $post_b );
-}
-
-/**
- * See if a certain post is connected to another one
- *
- * @param int $post_a The first end of the connection
- * @param int $post_b The second end of the connection
- *
- * @return bool True if the connection exists, false otherwise
- */
-function p2p_is_connected( $post_a, $post_b ) {
-	return P2P_Storage::is_connected( $post_a, $post_b );
+function p2p_disconnect( $from, $to, $data = array() ) {
+	foreach ( (array) $to as $to )
+		P2P_Connections::delete( $from, $to, $data );
 }
 
 /**
@@ -60,18 +51,31 @@ function p2p_is_connected( $post_a, $post_b ) {
  *
  * @return array A list of post ids
  */
-function p2p_get_connected( $post_id, $direction = 'to' ) {
+function p2p_get_connected( $post_id, $direction = 'to', $data = array() ) {
 	if ( 'both' == $direction ) {
-		$to = P2P_Storage::get_connected( $post_id, 'to' );
-		$from = P2P_Storage::get_connected( $post_id, 'from' );
+		$to = P2P_Connections::get( $post_id, 'to', $data );
+		$from = P2P_Connections::get( $post_id, 'from', $data );
 		$ids = array_merge( $to, array_diff( $from, $to ) );
 	} else {
-		$ids = P2P_Storage::get_connected( $post_id, $direction );
+		$ids = P2P_Connections::get( $post_id, $direction, $data );
 	}
 
 	return $ids;
 }
 
+/**
+ * See if a certain post is connected to another one
+ *
+ * @param int $from The first end of the connection
+ * @param int $to The second end of the connection
+ *
+ * @return bool True if the connection exists, false otherwise
+ */
+function p2p_is_connected( $from, $to, $data = array() ) {
+	$ids = p2p_get_connected( $from, $to, $data );
+
+	return !empty( $ids );
+}
 
 // Allows you to write query_posts( array( 'connected' => 123 ) );
 class P2P_Query {
