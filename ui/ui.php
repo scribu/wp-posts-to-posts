@@ -14,7 +14,7 @@ abstract class P2P_Box {
 		$this->reversed = $reversed;
 
 		if ( $this->reversed )
-			list( $this->to, $this->from ) = array( $this->from, $this->to, );
+			list( $this->to, $this->from ) = array( $this->from, $this->to );
 	}
 
 	function _box( $post ) {
@@ -74,16 +74,15 @@ class P2P_Connection_Types {
 		$r = array();
 		$i = 0;
 		foreach ( self::$ctypes as $args ) {
-			extract( $args, EXTR_SKIP );
-			if ( $post_type == $from ) {
+			if ( $post_type == $args['from'] ) {
 				$reversed = false;
-			} elseif ( $reciprocal && $post_type == $to ) {
+			} elseif ( $args['reciprocal'] && $post_type == $args['to'] ) {
 				$reversed = true;
 			} else {
 				continue;
 			}
 
-			$r[] = new $box($args, $reversed, $i++);
+			$r[] = new $args['box']($args, $reversed, $i++);
 		}
 
 		return $r;

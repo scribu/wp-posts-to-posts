@@ -25,9 +25,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		if ( !isset( $_POST['p2p_connected_ids'][$this->id] ) )
 			return;
 
-		$to = $this->to;
-
-		$old_connections = self::get_connected_ids( $post_id, $to );
+		$old_connections = self::get_connected_ids( $post_id );
 		$new_connections = explode( ',', $_POST['p2p_connected_ids'][$this->id] );
 
 		$to_disconnect = array_diff( $old_connections, $new_connections );
@@ -121,23 +119,12 @@ class P2P_Box_Multiple extends P2P_Box {
 		die( json_encode( $results ) );
 	}
 
-	private function get_post_list( $post_type ) {
-		$args = array(
-			'post_type' => $post_type,
-			'post_status' => 'any',
-			'nopaging' => true,
-			'cache_results' => false,
-		);
-
-		return scbUtil::objects_to_assoc( get_posts( $args ), 'ID', 'post_title' );
-	}
-
-	protected function get_connected_ids( $post_id, $post_type ) {
+	protected function get_connected_ids( $post_id ) {
 		$field = $this->reversed ? 'connected_to' : 'connected_from';
 
 		$args = array(
 			$field => $post_id,
-			'post_type'=> $post_type,
+			'post_type'=> $this->to,
 			'post_status' => 'any',
 			'nopaging' => true,
 			'suppress_filters' => false,
