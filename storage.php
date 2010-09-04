@@ -82,10 +82,6 @@ class P2P_Connections {
 
 		$query = "SELECT $select FROM $wpdb->p2p WHERE $where";
 
-#debug("SELECT * FROM $wpdb->p2pmeta", $wpdb->get_results("SELECT * FROM $wpdb->p2pmeta"));
-#debug($query);
-#dpb();
-
 		if ( 'sql' == $out )
 			return $query;
 

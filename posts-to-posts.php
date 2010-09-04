@@ -32,6 +32,7 @@ function _p2p_init() {
 	require dirname( __FILE__ ) . '/storage.php';
 	require dirname( __FILE__ ) . '/api.php';
 	require dirname( __FILE__ ) . '/ui/ui.php';
+	require dirname( __FILE__ ) . '/ui/boxes.php';
 
 	P2P_Connections::init( __FILE__ );
 	P2P_Query::init();

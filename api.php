@@ -8,6 +8,7 @@
  *  'from' string|array The first end of the connection
  *  'to' string|array The second end of the connection
  *  'title' string The box's title
+ *  'reciprocal' bool wether to show the box on both sides of the connection
  *  'box' string A class that implements the P2P_Box interface. Default: P2P_Box_Multiple
  */
 function p2p_register_connection_type( $args ) {
@@ -18,29 +19,41 @@ function p2p_register_connection_type( $args ) {
 		list( $args['from'], $args['to'] ) = $argv;
 	}
 
-	P2P_Connection_Types::register( $args );
+	foreach ( (array) $args['from'] as $from ) {
+		foreach ( (array) $args['to'] as $to ) {
+			$args['from'] = $from;
+			$args['to'] = $to;
+			P2P_Connection_Types::register( $args );
+		}
+	}
 }
 
 /**
  * Connect a post to one or more other posts
  *
- * @param int $from The first end of the connection
+ * @param int|array $from The first end of the connection
  * @param int|array $to The second end of the connection
  */
 function p2p_connect( $from, $to, $data = array() ) {
-	foreach ( (array) $to as $to )
-		P2P_Connections::add( $from, $to, $data );
+	foreach ( (array) $from as $from ) {
+		foreach ( (array) $to as $to ) {
+			P2P_Connections::add( $from, $to, $data );
+		}
+	}
 }
 
 /**
  * Disconnect a post from or more other posts
  *
- * @param int $from The first end of the connection
+ * @param int|array $from The first end of the connection
  * @param int|array $to The second end of the connection
  */
 function p2p_disconnect( $from, $to, $data = array() ) {
-	foreach ( (array) $to as $to )
-		P2P_Connections::delete( $from, $to, $data );
+	foreach ( (array) $from as $from ) {
+		foreach ( (array) $to as $to ) {
+			P2P_Connections::delete( $from, $to, $data );
+		}
+	}
 }
 
 /**
