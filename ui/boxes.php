@@ -22,11 +22,11 @@ class P2P_Box_Multiple extends P2P_Box {
 	}
 
 	function save( $post_id ) {
-		if ( !isset( $_POST['p2p_connected_ids'][$this->id] ) )
+		if ( !isset( $_POST['p2p_connected_ids'][$this->box_id] ) )
 			return;
 
 		$old_connections = $this->get_connected_ids( $post_id );
-		$new_connections = explode( ',', $_POST['p2p_connected_ids'][$this->id] );
+		$new_connections = explode( ',', $_POST['p2p_connected_ids'][$this->box_id] );
 
 		$to_disconnect = array_diff( $old_connections, $new_connections );
 		$to_connect = array_diff( $new_connections, $old_connections );
@@ -85,7 +85,7 @@ class P2P_Box_Multiple extends P2P_Box {
 	<div class="hide-if-js">
 		<?php echo scbForms::input( array(
 			'type' => 'text',
-			'name' => "p2p_connected_ids[$this->id]",
+			'name' => "p2p_connected_ids[$this->box_id]",
 			'value' => implode( ',', $connected_ids ),
 			'extra' => array( 'class' => 'p2p_connected_ids' ),
 		) ); ?>

@@ -10,7 +10,7 @@ abstract class P2P_Box {
 		foreach ( $args as $key => $value )
 			$this->$key = $value;
 
-		$this->id = $box_id;
+		$this->box_id = $box_id;
 		$this->reversed = $reversed;
 
 		if ( $this->reversed )
