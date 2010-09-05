@@ -33,6 +33,7 @@ function p2p_register_connection_type( $args ) {
  *
  * @param int|array $from The first end of the connection
  * @param int|array $to The second end of the connection
+ * @param array $data additional data about the connection
  */
 function p2p_connect( $from, $to, $data = array() ) {
 	foreach ( (array) $from as $from ) {
@@ -47,6 +48,7 @@ function p2p_connect( $from, $to, $data = array() ) {
  *
  * @param int|array $from The first end of the connection
  * @param int|array $to The second end of the connection
+ * @param array $data additional data about the connection to filter against
  */
 function p2p_disconnect( $from, $to, $data = array() ) {
 	foreach ( (array) $from as $from ) {
@@ -61,6 +63,7 @@ function p2p_disconnect( $from, $to, $data = array() ) {
  *
  * @param int $post_id One end of the connection
  * @param string $direction The direction of the connection. Can be 'to', 'from' or 'both'
+ * @param array $data additional data about the connection to filter against
  *
  * @return array( p2p_id => post_id )
  */
@@ -81,6 +84,7 @@ function p2p_get_connected( $post_id, $direction = 'to', $data = array() ) {
  *
  * @param int $from The first end of the connection
  * @param int $to The second end of the connection
+ * @param array $data additional data about the connection to filter against
  *
  * @return bool True if the connection exists, false otherwise
  */

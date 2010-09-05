@@ -132,7 +132,7 @@ class P2P_Connections {
 	 *
 	 * @param int $from post id
 	 * @param int|string $to post id or direction: 'from' or 'to'
-	 * @param array $data additional data about the connection
+	 * @param array $data additional data about the connection to filter against
 	 *
 	 * @return int Number of connections deleted
 	 */
