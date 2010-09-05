@@ -35,16 +35,16 @@ class P2P_Connections {
 	}
 
 	/**
-	 * Get a list of posts connected to a certain post
+	 * Get a list of connections, given a certain post id
 	 *
 	 * @param int $from post id
 	 * @param int|string $to post id or direction: 'from' or 'to'
-	 * @param array $data additional data about the connection
+	 * @param array $data additional data about the connection to filter against
 	 *
-	 * @return array list of post ids if $out = 'array'
-	 * @return string SQL query if $out = 'sql'
+	 * @return array( p2p_id => post_id ) if $to is string
+	 * @return array( p2p_id ) if $to is int
 	 */
-	function get( $from, $to, $data = array(), $out = 'array' ) {
+	function get( $from, $to, $data = array() ) {
 		global $wpdb;
 
 		$select = "";
@@ -52,11 +52,11 @@ class P2P_Connections {
 
 		switch ( $to ) {
 			case 'from':
-				$select .= "DISTINCT p2p_to";
+				$select .= "p2p_id, p2p_to AS post_id";
 				$where .= $wpdb->prepare( "p2p_from = %d", $from );
 				break;
 			case 'to':
-				$select .= "DISTINCT p2p_from";
+				$select .= "p2p_id, p2p_from AS post_id";
 				$where .= $wpdb->prepare( "p2p_to = %d", $from );
 				break;
 			default:
@@ -82,10 +82,16 @@ class P2P_Connections {
 
 		$query = "SELECT $select FROM $wpdb->p2p WHERE $where";
 
-		if ( 'sql' == $out )
-			return $query;
+		if ( is_numeric( $to ) )
+			return $wpdb->get_col( $query );
 
-		return $wpdb->get_col( $query );
+		$results = $wpdb->get_results( $query );
+
+		$r = array();
+		foreach ( $results as $row )
+			$r[ $row->p2p_id ] = $row->post_id;
+
+		return $r;
 	}
 
 	/**

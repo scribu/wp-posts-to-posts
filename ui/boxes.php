@@ -10,7 +10,7 @@ class P2P_Box_Multiple extends P2P_Box {
 	}
 
 	function scripts() {
-		wp_enqueue_script( 'p2p-admin-js', plugins_url( 'ui.js', __FILE__ ), array( 'jquery' ), '0.4-alpha3', true );
+		wp_enqueue_script( 'p2p-admin-js', plugins_url( 'ui.js', __FILE__ ), array( 'jquery' ), '0.4-alpha5', true );
 
 ?>
 <style type="text/css">
@@ -25,7 +25,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		if ( !isset( $_POST['p2p_connected_ids'][$this->id] ) )
 			return;
 
-		$old_connections = self::get_connected_ids( $post_id );
+		$old_connections = $this->get_connected_ids( $post_id );
 		$new_connections = explode( ',', $_POST['p2p_connected_ids'][$this->id] );
 
 		$to_disconnect = array_diff( $old_connections, $new_connections );
@@ -40,10 +40,19 @@ class P2P_Box_Multiple extends P2P_Box {
 		}
 	}
 
-	function box( $post_id ) {
-		$post_type = $this->to;
+	function single_connection( $p2p_id, $post_id ) {
+		echo html( 'li', scbForms::input( array(
+			'type' => 'checkbox',
+			'name' => "p2p_checkbox[]",
+			'value' => $post_id,
+			'checked' => true,
+			'desc' => get_the_title( $post_id ),
+			'extra' => array( 'autocomplete' => 'off' ),
+		) ) );
+	}
 
-		$connected_ids = self::get_connected_ids( $post_id, $post_type );
+	function box( $post_id ) {
+		$connected_ids = $this->get_connected_ids( $post_id, $this->to );
 ?>
 
 <div class="p2p_metabox">
@@ -52,15 +61,8 @@ class P2P_Box_Multiple extends P2P_Box {
 		<?php if ( empty( $connected_ids ) ) { ?>
 			<li class="howto"><?php _e( 'No connections.', 'posts-to-posts' ); ?></li>
 		<?php } else { ?>
-			<?php foreach ( $connected_ids as $id ) {
-				echo html( 'li', scbForms::input( array(
-					'type' => 'checkbox',
-					'name' => "p2p_checkbox_$id",
-					'value' => $id,
-					'checked' => true,
-					'desc' => get_the_title( $id ),
-					'extra' => array( 'autocomplete' => 'off' ),
-				) ) );
+			<?php foreach ( $connected_ids as $p2p_id => $post_id ) {
+				$this->single_connection($p2p_id, $post_id);
 			} ?>
 		<?php } ?>
 		</ul>
@@ -68,7 +70,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		<?php echo html( 'p class="p2p_search"',
 			scbForms::input( array(
 				'type' => 'text',
-				'name' => 'p2p_search_' . $post_type,
+				'name' => 'p2p_search_' . $this->to,
 				'desc' => __( 'Search', 'posts-to-posts' ) . ':',
 				'desc_pos' => 'before',
 				'extra' => array( 'autocomplete' => 'off' ),
@@ -120,17 +122,24 @@ class P2P_Box_Multiple extends P2P_Box {
 	}
 
 	protected function get_connected_ids( $post_id ) {
-		$field = $this->reversed ? 'connected_to' : 'connected_from';
+		$direction = $this->reversed ? 'to' : 'from';
+
+		$connected_posts = p2p_get_connected( $post_id, $direction );
+
+		if ( empty( $connected_posts ) )
+			return array();
 
 		$args = array(
-			$field => $post_id,
+			'post__in' => $connected_posts,
 			'post_type'=> $this->to,
 			'post_status' => 'any',
 			'nopaging' => true,
 			'suppress_filters' => false,
 		);
 
-		return scbUtil::array_pluck( get_posts($args), 'ID' );
+		$post_ids = scbUtil::array_pluck( get_posts($args), 'ID' );
+
+		return array_intersect( $connected_posts, $post_ids );	// to preserve p2p_id keys
 	}
 }
 

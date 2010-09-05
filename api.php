@@ -57,12 +57,12 @@ function p2p_disconnect( $from, $to, $data = array() ) {
 }
 
 /**
- * Get the list of connected posts
+ * Get a list of connected posts
  *
  * @param int $post_id One end of the connection
  * @param string $direction The direction of the connection. Can be 'to', 'from' or 'both'
  *
- * @return array A list of post ids
+ * @return array( p2p_id => post_id )
  */
 function p2p_get_connected( $post_id, $direction = 'to', $data = array() ) {
 	if ( 'both' == $direction ) {

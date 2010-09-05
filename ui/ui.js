@@ -24,13 +24,11 @@ jQuery(document).ready(function($) {
 					.append($('<input>').attr({
 						'type': 'checkbox',
 						'checked': 'checked',
-						'id': 'p2p_checkbox_' + $self.attr('name'),
+						'id': 'p2p_checkbox[]',
 						'value': $self.attr('name'),
 						'autocomplete': 'off'
 					}))
-					.append($('<label>').attr({
-						'for': 'p2p_checkbox_' + $self.attr('name')
-					}).html($self.html()))
+					.append($('<label>').html($self.html()))
 				);
 		}
 
