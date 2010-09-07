@@ -9,7 +9,7 @@
  *  'to' string|array The second end of the connection
  *  'title' string The box's title
  *  'reciprocal' bool wether to show the box on both sides of the connection
- *  'box' string A class that implements the P2P_Box interface. Default: P2P_Box_Multiple
+ *  'box' string A class that handles displaying and saving connections. Default: P2P_Box_Multiple
  */
 function p2p_register_connection_type( $args ) {
 	$argv = func_get_args();

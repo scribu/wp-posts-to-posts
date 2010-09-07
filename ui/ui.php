@@ -50,7 +50,7 @@ class P2P_Connection_Types {
 				$title = get_post_type_object( $ctype->to )->labels->name;
 
 			add_meta_box(
-				'p2p-connections-' . $ctype->id,
+				'p2p-connections-' . $ctype->box_id,
 				$title,
 				array( $ctype, '_box' ),
 				$from,
