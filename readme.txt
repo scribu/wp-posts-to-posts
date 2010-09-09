@@ -19,10 +19,7 @@ function my_connection_types() {
 	if ( !function_exists('p2p_register_connection_type') )
 		return;
 
-	p2p_register_connection_type( array(
-		'from' => array('post', 'page'),
-		'to' => 'book'
-	) );
+	p2p_register_connection_type( 'post', 'page' );
 }
 add_action('init', 'my_connection_types', 100);
 `

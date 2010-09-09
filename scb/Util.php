@@ -117,7 +117,7 @@ class scbUtil {
 
 
 if ( ! function_exists( 'html' ) ):
-function html($tag, $attributes = array(), $content = '') {
+function html( $tag, $attributes = array(), $content = '' ) {
 	if ( is_array( $attributes ) ) {
 		$closing = $tag;
 		foreach ( $attributes as $key => $value ) {
@@ -125,7 +125,7 @@ function html($tag, $attributes = array(), $content = '') {
 		}
 	} else {
 		$content = $attributes;
-		list($closing) = explode(' ', $tag, 2);
+		list( $closing ) = explode(' ', $tag, 2);
 	}
 
 	return "<{$tag}>{$content}</{$closing}>";
@@ -144,21 +144,6 @@ endif;
 
 
 //_____Compatibility layer_____
-
-
-// WP < 3.0
-if ( ! function_exists( '__return_false' ) ) :
-function __return_false() {
-	return false;
-}
-endif;
-
-// WP < ?
-if ( ! function_exists( '__return_true' ) ) :
-function __return_true() {
-	return true;
-}
-endif;
 
 // WP < ?
 if ( ! function_exists( 'set_post_field' ) ) :
