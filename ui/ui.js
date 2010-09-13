@@ -19,17 +19,11 @@ jQuery(document).ready(function($) {
 			$list = $metabox.find('.p2p_connected');
 
 		if ( !$list.find('input[value=' + $self.attr('name') + ']').length ) {
-			$list
-				.append($('<li>')
-					.append($('<input>').attr({
-						'type': 'checkbox',
-						'checked': 'checked',
-						'id': 'p2p_checkbox[]',
-						'value': $self.attr('name'),
-						'autocomplete': 'off'
-					}))
-					.append($('<label>').html($self.html()))
-				);
+			$list.append( 
+				$metabox.find('.connection-template').html()
+					.replace( '%post_id%', $self.attr('name') )
+					.replace( '%post_title%', $self.html() )
+			);
 		}
 
 		update_input($metabox);

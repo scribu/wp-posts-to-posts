@@ -47,7 +47,7 @@ function p2p_connect( $from, $to, $data = array() ) {
  * Disconnect a post from or more other posts
  *
  * @param int|array $from The first end of the connection
- * @param int|array $to The second end of the connection
+ * @param int|array|string $to The second end of the connection
  * @param array $data additional data about the connection to filter against
  */
 function p2p_disconnect( $from, $to, $data = array() ) {
