@@ -133,6 +133,8 @@ class P2P_Box_Multiple extends P2P_Box {
 	function ajax_search() {
 		$post_type_name = $_GET['post_type'];
 
+		add_filter( 'posts_search', array( __CLASS__, 'only_search_by_title' ) );
+
 		$args = array(
 			's' => $_GET['q'],
 			'post_type' => $post_type_name,
@@ -140,7 +142,7 @@ class P2P_Box_Multiple extends P2P_Box {
 			'posts_per_page' => 5,
 			'order' => 'ASC',
 			'orderby' => 'title',
-			'suppress_filters' => true,
+			'suppress_filters' => false,
 			'update_post_term_cache' => false,
 			'update_post_meta_cache' => false
 		);
@@ -152,6 +154,14 @@ class P2P_Box_Multiple extends P2P_Box {
 			$results[ $post->ID ] = $post->post_title;
 
 		die( json_encode( $results ) );
+	}
+
+	function only_search_by_title( $sql ) {
+		remove_filter( current_filter(), array( __CLASS__, __FUNCTION__ ) );
+
+		list( $sql ) = explode( ' OR ', $sql, 2 );
+
+		return $sql . '))';
 	}
 }
 
