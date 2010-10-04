@@ -35,9 +35,6 @@ abstract class scbAdminPage {
 	// l10n
 	protected $textdomain;
 
-	// Formdata used for filling the form elements
-	protected $formdata = array();
-
 
 //  ____________REGISTRATION COMPONENT____________
 
@@ -85,10 +82,8 @@ abstract class scbAdminPage {
 
 	// Constructor
 	function __construct( $file, $options = NULL ) {
-		if ( NULL !== $options ) {
+		if ( is_a( $options, 'scbOptions' ) )
 			$this->options = $options;
-			$this->formdata = $this->options->get();
-		}
 
 		$this->file = $file;
 		$this->plugin_url = plugin_dir_url( $file );
@@ -147,16 +142,18 @@ abstract class scbAdminPage {
 
 		check_admin_referer( $this->nonce );
 
-		$new_data = array();
-		foreach ( array_keys( $this->formdata ) as $key )
-			$new_data[$key] = @$_POST[$key];
+		if ( !isset($this->options) ) {
+			trigger_error('options handler not set', E_USER_WARNING);
+			return false;
+		}
+
+		$new_data = scbUtil::array_extract( $_POST, array_keys( $this->options->get_defaults() ) );
 
 		$new_data = stripslashes_deep( $new_data );
 
-		$this->formdata = $this->validate( $new_data, $this->formdata );
+		$new_data = $this->validate( $new_data, $this->options->get() );
 
-		if ( isset( $this->options ) )
-			$this->options->set( $this->formdata );
+		$this->options->set( $new_data );
 
 		$this->admin_msg();
 	}
@@ -286,8 +283,8 @@ abstract class scbAdminPage {
 	}
 
 	function input( $args, $formdata = array() ) {
-		if ( empty( $formdata ) )
-			$formdata = $this->formdata;
+		if ( empty( $formdata ) && isset( $this->options ) )
+			$formdata = $this->options->get();
 
 		if ( isset( $args['name_tree'] ) ) {
 			$tree = ( array ) $args['name_tree'];

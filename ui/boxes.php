@@ -145,13 +145,11 @@ class P2P_Box_Multiple extends P2P_Box {
 			'update_post_meta_cache' => false
 		);
 
-		$posts = new WP_Query( $args );
+		$posts = get_posts( $args );
 
 		$results = array();
-		while ( $posts->have_posts() ) {
-			$posts->the_post();
-			$results[ get_the_ID() ] = get_the_title();
-		}
+		foreach ( $posts as $post )
+			$results[ $post->ID ] = $post->post_title;
 
 		die( json_encode( $results ) );
 	}
