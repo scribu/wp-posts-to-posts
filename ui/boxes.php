@@ -24,8 +24,6 @@ class P2P_Box_Multiple extends P2P_Box {
 	}
 
 	function save( $post_a, $data ) {
-		p2p_disconnect( $post_a, $this->direction );
-
 		foreach ( $data[ 'post_id' ] as $i => $post_b ) {
 			$meta = array();
 			foreach ( $this->meta_keys as $meta_key ) {
