@@ -24,11 +24,8 @@ class P2P_Box_Multiple extends P2P_Box {
 	}
 
 	function save( $post_a, $data ) {
-		if ( isset( $data['all'] ) ) {
-			$to_remove = array_diff( $data['all'], $data['enabled'] );
-
-			p2p_delete_connection( $to_remove );
-		}
+		if ( !empty( $data['all'] ) )
+			p2p_delete_connection( array_diff( $data['all'], (array) @$data['enabled'] ) );
 
 		foreach ( explode( ',', $data[ 'ids' ] ) as $i => $post_b ) {
 			$meta = array();
