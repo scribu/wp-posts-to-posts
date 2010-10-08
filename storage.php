@@ -30,8 +30,8 @@ class P2P_Connections {
 	}
 
 	function delete_post( $post_id ) {
-		self::delete( $post_id, 'from' );
-		self::delete( $post_id, 'to' );
+		self::disconnect( $post_id, 'from' );
+		self::disconnect( $post_id, 'to' );
 	}
 
 	/**
@@ -103,7 +103,7 @@ class P2P_Connections {
 	 *
 	 * @return int|bool connection id or False on failure
 	 */
-	function add( $from, $to, $data = array() ) {
+	function connect( $from, $to, $data = array() ) {
 		global $wpdb;
 
 		$from = absint( $from );
@@ -136,15 +136,26 @@ class P2P_Connections {
 	 *
 	 * @return int Number of connections deleted
 	 */
-	function delete( $from, $to, $data = array() ) {
+	function disconnect( $from, $to, $data = array() ) {
+		return self::delete( self::get( $from, $to, $data, true ) );
+	}
+
+	/**
+	 * Delete one or more connections
+	 *
+	 * @param int|array $p2p_id Connection ids
+	 *
+	 * @return int Number of connections deleted
+	 */
+	function delete( $p2p_id ) {
 		global $wpdb;
 
-		$p2p_ids = self::get( $from, $to, $data, true );
+		if ( empty( $p2p_id ) )
+			return 0;
 
-		if ( empty( $p2p_ids ) )
-			return false;
+		$p2p_ids = array_map( 'absint', (array) $p2p_id );
 
-		$where = "WHERE p2p_id IN (" . implode(',', $p2p_ids ) . ")";
+		$where = "WHERE p2p_id IN (" . implode( ',', $p2p_ids ) . ")";
 
 		$wpdb->query( "DELETE FROM $wpdb->p2p $where" );
 		$wpdb->query( "DELETE FROM $wpdb->p2pmeta $where" );

@@ -136,7 +136,8 @@ class P2P_Connection_Types {
 		if ( empty( $boxes ) )
 			return;
 
-		p2p_disconnect( $post_id, 'from' );
+		// disconnect old connections
+		
 
 		foreach ( $boxes as $ctype ) {
 			$ctype->_save( $post_id );

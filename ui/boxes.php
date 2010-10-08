@@ -24,7 +24,13 @@ class P2P_Box_Multiple extends P2P_Box {
 	}
 
 	function save( $post_a, $data ) {
-		foreach ( $data[ 'post_id' ] as $i => $post_b ) {
+		if ( isset( $data['all'] ) ) {
+			$to_remove = array_diff( $data['all'], $data['enabled'] );
+
+			p2p_delete_connection( $to_remove );
+		}
+
+		foreach ( explode( ',', $data[ 'ids' ] ) as $i => $post_b ) {
 			$meta = array();
 			foreach ( $this->meta_keys as $meta_key ) {
 				$meta_value = $data[ $meta_key ][ $i ];
@@ -44,7 +50,10 @@ class P2P_Box_Multiple extends P2P_Box {
 
 	function box( $post_id ) {
 		$connected_ids = $this->get_connected_ids( $post_id );
-?>
+
+		foreach ( array_keys( $connected_ids ) as $p2p_id ) { ?>
+			<input type="hidden" name="<?php echo $this->input_name( array( 'all', '' ) ); ?>" value="<?php echo $p2p_id; ?>">
+		<?php } ?>
 
 <div class="p2p_metabox">
 	<div class="hide-if-no-js checkboxes">
@@ -77,10 +86,10 @@ class P2P_Box_Multiple extends P2P_Box {
 		<?php echo scbForms::input( array(
 			'type' => 'text',
 			'name' => $this->input_name( 'ids' ),
-			'value' => implode( ',', $connected_ids ),
-			'extra' => array( 'class' => 'p2p_connected_ids' ),
+			'value' => '',
+			'extra' => array( 'class' => 'p2p_to_connect' ),
 		) ); ?>
-		<p class="howto"><?php _e( 'Enter IDs of connected post types separated by commas, or turn on JavaScript!', 'posts-to-posts' ); ?></p>
+		<p class="howto"><?php _e( 'Enter IDs of posts to connect, separated by commas.', 'posts-to-posts' ); ?></p>
 	</div>
 
 <?php // TODO: move to footer, to avoid $_POST polution ?>
@@ -102,7 +111,7 @@ class P2P_Box_Multiple extends P2P_Box {
 ?>
 		<li>
 			<label>
-				<input type="checkbox" checked="checked" name="<?php echo $this->input_name( array( 'post_id', '' ) ); ?>" value="<?php echo $post_id; ?>">
+				<input type="checkbox" checked="checked" name="<?php echo $this->input_name( array( 'enabled', '' ) ); ?>" value="<?php echo $p2p_id; ?>">
 				<?php echo $post_title; ?>
 			</label>
 		</li>
