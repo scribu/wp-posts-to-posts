@@ -10,7 +10,7 @@ Create connections between posts
 
 == Description ==
 
-This plugin allows you to create relationships between posts of different types. The relationships are stored in a hidden taxonomy.
+This plugin allows you to create many-to-many relationships between posts of all types.
 
 To register a connection type, add this code in your theme's functions.php file:
 
