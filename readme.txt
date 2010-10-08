@@ -4,7 +4,7 @@ Donate link: http://scribu.net/paypal
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.0
 Tested up to: 3.0
-Stable tag: 0.3
+Stable tag: 0.4
 
 Create connections between posts
 
@@ -50,7 +50,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 == Changelog ==
 
 = 0.4 =
-* introduced 'connected_from', 'connected_to', 'connected' vars for WP_Query
+* introduced 'connected_from', 'connected_to', 'connected' vars to WP_Query
 * replaced $reciprocal with $data as the third argument
 * p2p_register_connection_type() accepts an associative array as arguments
 * removed p2p_list_connected()
