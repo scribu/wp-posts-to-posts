@@ -51,9 +51,10 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 = 0.4 =
 * introduced 'connected_from', 'connected_to', 'connected' vars for WP_Query
-* replaced $reciprocal arg with $data
-* p2p_register_connection_type() can take an associative array as arguments
+* replaced $reciprocal with $data as the third argument
+* p2p_register_connection_type() accepts an associative array as arguments
 * removed p2p_list_connected()
+* added p2p_delete_connection()
 * [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-4.html)
 
 = 0.3 =
