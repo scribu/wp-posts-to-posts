@@ -5,18 +5,18 @@
  * This creates the appropriate meta box in the admin edit screen
  *
  * @param array $args Can be:
- *  'from' string|array The first end of the connection
- *  'to' string|array The second end of the connection
- *  'title' string The box's title
- *  'reciprocal' bool wether to show the box on both sides of the connection
- *  'box' string A class that handles displaying and saving connections. Default: P2P_Box_Multiple
+ *  - 'from' string|array The first end of the connection
+ *  - 'to' string|array The second end of the connection
+ *  - 'title' string The box's title
+ *  - 'reciprocal' bool wether to show the box on both sides of the connection
+ *  - 'box' string A class that handles displaying and saving connections. Default: P2P_Box_Multiple
  */
 function p2p_register_connection_type( $args ) {
 	$argv = func_get_args();
 
 	if ( count( $argv ) > 1 ) {
 		$args = array();
-		list( $args['from'], $args['to'] ) = $argv;
+		list( $args['from'], $args['to'], $args['reciprocal'] ) = $argv;
 	}
 
 	foreach ( (array) $args['from'] as $from ) {

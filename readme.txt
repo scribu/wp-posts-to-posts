@@ -54,7 +54,6 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * removed p2p_list_connected()
 * p2p_get_connected() only accepts 2 arguments now
 * p2p_register_connection_type() can take an associative array as arguments
-* removed $reciprocal arg from all functions
 * [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-4.html)
 
 = 0.3 =

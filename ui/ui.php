@@ -131,9 +131,14 @@ class P2P_Connection_Types {
 		if ( defined( 'DOING_AJAX' ) || defined( 'DOING_CRON' ) || empty( $_POST ) || 'revision' == $from )
 			return;
 
+		$boxes = self::filter_ctypes( $from );
+
+		if ( empty( $boxes ) )
+			return;
+
 		p2p_disconnect( $post_id, 'from' );
 
-		foreach ( self::filter_ctypes( $from ) as $ctype ) {
+		foreach ( $boxes as $ctype ) {
 			$ctype->_save( $post_id );
 		}
 	}
