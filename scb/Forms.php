@@ -213,9 +213,14 @@ class scbForms {
 			// Find relevant formdata
 			$match = NULL;
 			if ( $checked === NULL ) {
-				$match = @self::$formdata[str_replace( '[]', '', $$i1 )];
-				if ( is_array( $match ) ) {
-					$match = $match[$i];
+				$key = str_replace( '[]', '', $$i1 );
+
+				if ( isset( self::$formdata[ $key ] ) ) {
+					$match = self::$formdata[ $key ];
+
+					if ( is_array( $match ) ) {
+						$match = $match[$i];
+					}
 				}
 			} else if ( is_array( $checked ) ) {
 				$cur_args['checked'] = isset( $checked[$i] ) && $checked[$i];

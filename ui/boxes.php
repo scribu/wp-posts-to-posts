@@ -76,7 +76,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		); ?>
 
 		<ul class="p2p_results"></ul>
-		<p class="howto"><?php _e( 'Start typing name of connected post type and click on it if you want to connect it.', 'posts-to-posts' ); ?></p>
+		<p class="howto"><?php _e( 'Start typing the title of a post you want to connect and then click on to connect it.', 'posts-to-posts' ); ?></p>
 	</div>
 
 	<div class="hide-if-js">
