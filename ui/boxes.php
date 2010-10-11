@@ -7,8 +7,6 @@ class P2P_Box_Multiple extends P2P_Box {
 	function init() {
 		add_action( 'admin_print_styles-post.php', array( __CLASS__, 'scripts' ) );
 		add_action( 'admin_print_styles-post-new.php', array( __CLASS__, 'scripts' ) );
-
-		add_action( 'wp_ajax_p2p_search', array( __CLASS__, 'ajax_search' ) );
 	}
 
 	function scripts() {
@@ -52,7 +50,7 @@ class P2P_Box_Multiple extends P2P_Box {
 			<input type="hidden" name="<?php echo $this->input_name( array( 'all', '' ) ); ?>" value="<?php echo $p2p_id; ?>">
 		<?php } ?>
 
-<div class="p2p_metabox">
+<div id="p2p-box-<?php echo $this->box_id; ?>" class="p2p_metabox<?php if ( $this->reversed ) echo ' reversed'; ?>">
 	<div class="hide-if-no-js checkboxes">
 		<ul class="p2p_connected">
 		<?php if ( empty( $connected_ids ) ) { ?>
@@ -134,14 +132,10 @@ class P2P_Box_Multiple extends P2P_Box {
 		return array_intersect( $connected_posts, $post_ids );	// to preserve p2p_id keys
 	}
 
-	function ajax_search() {
-		$post_type_name = $_GET['post_type'];
-
-		add_filter( 'posts_search', array( __CLASS__, 'only_search_by_title' ) );
-
-		$args = array(
-			's' => $_GET['q'],
-			'post_type' => $post_type_name,
+	function get_search_args( $search ) {
+		return array(
+			's' => $search,
+			'post_type' => $this->to,
 			'post_status' => 'any',
 			'posts_per_page' => 5,
 			'order' => 'ASC',
@@ -150,22 +144,6 @@ class P2P_Box_Multiple extends P2P_Box {
 			'update_post_term_cache' => false,
 			'update_post_meta_cache' => false
 		);
-
-		$posts = get_posts( $args );
-
-		$results = array();
-		foreach ( $posts as $post )
-			$results[ $post->ID ] = $post->post_title;
-
-		die( json_encode( $results ) );
-	}
-
-	function only_search_by_title( $sql ) {
-		remove_filter( current_filter(), array( __CLASS__, __FUNCTION__ ) );
-
-		list( $sql ) = explode( ' OR ', $sql, 2 );
-
-		return $sql . '))';
 	}
 }
 

@@ -45,7 +45,15 @@ jQuery(document).ready(function($) {
 			old_value = $self.val();
 
 			$spinner.show();
-			$.getJSON(ajaxurl, {action: 'p2p_search', q: $self.val(), post_type: post_type}, function(data) {
+			
+			var data = {
+				action: 'p2p_search',
+				q: $self.val(),
+				box_id: $metabox.attr('id').replace('p2p-box-', ''),
+				reversed: $metabox.hasClass('reversed')
+			}
+
+			$.getJSON(ajaxurl, data, function(data) {
 				$spinner.hide();
 
 				$results.html('');

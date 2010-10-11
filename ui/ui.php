@@ -5,7 +5,7 @@ abstract class P2P_Box {
 	protected $reversed;
 	protected $direction;
 
-	private $box_id;
+	protected $box_id;
 	private $input;
 
 	abstract function save( $post_id, $data );
@@ -100,7 +100,6 @@ class p2pInput {
 
 class P2P_Connection_Types {
 
-	private static $ctype_id = 0;
 	private static $ctypes = array();
 
 	static public function register( $args ) {
@@ -118,6 +117,7 @@ class P2P_Connection_Types {
 	static function init() {
 		add_action( 'add_meta_boxes', array( __CLASS__, '_register' ) );
 		add_action( 'save_post', array( __CLASS__, '_save' ), 10 );
+		add_action( 'wp_ajax_p2p_search', array( __CLASS__, 'ajax_search' ) );
 	}
 
 	static function _register( $from ) {
@@ -136,10 +136,38 @@ class P2P_Connection_Types {
 		}
 	}
 
+	function ajax_search() {
+		add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ) );
+
+		$box_id = absint( $_GET['box_id'] );
+		$reversed = (bool) $_GET['reversed'];
+
+		if ( !isset( self::$ctypes[ $box_id ] ) )
+			die(0);
+
+		$args = self::$ctypes[ $box_id ];
+		$box = new $args['box']($args, $reversed, $box_id);
+
+		$posts = get_posts( $box->get_search_args( $_GET['q'] ) );
+
+		$results = array();
+		foreach ( $posts as $post )
+			$results[ $post->ID ] = $post->post_title;
+
+		die( json_encode( $results ) );
+	}
+
+	function _search_by_title( $sql ) {
+		remove_filter( current_filter(), array( __CLASS__, __FUNCTION__ ) );
+
+		list( $sql ) = explode( ' OR ', $sql, 2 );
+
+		return $sql . '))';
+	}
+
 	private static function filter_ctypes( $post_type ) {
 		$r = array();
-		$i = 0;
-		foreach ( self::$ctypes as $args ) {
+		foreach ( self::$ctypes as $box_id => $args ) {
 			if ( $post_type == $args['from'] ) {
 				$reversed = false;
 			} elseif ( $args['reciprocal'] && $post_type == $args['to'] ) {
@@ -148,7 +176,7 @@ class P2P_Connection_Types {
 				continue;
 			}
 
-			$r[] = new $args['box']($args, $reversed, $i++);
+			$r[ $box_id ] = new $args['box']($args, $reversed, $box_id);
 		}
 
 		return $r;
