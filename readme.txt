@@ -49,6 +49,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 0.4.1 =
+* fix l10n
+
 = 0.4 =
 * introduced 'connected_from', 'connected_to', 'connected' vars to WP_Query
 * replaced $reciprocal with $data as the third argument
