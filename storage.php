@@ -67,7 +67,7 @@ class P2P_Connections {
 		if ( !empty( $data ) ) {
 			$clauses = array();
 			foreach ( $data as $key => $value ) {
-				$clauses[] = $wpdb->prepare( "WHEN %s THEN meta_value = %s ", $key, $value );
+				$clauses[] = $wpdb->prepare( "WHEN %s THEN meta_value = %s ", $key, maybe_serialize( $value ) );
 			}
 
 			$where .= " AND p2p_id IN (
