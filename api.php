@@ -67,13 +67,13 @@ function p2p_disconnect( $from, $to, $data = array() ) {
  *
  * @return array( p2p_id => post_id )
  */
-function p2p_get_connected( $post_id, $direction = 'to', $data = array() ) {
-	if ( 'both' == $direction ) {
+function p2p_get_connected( $post_id, $direction = 'both', $data = array() ) {
+	if ( in_array( $direction, array( 'to', 'from' ) ) ) {
+		$ids = P2P_Connections::get( $post_id, $direction, $data );
+	} else {
 		$to = P2P_Connections::get( $post_id, 'to', $data );
 		$from = P2P_Connections::get( $post_id, 'from', $data );
 		$ids = array_merge( $to, array_diff( $from, $to ) );
-	} else {
-		$ids = P2P_Connections::get( $post_id, $direction, $data );
 	}
 
 	return $ids;

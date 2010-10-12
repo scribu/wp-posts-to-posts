@@ -9,9 +9,12 @@ class scbTable {
 	function __construct( $name, $file, $columns, $upgrade_method = 'dbDelta' ) {
 		global $wpdb;
 
-		$this->name = $wpdb->$name = $wpdb->prefix . $name;
+		$this->name = $wpdb->prefix . $name;
 		$this->columns = $columns;
 		$this->upgrade_method = $upgrade_method;
+
+		$wpdb->tables[] = $name;
+		$wpdb->$name = $this->name;
 
 		scbUtil::add_activation_hook( $file, array( $this, 'install' ) );
 		scbUtil::add_uninstall_hook( $file, array( $this, 'uninstall' ) );
