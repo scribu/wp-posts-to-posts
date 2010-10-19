@@ -1,0 +1,72 @@
+# Translation of the WordPress plugin Posts 2 Posts 0.3 by scribu.
+# Copyright (C) 2010 scribu
+# This file is distributed under the same license as the Posts 2 Posts package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts 2 Posts 0.4\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-to-posts\n"
+"POT-Creation-Date: 2010-10-11 13:40+0300\n"
+"PO-Revision-Date: 2010-10-18 22:03-0500\n"
+"Last-Translator: \n"
+"Language-Team: wikichaves.com <info@wikichaves.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: ARGENTINA\n"
+"X-Poedit-Basepath: ..\n"
+
+#: scb/AdminPage.php:164
+msgid "Settings <strong>saved</strong>."
+msgstr "Preferencias <strong>guardado</strong>."
+
+#: scb/AdminPage.php:176
+#: scb/AdminPage.php:186
+msgid "Save Changes"
+msgstr "Guardar Cambios"
+
+#: scb/AdminPage.php:368
+msgid "Settings"
+msgstr "Preferencias"
+
+#: ui/boxes.php:59
+msgid "No connections."
+msgstr "Sin conexiones."
+
+#: ui/boxes.php:71
+msgid "Search"
+msgstr "Buscar"
+
+#: ui/boxes.php:79
+msgid "Start typing the title of a post you want to connect and then click on to connect it."
+msgstr "Comenzar a escribir el título de la entrada a la que se quiera conectar y luego clickear para conectarla."
+
+#: ui/boxes.php:89
+msgid "Enter IDs of posts to connect, separated by commas."
+msgstr "Ingresar los IDs de las entradas a conectar, separadas por comas."
+
+#. Plugin Name of the plugin/theme
+msgid "Posts 2 Posts"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://scribu.net/wordpress/posts-to-posts"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Create many-to-many relationships between all types of posts"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "scribu"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://scribu.net/"
+msgstr ""
+
+#~ msgid "Connected"
+#~ msgstr "Conectat"
