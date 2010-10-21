@@ -151,8 +151,10 @@ class P2P_Connection_Types {
 		$posts = get_posts( $box->get_search_args( $_GET['q'] ) );
 
 		$results = array();
-		foreach ( $posts as $post )
-			$results[ $post->ID ] = $post->post_title;
+		foreach ( $posts as $post ) {
+			$GLOBALS['post'] = $post;
+			$results[ $post->ID ] = apply_filters( 'the_title', $post->post_title );
+		}
 
 		die( json_encode( $results ) );
 	}
