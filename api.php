@@ -16,7 +16,7 @@ function p2p_register_connection_type( $args ) {
 
 	if ( count( $argv ) > 1 ) {
 		$args = array();
-		list( $args['from'], $args['to'], $args['reciprocal'] ) = $argv;
+		@list( $args['from'], $args['to'], $args['reciprocal'] ) = $argv;
 	}
 
 	foreach ( (array) $args['from'] as $from ) {

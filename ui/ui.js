@@ -50,7 +50,7 @@ jQuery(document).ready(function($) {
 				action: 'p2p_search',
 				q: $self.val(),
 				box_id: $metabox.attr('id').replace('p2p-box-', ''),
-				reversed: $metabox.hasClass('reversed')
+				reversed: +$metabox.hasClass('reversed')
 			}
 
 			$.getJSON(ajaxurl, data, function(data) {
