@@ -19,16 +19,17 @@ abstract class P2P_Box {
 // Internal stuff
 
 
-	public function __construct( $args, $reversed, $box_id ) {
+	public function __construct( $args, $direction, $box_id ) {
 		foreach ( $args as $key => $value )
 			$this->$key = $value;
 
 		$this->box_id = $box_id;
-		$this->reversed = $reversed;
 
 		$this->input = new p2pInput( array( 'p2p', $box_id ) );
 
-		$this->direction = $this->reversed ? 'to' : 'from';
+		$this->direction = $direction;
+
+		$this->reversed = ( 'to' == $direction );
 
 		if ( $this->reversed )
 			list( $this->to, $this->from ) = array( $this->from, $this->to );
@@ -170,15 +171,22 @@ class P2P_Connection_Types {
 	private static function filter_ctypes( $post_type ) {
 		$r = array();
 		foreach ( self::$ctypes as $box_id => $args ) {
-			if ( $post_type == $args['from'] ) {
-				$reversed = false;
-			} elseif ( $args['reciprocal'] && $post_type == $args['to'] ) {
-				$reversed = true;
-			} else {
-				continue;
+			$direction = false;
+
+			if ( $args['reciprocal'] ) {
+				if ( $args['from'] == $args['to'] ) {
+					$direction = 'any';
+				} elseif ( $post_type == $args['to'] ) {
+					$direction = 'to';
+				}
+			} elseif ( $post_type == $args['from'] ) {
+				$direction = 'from';
 			}
 
-			$r[ $box_id ] = new $args['box']($args, $reversed, $box_id);
+			if ( !$direction )
+				continue;
+
+			$r[ $box_id ] = new $args['box']($args, $direction, $box_id);
 		}
 
 		return $r;

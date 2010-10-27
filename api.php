@@ -73,7 +73,8 @@ function p2p_get_connected( $post_id, $direction = 'both', $data = array() ) {
 	} else {
 		$to = P2P_Connections::get( $post_id, 'to', $data );
 		$from = P2P_Connections::get( $post_id, 'from', $data );
-		$ids = array_merge( $to, array_diff( $from, $to ) );
+
+		$ids = $to + $from;
 	}
 
 	return $ids;
