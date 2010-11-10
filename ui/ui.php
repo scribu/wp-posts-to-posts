@@ -173,14 +173,14 @@ class P2P_Connection_Types {
 		foreach ( self::$ctypes as $box_id => $args ) {
 			$direction = false;
 
-			if ( $args['reciprocal'] ) {
-				if ( $args['from'] == $args['to'] ) {
-					$direction = 'any';
-				} elseif ( $post_type == $args['to'] ) {
-					$direction = 'to';
-				}
+			if ( $args['reciprocal'] && $args['from'] == $args['to'] ) {
+				$direction = 'any';		
+			} elseif ( $args['reciprocal'] && $post_type == $args['to'] ) {
+				$direction = 'to';
 			} elseif ( $post_type == $args['from'] ) {
 				$direction = 'from';
+			} else {
+				continue;			
 			}
 
 			if ( !$direction )
