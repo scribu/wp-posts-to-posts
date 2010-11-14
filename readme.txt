@@ -49,8 +49,10 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
-= 0.4.1 =
-* fix l10n
+= 0.5 =
+* $data parameter can also be a meta_query
+* attach p2p_id to each post found via WP_Query
+* metabox bugfixes
 
 = 0.4 =
 * introduced 'connected_from', 'connected_to', 'connected' vars to WP_Query

@@ -16,7 +16,7 @@ function p2p_register_connection_type( $args ) {
 
 	if ( count( $argv ) > 1 ) {
 		$args = array();
-		@list( $args['from'], $args['to'], $args['reciprocal'] ) = $argv;
+		list( $args['from'], $args['to'], $args['reciprocal'] ) = $argv;
 	}
 
 	foreach ( (array) $args['from'] as $from ) {
@@ -73,8 +73,7 @@ function p2p_get_connected( $post_id, $direction = 'both', $data = array() ) {
 	} else {
 		$to = P2P_Connections::get( $post_id, 'to', $data );
 		$from = P2P_Connections::get( $post_id, 'from', $data );
-
-		$ids = $to + $from;
+		$ids = array_merge( $to, array_diff( $from, $to ) );
 	}
 
 	return $ids;
@@ -111,6 +110,7 @@ class P2P_Query {
 
 	function init() {
 		add_filter( 'posts_where', array( __CLASS__, 'posts_where' ), 10, 2 );
+		add_filter( 'the_posts', array( __CLASS__, 'the_posts' ), 10, 2 );
 	}
 
 	function posts_where( $where, $wp_query ) {
@@ -123,12 +123,27 @@ class P2P_Query {
 		);
 
 		foreach ( $map as $qv => $direction ) {
-			if ( $id = $wp_query->get( $qv ) ) {
-				$where .= " AND $wpdb->posts.ID IN ( " . implode( ',', p2p_get_connected( $id, $direction ) ) . " )";
+			$id = $wp_query->get( $qv );
+			if ( $id ) {
+				$wp_query->_p2p_connections = p2p_get_connected( $id, $direction );
+				$where .= " AND $wpdb->posts.ID IN ( " . implode( ',', $wp_query->_p2p_connections ) . " )";
+				break;
 			}
 		}
 
 		return $where;
+	}
+
+	function the_posts( $posts, $wp_query ) {
+		if ( isset( $wp_query->_p2p_connections ) ) {
+			$connections = array_flip( $wp_query->_p2p_connections );
+			foreach ( $posts as $post ) {
+				if ( isset( $connections[ $post->ID ] ) )
+					$post->p2p_id = $connections[ $post->ID ];
+			}
+		}
+
+		return $posts;
 	}
 }
 
