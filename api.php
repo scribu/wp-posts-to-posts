@@ -124,11 +124,29 @@ class P2P_Query {
 
 		foreach ( $map as $qv => $direction ) {
 			$id = $wp_query->get( $qv );
-			if ( $id ) {
+			if ( !$id )
+				continue;
+
+			// TODO: use JOIN
+			if ( 'any' == $id ) {
+				switch ( $direction ) {
+					case 'from':
+						$where .= " AND $wpdb->posts.ID IN (SELECT p2p_to FROM $wpdb->p2p)";				
+						break;
+					case 'to':
+						$where .= " AND $wpdb->posts.ID IN (SELECT p2p_from FROM $wpdb->p2p)";				
+						break;
+					case 'both':
+						$where .= " AND ($wpdb->posts.ID IN (SELECT p2p_to FROM $wpdb->p2p) OR $wpdb->posts.ID IN (SELECT p2p_from FROM $wpdb->p2p)";				
+						break;
+				}
+			}
+			else {
 				$wp_query->_p2p_connections = p2p_get_connected( $id, $direction );
 				$where .= " AND $wpdb->posts.ID IN ( " . implode( ',', $wp_query->_p2p_connections ) . " )";
-				break;
 			}
+
+			break;
 		}
 
 		return $where;
