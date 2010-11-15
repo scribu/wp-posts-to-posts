@@ -50,6 +50,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 == Changelog ==
 
 = 0.5 =
+* 'connected_to' => 'any' etc.
 * $data parameter can also be a meta_query
 * attach p2p_id to each post found via WP_Query
 * metabox bugfixes
