@@ -66,18 +66,7 @@ class P2P_Connections {
 		}
 
 		if ( !empty( $data ) ) {
-			if ( isset( $data[0] ) ) {
-				$meta_query = $data;
-			}
-			else {
-				$meta_query = array();
-
-				foreach ( $data as $key => $value ) {
-					$meta_query[] = compact( 'key', 'value' );
-				}
-			}
-
-			$clauses = p2p_get_meta_sql( $meta_query, 'p2p', $wpdb->p2p, 'p2p_id' );
+			$clauses = _p2p_meta_sql_helper( $data );
 			$join .= $clauses['join'];
 			$where .= $clauses['where'];
 		}
@@ -181,6 +170,23 @@ function p2p_add_meta($p2p_id, $meta_key, $meta_value, $unique = false) {
 
 function p2p_delete_meta($p2p_id, $meta_key, $meta_value = '') {
 	return delete_metadata('p2p', $p2p_id, $meta_key, $meta_value);
+}
+
+function _p2p_meta_sql_helper( $data ) {
+	global $wpdb;
+	
+	if ( isset( $data[0] ) ) {
+		$meta_query = $data;
+	}
+	else {
+		$meta_query = array();
+
+		foreach ( $data as $key => $value ) {
+			$meta_query[] = compact( 'key', 'value' );
+		}
+	}
+
+	return p2p_get_meta_sql( $meta_query, 'p2p', $wpdb->p2p, 'p2p_id' );
 }
 
 // WP < 3.1-alpha
