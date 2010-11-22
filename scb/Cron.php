@@ -16,18 +16,43 @@ class scbCron {
 	 		string $action OR callback $callback
 			string $schedule OR number $interval
 			array $callback_args ( optional )
-	 * @param bool Debug mode
 	 */
-	function __construct( $file, $args, $debug = false ) {
-		$this->_set_args( $args );
+	function __construct( $file, $args ) {
+		extract( $args, EXTR_SKIP );
 
-		scbUtil::add_activation_hook( $file, array( $this, 'reset' ) );
-		register_deactivation_hook( $file, array( $this, 'unschedule' ) );
+		// Set time & schedule
+		if ( isset( $time ) )
+			$this->time = $time;
+
+		if ( isset( $interval ) ) {
+			$this->schedule = $interval . 'secs';
+			$this->interval = $interval;
+		} elseif ( isset( $schedule ) ) {
+			$this->schedule = $schedule;
+		}
+
+		// Set hook
+		if ( isset( $action ) ) {
+			$this->hook = $action;
+		} elseif ( isset( $callback ) ) {
+			$this->hook = self::_callback_to_string( $callback );
+			add_action( $this->hook, $callback );
+		} elseif ( method_exists( $this, 'callback' ) ) {
+			$this->hook = self::_callback_to_string( array( $this, 'callback' ) );
+			add_action( $this->hook, $callback );
+		} else {
+			trigger_error( '$action OR $callback not set', E_USER_WARNING );
+		}
+
+		if ( isset( $callback_args ) )
+			$this->callback_args = ( array ) $callback_args;
+
+		if ( $this->schedule ) {
+			scbUtil::add_activation_hook( $file, array( $this, 'reset' ) );
+			register_deactivation_hook( $file, array( $this, 'unschedule' ) );
+		}
 
 		add_filter( 'cron_schedules', array( $this, '_add_timing' ) );
-
-		if ( $debug )
-			self::debug();
 	}
 
 	/* Change the interval of the cron job
@@ -69,24 +94,26 @@ class scbCron {
 
 	/**
 	 * Execute the job now
+	 * @param array $args List of arguments to pass to the callback
 	 */
-	function do_now() {
-		do_action( $this->hook );
+	function do_now( $args = null ) {
+		if ( is_null( $args ) )
+			$args = $this->callback_args;
+
+		do_action_ref_array( $this->hook, $args );
 	}
 
 	/**
 	 * Execute the job with a given delay
-	 * @param int Delay in seconds
+	 * @param int $delay in seconds
+	 * @param array $args List of arguments to pass to the callback
 	 */
-	function do_once( $delay = 0 ) {
-		wp_schedule_single_event( time() + $delay, $this->hook, $this->callback_args );
-	}
+	function do_once( $delay = 0, $args = null ) {
+		if ( is_null( $args ) )
+			$args = $this->callback_args;
 
-	/**
-	 * Display current cron jobs
-	 */
-	function debug() {
-		add_action( 'admin_footer', array( __CLASS__, '_debug' ) );
+		wp_clear_scheduled_hook( $this->hook, $args );
+		wp_schedule_single_event( time() + $delay, $this->hook, $args );
 	}
 
 
@@ -103,52 +130,11 @@ class scbCron {
 		return $schedules;
 	}
 
-	function _debug() {
-		if ( ! current_user_can( 'manage_options' ) )
-			return;
-
-		echo "<pre>";
-		print_r( get_option( 'cron' ) );
-		echo "</pre>";
-	}
-
 	protected function schedule() {
 		if ( ! $this->time )
 			$this->time = time();
 
 		wp_schedule_event( $this->time, $this->schedule, $this->hook, $this->callback_args );
-	}
-
-	protected function _set_args( $args ) {
-		extract( $args );
-
-		// Set hook
-		if ( isset( $action ) ) {
-			$this->hook = $action;
-		} elseif ( isset( $callback ) ) {
-			$this->hook = self::_callback_to_string( $callback );
-
-			add_action( $this->hook, $callback );
-		} elseif ( method_exists( $this, 'callback' ) ) {
-			$this->hook = self::_callback_to_string( $callback );
-
-			add_action( $this->hook, $callback );
-		} else {
-			trigger_error( '$action OR $callback not set', E_USER_WARNING );
-		}
-
-		// Set schedule
-		if ( isset( $interval ) ) {
-			$this->schedule = $interval . 'secs';
-			$this->interval = $interval;
-		} elseif ( isset( $schedule ) ) {
-			$this->schedule = $schedule;
-		} else {
-			trigger_error( '$schedule OR $interval not set', E_USER_WARNING );
-		}
-
-		if ( isset( $callback_args ) )
-			$this->callback_args = ( array ) $callback_args;
 	}
 
 	protected static function really_clear_scheduled_hook( $name ) {

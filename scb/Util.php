@@ -115,18 +115,35 @@ class scbUtil {
 
 //_____Minimalist HTML framework_____
 
-
+/*
+ * Examples:
+ *
+ * html( 'p', 'Hello world!' );												<p>Hello world!</p>
+ * html( 'a', array( 'href' => 'http://example.com' ), 'A link' );			<a href="http://example.com">A link</a>
+ * html( 'img', array( 'src' => 'http://example.com/f.jpg' ) );				<img src="http://example.com/f.jpg" />
+ * html( 'ul', html( 'li', 'a' ), html( 'li', 'b' ) );						<ul><li>a</li><li>b</li></ul>
+ */
 if ( ! function_exists( 'html' ) ):
-function html( $tag, $attributes = array(), $content = '' ) {
-	if ( is_array( $attributes ) ) {
+function html( $tag ) {
+	$args = func_get_args();
+
+	$tag = array_shift( $args );
+
+	if ( is_array( $args[0] ) ) {
 		$closing = $tag;
+		$attributes = array_shift( $args );
 		foreach ( $attributes as $key => $value ) {
-			$tag .= ' ' . $key . '="' . esc_attr( $value ) . '"';
+			$tag .= ' ' . $key . '="' . htmlspecialchars( $value, ENT_QUOTES ) . '"';
 		}
 	} else {
-		$content = $attributes;
-		list( $closing ) = explode(' ', $tag, 2);
+		list( $closing ) = explode( ' ', $tag, 2 );
 	}
+
+	if ( in_array( $closing, array( 'area', 'base', 'basefont', 'br', 'hr', 'input', 'img', 'link', 'meta' ) ) ) {
+		return "<{$tag} />";
+	}
+
+	$content = implode( '', $args );
 
 	return "<{$tag}>{$content}</{$closing}>";
 }

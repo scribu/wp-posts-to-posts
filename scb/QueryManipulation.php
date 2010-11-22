@@ -16,6 +16,15 @@ class scbQueryManipulation {
 	);
 
 	public function __construct( $callback, $once = true ) {
+		global $wp_version;
+
+		if ( version_compare( $wp_version, '3.1-alpha', '>=' ) ) {
+			if ( !$once ) {
+				add_filter( 'posts_clauses', $callback, 10, 2 );
+				return;
+			}
+		}
+
 		$this->callback = $callback;
 
 		$this->enable();

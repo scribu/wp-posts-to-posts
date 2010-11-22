@@ -1,6 +1,6 @@
 <?php
 
-$GLOBALS['_scb_data'] = array( 26, __FILE__, array(
+$GLOBALS['_scb_data'] = array( 30, __FILE__, array(
 	'scbUtil', 'scbOptions', 'scbForms', 'scbTable',
 	'scbWidget', 'scbAdminPage', 'scbBoxesPage',
 	'scbQueryManipulation', 'scbCron',
@@ -12,7 +12,7 @@ class scbLoad4 {
 	private static $candidates;
 	private static $classes;
 	private static $callbacks = array();
-	
+
 	private static $loaded;
 
 	static function init( $callback = '' ) {
@@ -28,7 +28,7 @@ class scbLoad4 {
 		}
 
 		// TODO: don't load when activating a plugin ?
-		add_action( 'plugins_loaded', array( __CLASS__, 'load' ), 10, 0 );
+		add_action( 'plugins_loaded', array( __CLASS__, 'load' ), 9, 0 );
 	}
 
 	static function delayed_activation( $plugin ) {
@@ -37,13 +37,14 @@ class scbLoad4 {
 		if ( '.' == $plugin_dir )
 			return;
 
-		foreach ( self::$callbacks as $file => $callback )
-			if ( plugin_basename( dirname( dirname( $file ) ) ) == $plugin_dir ) {
+		foreach ( self::$callbacks as $file => $callback ) {
+			if ( dirname( dirname( plugin_basename( $file ) ) ) == $plugin_dir ) {
 				self::load( false );
 				call_user_func( $callback );
 				do_action( 'scb_activation_' . $plugin );
 				break;
 			}
+		}
 	}
 
 	static function load( $do_callbacks = true ) {

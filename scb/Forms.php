@@ -383,6 +383,8 @@ class scbForms {
 	}
 
 	private static function array_to_attr( $attr ) {
+		$attr = array_filter( (array) $attr );
+
 		$out = '';
 		foreach ( $attr as $key => $value )
 			$out .= ' ' . $key . '=' . '"' . esc_attr( $value ) . '"';
