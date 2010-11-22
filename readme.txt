@@ -49,6 +49,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 0.5.1 =
+* fixed fatal error on Menus screen
+
 = 0.5 =
 * added 'connected_meta' var to WP_Query
 * attach p2p_id to each post found via WP_Query

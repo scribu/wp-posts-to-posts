@@ -29,10 +29,8 @@ class scbQueryManipulation {
 
 		$this->enable();
 
-		if ( !$once )
-			return;
-
-		add_filter( 'posts_request', array( $this, '_disable' ) );
+		if ( $once )
+			add_filter( 'posts_request', array( $this, '_disable' ) );
 	}
 
 	function _disable( $request ) {
@@ -75,6 +73,11 @@ class scbQueryManipulation {
 	}
 
 	function alter( $query ) {
+		// suppress_filters => true
+		if ( is_null( $this->wp_query ) ) {
+			return;
+		}
+
 		$this->bits = call_user_func( $this->callback, $this->bits, $this->wp_query );
 	}
 
