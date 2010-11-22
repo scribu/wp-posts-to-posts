@@ -4,7 +4,7 @@ Donate link: http://scribu.net/paypal
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.0
 Tested up to: 3.0
-Stable tag: 0.4
+Stable tag: trunk
 
 Create connections between posts
 
@@ -51,11 +51,12 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 = 0.5 =
 * added 'connected_meta' var to WP_Query
+* attach p2p_id to each post found via WP_Query
 * 'connected_to' => 'any' etc.
 * $data parameter can also be a meta_query
-* attach p2p_id to each post found via WP_Query
 * metabox bugfixes
 * fixed l10n loading
+* [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-5.html)
 
 = 0.4 =
 * introduced 'connected_from', 'connected_to', 'connected' vars to WP_Query
