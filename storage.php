@@ -44,7 +44,7 @@ class P2P_Connections {
 	 * @return array( p2p_id => post_id ) if $to is string
 	 * @return array( p2p_id ) if $to is int
 	 */
-	function get( $from, $to, $data = array(), $_return_p2p_ids = false, $_return = 'sql' ) {
+	function get( $from, $to, $data = array(), $_return_p2p_ids = false ) {
 		global $wpdb;
 
 		$fields = "$wpdb->p2p.p2p_id";

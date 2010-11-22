@@ -168,6 +168,15 @@ class P2P_Query {
 			}
 		}
 
+		$meta_query = $wp_query->get('connected_meta');
+
+		if ( !empty( $meta_query ) ) {
+			$meta_clauses = p2p_get_meta_sql( $meta_query, 'p2p', $wpdb->p2p, 'p2p_id' );
+			foreach ( $meta_clauses as $key => $value ) {
+				$clauses[ $key ] .= $value;
+			}
+		}
+
 		return $clauses;
 	}
 }
