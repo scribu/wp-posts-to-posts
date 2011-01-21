@@ -62,18 +62,18 @@ function p2p_disconnect( $from, $to, $data = array() ) {
  * Get a list of connected posts
  *
  * @param int $post_id One end of the connection
- * @param string $direction The direction of the connection. Can be 'to', 'from' or 'both'
+ * @param string $direction The direction of the connection. Can be 'to', 'from' or 'any'
  * @param array $data additional data about the connection to filter against
  *
  * @return array( p2p_id => post_id )
  */
-function p2p_get_connected( $post_id, $direction = 'both', $data = array() ) {
-	if ( in_array( $direction, array( 'to', 'from' ) ) ) {
-		$ids = P2P_Connections::get( $post_id, $direction, $data );
-	} else {
+function p2p_get_connected( $post_id, $direction = 'any', $data = array() ) {
+	if ( 'any' == $direction ) {
 		$to = P2P_Connections::get( $post_id, 'to', $data );
 		$from = P2P_Connections::get( $post_id, 'from', $data );
 		$ids = array_merge( $to, array_diff( $from, $to ) );
+	} else {
+		$ids = P2P_Connections::get( $post_id, $direction, $data );
 	}
 
 	return $ids;
@@ -116,7 +116,7 @@ class P2P_Query {
 		global $wpdb;
 
 		$map = array(
-			'connected' => 'both',
+			'connected' => 'any',
 			'connected_to' => 'to',
 			'connected_from' => 'from',
 		);
@@ -147,7 +147,7 @@ class P2P_Query {
 			case 'to':
 				$clauses['join'] .= " INNER JOIN $wpdb->p2p ON ($wpdb->posts.ID = $wpdb->p2p.p2p_from)";
 				break;
-			case 'both':
+			case 'any':
 				$clauses['join'] .= " INNER JOIN $wpdb->p2p ON ($wpdb->posts.ID = $wpdb->p2p.p2p_to OR $wpdb->posts.ID = $wpdb->p2p.p2p_from)";
 				break;
 		}
@@ -162,7 +162,7 @@ class P2P_Query {
 				case 'to':
 					$clauses['where'] .= " AND $wpdb->p2p.p2p_to = $search";
 					break;
-				case 'both':
+				case 'any':
 					$clauses['where'] .= " AND ($wpdb->p2p.p2p_to = $search OR $wpdb->p2p.p2p_from = $search)";
 					break;
 			}
