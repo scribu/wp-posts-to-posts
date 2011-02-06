@@ -5,19 +5,20 @@
 class P2P_Test {
 
 	function init() {
-		add_action('init', array(__CLASS__, '_init'));
-#		add_action('admin_init', array(__CLASS__, 'setup'));
-		add_action('load-index.php', array(__CLASS__, 'test'));
-	}
-
-	function _init() {
 		if ( !function_exists('p2p_register_connection_type') )
 			return;
 
+		add_action('init', array(__CLASS__, '_init'));
+#		add_action('admin_init', array(__CLASS__, 'setup'));
+		add_action('load-index.php', array(__CLASS__, 'test'));
+#		add_action('load-index.php', array(__CLASS__, 'debug'));
+	}
+
+	function _init() {
 		register_post_type('actor', array('label' => 'Actors', 'public' => true));
 		register_post_type('movie', array('label' => 'Movies', 'public' => true));
 
-		p2p_register_connection_type('actor', 'actor', true);
+#		p2p_register_connection_type('actor', 'actor', true);
 		p2p_register_connection_type('actor', 'movie', true);
 	}
 
@@ -82,8 +83,8 @@ class P2P_Test {
 		p2p_connect( array_slice( $actor_ids, 0, 5 ), array_slice( $movie_ids, 0, 3 ) );
 		p2p_connect( $movie_ids[0], $actor_ids[10] );
 
-		assert( "array_slice( $movie_ids, 0, 3 ) == p2p_get_connected( $actor_ids[0] )" );
-		assert( "array( $actor_ids[0], $actor_ids[10] ) == p2p_get_connected( $movie_ids[0] )" );
+		assert( 'array_slice( $movie_ids, 0, 3 ) == array_values( p2p_get_connected( $actor_ids[0] ) )' );
+		assert( 'array( $actor_ids[0], $actor_ids[10] ) == array_values( p2p_get_connected( $movie_ids[0] ) )' );
 
 		assert( "true == p2p_is_connected( $actor_ids[0], $movie_ids[0] )" );
 		assert( "false == p2p_is_connected( $actor_ids[0], $movie_ids[10] )" );
@@ -119,5 +120,5 @@ class P2P_Test {
 	}
 }
 
-P2P_Test::init();
+add_action( 'plugins_loaded', array('P2P_Test', 'init'), 11 );
 

@@ -71,12 +71,17 @@ function p2p_get_connected( $post_id, $direction = 'any', $data = array() ) {
 	if ( 'any' == $direction ) {
 		$to = P2P_Connections::get( $post_id, 'to', $data );
 		$from = P2P_Connections::get( $post_id, 'from', $data );
-		$ids = array_merge( $to, array_diff( $from, $to ) );
-	} else {
-		$ids = P2P_Connections::get( $post_id, $direction, $data );
+
+		foreach ( $from as $p2p_id => $post_id ) {
+			if ( !in_array( $post_id, $to ) ) {	// might cause unpredictable results
+				$to[ $p2p_id ] = $post_id;
+			}
+		}
+
+		return $to;
 	}
 
-	return $ids;
+	return P2P_Connections::get( $post_id, $direction, $data );
 }
 
 /**

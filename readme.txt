@@ -49,6 +49,10 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 0.5.2 =
+* fixed p2p_is_connected()
+* make p2p_get_connected() return p2p_ids even with `$direction = 'any'`
+
 = 0.5.1 =
 * fixed fatal error on Menus screen
 
