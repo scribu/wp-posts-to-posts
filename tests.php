@@ -113,7 +113,7 @@ class P2P_Test {
 		) );
 		assert( 'array() == $posts' );
 
-		// compare query_posts to p2p_get_connected
+		// compare p2p_get_connected() to 'connected' => 123
 		p2p_connect( $actor_ids[2], $actor_ids[10] );
 		p2p_connect( $actor_ids[10], $actor_ids[2] );
 
