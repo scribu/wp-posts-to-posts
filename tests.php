@@ -9,7 +9,7 @@ class P2P_Test {
 			return;
 
 		add_action('init', array(__CLASS__, '_init'));
-#		add_action('admin_init', array(__CLASS__, 'setup'));
+		add_action('admin_init', array(__CLASS__, 'setup'));
 		add_action('load-index.php', array(__CLASS__, 'test'));
 #		add_action('load-index.php', array(__CLASS__, 'debug'));
 	}
@@ -20,6 +20,7 @@ class P2P_Test {
 
 #		p2p_register_connection_type('actor', 'actor', true);
 		p2p_register_connection_type('actor', 'movie', true);
+		p2p_register_connection_type('actor', 'actor', true);
 	}
 
 	function setup() {
@@ -80,26 +81,25 @@ class P2P_Test {
 			'nopaging' => true
 		) );
 
+		// basic API correctness
 		p2p_connect( array_slice( $actor_ids, 0, 5 ), array_slice( $movie_ids, 0, 3 ) );
 		p2p_connect( $movie_ids[0], $actor_ids[10] );
 
 		assert( 'array_slice( $movie_ids, 0, 3 ) == array_values( p2p_get_connected( $actor_ids[0] ) )' );
 		assert( 'array( $actor_ids[0], $actor_ids[10] ) == array_values( p2p_get_connected( $movie_ids[0] ) )' );
 
-		assert( "true == p2p_is_connected( $actor_ids[0], $movie_ids[0] )" );
-		assert( "false == p2p_is_connected( $actor_ids[0], $movie_ids[10] )" );
+		assert( 'true == p2p_is_connected( $actor_ids[0], $movie_ids[0] )' );
+		assert( 'false == p2p_is_connected( $actor_ids[0], $movie_ids[10] )' );
 
-#		$query = new WP_Query( array(
-#			'connected' => 17071,
-#			'connected_meta' => array(
-#				array(
-#					'key' => 'foo',
-#					'value' => 'bar'
-#				)
-#			)
-#		) );
-
-#		debug($query->posts);
+		// 'actor' => 'actor'
+		$posts = get_posts( array(
+			'connected' => $actor_ids[0],
+			'post_type' => 'actor',
+			'post_status' => 'any',
+			'suppress_filters' => false,
+			'fields' => 'ids',
+		) );
+		assert( 'array() == $posts' );
 
 		if ( $failed )
 			self::debug();
