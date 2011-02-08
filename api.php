@@ -69,16 +69,14 @@ function p2p_disconnect( $from, $to, $data = array() ) {
  */
 function p2p_get_connected( $post_id, $direction = 'any', $data = array() ) {
 	if ( 'any' == $direction ) {
-		$to = P2P_Connections::get( $post_id, 'to', $data );
 		$from = P2P_Connections::get( $post_id, 'from', $data );
+		$to = P2P_Connections::get( $post_id, 'to', $data );
 
-		foreach ( $from as $p2p_id => $post_id ) {
-			if ( !in_array( $post_id, $to ) ) {	// might cause unpredictable results
-				$to[ $p2p_id ] = $post_id;
-			}
+		foreach ( $to as $p2p_id => $post_id ) {
+			$from[ $p2p_id ] = $post_id;
 		}
 
-		return $to;
+		return $from;
 	}
 
 	return P2P_Connections::get( $post_id, $direction, $data );
@@ -136,14 +134,6 @@ class P2P_Query {
 			return $clauses;
 
 		$clauses['fields'] .= ", $wpdb->p2p.p2p_id";
-
-		$groupby = "{$wpdb->posts}.ID";
-		if ( false === strpos( $clauses['groupby'], $groupby ) ) {
-			if ( empty( $clauses['groupby'] ) )
-				$clauses['groupby'] = $groupby;
-			else
-				$clauses['groupby'] .= ",$groupby";
-		}
 
 		$clauses['join'] .= " INNER JOIN $wpdb->p2p";
 
