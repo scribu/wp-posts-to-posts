@@ -26,7 +26,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once dirname( __FILE__ ) . '/scb/load.php';
+require dirname( __FILE__ ) . '/scb/load.php';
 
 function _p2p_init() {
 	load_plugin_textdomain( 'posts-to-posts', '', dirname( plugin_basename( __FILE__ ) ) . '/lang' );
@@ -40,7 +40,7 @@ function _p2p_init() {
 	P2P_Query::init();
 	P2P_Connection_Types::init();
 	P2P_Box_Multiple::init();
-	
+
 	P2P_Migrate::init();
 }
 scb_init( '_p2p_init' );
