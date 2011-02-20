@@ -110,56 +110,55 @@ function p2p_delete_connection( $p2p_id ) {
 
 // Allows you to write query_posts( array( 'connected' => 123 ) );
 class P2P_Query {
+	private static $qv_map = array(
+		'connected' => 'any',
+		'connected_to' => 'to',
+		'connected_from' => 'from',
+	);
 
 	function init() {
-		new scbQueryManipulation( array( __CLASS__, 'query' ), false );
+		new scbQueryManipulation( array( __CLASS__, 'query' ), false );		// 'posts_clauses'
+		add_filter( 'the_posts', array( __CLASS__, 'the_posts' ), 11, 2 );
 	}
 
 	function query( $clauses, $wp_query ) {
 		global $wpdb;
 
-		$map = array(
-			'connected' => 'any',
-			'connected_to' => 'to',
-			'connected_from' => 'from',
-		);
+		$found = self::find_qv( $wp_query );
 
-		foreach ( $map as $qv => $direction ) {
-			$search = $wp_query->get( $qv );
-			if ( !empty($search) )
-				break;
-		}
-
-		if ( empty( $search ) )
+		if ( !$found )
 			return $clauses;
 
-		$clauses['fields'] .= ", $wpdb->p2p.p2p_id";
+		list( $search, $key, $direction ) = $found;
+
+		$clauses['fields'] .= ", $wpdb->p2p.*";
 
 		$clauses['join'] .= " INNER JOIN $wpdb->p2p";
 
-		if ( 'any' == $search )
+		if ( 'any' == $search ) {
 			$search = false;
-		else
-			$search = absint( $search );
+		} else {
+			$search = implode( ',', array_map( 'absint', (array) $search ) );
+		}
 
 		switch ( $direction ) {
 			case 'from':
 				$clauses['where'] .= " AND $wpdb->posts.ID = $wpdb->p2p.p2p_to";
 				if ( $search ) {
-					$clauses['where'] .= " AND $wpdb->p2p.p2p_from = $search";
+					$clauses['where'] .= " AND $wpdb->p2p.p2p_from IN ($search)";
 				}
 				break;
 			case 'to':
 				$clauses['where'] .= " AND $wpdb->posts.ID = $wpdb->p2p.p2p_from";
 				if ( $search ) {
-					$clauses['where'] .= " AND $wpdb->p2p.p2p_to = $search";
+					$clauses['where'] .= " AND $wpdb->p2p.p2p_to IN ($search)";
 				}
 				break;
 			case 'any':
 				if ( $search ) {
 					$clauses['where'] .= " AND (
-						($wpdb->posts.ID = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from = $search) OR
-						($wpdb->posts.ID = $wpdb->p2p.p2p_from AND $wpdb->p2p.p2p_to = $search)
+						($wpdb->posts.ID = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from IN ($search) ) OR
+						($wpdb->posts.ID = $wpdb->p2p.p2p_from AND $wpdb->p2p.p2p_to IN ($search) )
 					)";
 				} else {
 					$clauses['where'] .= " AND ($wpdb->posts.ID = $wpdb->p2p.p2p_to OR $wpdb->posts.ID = $wpdb->p2p.p2p_from)";
@@ -167,7 +166,7 @@ class P2P_Query {
 				break;
 		}
 
-		$connected_meta = $wp_query->get('connected_meta');
+		$connected_meta = $wp_query->get( 'connected_meta' );
 		if ( !empty( $connected_meta ) ) {
 			$meta_clauses = _p2p_meta_sql_helper( $connected_meta );
 			foreach ( $meta_clauses as $key => $value ) {
@@ -176,6 +175,62 @@ class P2P_Query {
 		}
 
 		return $clauses;
+	}
+
+	function the_posts( $the_posts, $wp_query ) {
+		if ( empty( $the_posts ) )
+			return $the_posts;
+
+		$found = self::find_qv( $wp_query, 'each_' );
+
+		if ( !$found )
+			return $the_posts;
+
+		list( $search, $key ) = $found;
+
+		// re-index by ID
+		$posts = array();
+		foreach ( $the_posts as $post ) {
+			$post->$key = array();
+			$posts[ $post->ID ] = $post;
+		}
+
+		// ignore inner qv
+		foreach ( array_keys( self::$qv_map ) as $qv )
+			unset( $search[ $qv ] );
+
+		$search[ $key ] = array_keys( $posts );
+		$search[ 'suppress_filters' ] = false;
+
+		foreach ( get_posts( $search ) as $inner_post ) {
+			if ( $inner_post->ID == $inner_post->p2p_from )
+				$outer_post_id = $inner_post->p2p_to;
+			elseif ( $inner_post->ID == $inner_post->p2p_to )
+				$outer_post_id = $inner_post->p2p_from;
+			else
+				throw new Exception( 'Corrupted data.' );
+
+			if ( $outer_post_id == $inner_post->ID )
+				throw new Exception( 'Post connected to itself.' );
+
+			array_push( $posts[ $outer_post_id ]->$key, $inner_post );
+		}
+
+		// objects are passed by reference, so just return the original collection
+		return $the_posts;
+	}
+
+	private function find_qv( $wp_query, $prefix = '' ) {
+		foreach ( self::$qv_map as $qv => $direction ) {
+			$search = $wp_query->get( $prefix . $qv );
+			if ( !empty( $search ) )
+				break;
+		}
+
+		if ( empty( $search ) )
+			return false;
+
+		return array( $search, $qv, $direction );
 	}
 }
 
