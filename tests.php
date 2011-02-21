@@ -134,52 +134,63 @@ class P2P_Test {
 
 		assert( 'array_intersect_assoc($r, $raw) == $r' );
 
-		// test 'each_*' query vars
-		$posts = get_posts( array(
+#		// test 'each_*' query vars
+#		$posts = get_posts( array(
+#			'post_type' => 'actor',
+#			'post_status' => 'any',
+#			'nopaging' => true,
+#			'each_connected' => array(
+#				'post_type' => 'movie',
+#				'post_status' => 'any',
+#				'nopaging' => true,
+#			),
+#			'suppress_filters' => false
+#		) );
+
+#		self::walk( $posts );
+
+#		// test 'each_*' query vars
+#		$posts = get_posts( array(
+#			'post_type' => 'actor',
+#			'post_status' => 'any',
+#			'nopaging' => true,
+#			'each_connected' => array(
+#				'post_type' => 'actor',
+#				'post_status' => 'any',
+#				'nopaging' => true,
+#				'each_connected' => array(
+#					'post_type' => 'actor',
+#					'post_status' => 'any',
+#					'nopaging' => true,
+#				),
+#			),
+#			'suppress_filters' => false
+#		) );
+
+#		self::walk( $posts );
+
+		// test p2p_each_connected()
+		$query = new WP_Query( array(
 			'post_type' => 'actor',
 			'post_status' => 'any',
 			'nopaging' => true,
-			'each_connected' => array(
-				'post_type' => 'actor',
-				'post_status' => 'any',
-				'nopaging' => true,
-			),
-			'suppress_filters' => false
 		) );
 
-		self::walk( $posts );
+		p2p_each_connected( 'any', 'movies', array( 'post_type' => 'movie' ), $query );
 
-		// test 'each_*' query vars
-		$posts = get_posts( array(
-			'post_type' => 'actor',
-			'post_status' => 'any',
-			'nopaging' => true,
-			'each_connected' => array(
-				'post_type' => 'actor',
-				'post_status' => 'any',
-				'nopaging' => true,
-				'each_connected' => array(
-					'post_type' => 'actor',
-					'post_status' => 'any',
-					'nopaging' => true,
-				),
-			),
-			'suppress_filters' => false
-		) );
-
-		self::walk( $posts );
+		self::walk( $query->posts, 'movies' );
 
 		if ( $failed )
 			self::debug();
 	}
 
-	private function walk( $posts, $level = 0 ) {
+	private function walk( $posts, $key = '', $level = 0 ) {
 		if ( 0 == $level )
 			echo '<pre>';
 
 		foreach ( $posts as $post ) {
 			echo str_repeat( "\t", $level ) . "$post->ID: $post->post_title\n";
-			self::walk( (array) @$post->connected, $level+1 );
+			self::walk( (array) @$post->{"connected_$key"}, $key, $level+1 );
 		}
 
 		if ( 0 == $level )

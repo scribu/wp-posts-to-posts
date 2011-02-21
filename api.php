@@ -108,9 +108,65 @@ function p2p_delete_connection( $p2p_id ) {
 	return P2P_Connections::delete( $p2p_id );
 }
 
+/**
+ * Optimized inner query, after the outer query was executed.
+ *
+ * Populates each of the outer querie's $post objects with a property containing a list of connected posts
+ *
+ * @param string $direction The direction of the connection. Can be 'to', 'from' or 'any'
+ * @param string $prop_name The property name; will be prefixed with 'connected_'
+ * @param string|array $args The query vars for the inner query
+ * @param object $query (optional) The outer query. Defaults to the global $wp_query
+ */
+function p2p_each_connected( $direction, $prop_name, $search, $query = null ) {
+	if ( is_null( $query ) )
+		$query = $GLOBALS['wp_query'];
+
+	if ( empty( $query->posts ) )
+		return;
+
+	if ( empty( $prop_name ) )
+		$prop_name = 'connected';
+	else
+		$prop_name = 'connected_' . $prop_name;
+
+	// re-index by ID
+	$posts = array();
+	foreach ( $query->posts as $post ) {
+		$post->$prop_name = array();
+		$posts[ $post->ID ] = $post;
+	}
+
+	// ignore other 'connected' query vars for the inner query
+	foreach ( array_keys( P2P_Query::$qv_map ) as $qv )
+		unset( $search[ $qv ] );
+
+	if ( 'any' == $direction )
+		$key = 'connected';
+	else
+		$key = 'connected_' . $direction;
+
+	$search[ $key ] = array_keys( $posts );
+	$search[ 'suppress_filters' ] = false;
+
+	foreach ( get_posts( $search ) as $inner_post ) {
+		if ( $inner_post->ID == $inner_post->p2p_from )
+			$outer_post_id = $inner_post->p2p_to;
+		elseif ( $inner_post->ID == $inner_post->p2p_to )
+			$outer_post_id = $inner_post->p2p_from;
+		else
+			throw new Exception( 'Corrupted data.' );
+
+		if ( $outer_post_id == $inner_post->ID )
+			throw new Exception( 'Post connected to itself.' );
+
+		array_push( $posts[ $outer_post_id ]->$prop_name, $inner_post );
+	}
+}
+
 // Allows you to write query_posts( array( 'connected' => 123 ) );
 class P2P_Query {
-	private static $qv_map = array(
+	static $qv_map = array(
 		'connected' => 'any',
 		'connected_to' => 'to',
 		'connected_from' => 'from',
@@ -186,37 +242,10 @@ class P2P_Query {
 		if ( !$found )
 			return $the_posts;
 
-		list( $search, $key ) = $found;
+		list( $search, $key, $direction ) = $found;		
 
-		// re-index by ID
-		$posts = array();
-		foreach ( $the_posts as $post ) {
-			$post->$key = array();
-			$posts[ $post->ID ] = $post;
-		}
+		p2p_each_connected( $direction, $key, $search, $wp_query );
 
-		// ignore inner qv
-		foreach ( array_keys( self::$qv_map ) as $qv )
-			unset( $search[ $qv ] );
-
-		$search[ $key ] = array_keys( $posts );
-		$search[ 'suppress_filters' ] = false;
-
-		foreach ( get_posts( $search ) as $inner_post ) {
-			if ( $inner_post->ID == $inner_post->p2p_from )
-				$outer_post_id = $inner_post->p2p_to;
-			elseif ( $inner_post->ID == $inner_post->p2p_to )
-				$outer_post_id = $inner_post->p2p_from;
-			else
-				throw new Exception( 'Corrupted data.' );
-
-			if ( $outer_post_id == $inner_post->ID )
-				throw new Exception( 'Post connected to itself.' );
-
-			array_push( $posts[ $outer_post_id ]->$key, $inner_post );
-		}
-
-		// objects are passed by reference, so just return the original collection
 		return $the_posts;
 	}
 

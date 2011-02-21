@@ -50,7 +50,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 == Changelog ==
 
 = 0.6 =
-* added 'each_connected' query var
+* added p2p_each_connected()
 * fixed p2p_is_connected()
 * made p2p_get_connected() return p2p_ids even with `$direction = 'any'`
 * made compatible with [Proper Network Activation](http://wordpress.org/extend/plugins/proper-network-activation)
