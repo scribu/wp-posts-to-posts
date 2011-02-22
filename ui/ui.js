@@ -1,6 +1,6 @@
 jQuery(document).ready(function($) {
 	$('.p2p_results').delegate('a', 'click', function() {
-		var $self = $(this);
+		var $self = $(this),
 			$metabox = $self.parents('.p2p_metabox'),
 			$list = $metabox.find('.p2p_connected'),
 			post_id = $self.attr('name');
@@ -20,28 +20,33 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 
-	var delayed = undefined;
+	$('.p2p_search :text').keypress(function (ev) {
+		if ( 13 === ev.keyCode )
+			return false;
+	});
 
-	$('.p2p_search :text').keyup(function() {
+	var delayed, old_value = '';
 
-		if ( delayed != undefined )
+	$('.p2p_search :text').keyup(function (ev) {
+
+		if ( undefined !== delayed ) {
 			clearTimeout(delayed);
+		}
 
-		var $self = $(this);
+		var $self = $(this),
 			$metabox = $self.parents('.p2p_metabox'),
 			$results = $metabox.find('.p2p_results'),
-			post_type = $self.attr('name').replace('p2p_search_', ''),
-			old_value = '',
 			$spinner = $metabox.find('.waiting');
 
-		var delayed = setTimeout(function() {
+		delayed = setTimeout(function() {
 			if ( !$self.val().length ) {
 				$results.html('');
 				return;
 			}
 
-			if ( $self.val() == old_value )
+			if ( $self.val() === old_value ) {
 				return;
+			}
 			old_value = $self.val();
 
 			$spinner.show();
@@ -51,7 +56,7 @@ jQuery(document).ready(function($) {
 				q: $self.val(),
 				box_id: $metabox.attr('id').replace('p2p-box-', ''),
 				reversed: +$metabox.hasClass('reversed')
-			}
+			};
 
 			$.getJSON(ajaxurl, data, function(data) {
 				$spinner.hide();
