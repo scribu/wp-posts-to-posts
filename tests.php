@@ -169,16 +169,16 @@ class P2P_Test {
 
 #		self::walk( $posts );
 
-		// test p2p_each_connected()
-		$query = new WP_Query( array(
-			'post_type' => 'actor',
-			'post_status' => 'any',
-			'nopaging' => true,
-		) );
+#		// test p2p_each_connected()
+#		$query = new WP_Query( array(
+#			'post_type' => 'actor',
+#			'post_status' => 'any',
+#			'nopaging' => true,
+#		) );
 
-		p2p_each_connected( 'any', 'movies', array( 'post_type' => 'movie' ), $query );
+#		p2p_each_connected( 'any', 'movies', array( 'post_type' => 'movie' ), $query );
 
-		self::walk( $query->posts, 'movies' );
+#		self::walk( $query->posts, 'movies' );
 
 		if ( $failed )
 			self::debug();
