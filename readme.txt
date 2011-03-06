@@ -3,8 +3,8 @@ Contributors: scribu
 Donate link: http://scribu.net/paypal
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.0
-Tested up to: 3.1-alpha
-Stable tag: 0.5.1
+Tested up to: 3.1
+Stable tag: 0.6
 
 Create connections between posts
 
