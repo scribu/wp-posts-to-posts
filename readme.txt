@@ -54,6 +54,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * fixed p2p_is_connected()
 * made p2p_get_connected() return p2p_ids even with `$direction = 'any'`
 * made compatible with [Proper Network Activation](http://wordpress.org/extend/plugins/proper-network-activation)
+* [more info](http://scribu.net/wordpress/posts-to-posts/version-0-6.html)
 
 = 0.5.1 =
 * fixed fatal error on Menus screen
