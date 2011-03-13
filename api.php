@@ -16,7 +16,7 @@ function p2p_register_connection_type( $args ) {
 
 	if ( count( $argv ) > 1 ) {
 		$args = array();
-		list( $args['from'], $args['to'], $args['reciprocal'] ) = $argv;
+		@list( $args['from'], $args['to'], $args['reciprocal'] ) = $argv;
 	}
 
 	foreach ( (array) $args['from'] as $from ) {
@@ -242,7 +242,10 @@ class P2P_Query {
 		if ( !$found )
 			return $the_posts;
 
-		list( $search, $key, $direction ) = $found;		
+		list( $search, $qv, $direction ) = $found;		
+
+		$qv = explode('_', $qv);
+		$key = isset( $qv[1] ) ? $qv[1] : '';
 
 		p2p_each_connected( $direction, $key, $search, $wp_query );
 
@@ -251,6 +254,7 @@ class P2P_Query {
 
 	private function find_qv( $wp_query, $prefix = '' ) {
 		foreach ( self::$qv_map as $qv => $direction ) {
+
 			$search = $wp_query->get( $prefix . $qv );
 			if ( !empty( $search ) )
 				break;

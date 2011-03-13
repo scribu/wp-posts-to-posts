@@ -23,6 +23,24 @@ function my_connection_types() {
 }
 add_action('init', 'my_connection_types', 100);
 `
+
+Then, after creating a few connections, you can list the posts associated to a page, using WP_Query:
+
+`
+$connected = new WP_Query( array(
+  'post_type' => 'post',
+  'connected' => $some_page_id
+) );
+
+while( $connected->have_posts() ) $connected->the_post();
+  echo '<li>';
+  the_title();
+  echo '</li>';
+endwhile;
+
+wp_reset_postdata();
+`
+
 <br>
 
 Links: [API](http://plugins.trac.wordpress.org/browser/posts-to-posts/trunk/api.php) | [Plugin News](http://scribu.net/wordpress/posts-to-posts) | [Author's Site](http://scribu.net)

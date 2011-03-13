@@ -134,20 +134,20 @@ class P2P_Test {
 
 		assert( 'array_intersect_assoc($r, $raw) == $r' );
 
-#		// test 'each_*' query vars
-#		$posts = get_posts( array(
-#			'post_type' => 'actor',
-#			'post_status' => 'any',
-#			'nopaging' => true,
-#			'each_connected' => array(
-#				'post_type' => 'movie',
-#				'post_status' => 'any',
-#				'nopaging' => true,
-#			),
-#			'suppress_filters' => false
-#		) );
+		// test 'each_*' query vars
+		$posts = get_posts( array(
+			'post_type' => 'actor',
+			'post_status' => 'any',
+			'nopaging' => true,
+			'each_connected' => array(
+				'post_type' => 'movie',
+				'post_status' => 'any',
+				'nopaging' => true,
+			),
+			'suppress_filters' => false
+		) );
 
-#		self::walk( $posts );
+		self::walk( $posts );
 
 #		// test 'each_*' query vars
 #		$posts = get_posts( array(
