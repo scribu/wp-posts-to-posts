@@ -1,73 +1,99 @@
 jQuery(document).ready(function($) {
-	$('.p2p_results').delegate('a', 'click', function() {
-		var $self = $(this),
-			$metabox = $self.parents('.p2p_metabox'),
-			$list = $metabox.find('.p2p_connected'),
-			post_id = $self.attr('name');
 
-		$list.append(
-			$metabox.find('.connection-template').html()
-				.replace( '%post_id%', post_id )
-				.replace( '%post_title%', $self.html() )
-		);
+$('.p2p-add-new').each(function() {
+	var $metabox = $(this).parents('.inside'),
+		$addNew = $metabox.find('.p2p-add-new'),
+		base_data = {
+			box_id: $addNew.attr('data-box-id'),
+			reversed: + $addNew.attr('data-reversed')
+		},
+		$spinner = $metabox.find('.waiting');
 
-		$metabox.find('.p2p_connected .howto').remove();
+	$metabox.delegate('.p2p-col-delete a', 'click', function() {
+		var $row = $(this).parents('tr'),
+			data = $.extend( base_data, {
+				action: 'p2p_connections',
+				subaction: 'disconnect',
+				p2p_id: $row.attr('data-p2p-id')
+			} );
 
-		var $connected = $metabox.find('.p2p_to_connect');
+		$spinner.show();
 
-		$connected.val( $connected.val() + post_id + ',' );
+		$.post(ajaxurl, data, function(response) {
+			$spinner.hide();
+			$row.slideUp();
+		});
 
 		return false;
 	});
 
-	$('.p2p_search :text').keypress(function (ev) {
-		if ( 13 === ev.keyCode )
-			return false;
+	$metabox.delegate('.p2p-results a', 'click', function() {
+		var $self = $(this),
+			data = $.extend( base_data, {
+				action: 'p2p_connections',
+				subaction: 'connect',
+				from: $('#post_ID').val(),
+				to: $self.attr('name')
+			} );
+
+		$spinner.show();
+
+		$.post(ajaxurl, data, function(response) {
+			$spinner.hide();
+//			if ( '-1' == response )
+//				return;
+			$metabox.find('.p2p-connections tbody').append(response);
+		});
+
+		return false;
 	});
 
 	var delayed, old_value = '';
 
-	$('.p2p_search :text').keyup(function (ev) {
+	$metabox.find('.p2p-search :text')
+		.keypress(function (ev) {
+			if ( 13 === ev.keyCode )
+				return false;
+		})
 
-		if ( undefined !== delayed ) {
-			clearTimeout(delayed);
-		}
-
-		var $self = $(this),
-			$metabox = $self.parents('.p2p_metabox'),
-			$results = $metabox.find('.p2p_results'),
-			$spinner = $metabox.find('.waiting');
-
-		delayed = setTimeout(function() {
-			if ( !$self.val().length ) {
-				$results.html('');
-				return;
+		.keyup(function (ev) {
+			if ( undefined !== delayed ) {
+				clearTimeout(delayed);
 			}
 
-			if ( $self.val() === old_value ) {
-				return;
-			}
-			old_value = $self.val();
+			var $self = $(this),
+				$metabox = $self.parents('.inside'),
+				$results = $metabox.find('.p2p-results'),
+				$spinner = $metabox.find('.waiting');
 
-			$spinner.show();
-			
-			var data = {
-				action: 'p2p_search',
-				q: $self.val(),
-				box_id: $metabox.attr('id').replace('p2p-box-', ''),
-				reversed: +$metabox.hasClass('reversed')
-			};
+			delayed = setTimeout(function() {
+				if ( !$self.val().length ) {
+					$results.html('');
+					return;
+				}
 
-			$.getJSON(ajaxurl, data, function(data) {
-				$spinner.hide();
+				if ( $self.val() === old_value ) {
+					return;
+				}
+				old_value = $self.val();
 
-				$results.html('');
+				$spinner.show();
 
-				$.each(data, function(id, title) {
-					$results.append('<li><a href="#" name="' + id + '">' + title + '</a></li>');
+				var data = $.extend( base_data, {
+					action: 'p2p_search',
+					q: $self.val(),
+				} );
+
+				$.getJSON(ajaxurl, data, function(data) {
+					$spinner.hide();
+
+					$results.html('');
+
+					$.each(data, function(id, title) {
+						$results.append('<li><a href="#" name="' + id + '">' + title + '</a></li>');
+					});
 				});
-			});
-		}, 400);
-	});
+			}, 400);
+		});
 });
-
+});

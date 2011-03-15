@@ -1,19 +1,17 @@
 <?php
 
 abstract class P2P_Box {
+	public $from;
+	public $to;
 
 	protected $reversed;
 	protected $direction;
 
 	protected $box_id;
-	private $input;
 
-	abstract function save( $post_id, $data );
 	abstract function box( $post_id );
 
-	protected function input_name( $name ) {
-		return $this->input->get_name( $name );
-	}
+	function setup() {}
 
 
 // Internal stuff
@@ -25,21 +23,21 @@ abstract class P2P_Box {
 
 		$this->box_id = $box_id;
 
-		$this->input = new p2pInput( array( 'p2p', $box_id ) );
-
 		$this->direction = $direction;
 
 		$this->reversed = ( 'to' == $direction );
 
 		if ( $this->reversed )
 			list( $this->to, $this->from ) = array( $this->from, $this->to );
+
+		$this->setup();
 	}
 
 	function _register( $from ) {
 		$title = $this->title; 
 
 		if ( empty( $title ) )
-			$title = get_post_type_object( $this->to )->labels->name;
+			$title = sprintf( __( 'Connected %s', 'posts-to-posts' ), get_post_type_object( $this->to )->labels->name );
 
 		add_meta_box(
 			'p2p-connections-' . $this->box_id,
@@ -51,50 +49,8 @@ abstract class P2P_Box {
 		);
 	}
 
-	function _save( $post_id ) {
-		$data = $this->input->extract( $_POST );
-
-		if ( is_null( $data ) )
-			return;
-
-		$this->save( $post_id, $data );
-	}
-
 	function _box( $post ) {
 		$this->box( $post->ID );
-	}
-}
-
-
-class p2pInput {
-
-	private $prefix;
-
-	function __construct( $prefix = array() ) {
-		$this->prefix = $prefix;
-	}
-
-	function get_name( $suffix ) {
-		$name_a = array_merge( $this->prefix, (array) $suffix );
-		
-		$name = array_shift( $name_a );
-		foreach ( $name_a as $key )
-			$name .= '[' . esc_attr( $key ) . ']';
-
-		return $name;
-	}
-
-	function extract( $value, $suffix = array() ) {
-		$name_a = array_merge( $this->prefix, (array) $suffix );
-
-		foreach ( $name_a as $key ) {
-			if ( !isset( $value[ $key ] ) )
-				return null;
-
-			$value = $value[$key];
-		}
-
-		return $value;
 	}
 }
 
@@ -107,6 +63,7 @@ class P2P_Connection_Types {
 		$args = wp_parse_args( $args, array(
 			'from' => '',
 			'to' => '',
+			'fields' => array(),
 			'box' => 'P2P_Box_Multiple',
 			'title' => '',
 			'reciprocal' => false
@@ -117,8 +74,9 @@ class P2P_Connection_Types {
 
 	static function init() {
 		add_action( 'add_meta_boxes', array( __CLASS__, '_register' ) );
-		add_action( 'save_post', array( __CLASS__, '_save' ), 10 );
+
 		add_action( 'wp_ajax_p2p_search', array( __CLASS__, 'ajax_search' ) );
+		add_action( 'wp_ajax_p2p_connections', array( __CLASS__, 'ajax_connections' ) );
 	}
 
 	static function _register( $from ) {
@@ -127,27 +85,28 @@ class P2P_Connection_Types {
 		}
 	}
 
-	static function _save( $post_id ) {
-		$from = get_post_type( $post_id );
-		if ( defined( 'DOING_AJAX' ) || defined( 'DOING_CRON' ) || empty( $_POST ) || 'revision' == $from )
-			return;
+	function ajax_connections() {
+		$box = self::ajax_make_box();
 
-		foreach ( self::filter_ctypes( $from ) as $ctype ) {
-			$ctype->_save( $post_id );
-		}
+		$ptype_obj = get_post_type_object( $box->from );
+		if ( !current_user_can( $ptype_obj->cap->edit_posts ) )
+			die(-1);
+
+		$subaction = $_POST['subaction'];
+
+		$box->$subaction();
+	}
+
+	function ajax_disconnect() {
+		$box = self::ajax_make_box();
+
+		$box->disconnect();
 	}
 
 	function ajax_search() {
 		add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ) );
 
-		$box_id = absint( $_GET['box_id'] );
-		$reversed = (bool) $_GET['reversed'];
-
-		if ( !isset( self::$ctypes[ $box_id ] ) )
-			die(0);
-
-		$args = self::$ctypes[ $box_id ];
-		$box = new $args['box']($args, $reversed, $box_id);
+		$box = self::ajax_make_box();
 
 		$posts = get_posts( $box->get_search_args( $_GET['q'] ) );
 
@@ -166,6 +125,18 @@ class P2P_Connection_Types {
 		list( $sql ) = explode( ' OR ', $sql, 2 );
 
 		return $sql . '))';
+	}
+
+	private static function ajax_make_box() {
+		$box_id = absint( $_REQUEST['box_id'] );
+		$reversed = (bool) $_REQUEST['reversed'];
+
+		if ( !isset( self::$ctypes[ $box_id ] ) )
+			die(0);
+
+		$args = self::$ctypes[ $box_id ];
+
+		return new $args['box']($args, $reversed, $box_id);	
 	}
 
 	private static function filter_ctypes( $post_type ) {

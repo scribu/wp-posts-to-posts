@@ -1,0 +1,53 @@
+/* Connections */
+
+.p2p-connections {
+    background-color: #F9F9F9;
+    border-color: #DFDFDF;
+
+	border-radius: 3px;
+    border-spacing: 0;
+    border-style: solid;
+    border-width: 1px;
+    margin: 0;
+    width: 100%;
+}
+
+.p2p-connections th {
+	background-color: #F1F1F1;
+
+	padding: 5px 8px 8px;
+	text-align: left;
+}
+
+.p2p-connections td {
+	border-top: 1px solid #DFDFDF;
+	padding: 5px 8px;
+}
+
+.p2p-connections td input {
+	width: 100%;
+}
+
+.p2p-col-delete {
+	width: 16px;
+}
+
+.p2p-col-delete a {
+	background: url("cancel.png") no-repeat scroll 0 0 transparent;
+	display: block;
+	height: 16px;
+	margin-top: 1px;
+	opacity: 0.5;
+	text-indent: -9999px;
+	width: 16px;
+}
+
+.p2p-col-delete a:hover {
+	opacity: 1;
+}
+
+/* Search */
+
+.p2p-search .waiting {vertical-align: -.4em}
+.p2p-results {margin: -5px 6px 10px}
+
