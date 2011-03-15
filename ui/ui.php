@@ -108,7 +108,7 @@ class P2P_Connection_Types {
 
 		$box = self::ajax_make_box();
 
-		$posts = get_posts( $box->get_search_args( $_GET['q'] ) );
+		$posts = get_posts( $box->get_search_args( $_GET['q'], $_GET['post_id'] ) );
 
 		$results = array();
 		foreach ( $posts as $post ) {

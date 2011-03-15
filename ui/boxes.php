@@ -151,10 +151,11 @@ class P2P_Box_Multiple extends P2P_Box {
 		return array_intersect( $connected_posts, $post_ids );	// to preserve p2p_id keys
 	}
 
-	function get_search_args( $search ) {
+	function get_search_args( $search, $post_id ) {
 		return array(
 			's' => $search,
 			'post_type' => $this->to,
+			'post__not_in' => p2p_get_connected( $post_id, $this->direction ),
 			'post_status' => 'any',
 			'posts_per_page' => 5,
 			'order' => 'ASC',

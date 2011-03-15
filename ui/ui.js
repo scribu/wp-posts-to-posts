@@ -43,6 +43,7 @@ $('.p2p-add-new').each(function() {
 //			if ( '-1' == response )
 //				return;
 			$metabox.find('.p2p-connections tbody').append(response);
+			$self.parents('li').remove();
 		});
 
 		return false;
@@ -82,6 +83,7 @@ $('.p2p-add-new').each(function() {
 				var data = $.extend( base_data, {
 					action: 'p2p_search',
 					q: $self.val(),
+					post_id: $('#post_ID').val(),
 				} );
 
 				$.getJSON(ajaxurl, data, function(data) {
