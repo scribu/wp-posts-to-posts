@@ -67,6 +67,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 0.7 =
+* improved UI
+
 = 0.6 =
 * added p2p_each_connected()
 * fixed p2p_is_connected()
