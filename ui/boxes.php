@@ -40,9 +40,7 @@ class P2P_Box_Multiple extends P2P_Box {
 
 		$p2p_id = P2P_Connections::connect( $args[0], $args[1] );
 
-		// TODO: prevent duplicate rows
-
-		$this->display_row( $p2p_id, $args[1] );
+		$this->display_row( $p2p_id, $to );
 	}
 
 	function disconnect() {
