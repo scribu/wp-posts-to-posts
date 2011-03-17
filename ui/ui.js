@@ -4,11 +4,12 @@ $('.p2p-add-new').each(function() {
 	var $metabox = $(this).parents('.inside'),
 		$addNew = $metabox.find('.p2p-add-new'),
 		base_data = {
-			box_id: $addNew.attr('data-box-id'),
-			reversed: + $addNew.attr('data-reversed')
+			box_id: $addNew.attr('data-box_id'),
+			direction: $addNew.attr('data-direction')
 		},
 		$spinner = $metabox.find('.waiting');
 
+	// Delete connection
 	$metabox.delegate('.p2p-col-delete a', 'click', function() {
 		var $row = $(this).parents('tr'),
 			data = $.extend( base_data, {
@@ -27,6 +28,7 @@ $('.p2p-add-new').each(function() {
 		return false;
 	});
 
+	// Create new connection
 	$metabox.delegate('.p2p-results a', 'click', function() {
 		var $self = $(this),
 			data = $.extend( base_data, {
@@ -43,12 +45,15 @@ $('.p2p-add-new').each(function() {
 //			if ( '-1' == response )
 //				return;
 			$metabox.find('.p2p-connections tbody').append(response);
-			$self.parents('li').remove();
+			
+			if ( $addNew.attr('data-prevent_duplicates') )
+				$self.parents('li').remove();
 		});
 
 		return false;
 	});
 
+	// Search posts
 	var delayed, old_value = '';
 
 	$metabox.find('.p2p-search :text')

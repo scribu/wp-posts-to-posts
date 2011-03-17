@@ -7,8 +7,10 @@
  * @param array $args Can be:
  *  - 'from' string|array The first end of the connection
  *  - 'to' string|array The second end of the connection
+ *  - 'fields' array Additional metadata fields
+ *  - 'prevent_duplicates' bool Wether to disallow duplicate connections between the same two posts
+ *  - 'reciprocal' bool Wether to show the box on both sides of the connection
  *  - 'title' string The box's title
- *  - 'reciprocal' bool wether to show the box on both sides of the connection
  *  - 'box' string A class that handles displaying and saving connections. Default: P2P_Box_Multiple
  */
 function p2p_register_connection_type( $args ) {
@@ -19,10 +21,23 @@ function p2p_register_connection_type( $args ) {
 		@list( $args['from'], $args['to'], $args['reciprocal'] ) = $argv;
 	}
 
+	$defaults = array(
+		'from' => '',
+		'to' => '',
+		'fields' => array(),
+		'prevent_duplicates' => true,
+		'reciprocal' => false,
+		'title' => '',
+		'box' => 'P2P_Box_Multiple',
+	);
+
 	foreach ( (array) $args['from'] as $from ) {
 		foreach ( (array) $args['to'] as $to ) {
 			$args['from'] = $from;
 			$args['to'] = $to;
+
+			$args = wp_parse_args( $args, $defaults );
+
 			P2P_Connection_Types::register( $args );
 		}
 	}

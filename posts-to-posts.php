@@ -39,7 +39,6 @@ function _p2p_init() {
 	P2P_Connections::init( __FILE__ );
 	P2P_Query::init();
 	P2P_Connection_Types::init();
-	P2P_Box_Multiple::init();
 
 	P2P_Migrate::init();
 }

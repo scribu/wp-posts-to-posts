@@ -147,7 +147,7 @@ class P2P_Test {
 			'suppress_filters' => false
 		) );
 
-		self::walk( $posts );
+#		self::walk( $posts );
 
 #		// test 'each_*' query vars
 #		$posts = get_posts( array(

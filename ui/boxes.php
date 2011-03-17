@@ -2,20 +2,6 @@
 
 class P2P_Box_Multiple extends P2P_Box {
 
-	protected $meta_keys = array();
-
-	function init() {
-		add_action( 'admin_print_styles-post.php', array( __CLASS__, 'scripts' ) );
-		add_action( 'admin_print_styles-post-new.php', array( __CLASS__, 'scripts' ) );
-
-		add_action( 'save_post', array( __CLASS__, 'save' ), 10, 2 );
-	}
-
-	function scripts() {
-		wp_enqueue_style( 'p2p-admin', plugins_url( 'ui.css', __FILE__ ), array(), '0.7-alpha' );
-		wp_enqueue_script( 'p2p-admin', plugins_url( 'ui.js', __FILE__ ), array( 'jquery' ), '0.7-alpha', true );
-	}
-
 	function setup() {
 		$ptype_obj = get_post_type_object( $this->to );
 
@@ -38,7 +24,16 @@ class P2P_Box_Multiple extends P2P_Box {
 		if ( $this->reversed )
 			$args = array_reverse( $args );
 
-		$p2p_id = P2P_Connections::connect( $args[0], $args[1] );
+		$p2p_id = false;
+		if ( $this->prevent_duplicates ) {
+			$p2p_ids = P2P_Connections::get( $args[0], $args[1] );
+
+			if ( !empty( $p2p_ids ) )
+				$p2p_id = $p2p_ids[0];
+		}
+
+		if ( !$p2p_id )
+			$p2p_id = P2P_Connections::connect( $args[0], $args[1] );
 
 		$this->display_row( $p2p_id, $to );
 	}
@@ -51,19 +46,14 @@ class P2P_Box_Multiple extends P2P_Box {
 		die(1);
 	}
 
-	function save( $post_id, $post ) {
-		if ( 'revision' == $post->post_type || !isset( $_POST['p2p_meta'] ) )
-			return;
-
-		foreach ( $_POST['p2p_meta'] as $p2p_id => $data ) {
-			foreach ( $data as $key => $value ) {
-				p2p_update_meta( $p2p_id, $key, $value );
-			}
-		}
-	}
-
 	function box( $post_id ) {
 		$connected_ids = $this->get_connected_ids( $post_id );
+
+		$data_attr = array();
+		foreach ( array( 'box_id', 'direction', 'prevent_duplicates' ) as $key )
+			$data_attr[] = "data-$key='" . $this->$key . "'";
+		$data_attr = implode( ' ', $data_attr );
+
 ?>
 <table class="p2p-connections">
 	<thead>
@@ -81,7 +71,7 @@ class P2P_Box_Multiple extends P2P_Box {
 	</tbody>
 </table>
 
-<div class="p2p-add-new" data-box-id="<?php echo $this->box_id; ?>" data-reversed="<?php echo $this->reversed; ?>">
+<div class="p2p-add-new" <?php echo $data_attr; ?>>
 		<p><strong><?php _e( 'Add New Connection:', 'posts-to-posts' ); ?></strong></p>
 
 		<p class="p2p-search">
@@ -152,10 +142,9 @@ class P2P_Box_Multiple extends P2P_Box {
 	}
 
 	function get_search_args( $search, $post_id ) {
-		return array(
+		$args = array(
 			's' => $search,
 			'post_type' => $this->to,
-			'post__not_in' => p2p_get_connected( $post_id, $this->direction ),
 			'post_status' => 'any',
 			'posts_per_page' => 5,
 			'order' => 'ASC',
@@ -164,6 +153,11 @@ class P2P_Box_Multiple extends P2P_Box {
 			'update_post_term_cache' => false,
 			'update_post_meta_cache' => false
 		);
+
+		if ( $this->prevent_duplicates )
+			$args['post__not_in'] = p2p_get_connected( $post_id, $this->direction );
+
+		return $args;
 	}
 }
 

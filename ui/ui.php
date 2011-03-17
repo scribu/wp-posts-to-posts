@@ -60,28 +60,38 @@ class P2P_Connection_Types {
 	private static $ctypes = array();
 
 	static public function register( $args ) {
-		$args = wp_parse_args( $args, array(
-			'from' => '',
-			'to' => '',
-			'fields' => array(),
-			'box' => 'P2P_Box_Multiple',
-			'title' => '',
-			'reciprocal' => false
-		) );
-
 		self::$ctypes[] = $args;
 	}
 
 	static function init() {
 		add_action( 'add_meta_boxes', array( __CLASS__, '_register' ) );
+		add_action( 'admin_print_styles-post.php', array( __CLASS__, 'scripts' ) );
+		add_action( 'admin_print_styles-post-new.php', array( __CLASS__, 'scripts' ) );
 
+		add_action( 'save_post', array( __CLASS__, 'save' ), 10, 2 );
 		add_action( 'wp_ajax_p2p_search', array( __CLASS__, 'ajax_search' ) );
 		add_action( 'wp_ajax_p2p_connections', array( __CLASS__, 'ajax_connections' ) );
+	}
+
+	function scripts() {
+		wp_enqueue_style( 'p2p-admin', plugins_url( 'ui.css', __FILE__ ), array(), '0.7-alpha' );
+		wp_enqueue_script( 'p2p-admin', plugins_url( 'ui.js', __FILE__ ), array( 'jquery' ), '0.7-alpha', true );
 	}
 
 	static function _register( $from ) {
 		foreach ( self::filter_ctypes( $from ) as $ctype ) {
 			$ctype->_register( $from );
+		}
+	}
+
+	function save( $post_id, $post ) {
+		if ( 'revision' == $post->post_type || !isset( $_POST['p2p_meta'] ) )
+			return;
+
+		foreach ( $_POST['p2p_meta'] as $p2p_id => $data ) {
+			foreach ( $data as $key => $value ) {
+				p2p_update_meta( $p2p_id, $key, $value );
+			}
 		}
 	}
 
@@ -129,14 +139,14 @@ class P2P_Connection_Types {
 
 	private static function ajax_make_box() {
 		$box_id = absint( $_REQUEST['box_id'] );
-		$reversed = (bool) $_REQUEST['reversed'];
+		$direction = $_REQUEST['direction'];
 
 		if ( !isset( self::$ctypes[ $box_id ] ) )
 			die(0);
 
 		$args = self::$ctypes[ $box_id ];
 
-		return new $args['box']($args, $reversed, $box_id);	
+		return new $args['box']($args, $direction, $box_id);	
 	}
 
 	private static function filter_ctypes( $post_type ) {

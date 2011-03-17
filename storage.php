@@ -91,10 +91,11 @@ class P2P_Connections {
 	 * @param int $from post id
 	 * @param int $to post id
 	 * @param array $data additional data about the connection
+	 * @param string $duplicates Duplicate prevention strategy: 'none', 'matching_data', 'strict'
 	 *
 	 * @return int|bool connection id or False on failure
 	 */
-	function connect( $from, $to, $data = array() ) {
+	function connect( $from, $to, $data = array(), $duplicates = 'matching_data' ) {
 		global $wpdb;
 
 		$from = absint( $from );
@@ -102,11 +103,6 @@ class P2P_Connections {
 
 		if ( !$from || !$to )
 			return false;
-
-		$p2p_ids = self::get( $from, $to, $data, true );
-
-		if ( !empty( $p2p_ids ) )
-			return $p2p_ids[0];
 
 		$wpdb->insert( $wpdb->p2p, array( 'p2p_from' => $from, 'p2p_to' => $to ), '%d' );
 
