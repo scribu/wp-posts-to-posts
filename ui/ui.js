@@ -2,12 +2,34 @@ jQuery(document).ready(function($) {
 
 $('.p2p-add-new').each(function() {
 	var $metabox = $(this).parents('.inside'),
+		$connections = $metabox.find('.p2p-connections'),
 		$addNew = $metabox.find('.p2p-add-new'),
 		base_data = {
 			box_id: $addNew.attr('data-box_id'),
 			direction: $addNew.attr('data-direction')
 		},
 		$spinner = $metabox.find('.waiting');
+
+	// Delete all connections
+	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
+		var $self = $(this),
+			data = $.extend( base_data, {
+				action: 'p2p_connections',
+				subaction: 'clear_connections',
+				post_id: $('#post_ID').val(),
+			} );
+
+		$spinner.show();
+
+		$.post(ajaxurl, data, function(response) {
+			$connections
+				.hide()
+				.find('tbody').html('');
+			$spinner.hide();
+		});
+
+		return false;
+	});
 
 	// Delete connection
 	$metabox.delegate('td.p2p-col-delete a', 'click', function() {
@@ -23,13 +45,17 @@ $('.p2p-add-new').each(function() {
 
 		$.post(ajaxurl, data, function(response) {
 			$row.remove();
+
+			if ( !$connections.find('tbody tr').length )
+				$connections.hide();
+
 			$spinner.hide();
 		});
 
 		return false;
 	});
 
-	// Create new connection
+	// Create connection
 	$metabox.delegate('td.p2p-col-add a', 'click', function() {
 		var $self = $(this),
 			$row = $self.parents('tr'),
@@ -45,7 +71,9 @@ $('.p2p-add-new').each(function() {
 		$.post(ajaxurl, data, function(response) {
 //			if ( '-1' == response )
 //				return;
-			$metabox.find('.p2p-connections tbody').append(response);
+			$connections
+				.show()
+				.find('tbody').append(response);
 
 			if ( $addNew.attr('data-prevent_duplicates') ) {
 				$row.remove();

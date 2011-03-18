@@ -6,7 +6,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		$ptype_obj = get_post_type_object( $this->to );
 
 		$this->columns = array_merge(
-			array( 'delete' => $this->column_delete(-1) ),
+			array( 'delete' => $this->clear_connections_link() ),
 			array( 'title' => $ptype_obj->labels->singular_name ),
 			$this->fields
 		);
@@ -46,6 +46,13 @@ class P2P_Box_Multiple extends P2P_Box {
 		die(1);
 	}
 
+	function clear_connections() {
+		$post_id = absint( $_POST['post_id'] );
+		p2p_disconnect( $post_id, $this->direction );
+
+		die(1);
+	}
+
 	function box( $post_id ) {
 		$connected_ids = $this->get_connected_ids( $post_id );
 
@@ -55,7 +62,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		$data_attr = implode( ' ', $data_attr );
 
 ?>
-<table class="p2p-connections">
+<table class="p2p-connections" <?php if ( empty( $connected_ids ) ) echo 'style="display:none"'; ?>>
 	<thead>
 		<tr>
 		<?php foreach ( $this->columns as $key => $title ) {
@@ -155,6 +162,13 @@ class P2P_Box_Multiple extends P2P_Box {
 			'href' => '#',
 			'title' => __( 'Delete connection', 'posts-to-posts' )
 		), __( 'Delete connection', 'posts-to-posts' ) );
+	}
+
+	protected function clear_connections_link() {
+		return html( 'a', array(
+			'href' => '#',
+			'title' => __( 'Delete all connections', 'posts-to-posts' )
+		), __( 'Delete all connections', 'posts-to-posts' ) );
 	}
 
 	protected function get_connected_ids( $post_id ) {
