@@ -22,8 +22,8 @@ $('.p2p-add-new').each(function() {
 		$spinner.show();
 
 		$.post(ajaxurl, data, function(response) {
+			$row.remove();
 			$spinner.hide();
-			$row.slideUp();
 		});
 
 		return false;
@@ -43,13 +43,15 @@ $('.p2p-add-new').each(function() {
 		$spinner.show();
 
 		$.post(ajaxurl, data, function(response) {
-			$spinner.hide();
 //			if ( '-1' == response )
 //				return;
 			$metabox.find('.p2p-connections tbody').append(response);
 
-			if ( $addNew.attr('data-prevent_duplicates') )
-				$row.slideUp();
+			if ( $addNew.attr('data-prevent_duplicates') ) {
+				$row.remove();
+			}
+
+			$spinner.hide();
 		});
 
 		return false;
