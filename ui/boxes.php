@@ -137,7 +137,7 @@ class P2P_Box_Multiple extends P2P_Box {
 	protected function column_title( $post_id ) {
 		return html( 'a', array(
 			'href' => str_replace( '&amp;', '&', get_edit_post_link( $post_id ) ),
-			'title' => __( 'Edit this post', 'posts-to-posts' )
+			'title' => get_post_type_object( get_post_type( $post_id ) )->labels->edit_item,
 		), get_the_title( $post_id ) );
 	}
 
@@ -145,16 +145,16 @@ class P2P_Box_Multiple extends P2P_Box {
 		return html( 'a', array(
 			'data-post_id' => $post_id,
 			'href' => '#',
-			'title' => __( 'Add', 'posts-to-posts' )
-		), __( 'Add', 'posts-to-posts' ) );
+			'title' => __( 'Create connection', 'posts-to-posts' )
+		), __( 'Create connection', 'posts-to-posts' ) );
 	}
 
 	protected function column_delete( $p2p_id ) {
 		return html( 'a', array(
 			'data-p2p_id' => $p2p_id,
 			'href' => '#',
-			'title' => __( 'Delete', 'posts-to-posts' )
-		), __( 'Delete', 'posts-to-posts' ) );
+			'title' => __( 'Delete connection', 'posts-to-posts' )
+		), __( 'Delete connection', 'posts-to-posts' ) );
 	}
 
 	protected function get_connected_ids( $post_id ) {
