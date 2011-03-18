@@ -122,11 +122,10 @@ class P2P_Connection_Types {
 
 		$results = array();
 		foreach ( $posts as $post ) {
-			$GLOBALS['post'] = $post;
-			$results[ $post->ID ] = apply_filters( 'the_title', $post->post_title );
+			$box->results_row( $post );
 		}
 
-		die( json_encode( $results ) );
+		die();
 	}
 
 	function _search_by_title( $sql ) {

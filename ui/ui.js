@@ -10,12 +10,13 @@ $('.p2p-add-new').each(function() {
 		$spinner = $metabox.find('.waiting');
 
 	// Delete connection
-	$metabox.delegate('.p2p-col-delete a', 'click', function() {
-		var $row = $(this).parents('tr'),
+	$metabox.delegate('td.p2p-col-delete a', 'click', function() {
+		var $self = $(this),
+			$row = $self.parents('tr'),
 			data = $.extend( base_data, {
 				action: 'p2p_connections',
 				subaction: 'disconnect',
-				p2p_id: $row.attr('data-p2p-id')
+				p2p_id: $self.attr('data-p2p_id')
 			} );
 
 		$spinner.show();
@@ -29,13 +30,14 @@ $('.p2p-add-new').each(function() {
 	});
 
 	// Create new connection
-	$metabox.delegate('.p2p-results a', 'click', function() {
+	$metabox.delegate('td.p2p-col-add a', 'click', function() {
 		var $self = $(this),
+			$row = $self.parents('tr'),
 			data = $.extend( base_data, {
 				action: 'p2p_connections',
 				subaction: 'connect',
 				from: $('#post_ID').val(),
-				to: $self.attr('name')
+				to: $self.attr('data-post_id')
 			} );
 
 		$spinner.show();
@@ -45,9 +47,9 @@ $('.p2p-add-new').each(function() {
 //			if ( '-1' == response )
 //				return;
 			$metabox.find('.p2p-connections tbody').append(response);
-			
+
 			if ( $addNew.attr('data-prevent_duplicates') )
-				$self.parents('li').remove();
+				$row.slideUp();
 		});
 
 		return false;
@@ -69,7 +71,7 @@ $('.p2p-add-new').each(function() {
 
 			var $self = $(this),
 				$metabox = $self.parents('.inside'),
-				$results = $metabox.find('.p2p-results'),
+				$results = $metabox.find('.p2p-results tbody'),
 				$spinner = $metabox.find('.waiting');
 
 			delayed = setTimeout(function() {
@@ -91,14 +93,10 @@ $('.p2p-add-new').each(function() {
 					post_id: $('#post_ID').val(),
 				} );
 
-				$.getJSON(ajaxurl, data, function(data) {
+				$.get(ajaxurl, data, function(data) {
 					$spinner.hide();
 
-					$results.html('');
-
-					$.each(data, function(id, title) {
-						$results.append('<li><a href="#" name="' + id + '">' + title + '</a></li>');
-					});
+					$results.html(data);
 				});
 			}, 400);
 		});

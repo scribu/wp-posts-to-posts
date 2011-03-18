@@ -6,9 +6,9 @@ class P2P_Box_Multiple extends P2P_Box {
 		$ptype_obj = get_post_type_object( $this->to );
 
 		$this->columns = array_merge(
-			array( 'post' => $ptype_obj->labels->singular_name ),
-			$this->fields,
-			array( 'delete' => '' )
+			array( 'delete' => $this->column_delete(-1) ),
+			array( 'title' => $ptype_obj->labels->singular_name ),
+			$this->fields
 		);
 	}
 
@@ -35,7 +35,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		if ( !$p2p_id )
 			$p2p_id = P2P_Connections::connect( $args[0], $args[1] );
 
-		$this->display_row( $p2p_id, $to );
+		$this->connection_row( $p2p_id, $to );
 	}
 
 	function disconnect() {
@@ -66,7 +66,7 @@ class P2P_Box_Multiple extends P2P_Box {
 
 	<tbody>
 	<?php foreach ( $connected_ids as $p2p_id => $post_b ) {
-		$this->display_row( $p2p_id, $post_b );
+		$this->connection_row( $p2p_id, $post_b );
 	} ?>
 	</tbody>
 </table>
@@ -84,28 +84,27 @@ class P2P_Box_Multiple extends P2P_Box {
 			<img alt="" src="<?php echo admin_url( 'images/wpspin_light.gif' ); ?>" class="waiting" style="display: none;">
 		</p>
 
-		<ul class="p2p-results"></ul>
+		<table class="p2p-results">
+			<tbody>
+			</tbody>
+		</table>
 </div>
 <?php
 	}
 
-	protected function display_row( $p2p_id, $post_id ) {
-		echo '<tr data-p2p-id="' . $p2p_id . '">';
+	protected function connection_row( $p2p_id, $post_id ) {
+		echo '<tr>';
+
+		$GLOBALS['post'] = get_post( $post_id );
 
 		foreach ( array_keys( $this->columns ) as $key ) {
 			switch ( $key ) {
-				case 'post':
-					$value = html( 'a', array(
-						'href' => str_replace( '&amp;', '&', get_edit_post_link( $post_id ) ),
-						'title' => __( 'Edit', 'posts-to-posts' )
-					), get_post_field( 'post_title', $post_id ) );
+				case 'title':
+					$value = $this->column_title( $post_id );
 					break;
 
 				case 'delete':
-					$value = html( 'a', array(
-						'href' => '#',
-						'title' => __( 'Delete', 'posts-to-posts' )
-					), __( 'Delete', 'posts-to-posts' ) );
+					$value = $this->column_delete( $p2p_id );
 					break;
 
 				default:
@@ -120,6 +119,42 @@ class P2P_Box_Multiple extends P2P_Box {
 		}
 
 		echo '</tr>';
+	}
+
+	public function results_row( $post ) {
+		echo '<tr>';
+
+		$GLOBALS['post'] = $post;
+
+		foreach ( array( 'add', 'title' ) as $key ) {
+			$method = "column_$key";
+			echo html( 'td', array( 'class' => "p2p-col-$key" ), $this->$method( $post->ID ) );
+		}
+
+		echo '</tr>';
+	}
+	
+	protected function column_title( $post_id ) {
+		return html( 'a', array(
+			'href' => str_replace( '&amp;', '&', get_edit_post_link( $post_id ) ),
+			'title' => __( 'Edit this post', 'posts-to-posts' )
+		), get_the_title( $post_id ) );
+	}
+
+	protected function column_add( $post_id ) {
+		return html( 'a', array(
+			'data-post_id' => $post_id,
+			'href' => '#',
+			'title' => __( 'Add', 'posts-to-posts' )
+		), __( 'Add', 'posts-to-posts' ) );
+	}
+
+	protected function column_delete( $p2p_id ) {
+		return html( 'a', array(
+			'data-p2p_id' => $p2p_id,
+			'href' => '#',
+			'title' => __( 'Delete', 'posts-to-posts' )
+		), __( 'Delete', 'posts-to-posts' ) );
 	}
 
 	protected function get_connected_ids( $post_id ) {

@@ -1,5 +1,6 @@
 /* Connections */
 
+.p2p-results,
 .p2p-connections {
     background-color: #F9F9F9;
     border-color: #DFDFDF;
@@ -9,6 +10,15 @@
     border-style: solid;
     border-width: 1px;
     margin: 0;
+}
+
+.p2p-results td,
+.p2p-connections td {
+	border-bottom: 1px solid #DFDFDF;
+	padding: 5px 8px;
+}
+
+.p2p-connections {
     width: 100%;
 }
 
@@ -19,21 +29,17 @@
 	text-align: left;
 }
 
-.p2p-connections td {
-	border-top: 1px solid #DFDFDF;
-	padding: 5px 8px;
-}
-
 .p2p-connections td input {
 	width: 100%;
 }
 
+.p2p-col-add,
 .p2p-col-delete {
 	width: 16px;
 }
 
+.p2p-col-add a,
 .p2p-col-delete a {
-	background: url("cancel.png") no-repeat scroll 0 0 transparent;
 	display: block;
 	height: 16px;
 	margin-top: 1px;
@@ -42,12 +48,18 @@
 	width: 16px;
 }
 
+.p2p-col-add a {
+	background: url("images/add.png") no-repeat scroll 0 0 transparent;
+}
+
+.p2p-col-delete a {
+	background: url("images/delete.png") no-repeat scroll 0 0 transparent;
+}
+
+.p2p-col-add a:hover,
 .p2p-col-delete a:hover {
 	opacity: 1;
 }
 
-/* Search */
-
 .p2p-search .waiting {vertical-align: -.4em}
-.p2p-results {margin: -5px 6px 10px}
 
