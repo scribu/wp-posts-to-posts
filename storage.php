@@ -44,20 +44,36 @@ class P2P_Connections {
 	 * @return array( p2p_id => post_id ) if $to is string
 	 * @return array( p2p_id ) if $to is int
 	 */
-	function get( $from, $to, $data = array(), $_return_p2p_ids = false ) {
+	function get( $post_id, $direction, $data = array() ) {
+		if ( 'any' == $direction ) {
+			$from = self::_get( $post_id, 'from', $data );
+			$to = self::_get( $post_id, 'to', $data );
+
+			foreach ( $to as $p2p_id => $post_id ) {
+				$from[ $p2p_id ] = $post_id;
+			}
+
+			return $from;
+		}
+
+		return self::_get( $post_id, $direction, $data );
+	}
+
+	private function _get( $from, $to, $data = array() ) {
 		global $wpdb;
 
 		$fields = "$wpdb->p2p.p2p_id";
 		$where = '';
 		$join = '';
 
+		$_return_p2p_ids = false;
 		switch ( $to ) {
 			case 'from':
-				$fields .= $_return_p2p_ids ? '' : ', p2p_to AS post_id';
+				$fields .= ', p2p_to AS post_id';
 				$where .= $wpdb->prepare( "p2p_from = %d", $from );
 				break;
 			case 'to':
-				$fields .= $_return_p2p_ids ? '' : ', p2p_from AS post_id';
+				$fields .= ', p2p_from AS post_id';
 				$where .= $wpdb->prepare( "p2p_to = %d", $from );
 				break;
 			default:
@@ -124,7 +140,13 @@ class P2P_Connections {
 	 * @return int Number of connections deleted
 	 */
 	function disconnect( $from, $to, $data = array() ) {
-		return self::delete( self::get( $from, $to, $data, true ) );
+		$connections = self::get( $from, $to, $data );
+
+		// We're interested in the p2p_ids
+		if ( !(int) $to )
+			$connections = array_keys( $connections );
+
+		return self::delete( $connections );
 	}
 
 	/**

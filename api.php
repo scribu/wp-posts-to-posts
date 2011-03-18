@@ -83,17 +83,6 @@ function p2p_disconnect( $from, $to, $data = array() ) {
  * @return array( p2p_id => post_id )
  */
 function p2p_get_connected( $post_id, $direction = 'any', $data = array() ) {
-	if ( 'any' == $direction ) {
-		$from = P2P_Connections::get( $post_id, 'from', $data );
-		$to = P2P_Connections::get( $post_id, 'to', $data );
-
-		foreach ( $to as $p2p_id => $post_id ) {
-			$from[ $p2p_id ] = $post_id;
-		}
-
-		return $from;
-	}
-
 	return P2P_Connections::get( $post_id, $direction, $data );
 }
 
