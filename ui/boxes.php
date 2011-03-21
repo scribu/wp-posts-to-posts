@@ -62,21 +62,27 @@ class P2P_Box_Multiple extends P2P_Box {
 		$data_attr = implode( ' ', $data_attr );
 
 ?>
-<table class="p2p-connections" <?php if ( empty( $connected_ids ) ) echo 'style="display:none"'; ?>>
-	<thead>
-		<tr>
-		<?php foreach ( $this->columns as $key => $title ) {
-			echo html( 'th', array( 'class' => "p2p-col-$key" ), $title );
-		} ?>
-		</tr>
-	</thead>
+<div>
+	<table class="p2p-connections" <?php if ( empty( $connected_ids ) ) echo 'style="display:none"'; ?>>
+		<thead>
+			<tr>
+			<?php 
+				foreach ( $this->columns as $key => $title ) {
+				echo html( 'th', array( 'class' => "p2p-col-$key" ), $title );
+				} 
+			?>
+			</tr>
+		</thead>
 
-	<tbody>
-	<?php foreach ( $connected_ids as $p2p_id => $post_b ) {
-		$this->connection_row( $p2p_id, $post_b );
-	} ?>
-	</tbody>
-</table>
+		<tbody>
+		<?php 
+			foreach ( $connected_ids as $p2p_id => $post_b ) {
+			$this->connection_row( $p2p_id, $post_b );
+			} 
+		?>
+		</tbody>
+	</table>
+</div>
 
 <div class="p2p-add-new" <?php echo $data_attr; ?>>
 		<p><strong><?php _e( 'Add New Connection:', 'posts-to-posts' ); ?></strong></p>
@@ -95,6 +101,7 @@ class P2P_Box_Multiple extends P2P_Box {
 			<tbody>
 			</tbody>
 		</table>
+		
 
 
 </div>

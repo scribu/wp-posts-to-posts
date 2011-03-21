@@ -9,7 +9,10 @@ $('.p2p-add-new').each(function() {
 			direction: $addNew.attr('data-direction')
 		},
 		$spinner = $metabox.find('.waiting');
-
+		
+	$metabox.closest('.postbox')
+		.addClass('p2p');
+	
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
 		var $self = $(this),

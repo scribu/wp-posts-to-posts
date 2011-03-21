@@ -1,3 +1,24 @@
+/* @override http://zebradev.local/wp-content/plugins/posts-to-posts/ui/ui.css?ver=0.7-alpha */
+
+/* General */
+#poststuff .p2p .inside { 
+	margin: 6px 0pt 0pt;
+	}
+.p2p .inside > * { 
+	margin-left: 5px;
+	margin-right: 5px;
+	}
+.p2p .inside .p2p-footer { 
+	background-color: #f1f1f1;
+    border-top: 1px solid #ddd;
+    clear: both;
+    padding: 7px;
+	margin: 8px 0 0 0;
+	}
+.p2p-footer .p2p-recent { 
+	float: right;
+	}
+
 /* Connections */
 
 .p2p-results,
@@ -14,9 +35,16 @@
 
 .p2p-results td,
 .p2p-connections td {
-	border-bottom: 1px solid #DFDFDF;
-	padding: 5px 8px;
+	border-top: 1px solid #DFDFDF;
 }
+
+.p2p-connections td, .p2p-results td a { 
+	padding: 5px 8px;
+	}
+	
+.p2p-results tr:first-child td { 
+	border-top: 0;
+	}
 
 .p2p-connections {
     width: 100%;
@@ -48,12 +76,18 @@
 	width: 16px;
 }
 
+.p2p-col-add a:hover {
+	background-color: #f5f5f5;
+	border-right: 1px solid #ddd;
+	width: 15px;
+	}
+
 .p2p-col-add a {
-	background: url("images/add.png") no-repeat scroll 0 0 transparent;
+	background: url("images/add.png") no-repeat scroll 50% 50% transparent;
 }
 
 .p2p-col-delete a {
-	background: url("images/delete.png") no-repeat scroll 0 0 transparent;
+	background: url("images/delete.png") no-repeat scroll 50% 50% transparent;
 }
 
 .p2p-col-add a:hover,
@@ -62,4 +96,3 @@
 }
 
 .p2p-search .waiting {vertical-align: -.4em}
-
