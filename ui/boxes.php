@@ -95,12 +95,26 @@ class P2P_Box_Multiple extends P2P_Box {
 			<tbody>
 			</tbody>
 		</table>
+
+
 </div>
+<div class="p2p-footer">
+	<a href="#" class="p2p-recent button" name="p2p-recent">
+		<?php _e( 'Recent', 'posts-to-posts' ); ?>
+	</a>
+	<div class="clear">
+		<!-- Clearfix would be better -->
+	</div>
+</div>
+
+
 <?php
 	}
 
 	protected function connection_row( $p2p_id, $post_id ) {
 		echo '<tr>';
+
+		$GLOBALS['post'] = get_post( $post_id );
 
 		foreach ( array_keys( $this->columns ) as $key ) {
 			switch ( $key ) {
@@ -129,6 +143,8 @@ class P2P_Box_Multiple extends P2P_Box {
 	public function results_row( $post ) {
 		echo '<tr>';
 
+		$GLOBALS['post'] = $post;
+
 		foreach ( array( 'add', 'title' ) as $key ) {
 			$method = "column_$key";
 			echo html( 'td', array( 'class' => "p2p-col-$key" ), $this->$method( $post->ID ) );
@@ -136,12 +152,12 @@ class P2P_Box_Multiple extends P2P_Box {
 
 		echo '</tr>';
 	}
-
+	
 	protected function column_title( $post_id ) {
 		return html( 'a', array(
 			'href' => str_replace( '&amp;', '&', get_edit_post_link( $post_id ) ),
 			'title' => get_post_type_object( get_post_type( $post_id ) )->labels->edit_item,
-		), get_post_field( 'post_title', $post_id ) );
+		), get_the_title( $post_id ) );
 	}
 
 	protected function column_add( $post_id ) {
@@ -197,6 +213,22 @@ class P2P_Box_Multiple extends P2P_Box {
 			'suppress_filters' => false,
 			'update_post_term_cache' => false,
 			'update_post_meta_cache' => false
+		);
+
+		if ( $this->prevent_duplicates )
+			$args['post__not_in'] = p2p_get_connected( $post_id, $this->direction );
+
+		return $args;
+	}
+	
+	function get_recent_args( $post_id ) {
+		$args = array(
+			'numberposts' => 10,
+			'orderby' => 'post_date',
+			'order' => 'DESC',
+			'post_type' => $this->to,
+			'post_status' => 'publish',
+			'suppress_filters' => false //true
 		);
 
 		if ( $this->prevent_duplicates )

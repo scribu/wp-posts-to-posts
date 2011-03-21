@@ -71,6 +71,7 @@ class P2P_Connection_Types {
 		add_action( 'save_post', array( __CLASS__, 'save' ), 10, 2 );
 		add_action( 'wp_ajax_p2p_search', array( __CLASS__, 'ajax_search' ) );
 		add_action( 'wp_ajax_p2p_connections', array( __CLASS__, 'ajax_connections' ) );
+		add_action( 'wp_ajax_p2p_recent', array( __CLASS__, 'ajax_recent' ) );
 	}
 
 	function scripts() {
@@ -125,6 +126,19 @@ class P2P_Connection_Types {
 			$box->results_row( $post );
 		}
 
+		die();
+	}
+	
+	function ajax_recent() {
+		$box = self::ajax_make_box();
+		
+		$posts = get_posts( $box->get_recent_args( $_GET['post_id'] ) );
+
+		$results = array();
+		foreach ( $posts as $post ) {
+			 $box->results_row( $post );
+		}
+		
 		die();
 	}
 
