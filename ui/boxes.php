@@ -121,9 +121,7 @@ class P2P_Box_Multiple extends P2P_Box {
 	protected function connection_row( $p2p_id, $post_id ) {
 		echo '<tr>';
 
-		$GLOBALS['post'] = get_post( $post_id );
-
-		foreach ( array_keys( $this->columns ) as $key ) {
+	foreach ( array_keys( $this->columns ) as $key ) {
 			switch ( $key ) {
 				case 'title':
 					$value = $this->column_title( $post_id );
@@ -150,8 +148,6 @@ class P2P_Box_Multiple extends P2P_Box {
 	public function results_row( $post ) {
 		echo '<tr>';
 
-		$GLOBALS['post'] = $post;
-
 		foreach ( array( 'add', 'title' ) as $key ) {
 			$method = "column_$key";
 			echo html( 'td', array( 'class' => "p2p-col-$key" ), $this->$method( $post->ID ) );
@@ -159,12 +155,12 @@ class P2P_Box_Multiple extends P2P_Box {
 
 		echo '</tr>';
 	}
-	
+
 	protected function column_title( $post_id ) {
 		return html( 'a', array(
 			'href' => str_replace( '&amp;', '&', get_edit_post_link( $post_id ) ),
 			'title' => get_post_type_object( get_post_type( $post_id ) )->labels->edit_item,
-		), get_the_title( $post_id ) );
+		), get_post_field( 'post_title', $post_id ) );
 	}
 
 	protected function column_add( $post_id ) {
