@@ -44,7 +44,7 @@ abstract class P2P_Box {
 			$title,
 			array( $this, '_box' ),
 			$from,
-			'side',
+			$this->context,
 			'default'
 		);
 	}

@@ -11,6 +11,7 @@
  *  - 'prevent_duplicates' bool Wether to disallow duplicate connections between the same two posts
  *  - 'reciprocal' bool Wether to show the box on both sides of the connection
  *  - 'title' string The box's title
+ *  - 'context' string Where should the box show up by default: 'advanced' or 'side'
  *  - 'box' string A class that handles displaying and saving connections. Default: P2P_Box_Multiple
  */
 function p2p_register_connection_type( $args ) {
@@ -28,6 +29,7 @@ function p2p_register_connection_type( $args ) {
 		'prevent_duplicates' => true,
 		'reciprocal' => false,
 		'title' => '',
+		'context' => 'side',
 		'box' => 'P2P_Box_Multiple',
 	);
 
