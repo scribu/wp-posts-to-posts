@@ -39,8 +39,26 @@
 	border-top: 1px solid #DFDFDF;
 }
 
-.p2p-connections td, .p2p-results td a {
-	padding: 5px 8px;
+.p2p-connections th,
+.p2p-connections td,
+.p2p-results td {
+	padding-left: 6px;
+	padding-right: 6px;
+}
+
+th.p2p-col-delete,
+td.p2p-col-delete,
+td.p2p-col-add {
+	padding: 0;
+}
+
+.p2p-col-delete a,
+.p2p-col-add a {
+	padding: 5px 6px;
+}
+
+th.p2p-col-delete a {
+	padding-bottom: 8px;
 }
 
 .p2p-results tr:first-child td {
@@ -53,7 +71,6 @@
 
 .p2p-connections th {
 	background-color: #F1F1F1;
-	padding: 5px 8px 8px;
 	text-align: left;
 }
 
@@ -76,9 +93,11 @@
 	width: 16px;
 }
 
-.p2p-col-add a:hover {
+.p2p-col-add a:hover,
+.p2p-col-delete a:hover {
 	background-color: #f5f5f5;
 	border-right: 1px solid #ddd;
+	opacity: 1;
 	width: 15px;
 }
 
@@ -88,11 +107,6 @@
 
 .p2p-col-delete a {
 	background: url("images/delete.png") no-repeat scroll 50% 50% transparent;
-}
-
-.p2p-col-add a:hover,
-.p2p-col-delete a:hover {
-	opacity: 1;
 }
 
 .p2p-search .waiting {
