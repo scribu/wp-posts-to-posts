@@ -9,7 +9,10 @@ $('.p2p-add-new').each(function() {
 			direction: $addNew.attr('data-direction')
 		},
 		$spinner = $metabox.find('.waiting');
-
+		
+	$metabox.closest('.postbox')
+		.addClass('p2p');
+	
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
 		var $self = $(this),
@@ -84,6 +87,29 @@ $('.p2p-add-new').each(function() {
 
 		return false;
 	});
+	
+	// Delegate recent
+	$metabox.delegate('a.p2p-recent', 'click', function() {
+	var $self = $(this),
+		$metabox = $self.parents('.inside'),
+		$results = $metabox.find('.p2p-results tbody'),
+		$spinner = $metabox.find('.waiting');
+
+		$spinner.show();
+		
+		var data = $.extend( base_data, {
+			action: 'p2p_recent',
+			post_id: $('#post_ID').val(),
+		} );
+			
+		$.get(ajaxurl, data, function(data) {
+			$spinner.hide();
+
+			$results.html(data);
+		});
+		
+		return false;
+	});
 
 	// Search posts
 	var delayed, old_value = '';
@@ -125,7 +151,7 @@ $('.p2p-add-new').each(function() {
 
 				$.get(ajaxurl, data, function(data) {
 					$spinner.hide();
-
+				
 					$results.html(data);
 				});
 			}, 400);

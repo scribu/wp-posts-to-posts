@@ -62,21 +62,27 @@ class P2P_Box_Multiple extends P2P_Box {
 		$data_attr = implode( ' ', $data_attr );
 
 ?>
-<table class="p2p-connections" <?php if ( empty( $connected_ids ) ) echo 'style="display:none"'; ?>>
-	<thead>
-		<tr>
-		<?php foreach ( $this->columns as $key => $title ) {
-			echo html( 'th', array( 'class' => "p2p-col-$key" ), $title );
-		} ?>
-		</tr>
-	</thead>
+<div>
+	<table class="p2p-connections" <?php if ( empty( $connected_ids ) ) echo 'style="display:none"'; ?>>
+		<thead>
+			<tr>
+			<?php 
+				foreach ( $this->columns as $key => $title ) {
+				echo html( 'th', array( 'class' => "p2p-col-$key" ), $title );
+				} 
+			?>
+			</tr>
+		</thead>
 
-	<tbody>
-	<?php foreach ( $connected_ids as $p2p_id => $post_b ) {
-		$this->connection_row( $p2p_id, $post_b );
-	} ?>
-	</tbody>
-</table>
+		<tbody>
+		<?php 
+			foreach ( $connected_ids as $p2p_id => $post_b ) {
+			$this->connection_row( $p2p_id, $post_b );
+			} 
+		?>
+		</tbody>
+	</table>
+</div>
 
 <div class="p2p-add-new" <?php echo $data_attr; ?>>
 		<p><strong><?php _e( 'Add New Connection:', 'posts-to-posts' ); ?></strong></p>
@@ -95,14 +101,27 @@ class P2P_Box_Multiple extends P2P_Box {
 			<tbody>
 			</tbody>
 		</table>
+		
+
+
 </div>
+<div class="p2p-footer">
+	<a href="#" class="p2p-recent button" name="p2p-recent">
+		<?php _e( 'Recent', 'posts-to-posts' ); ?>
+	</a>
+	<div class="clear">
+		<!-- Clearfix would be better -->
+	</div>
+</div>
+
+
 <?php
 	}
 
 	protected function connection_row( $p2p_id, $post_id ) {
 		echo '<tr>';
 
-		foreach ( array_keys( $this->columns ) as $key ) {
+	foreach ( array_keys( $this->columns ) as $key ) {
 			switch ( $key ) {
 				case 'title':
 					$value = $this->column_title( $post_id );
@@ -197,6 +216,22 @@ class P2P_Box_Multiple extends P2P_Box {
 			'suppress_filters' => false,
 			'update_post_term_cache' => false,
 			'update_post_meta_cache' => false
+		);
+
+		if ( $this->prevent_duplicates )
+			$args['post__not_in'] = p2p_get_connected( $post_id, $this->direction );
+
+		return $args;
+	}
+	
+	function get_recent_args( $post_id ) {
+		$args = array(
+			'numberposts' => 10,
+			'orderby' => 'post_date',
+			'order' => 'DESC',
+			'post_type' => $this->to,
+			'post_status' => 'publish',
+			'suppress_filters' => false //true
 		);
 
 		if ( $this->prevent_duplicates )
