@@ -18,9 +18,9 @@ class P2P_Test {
 		register_post_type('actor', array('label' => 'Actors', 'public' => true));
 		register_post_type('movie', array('label' => 'Movies', 'public' => true));
 
-#		p2p_register_connection_type('actor', 'actor', true);
-		p2p_register_connection_type('actor', 'movie', true);
 		p2p_register_connection_type('actor', 'actor', true);
+		p2p_register_connection_type('actor', 'movie', true);
+		p2p_register_connection_type('actor', 'post');
 	}
 
 	function setup() {
