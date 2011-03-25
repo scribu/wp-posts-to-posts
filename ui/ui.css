@@ -3,6 +3,9 @@
 #poststuff .p2p .inside {
 	margin: 6px 0pt 0pt;
 }
+#poststuff .inside .p2p-search p {
+	margin-left: 0;
+}
 
 .p2p .inside > * {
 	margin-left: 5px;
@@ -19,6 +22,14 @@
 
 .p2p-footer .p2p-recent {
 	float: right;
+}
+
+.p2p .p2p-hint {
+	color: #AAA;
+	margin: 15px 0 -24px 8px;
+}
+.hidden {
+	visibility: hidden;
 }
 
 /* Connections */
@@ -111,6 +122,11 @@ th.p2p-col-delete a {
 
 .p2p-search .waiting {
 	vertical-align: -.4em
+}
+
+
+.p2p-search input[type="text"] {
+	background-color: transparent;
 }
 
 /* If added to the left side of the footer

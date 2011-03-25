@@ -94,6 +94,12 @@ $('.p2p-add-new').each(function() {
 		$metabox = $self.parents('.inside'),
 		$results = $metabox.find('.p2p-results tbody'),
 		$spinner = $metabox.find('.waiting');
+		$input = $metabox.find('.p2p-search :text');
+
+		$input
+			.val('')
+			.closest('.p2p-search')
+				.find('.p2p-hint').removeClass('hidden');
 
 		$spinner.show();
 		
@@ -115,6 +121,17 @@ $('.p2p-add-new').each(function() {
 	var delayed, old_value = '';
 
 	$metabox.find('.p2p-search :text')
+		.focus(function() {
+			$(this)
+				.closest('.p2p-search')
+					.find('.p2p-hint').addClass('hidden');
+		})
+		.blur(function() {
+			if ($(this).val().length < 1)
+				$(this)
+					.closest('.p2p-search')
+						.find('.p2p-hint').removeClass('hidden');
+		})
 		.keypress(function (ev) {
 			if ( 13 === ev.keyCode )
 				return false;

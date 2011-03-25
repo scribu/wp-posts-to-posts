@@ -87,24 +87,24 @@ class P2P_Box_Multiple extends P2P_Box {
 <div class="p2p-add-new" <?php echo $data_attr; ?>>
 		<p><strong><?php _e( 'Add New Connection:', 'posts-to-posts' ); ?></strong></p>
 
-		<p class="p2p-search">
-			<?php _e( 'Search:', 'posts-to-posts' ); ?>
+		<div class="p2p-search">
+			<div class="p2p-hint"><?php _e( 'Search:', 'posts-to-posts' ); ?></div>
+			<p>
 			<?php echo html( 'input', array(
 				'type' => 'text',
 				'name' => 'p2p_search_' . $this->to,
 				'autocomplete' => 'off',
 			) ); ?>
 			<img alt="" src="<?php echo admin_url( 'images/wpspin_light.gif' ); ?>" class="waiting" style="display: none;">
-		</p>
+			</p>
+		</div>
 
 		<table class="p2p-results">
 			<tbody>
 			</tbody>
 		</table>
-		
-
-
 </div>
+
 <div class="p2p-footer">
 	<a href="#" class="p2p-recent button" name="p2p-recent">
 		<?php _e( 'Recent', 'posts-to-posts' ); ?>
