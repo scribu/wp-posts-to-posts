@@ -8,30 +8,37 @@ $('.p2p-add-new').each(function() {
 			box_id: $addNew.attr('data-box_id'),
 			direction: $addNew.attr('data-direction')
 		},
-		$spinner = $metabox.find('.waiting');
+		$spinner = $metabox.find('.waiting'),
+		$deleteConfirm = $metabox.find('.p2p-delete-confirm'),
+		deleteConfirmMessage = $deleteConfirm.html();
+		
+		$deleteConfirm.remove(); // Remove the message from the dom
 		
 	$metabox.closest('.postbox')
 		.addClass('p2p');
 	
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
-		var $self = $(this),
-			data = $.extend( base_data, {
-				action: 'p2p_connections',
-				subaction: 'clear_connections',
-				post_id: $('#post_ID').val(),
-			} );
+		var confirmation = confirm(deleteConfirmMessage);
+		if (confirmation) {
+			var $self = $(this),
+				data = $.extend( base_data, {
+					action: 'p2p_connections',
+					subaction: 'clear_connections',
+					post_id: $('#post_ID').val(),
+				} );
 
-		$spinner.show();
+			$spinner.show();
 
-		$.post(ajaxurl, data, function(response) {
-			$connections
-				.hide()
-				.find('tbody').html('');
-			$spinner.hide();
-		});
-
+			$.post(ajaxurl, data, function(response) {
+				$connections
+					.hide()
+					.find('tbody').html('');
+				$spinner.hide();
+			});
+		}			
 		return false;
+		
 	});
 
 	// Delete connection
