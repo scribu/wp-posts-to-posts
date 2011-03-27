@@ -1,40 +1,44 @@
 jQuery(document).ready(function($) {
-
+// Save the wp-spinner
+$spinner = $('#publishing-action .ajax-loading')
+	.clone()
+	.removeAttr('id')
+	.removeClass('ajax-loading')
+	.addClass('waiting');
+		
 $('.p2p-add-new').each(function() {
-	var $metabox = $(this).parents('.inside'),
+	var $metabox = $(this).closest('.inside'),
 		$connections = $metabox.find('.p2p-connections'),
 		$addNew = $metabox.find('.p2p-add-new'),
 		base_data = {
 			box_id: $addNew.attr('data-box_id'),
 			direction: $addNew.attr('data-direction')
 		},
-		$spinner = $metabox.find('.waiting'),
 		$deleteConfirm = $metabox.find('.p2p-delete-confirm'),
 		deleteConfirmMessage = $deleteConfirm.html();
-		
-		$deleteConfirm.remove(); // Remove the message from the dom
-		
+	// Init actions	
+	$deleteConfirm.remove();
 	$metabox.closest('.postbox')
 		.addClass('p2p');
 	
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
 		var confirmation = confirm(deleteConfirmMessage);
-		if (confirmation) {
+			if (confirmation) {
 			var $self = $(this),
 				data = $.extend( base_data, {
 					action: 'p2p_connections',
 					subaction: 'clear_connections',
 					post_id: $('#post_ID').val(),
 				} );
-
-			$spinner.show();
-
+			
+			$spinner.prependTo($metabox.find('.p2p-footer'));
+			
 			$.post(ajaxurl, data, function(response) {
 				$connections
 					.hide()
 					.find('tbody').html('');
-				$spinner.hide();
+				$spinner.remove();
 			});
 		}			
 		return false;
@@ -51,7 +55,7 @@ $('.p2p-add-new').each(function() {
 				p2p_id: $self.attr('data-p2p_id')
 			} );
 
-		$spinner.show();
+		$spinner.prependTo($metabox.find('.p2p-footer'));
 
 		$.post(ajaxurl, data, function(response) {
 			$row.remove();
@@ -59,7 +63,7 @@ $('.p2p-add-new').each(function() {
 			if ( !$connections.find('tbody tr').length )
 				$connections.hide();
 
-			$spinner.hide();
+			$spinner.remove();
 		});
 
 		return false;
@@ -68,7 +72,7 @@ $('.p2p-add-new').each(function() {
 	// Create connection
 	$metabox.delegate('td.p2p-col-add a', 'click', function() {
 		var $self = $(this),
-			$row = $self.parents('tr'),
+			$row = $self.closest('tr'),
 			data = $.extend( base_data, {
 				action: 'p2p_connections',
 				subaction: 'connect',
@@ -76,7 +80,7 @@ $('.p2p-add-new').each(function() {
 				to: $self.attr('data-post_id')
 			} );
 
-		$spinner.show();
+		$spinner.prependTo($metabox.find('.p2p-footer'));
 
 		$.post(ajaxurl, data, function(response) {
 //			if ( '-1' == response )
@@ -89,7 +93,7 @@ $('.p2p-add-new').each(function() {
 				$row.remove();
 			}
 
-			$spinner.hide();
+			$spinner.remove();
 		});
 
 		return false;
@@ -100,7 +104,6 @@ $('.p2p-add-new').each(function() {
 	var $self = $(this),
 		$metabox = $self.parents('.inside'),
 		$results = $metabox.find('.p2p-results tbody'),
-		$spinner = $metabox.find('.waiting');
 		$input = $metabox.find('.p2p-search :text');
 
 		$input
@@ -108,7 +111,7 @@ $('.p2p-add-new').each(function() {
 			.closest('.p2p-search')
 				.find('.p2p-hint').removeClass('hidden');
 
-		$spinner.show();
+		$spinner.prependTo($metabox.find('.p2p-footer'));
 		
 		var data = $.extend( base_data, {
 			action: 'p2p_recent',
@@ -116,7 +119,7 @@ $('.p2p-add-new').each(function() {
 		} );
 			
 		$.get(ajaxurl, data, function(data) {
-			$spinner.hide();
+			$spinner.remove();
 
 			$results.html(data);
 		});
@@ -152,7 +155,6 @@ $('.p2p-add-new').each(function() {
 			var $self = $(this),
 				$metabox = $self.parents('.inside'),
 				$results = $metabox.find('.p2p-results tbody'),
-				$spinner = $metabox.find('.waiting');
 
 			delayed = setTimeout(function() {
 				if ( !$self.val().length ) {
@@ -165,7 +167,7 @@ $('.p2p-add-new').each(function() {
 				}
 				old_value = $self.val();
 
-				$spinner.show();
+				$spinner.appendTo($metabox.find('.p2p-search p'));
 
 				var data = $.extend( base_data, {
 					action: 'p2p_search',
@@ -174,7 +176,7 @@ $('.p2p-add-new').each(function() {
 				} );
 
 				$.get(ajaxurl, data, function(data) {
-					$spinner.hide();
+					$spinner.remove();
 				
 					$results.html(data);
 				});

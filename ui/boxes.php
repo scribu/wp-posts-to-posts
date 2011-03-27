@@ -62,6 +62,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		$data_attr = implode( ' ', $data_attr );
 
 ?>
+
 <div>
 	<p class="p2p-delete-confirm"><?php _e( 'Are you sure you want to remove all connections?', 'posts-to-posts' ); ?></p>
 	<table class="p2p-connections" <?php if ( empty( $connected_ids ) ) echo 'style="display:none"'; ?>>
@@ -96,7 +97,6 @@ class P2P_Box_Multiple extends P2P_Box {
 				'name' => 'p2p_search_' . $this->to,
 				'autocomplete' => 'off',
 			) ); ?>
-			<img alt="" src="<?php echo admin_url( 'images/wpspin_light.gif' ); ?>" class="waiting" style="display: none;">
 			</p>
 		</div>
 
