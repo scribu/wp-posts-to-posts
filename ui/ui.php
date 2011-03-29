@@ -65,8 +65,6 @@ class P2P_Connection_Types {
 
 	static function init() {
 		add_action( 'add_meta_boxes', array( __CLASS__, '_register' ) );
-		add_action( 'admin_print_styles-post.php', array( __CLASS__, 'scripts' ) );
-		add_action( 'admin_print_styles-post-new.php', array( __CLASS__, 'scripts' ) );
 
 		add_action( 'save_post', array( __CLASS__, 'save' ), 10, 2 );
 		add_action( 'wp_ajax_p2p_search', array( __CLASS__, 'ajax_search' ) );
@@ -74,18 +72,21 @@ class P2P_Connection_Types {
 		add_action( 'wp_ajax_p2p_recent', array( __CLASS__, 'ajax_recent' ) );
 	}
 
-	function scripts() {
+	static function _register( $from ) {
+		$filtered = self::filter_ctypes( $from );
+
+		if ( empty( $filtered ) )
+			return;
+
+		foreach ( $filtered as $ctype ) {
+			$ctype->_register( $from );
+		}
+
 		wp_enqueue_style( 'p2p-admin', plugins_url( 'ui.css', __FILE__ ), array(), '0.7-alpha' );
 		wp_enqueue_script( 'p2p-admin', plugins_url( 'ui.js', __FILE__ ), array( 'jquery' ), '0.7-alpha', true );
 		wp_localize_script( 'p2p-admin', 'P2PAdmin_I18n', array(
 			'deleteConfirmMessage' => __( 'Are you sure you want to remove all connections?', 'posts-to-posts' )
 		) );
-	}
-
-	static function _register( $from ) {
-		foreach ( self::filter_ctypes( $from ) as $ctype ) {
-			$ctype->_register( $from );
-		}
 	}
 
 	function save( $post_id, $post ) {
