@@ -107,7 +107,7 @@ $('.p2p-add-new').each(function() {
 		$input
 			.val('')
 			.closest('.p2p-search')
-				.find('.p2p-hint').removeClass('hidden');
+				.find('.p2p-hint').show();
 
 		$spinner.prependTo($metabox.find('.p2p-footer'));
 		
@@ -132,13 +132,13 @@ $('.p2p-add-new').each(function() {
 		.focus(function() {
 			$(this)
 				.closest('.p2p-search')
-					.find('.p2p-hint').addClass('hidden');
+					.find('.p2p-hint').hide();
 		})
 		.blur(function() {
 			if ($(this).val().length < 1)
 				$(this)
 					.closest('.p2p-search')
-						.find('.p2p-hint').removeClass('hidden');
+						.find('.p2p-hint').show();
 		})
 		.keypress(function (ev) {
 			if ( 13 === ev.keyCode )
