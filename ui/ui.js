@@ -13,18 +13,16 @@ $('.p2p-add-new').each(function() {
 		base_data = {
 			box_id: $addNew.attr('data-box_id'),
 			direction: $addNew.attr('data-direction')
-		},
-		$deleteConfirm = $metabox.find('.p2p-delete-confirm'),
-		deleteConfirmMessage = $deleteConfirm.html();
-	// Init actions	
-	$deleteConfirm.remove();
+		};
+
+	// Init actions
 	$metabox.closest('.postbox')
 		.addClass('p2p');
 	
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
-		var confirmation = confirm(deleteConfirmMessage);
-			if (confirmation) {
+		var confirmation = confirm(P2PAdmin_I18n.deleteConfirmMessage);
+		if (confirmation) {
 			var $self = $(this),
 				data = $.extend( base_data, {
 					action: 'p2p_connections',

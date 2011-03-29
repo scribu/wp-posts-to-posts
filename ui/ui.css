@@ -132,7 +132,8 @@ th.p2p-col-delete a {
 	padding-right: 24px;
 }
 
-.p2p .p2p-footer .waiting { 
+.p2p-footer .waiting {
 	margin: 3px 0 4px;
 	float: left;
 }
+

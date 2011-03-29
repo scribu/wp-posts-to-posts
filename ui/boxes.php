@@ -64,7 +64,6 @@ class P2P_Box_Multiple extends P2P_Box {
 ?>
 
 <div>
-	<p class="p2p-delete-confirm"><?php _e( 'Are you sure you want to remove all connections?', 'posts-to-posts' ); ?></p>
 	<table class="p2p-connections" <?php if ( empty( $connected_ids ) ) echo 'style="display:none"'; ?>>
 		<thead>
 			<tr>
