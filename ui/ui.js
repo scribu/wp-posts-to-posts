@@ -12,7 +12,7 @@ if (!jQuery('<input placeholder="1" />')[0].placeholder) {
 		var $this = $(this);
 		if ($this.hasClass('p2p-placeholder')) {
 			$this.val('');
-			$this.removeClass('p2p-placeholder')
+			$this.removeClass('p2p-placeholder');
 		}
 	}).blur(function(e){
 		var $this = $(this);
@@ -59,7 +59,7 @@ $('.p2p-add-new').each(function() {
 				data = $.extend( base_data, {
 					action: 'p2p_connections',
 					subaction: 'clear_connections',
-					post_id: $('#post_ID').val(),
+					post_id: $('#post_ID').val()
 				} );
 			
 			show_spinner();
@@ -137,7 +137,7 @@ $('.p2p-add-new').each(function() {
 		if ( total_pages <= 1 ) {
 			$metabox.find('.p2p-prev, .p2p-next').hide();
 		} else {
-			if ( 1 == current_page ) {
+			if ( 1 === current_page ) {
 				$metabox.find('.p2p-prev').hide();
 				$metabox.find('.p2p-next').css('margin-left', '29px' );
 			} else {
@@ -145,7 +145,7 @@ $('.p2p-add-new').each(function() {
 				$metabox.find('.p2p-next').css('margin-left', '0' );
 			}
 
-			if ( total_pages == current_page ) {
+			if ( total_pages === current_page ) {
 				$metabox.find('.p2p-next').hide();
 			} else {
 				$metabox.find('.p2p-next').show();
@@ -160,7 +160,7 @@ $('.p2p-add-new').each(function() {
 			action: 'p2p_search',
 			s: $metabox.find('.p2p-search :text').val(),
 			paged: new_page,
-			post_id: $('#post_ID').val(),
+			post_id: $('#post_ID').val()
 		} );
 
 		$.getJSON(ajaxurl, data, function(data) {
@@ -203,7 +203,6 @@ $('.p2p-add-new').each(function() {
 			}
 
 			var $self = $(this),
-				$metabox = $self.parents('.inside'),
 				$results = $metabox.find('.p2p-results tbody'),
 
 			delayed = setTimeout(function() {
