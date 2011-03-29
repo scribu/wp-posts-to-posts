@@ -183,7 +183,7 @@ $('.p2p-add-new').each(function() {
 
 		show_spinner();
 
-		find_posts();
+		find_posts(1);
 
 		return false;
 	});
