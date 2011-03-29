@@ -122,14 +122,26 @@ class P2P_Connection_Types {
 
 		$box = self::ajax_make_box();
 
-		$posts = get_posts( $box->get_search_args( $_GET['s'], $_GET['post_id'] ) );
+		$args = array(
+			's' => $_GET['s'],
+			'paged' => $_GET['paged']
+		);
 
-		$results = array();
-		foreach ( $posts as $post ) {
+		$query = new WP_Query( $box->get_search_args( $args, $_GET['post_id'] ) );
+
+		ob_start();
+		foreach ( $query->posts as $post ) {
 			$box->results_row( $post );
 		}
+		
+		$results = array(
+			'rows' => ob_get_clean(),
+			'pages' => $query->max_num_pages
+		);
 
-		die();
+		echo json_encode( $results );
+
+		die;
 	}
 
 	function _search_by_title( $sql, $wp_query ) {

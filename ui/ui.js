@@ -121,32 +121,61 @@ $('.p2p-add-new').each(function() {
 		return false;
 	});
 
-	function find_posts( s, $results ) {
+	// Pagination
+	var	current_page = 1,
+		total_pages = 0;
+
+	function update_nav() {
+		if ( total_pages <= 1 ) {
+			$metabox.find('.p2p-prev, .p2p-next').hide();
+		} else {
+			if ( 1 == current_page ) {
+				$metabox.find('.p2p-prev').hide();
+				$metabox.find('.p2p-next').css('margin-left', '29px' );
+			} else {
+				$metabox.find('.p2p-prev').show();
+				$metabox.find('.p2p-next').css('margin-left', '0' );
+			}
+
+			if ( total_pages == current_page ) {
+				$metabox.find('.p2p-next').hide();
+			} else {
+				$metabox.find('.p2p-next').show();
+			}
+		}
+	}
+
+	function find_posts(new_page) {
+		new_page = new_page || current_page;
+
 		var data = $.extend( base_data, {
 			action: 'p2p_search',
-			s: s,
+			s: $metabox.find('.p2p-search :text').val(),
+			paged: new_page,
 			post_id: $('#post_ID').val(),
 		} );
 
-		$.get(ajaxurl, data, function(data) {
+		$.getJSON(ajaxurl, data, function(data) {
+			current_page = new_page;
+			total_pages = data.pages;
+
+			update_nav();
+
 			$spinner.remove();
 
-			$results.html(data);
+			$metabox.find('.p2p-results tbody').html(data.rows);
 		});
 	}
 
 	// Delegate recent
 	$metabox.delegate('.p2p-recent', 'click', function() {
-		var $self = $(this),
-			$results = $metabox.find('.p2p-results tbody');
-
 		$metabox.find('.p2p-search :text')
 			.val('')
 			.blur();	// so that placeholder is shown again in IE
 
-		$self.after( $spinner );
+		$(this).after( $spinner );
 
-		find_posts( '', $results );
+		find_posts();
 
 		return false;
 	});
@@ -182,8 +211,21 @@ $('.p2p-add-new').each(function() {
 
 				$spinner.appendTo($metabox.find('.p2p-search p'));
 
-				find_posts( $self.val(), $results );
+				find_posts(1);
 			}, 400);
 		});
+
+	// Pagination
+	$metabox.delegate('.p2p-prev, .p2p-next', 'click', function() {
+		var $self = $(this),
+			new_page = current_page;
+
+		if ( $self.hasClass('p2p-prev') )
+			new_page--;
+		else
+			new_page++;
+
+		find_posts(new_page);
+	});
 });
 });

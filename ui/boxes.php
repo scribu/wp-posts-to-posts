@@ -106,6 +106,11 @@ class P2P_Box_Multiple extends P2P_Box {
 </div>
 
 <div class="p2p-footer">
+	<div class="p2p-nav">
+		<div class="p2p-prev button" title="<?php _e( 'Previous', 'p2p-textdomain' ); ?>">&laquo;</div>
+		<div class="p2p-next button" title="<?php _e( 'Next', 'p2p-textdomain' ); ?>">&raquo;</div>
+	</div>
+
 	<a href="#" class="p2p-recent button" name="p2p-recent">
 		<?php _e( 'Recent', 'posts-to-posts' ); ?>
 	</a>
@@ -205,9 +210,8 @@ class P2P_Box_Multiple extends P2P_Box {
 		return array_intersect( $connected_posts, $post_ids );	// to preserve p2p_id keys
 	}
 
-	function get_search_args( $search, $post_id ) {
-		$args = array(
-			's' => $search,
+	function get_search_args( $args, $post_id ) {
+		$args = array_merge( $args, array(
 			'post_type' => $this->to,
 			'post_status' => 'any',
 			'posts_per_page' => 5,
@@ -216,7 +220,7 @@ class P2P_Box_Multiple extends P2P_Box {
 			'suppress_filters' => false,
 			'update_post_term_cache' => false,
 			'update_post_meta_cache' => false
-		);
+		) );
 
 		if ( $this->prevent_duplicates )
 			$args['post__not_in'] = p2p_get_connected( $post_id, $this->direction );

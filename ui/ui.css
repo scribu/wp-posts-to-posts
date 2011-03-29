@@ -133,3 +133,10 @@ th.p2p-col-delete a {
 	margin: 3px 6px 0;
 }
 
+.p2p-prev,
+.p2p-next {
+	display: none;
+	float: left;
+	margin-right: 5px;
+}
+
