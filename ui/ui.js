@@ -1,11 +1,12 @@
 jQuery(document).ready(function($) {
+
 // Save the wp-spinner
-$spinner = $('#publishing-action .ajax-loading')
+var $spinner = $('#publishing-action .ajax-loading')
 	.clone()
 	.removeAttr('id')
 	.removeClass('ajax-loading')
 	.addClass('waiting');
-		
+
 $('.p2p-add-new').each(function() {
 	var $metabox = $(this).closest('.inside'),
 		$connections = $metabox.find('.p2p-connections'),
