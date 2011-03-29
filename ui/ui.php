@@ -69,7 +69,6 @@ class P2P_Connection_Types {
 		add_action( 'save_post', array( __CLASS__, 'save' ), 10, 2 );
 		add_action( 'wp_ajax_p2p_search', array( __CLASS__, 'ajax_search' ) );
 		add_action( 'wp_ajax_p2p_connections', array( __CLASS__, 'ajax_connections' ) );
-		add_action( 'wp_ajax_p2p_recent', array( __CLASS__, 'ajax_recent' ) );
 	}
 
 	static function _register( $from ) {
@@ -119,11 +118,11 @@ class P2P_Connection_Types {
 	}
 
 	function ajax_search() {
-		add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ) );
+		add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
 
 		$box = self::ajax_make_box();
 
-		$posts = get_posts( $box->get_search_args( $_GET['q'], $_GET['post_id'] ) );
+		$posts = get_posts( $box->get_search_args( $_GET['s'], $_GET['post_id'] ) );
 
 		$results = array();
 		foreach ( $posts as $post ) {
@@ -132,26 +131,16 @@ class P2P_Connection_Types {
 
 		die();
 	}
-	
-	function ajax_recent() {
-		$box = self::ajax_make_box();
-		
-		$posts = get_posts( $box->get_recent_args( $_GET['post_id'] ) );
 
-		$results = array();
-		foreach ( $posts as $post ) {
-			 $box->results_row( $post );
-		}
-		
-		die();
-	}
-
-	function _search_by_title( $sql ) {
+	function _search_by_title( $sql, $wp_query ) {
 		remove_filter( current_filter(), array( __CLASS__, __FUNCTION__ ) );
 
-		list( $sql ) = explode( ' OR ', $sql, 2 );
-
-		return $sql . '))';
+		if ( $wp_query->is_search ) {
+			list( $sql ) = explode( ' OR ', $sql, 2 );
+			return $sql . '))';
+		}
+		
+		return $sql;
 	}
 
 	private static function ajax_make_box() {

@@ -120,7 +120,21 @@ $('.p2p-add-new').each(function() {
 
 		return false;
 	});
-	
+
+	function find_posts( s, $results ) {
+		var data = $.extend( base_data, {
+			action: 'p2p_search',
+			s: s,
+			post_id: $('#post_ID').val(),
+		} );
+
+		$.get(ajaxurl, data, function(data) {
+			$spinner.remove();
+
+			$results.html(data);
+		});
+	}
+
 	// Delegate recent
 	$metabox.delegate('.p2p-recent', 'click', function() {
 		var $self = $(this),
@@ -132,16 +146,7 @@ $('.p2p-add-new').each(function() {
 
 		$self.after( $spinner );
 
-		var data = $.extend( base_data, {
-			action: 'p2p_recent',
-			post_id: $('#post_ID').val(),
-		} );
-			
-		$.get(ajaxurl, data, function(data) {
-			$spinner.remove();
-
-			$results.html(data);
-		});
+		find_posts( '', $results );
 
 		return false;
 	});
@@ -177,17 +182,7 @@ $('.p2p-add-new').each(function() {
 
 				$spinner.appendTo($metabox.find('.p2p-search p'));
 
-				var data = $.extend( base_data, {
-					action: 'p2p_search',
-					q: $self.val(),
-					post_id: $('#post_ID').val(),
-				} );
-
-				$.get(ajaxurl, data, function(data) {
-					$spinner.remove();
-				
-					$results.html(data);
-				});
+				find_posts( $self.val(), $results );
 			}, 400);
 		});
 });
