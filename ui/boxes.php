@@ -89,12 +89,12 @@ class P2P_Box_Multiple extends P2P_Box {
 		<p><strong><?php _e( 'Add New Connection:', 'posts-to-posts' ); ?></strong></p>
 
 		<div class="p2p-search">
-			<div class="p2p-hint"><?php _e( 'Search:', 'posts-to-posts' ); ?></div>
 			<p>
 			<?php echo html( 'input', array(
 				'type' => 'text',
 				'name' => 'p2p_search_' . $this->to,
 				'autocomplete' => 'off',
+				'placeholder' => __( 'Search', 'posts-to-posts' )
 			) ); ?>
 			</p>
 		</div>

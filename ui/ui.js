@@ -1,5 +1,28 @@
 jQuery(document).ready(function($) {
 
+// Placeholder support for IE
+if (!jQuery('<input placeholder="1" />')[0].placeholder) {
+	jQuery('.p2p-search input[placeholder]').each(function(){
+		var $this = $(this);
+		if (!$this.val()) {
+			$this.val($this.attr('placeholder'));
+			$this.addClass('p2p-placeholder');
+		}
+	}).focus(function(e){
+		var $this = $(this);
+		if ($this.hasClass('p2p-placeholder')) {
+			$this.val('');
+			$this.removeClass('p2p-placeholder')
+		}
+	}).blur(function(e){
+		var $this = $(this);
+		if (!$this.val()) {
+			$this.addClass('p2p-placeholder');
+			$this.val($this.attr('placeholder'));
+		}
+	});
+}
+
 // Save the wp-spinner
 var $spinner = $('#publishing-action .ajax-loading')
 	.clone()
@@ -99,19 +122,16 @@ $('.p2p-add-new').each(function() {
 	});
 	
 	// Delegate recent
-	$metabox.delegate('a.p2p-recent', 'click', function() {
-	var $self = $(this),
-		$metabox = $self.parents('.inside'),
-		$results = $metabox.find('.p2p-results tbody'),
-		$input = $metabox.find('.p2p-search :text');
+	$metabox.delegate('.p2p-recent', 'click', function() {
+		var $self = $(this),
+			$results = $metabox.find('.p2p-results tbody');
 
-		$input
+		$metabox.find('.p2p-search :text')
 			.val('')
-			.closest('.p2p-search')
-				.find('.p2p-hint').show();
+			.blur();	// so that placeholder is shown again in IE
 
-		$spinner.prependTo($metabox.find('.p2p-footer'));
-		
+		$self.after( $spinner );
+
 		var data = $.extend( base_data, {
 			action: 'p2p_recent',
 			post_id: $('#post_ID').val(),
@@ -122,7 +142,7 @@ $('.p2p-add-new').each(function() {
 
 			$results.html(data);
 		});
-		
+
 		return false;
 	});
 
@@ -130,17 +150,6 @@ $('.p2p-add-new').each(function() {
 	var delayed, old_value = '';
 
 	$metabox.find('.p2p-search :text')
-		.focus(function() {
-			$(this)
-				.closest('.p2p-search')
-					.find('.p2p-hint').hide();
-		})
-		.blur(function() {
-			if ($(this).val().length < 1)
-				$(this)
-					.closest('.p2p-search')
-						.find('.p2p-hint').show();
-		})
 		.keypress(function (ev) {
 			if ( 13 === ev.keyCode )
 				return false;

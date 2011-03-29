@@ -24,9 +24,8 @@
 	float: right;
 }
 
-.p2p .p2p-hint {
+.p2p-placeholder {
 	color: #AAA;
-	margin: 15px 0 -24px 8px;
 }
 
 /* Connections */
@@ -130,7 +129,7 @@ th.p2p-col-delete a {
 }
 
 .p2p-footer .waiting {
-	margin: 3px 0 4px;
-	float: left;
+	float: right;
+	margin: 3px 6px 0;
 }
 
