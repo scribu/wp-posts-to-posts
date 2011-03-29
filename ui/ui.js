@@ -23,13 +23,6 @@ if (!jQuery('<input placeholder="1" />')[0].placeholder) {
 	});
 }
 
-// Save the wp-spinner
-var $spinner = $('#publishing-action .ajax-loading')
-	.clone()
-	.removeAttr('id')
-	.removeClass('ajax-loading')
-	.addClass('waiting');
-
 $('.p2p-add-new').each(function() {
 	var $metabox = $(this).closest('.inside'),
 		$connections = $metabox.find('.p2p-connections'),
@@ -38,6 +31,21 @@ $('.p2p-add-new').each(function() {
 			box_id: $addNew.attr('data-box_id'),
 			direction: $addNew.attr('data-direction')
 		};
+
+	// Save the wp-spinner
+	var $spinner = $('#publishing-action .ajax-loading')
+		.clone()
+		.removeAttr('id')
+		.removeClass('ajax-loading')
+		.addClass('waiting');
+
+	function show_spinner() {
+		$metabox.find('.p2p-recent').after( $spinner.show() );
+	}
+
+	function hide_spinner() {
+		$spinner.hide();
+	}
 
 	// Init actions
 	$metabox.closest('.postbox')
@@ -54,13 +62,13 @@ $('.p2p-add-new').each(function() {
 					post_id: $('#post_ID').val(),
 				} );
 			
-			$spinner.prependTo($metabox.find('.p2p-footer'));
-			
+			show_spinner();
+
 			$.post(ajaxurl, data, function(response) {
 				$connections
 					.hide()
 					.find('tbody').html('');
-				$spinner.remove();
+				hide_spinner();
 			});
 		}			
 		return false;
@@ -77,7 +85,7 @@ $('.p2p-add-new').each(function() {
 				p2p_id: $self.attr('data-p2p_id')
 			} );
 
-		$spinner.prependTo($metabox.find('.p2p-footer'));
+		show_spinner();
 
 		$.post(ajaxurl, data, function(response) {
 			$row.remove();
@@ -85,7 +93,7 @@ $('.p2p-add-new').each(function() {
 			if ( !$connections.find('tbody tr').length )
 				$connections.hide();
 
-			$spinner.remove();
+			hide_spinner();
 		});
 
 		return false;
@@ -102,7 +110,7 @@ $('.p2p-add-new').each(function() {
 				to: $self.attr('data-post_id')
 			} );
 
-		$spinner.prependTo($metabox.find('.p2p-footer'));
+		show_spinner();
 
 		$.post(ajaxurl, data, function(response) {
 //			if ( '-1' == response )
@@ -115,7 +123,7 @@ $('.p2p-add-new').each(function() {
 				$row.remove();
 			}
 
-			$spinner.remove();
+			hide_spinner();
 		});
 
 		return false;
@@ -161,7 +169,7 @@ $('.p2p-add-new').each(function() {
 
 			update_nav();
 
-			$spinner.remove();
+			hide_spinner();
 
 			$metabox.find('.p2p-results tbody').html(data.rows);
 		});
@@ -173,7 +181,7 @@ $('.p2p-add-new').each(function() {
 			.val('')
 			.blur();	// so that placeholder is shown again in IE
 
-		$(this).after( $spinner );
+		show_spinner();
 
 		find_posts();
 
@@ -224,6 +232,8 @@ $('.p2p-add-new').each(function() {
 			new_page--;
 		else
 			new_page++;
+
+		show_spinner();
 
 		find_posts(new_page);
 	});
