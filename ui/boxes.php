@@ -108,7 +108,7 @@ class P2P_Box_Multiple extends P2P_Box {
 <div class="p2p-footer">
 	<div class="p2p-nav">
 		<div class="p2p-prev button" title="<?php _e( 'Previous', 'p2p-textdomain' ); ?>">&lsaquo;</div>
-		<div><span class="p2p-current"></span> <? _e('of', 'p2p-textdomain'); ?> <span class="p2p-total"></span></div>
+		<div><span class="p2p-current"></span> <? _e( 'of', 'p2p-textdomain' ); ?> <span class="p2p-total"></span></div>
 		<div class="p2p-next button" title="<?php _e( 'Next', 'p2p-textdomain' ); ?>">&rsaquo;</div>
 	</div>
 

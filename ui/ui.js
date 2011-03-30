@@ -230,12 +230,17 @@ $('.p2p-add-new').each(function() {
 		var $self = $(this),
 			new_page = current_page;
 
+		if ( $self.hasClass('inactive') )
+			return false;
+
 		if ( $self.hasClass('p2p-prev') )
 			new_page--;
 		else
 			new_page++;
 
 		find_posts(new_page, 'paginate');
+
+		return false;
 	});
 });
 });
