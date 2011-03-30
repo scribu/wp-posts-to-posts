@@ -28,6 +28,7 @@ $('.p2p-add-new').each(function() {
 		$connections = $metabox.find('.p2p-connections'),
 		$results = $metabox.find('.p2p-results'),
 		$searchInput = $metabox.find('.p2p-search :text'),
+		$pagination = $metabox.find('.p2p-nav'),
 		$addNew = $metabox.find('.p2p-add-new'),
 		base_data = {
 			box_id: $addNew.attr('data-box_id'),
@@ -40,7 +41,7 @@ $('.p2p-add-new').each(function() {
 		.removeAttr('id')
 		.removeClass('ajax-loading')
 		.addClass('waiting');
-	
+
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
 		if ( !confirm(P2PAdmin_I18n.deleteConfirmMessage) )
@@ -63,7 +64,7 @@ $('.p2p-add-new').each(function() {
 			$td.html( $self );
 		});
 
-		return false;		
+		return false;
 	});
 
 	// Delete connection
@@ -144,25 +145,23 @@ $('.p2p-add-new').each(function() {
 
 			$metabox.find('.p2p-search').find('.p2p-notice').remove();
 
-			var $pagination = $metabox.find('.p2p-nav');
 			$pagination.hide();
-			
+
 			if ( 'undefined' === typeof response.rows ) {
 				$metabox.find('.p2p-search').append('<p class="p2p-notice">' + response.msg + '</p>');
 				$results.hide()
 					.find('tbody').html('');
-				
 			} else {
 				$results.show()
 					.find('tbody').html(response.rows);
 
 				total_pages = response.pages;
-				
-				if ( total_pages > 1 ) {
-					$pagination.show();					
-				} 
-				
+
 				// update pagination
+				if ( total_pages > 1 ) {
+					$pagination.show();
+				}
+
 				if ( 1 === current_page ) {
 					$metabox.find('.p2p-prev').addClass('inactive');
 				} else {
@@ -220,7 +219,7 @@ $('.p2p-add-new').each(function() {
 			var $self = $(this);
 
 			delayed = setTimeout(function() {
-				
+
 				if ( $self.val() === old_value ) {
 					return;
 				}
