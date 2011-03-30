@@ -40,10 +40,6 @@ $('.p2p-add-new').each(function() {
 		.removeAttr('id')
 		.removeClass('ajax-loading')
 		.addClass('waiting');
-
-	// Init actions
-	$metabox.closest('.postbox')
-		.addClass('p2p');
 	
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {

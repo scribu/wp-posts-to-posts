@@ -63,7 +63,7 @@ class P2P_Box_Multiple extends P2P_Box {
 
 ?>
 
-<div>
+<div class="p2p-box">
 	<table class="p2p-connections" <?php if ( empty( $connected_ids ) ) echo 'style="display:none"'; ?>>
 		<thead>
 			<tr>
@@ -83,27 +83,25 @@ class P2P_Box_Multiple extends P2P_Box {
 		?>
 		</tbody>
 	</table>
-</div>
 
-<div class="p2p-add-new" <?php echo $data_attr; ?>>
-		<p><strong><?php _e( 'Add New Connection:', 'posts-to-posts' ); ?></strong></p>
+	<div class="p2p-add-new" <?php echo $data_attr; ?>>
+			<p><strong><?php _e( 'Add New Connection:', 'posts-to-posts' ); ?></strong></p>
 
-		<div class="p2p-search">
-			<p>
-			<?php echo html( 'input', array(
-				'type' => 'text',
-				'name' => 'p2p_search_' . $this->to,
-				'autocomplete' => 'off',
-				'placeholder' => __( 'Search', 'posts-to-posts' )
-			) ); ?>
-			</p>
-		</div>
+			<div class="p2p-search">
+				<?php echo html( 'input', array(
+					'type' => 'text',
+					'name' => 'p2p_search_' . $this->to,
+					'autocomplete' => 'off',
+					'placeholder' => __( 'Search', 'posts-to-posts' )
+				) ); ?>
+			</div>
 
-		<table class="p2p-results">
-			<tbody>
-			</tbody>
-		</table>
-</div>
+			<table class="p2p-results">
+				<tbody>
+				</tbody>
+			</table>
+	</div><!--.p2p-add-new-->
+</div><!--.p2p-box-->
 
 <div class="p2p-footer">
 	<div class="p2p-nav">

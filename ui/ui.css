@@ -8,25 +8,12 @@
 	cursor: default;
 }
 
-#poststuff .p2p .inside {
-	margin: 6px 0pt 0pt;
-}
-
-#poststuff .inside .p2p-search p {
-	margin-left: 0;
-}
-
-.p2p .inside > * {
-	margin-left: 5px;
-	margin-right: 5px;
-}
-
-.p2p .inside .p2p-footer {
+.p2p-footer {
 	background-color: #f1f1f1;
 	border-top: 1px solid #ddd;
 	clear: both;
 	padding: 7px;
-	margin: 8px 0 0 0;
+	margin: 0 -6px -8px;
 }
 
 .p2p-footer .p2p-recent {
@@ -37,11 +24,13 @@
 	color: #AAA;
 }
 
-/* Connections */
-
+.p2p-connections,
+.p2p-search,
 .p2p-results {
-	display: none;
+	margin-bottom: 8px;
 }
+
+/* Connections */
 
 .p2p-results,
 .p2p-connections {
@@ -51,7 +40,10 @@
 	border-spacing: 0;
 	border-style: solid;
 	border-width: 1px;
-	margin: 0;
+}
+
+.p2p-results {
+	display: none;
 }
 
 .p2p-results td,
@@ -131,6 +123,10 @@ th.p2p-col-delete a {
 	background: url("images/delete.png") no-repeat scroll 50% 50% transparent;
 }
 
+#poststuff .p2p-box .p2p-add-new p {
+	margin-left: 5px;
+}
+
 .p2p-search .waiting {
 	margin-left: -20px;
 	opacity: 0.8;
@@ -141,6 +137,7 @@ th.p2p-col-delete a {
 	background-color: transparent;
 	width: 150px;
 	padding-right: 22px;
+	margin: 0;
 }
 
 .p2p-notice {
@@ -168,3 +165,4 @@ th.p2p-col-delete a {
 	padding-bottom: 3px;
 	margin-right: 5px;
 }
+
