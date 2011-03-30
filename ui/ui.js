@@ -139,30 +139,30 @@ $('.p2p-add-new').each(function() {
 
 	function update_nav() {
 		if ( total_pages <= 1 ) {
-			$metabox.find('.p2p-prev, .p2p-next').hide();
+			$metabox.find('.p2p-nav').hide();
 		} else {
+			$metabox.find('.p2p-nav').show();
 			if ( 1 === current_page ) {
-				$metabox.find('.p2p-prev').hide();
-				$metabox.find('.p2p-next').css('margin-left', '29px' );
+				$metabox.find('.p2p-prev').addClass('inactive');
 			} else {
-				$metabox.find('.p2p-prev').show();
-				$metabox.find('.p2p-next').css('margin-left', '0' );
+				$metabox.find('.p2p-prev').removeClass('inactive');
 			}
 
 			if ( total_pages === current_page ) {
-				$metabox.find('.p2p-next').hide();
+				$metabox.find('.p2p-next').addClass('inactive');
 			} else {
-				$metabox.find('.p2p-next').show();
+				$metabox.find('.p2p-next').removeClass('inactive');
 			}
 		}
 	}
 
 	function find_posts(new_page, action) {
-		new_page = new_page || current_page;
+		new_page = new_page ? ( new_page > total_pages ? current_page : new_page ) : current_page;
 
-		var data = $.extend( base_data, {
+		var $searchInput = $metabox.find('.p2p-search :text'),
+			data = $.extend( base_data, {
 			action: 'p2p_search',
-			s: $metabox.find('.p2p-search :text').val(),
+			s: $searchInput.val(),
 			paged: new_page,
 			post_id: $('#post_ID').val()
 		} );
@@ -176,8 +176,20 @@ $('.p2p-add-new').each(function() {
 			update_nav();
 
 			hide_spinner();
-
-			$metabox.find('.p2p-results tbody').html(data.rows);
+			
+			$metabox.find('.p2p-current').html(current_page);
+			$metabox.find('.p2p-total').html(total_pages);
+			
+			$metabox.find('.p2p-results tbody').each(function() {
+				$searchInput.siblings('.p2p-notice').remove();
+				if (data.rows.length < 1) {
+					$searchInput.after('<span class="p2p-notice">' + P2PAdmin_I18n.nothingFoundMessage + '</span>');
+					$(this).html('');
+				}
+				else {
+					$(this).html(data.rows);
+				}
+			});
 		});
 	}
 
@@ -206,10 +218,10 @@ $('.p2p-add-new').each(function() {
 				clearTimeout(delayed);
 			}
 
-			var $self = $(this),
-				$results = $metabox.find('.p2p-results tbody'),
+			var $self = $(this);
 
 			delayed = setTimeout(function() {
+				
 				if ( $self.val() === old_value ) {
 					return;
 				}

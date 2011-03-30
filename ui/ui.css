@@ -1,8 +1,17 @@
 /* General */
 
+.button.inactive, .button.inactive:hover {
+	border-color: #bbb;
+	color: #aaa;
+	background: #f6f6f6;
+	text-shadow: none;
+	cursor: default;
+}
+
 #poststuff .p2p .inside {
 	margin: 6px 0pt 0pt;
 }
+
 #poststuff .inside .p2p-search p {
 	margin-left: 0;
 }
@@ -130,15 +139,28 @@ th.p2p-col-delete a {
 	padding-right: 24px;
 }
 
+.p2p-notice {
+	margin-left: 5px;
+}
+
+#side-sortables .p2p-notice {
+	display: block;
+	margin-top: 10px;
+}
+
 .p2p-footer .waiting {
 	float: right;
 	margin: 3px 6px 0;
 }
 
-.p2p-prev,
-.p2p-next {
+.p2p-nav {
 	display: none;
-	float: left;
-	margin-right: 5px;
 }
 
+.p2p-nav > * {
+	float: left;
+	line-height: 13px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin-right: 5px;
+}
