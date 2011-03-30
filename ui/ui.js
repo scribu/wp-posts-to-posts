@@ -148,8 +148,8 @@ $('.p2p-add-new').each(function() {
 
 			$metabox.find('.p2p-search').find('.p2p-notice').remove();
 
-			var pagination = $metabox.find('.p2p-nav');
-			pagination.hide();
+			var $pagination = $metabox.find('.p2p-nav');
+			$pagination.hide();
 			
 			if ( 'undefined' === typeof response.rows ) {
 				$metabox.find('.p2p-search').append('<p class="p2p-notice">' + response.msg + '</p>');
@@ -163,7 +163,7 @@ $('.p2p-add-new').each(function() {
 				total_pages = response.pages;
 				
 				if ( total_pages > 1 ) {
-					$metabox.find('p2p-nav').show();					
+					$pagination.show();					
 				} 
 				
 				// update pagination
