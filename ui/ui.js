@@ -144,19 +144,25 @@ $('.p2p-add-new').each(function() {
 
 			$metabox.find('.p2p-search').find('.p2p-notice').remove();
 
+			var $pagination = $metabox.find('.p2p-nav');
+			$pagination.hide();
+			
 			if ( 'undefined' === typeof response.rows ) {
 				$metabox.find('.p2p-search').append('<p class="p2p-notice">' + response.msg + '</p>');
 				$results.hide()
 					.find('tbody').html('');
-				$metabox.find('.p2p-nav').hide();
+				
 			} else {
 				$results.show()
 					.find('tbody').html(response.rows);
 
 				total_pages = response.pages;
-
+				
+				if ( total_pages > 1 ) {
+					$pagination.show();					
+				} 
+				
 				// update pagination
-				$metabox.find('.p2p-nav').show();
 				if ( 1 === current_page ) {
 					$metabox.find('.p2p-prev').addClass('inactive');
 				} else {
