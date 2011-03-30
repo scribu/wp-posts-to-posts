@@ -15,7 +15,15 @@ class P2P_Test {
 	}
 
 	function _init() {
-		register_post_type('actor', array('label' => 'Actors', 'public' => true));
+		register_post_type('actor', array(
+			'public' => true,
+			'labels' => array(
+				'name' => 'Actors',
+				'singular_name' => 'Actor',
+				'search_items' => 'Search Actors',
+				'not_found' => 'No actors found.'
+			)
+		));
 		register_post_type('movie', array('label' => 'Movies', 'public' => true));
 
 		p2p_register_connection_type('actor', 'actor', true);

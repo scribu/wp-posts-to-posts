@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Posts 2 Posts 0.7-beta\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-to-posts\n"
-"POT-Creation-Date: 2011-03-30 21:49+0300\n"
+"POT-Creation-Date: 2011-03-30 21:56+0300\n"
 "PO-Revision-Date: 2011-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,10 +31,6 @@ msgstr ""
 
 #: ui/boxes.php:88
 msgid "Create connections:"
-msgstr ""
-
-#: ui/boxes.php:95
-msgid "Search"
 msgstr ""
 
 #: ui/boxes.php:108

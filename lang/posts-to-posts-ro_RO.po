@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Posts 2 Posts 0.3\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-to-posts\n"
-"POT-Creation-Date: 2011-03-30 21:49+0300\n"
-"PO-Revision-Date: 2011-03-30 21:51+0200\n"
+"POT-Creation-Date: 2011-03-30 21:56+0300\n"
+"PO-Revision-Date: 2011-03-30 21:56+0200\n"
 "Last-Translator: scribu <mail@scribu.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -32,10 +32,6 @@ msgstr "Setări"
 #: ui/boxes.php:88
 msgid "Create connections:"
 msgstr "Creează conexiuni:"
-
-#: ui/boxes.php:95
-msgid "Search"
-msgstr "Căutare"
 
 #: ui/boxes.php:108
 msgid "Previous"
@@ -97,6 +93,8 @@ msgstr ""
 msgid "http://scribu.net/"
 msgstr ""
 
+#~ msgid "Search"
+#~ msgstr "Căutare"
 #~ msgid ""
 #~ "Start typing the title of a post you want to connect and then click on to "
 #~ "connect it."

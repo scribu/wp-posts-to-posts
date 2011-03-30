@@ -92,7 +92,7 @@ class P2P_Box_Multiple extends P2P_Box {
 					'type' => 'text',
 					'name' => 'p2p_search_' . $this->to,
 					'autocomplete' => 'off',
-					'placeholder' => __( 'Search', 'posts-to-posts' )
+					'placeholder' => get_post_type_object( $this->to )->labels->search_items
 				) ); ?>
 			</div>
 
