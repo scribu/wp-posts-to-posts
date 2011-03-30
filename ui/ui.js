@@ -137,59 +137,52 @@ $('.p2p-add-new').each(function() {
 	var	current_page = 1,
 		total_pages = 0;
 
-	function update_nav() {
-		if ( total_pages <= 1 ) {
-			$metabox.find('.p2p-nav').hide();
-		} else {
-			$metabox.find('.p2p-nav').show();
-			if ( 1 === current_page ) {
-				$metabox.find('.p2p-prev').addClass('inactive');
-			} else {
-				$metabox.find('.p2p-prev').removeClass('inactive');
-			}
-
-			if ( total_pages === current_page ) {
-				$metabox.find('.p2p-next').addClass('inactive');
-			} else {
-				$metabox.find('.p2p-next').removeClass('inactive');
-			}
-		}
-	}
-
 	function find_posts(new_page, action) {
 		new_page = new_page ? ( new_page > total_pages ? current_page : new_page ) : current_page;
 
 		var $searchInput = $metabox.find('.p2p-search :text'),
 			data = $.extend( base_data, {
-			action: 'p2p_search',
-			s: $searchInput.val(),
-			paged: new_page,
-			post_id: $('#post_ID').val()
-		} );
+				action: 'p2p_search',
+				s: $searchInput.val(),
+				paged: new_page,
+				post_id: $('#post_ID').val()
+			} );
 
 		show_spinner(action);
 
-		$.getJSON(ajaxurl, data, function(data) {
-			current_page = new_page;
-			total_pages = data.pages;
-
-			update_nav();
-
+		$.getJSON(ajaxurl, data, function(response) {
 			hide_spinner();
-			
-			$metabox.find('.p2p-current').html(current_page);
-			$metabox.find('.p2p-total').html(total_pages);
-			
-			$metabox.find('.p2p-results tbody').each(function() {
-				$searchInput.siblings('.p2p-notice').remove();
-				if (data.rows.length < 1) {
-					$searchInput.after('<span class="p2p-notice">' + P2PAdmin_I18n.nothingFoundMessage + '</span>');
-					$(this).html('');
+
+			current_page = new_page;
+
+			var $tbody = $metabox.find('.p2p-results tbody');
+
+			$searchInput.siblings('.p2p-notice').remove();
+			if ( 'undefined' === typeof response.rows ) {
+				$searchInput.after('<span class="p2p-notice">' + response.msg + '</span>');
+				$tbody.html('');
+				$metabox.find('.p2p-nav').hide();
+			} else {
+				$tbody.html(response.rows);
+
+				total_pages = response.pages;
+
+				$metabox.find('.p2p-nav').show();
+				if ( 1 === current_page ) {
+					$metabox.find('.p2p-prev').addClass('inactive');
+				} else {
+					$metabox.find('.p2p-prev').removeClass('inactive');
 				}
-				else {
-					$(this).html(data.rows);
+
+				if ( total_pages === current_page ) {
+					$metabox.find('.p2p-next').addClass('inactive');
+				} else {
+					$metabox.find('.p2p-next').removeClass('inactive');
 				}
-			});
+
+				$metabox.find('.p2p-current').html(current_page);
+				$metabox.find('.p2p-total').html(total_pages);
+			}
 		});
 	}
 
