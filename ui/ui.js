@@ -26,6 +26,7 @@ if (!jQuery('<input placeholder="1" />')[0].placeholder) {
 $('.p2p-add-new').each(function() {
 	var $metabox = $(this).closest('.inside'),
 		$connections = $metabox.find('.p2p-connections'),
+		$searchInput = $metabox.find('.p2p-search :text'),
 		$addNew = $metabox.find('.p2p-add-new'),
 		base_data = {
 			box_id: $addNew.attr('data-box_id'),
@@ -41,7 +42,7 @@ $('.p2p-add-new').each(function() {
 
 	function show_spinner(action) {
 		if ( 'search' === action ) {
-			$spinner.appendTo( $metabox.find('.p2p-search p') );
+			$spinner.insertAfter( $searchInput );
 		} else {
 			$spinner.insertAfter( $metabox.find('.p2p-recent') );
 		}
@@ -140,8 +141,7 @@ $('.p2p-add-new').each(function() {
 	function find_posts(new_page, action) {
 		new_page = new_page ? ( new_page > total_pages ? current_page : new_page ) : current_page;
 
-		var $searchInput = $metabox.find('.p2p-search :text'),
-			data = $.extend( base_data, {
+		var data = $.extend( base_data, {
 				action: 'p2p_search',
 				s: $searchInput.val(),
 				paged: new_page,
@@ -157,9 +157,10 @@ $('.p2p-add-new').each(function() {
 
 			var $tbody = $metabox.find('.p2p-results tbody');
 
-			$searchInput.siblings('.p2p-notice').remove();
+			$metabox.find('.p2p-search').find('.p2p-notice').remove();
+
 			if ( 'undefined' === typeof response.rows ) {
-				$searchInput.after('<span class="p2p-notice">' + response.msg + '</span>');
+				$metabox.find('.p2p-search').append('<p class="p2p-notice">' + response.msg + '</p>');
 				$tbody.html('');
 				$metabox.find('.p2p-nav').hide();
 			} else {

@@ -128,15 +128,15 @@ th.p2p-col-delete a {
 }
 
 .p2p-search .waiting {
-	vertical-align: -.4em;
-	margin-left: -27px;
+	margin-left: -20px;
 	opacity: 0.8;
+	vertical-align: -0.3em;
 }
 
-.p2p-search input[type="text"] {
+.p2p-search input {
 	background-color: transparent;
 	width: 150px;
-	padding-right: 24px;
+	padding-right: 22px;
 }
 
 .p2p-notice {
