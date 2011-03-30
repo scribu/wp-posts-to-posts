@@ -40,20 +40,6 @@ $('.p2p-add-new').each(function() {
 		.removeClass('ajax-loading')
 		.addClass('waiting');
 
-	function show_spinner(action) {
-		if ( 'search' === action ) {
-			$spinner.insertAfter( $searchInput );
-		} else {
-			$spinner.insertAfter( $metabox.find('.p2p-recent') );
-		}
-
-		$spinner.show();
-	}
-
-	function hide_spinner() {
-		$spinner.hide();
-	}
-
 	// Init actions
 	$metabox.closest('.postbox')
 		.addClass('p2p');
@@ -148,10 +134,16 @@ $('.p2p-add-new').each(function() {
 				post_id: $('#post_ID').val()
 			} );
 
-		show_spinner(action);
+		// show spinner
+		if ( 'search' === action ) {
+			$spinner.insertAfter( $searchInput );
+		} else {
+			$spinner.insertAfter( $metabox.find('.p2p-recent') );
+		}
+		$spinner.show();
 
 		$.getJSON(ajaxurl, data, function(response) {
-			hide_spinner();
+			$spinner.hide();
 
 			current_page = new_page;
 
@@ -168,6 +160,7 @@ $('.p2p-add-new').each(function() {
 
 				total_pages = response.pages;
 
+				// update pagination
 				$metabox.find('.p2p-nav').show();
 				if ( 1 === current_page ) {
 					$metabox.find('.p2p-prev').addClass('inactive');
