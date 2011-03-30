@@ -163,6 +163,8 @@ $('.p2p-add-new').each(function() {
 			post_id: $('#post_ID').val()
 		} );
 
+		show_spinner();
+
 		$.getJSON(ajaxurl, data, function(data) {
 			current_page = new_page;
 			total_pages = data.pages;
@@ -180,8 +182,6 @@ $('.p2p-add-new').each(function() {
 		$metabox.find('.p2p-search :text')
 			.val('')
 			.blur();	// so that placeholder is shown again in IE
-
-		show_spinner();
 
 		find_posts(1);
 
@@ -218,8 +218,6 @@ $('.p2p-add-new').each(function() {
 				}
 				old_value = $self.val();
 
-				$spinner.appendTo($metabox.find('.p2p-search p'));
-
 				find_posts(1);
 			}, 400);
 		});
@@ -233,8 +231,6 @@ $('.p2p-add-new').each(function() {
 			new_page--;
 		else
 			new_page++;
-
-		show_spinner();
 
 		find_posts(new_page);
 	});
