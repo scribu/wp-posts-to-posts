@@ -142,7 +142,7 @@ $('.p2p-add-new').each(function() {
 		$spinner.show();
 
 		$.getJSON(ajaxurl, data, function(response) {
-			$spinner.hide();
+			$spinner.remove();
 
 			current_page = new_page;
 
