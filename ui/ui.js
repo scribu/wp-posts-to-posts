@@ -59,47 +59,47 @@ $('.p2p-add-new').each(function() {
 	
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
-		var confirmation = confirm(P2PAdmin_I18n.deleteConfirmMessage);
-		if (confirmation) {
-			var $self = $(this),
-				data = $.extend( base_data, {
-					action: 'p2p_connections',
-					subaction: 'clear_connections',
-					post_id: $('#post_ID').val()
-				} );
-			
-			show_spinner('delete');
+		if ( !confirm(P2PAdmin_I18n.deleteConfirmMessage) )
+			return false;
 
-			$.post(ajaxurl, data, function(response) {
-				$connections
-					.hide()
-					.find('tbody').html('');
-				hide_spinner();
-			});
-		}			
-		return false;
-		
+		var $self = $(this),
+			$td = $self.closest('td'),
+			data = $.extend( base_data, {
+				action: 'p2p_connections',
+				subaction: 'clear_connections',
+				post_id: $('#post_ID').val()
+			} );
+
+		$td.html( $spinner.show() );
+
+		$.post(ajaxurl, data, function(response) {
+			$connections
+				.hide()
+				.find('tbody').html('');
+
+			$td.html( $self );
+		});
+
+		return false;		
 	});
 
 	// Delete connection
 	$metabox.delegate('td.p2p-col-delete a', 'click', function() {
 		var $self = $(this),
-			$row = $self.parents('tr'),
+			$td = $self.closest('td'),
 			data = $.extend( base_data, {
 				action: 'p2p_connections',
 				subaction: 'disconnect',
 				p2p_id: $self.attr('data-p2p_id')
 			} );
 
-		show_spinner('delete');
+		$td.html( $spinner.show() );
 
 		$.post(ajaxurl, data, function(response) {
-			$row.remove();
+			$td.closest('tr').remove();
 
 			if ( !$connections.find('tbody tr').length )
 				$connections.hide();
-
-			hide_spinner();
 		});
 
 		return false;
@@ -108,7 +108,7 @@ $('.p2p-add-new').each(function() {
 	// Create connection
 	$metabox.delegate('td.p2p-col-add a', 'click', function() {
 		var $self = $(this),
-			$row = $self.closest('tr'),
+			$td = $self.closest('td'),
 			data = $.extend( base_data, {
 				action: 'p2p_connections',
 				subaction: 'connect',
@@ -116,20 +116,18 @@ $('.p2p-add-new').each(function() {
 				to: $self.attr('data-post_id')
 			} );
 
-		show_spinner();
+		$td.html( $spinner.show() );
 
 		$.post(ajaxurl, data, function(response) {
-//			if ( '-1' == response )
-//				return;
 			$connections
 				.show()
 				.find('tbody').append(response);
 
 			if ( $addNew.attr('data-prevent_duplicates') ) {
-				$row.remove();
+				$td.closest('tr').remove();
+			} else {
+				$td.html( $self );
 			}
-
-			hide_spinner();
 		});
 
 		return false;

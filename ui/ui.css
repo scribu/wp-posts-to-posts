@@ -60,7 +60,9 @@ td.p2p-col-add {
 }
 
 .p2p-col-delete a,
-.p2p-col-add a {
+.p2p-col-add a,
+.p2p-col-delete img, 
+.p2p-col-add img {
 	padding: 5px 6px;
 }
 
