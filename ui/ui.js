@@ -39,8 +39,14 @@ $('.p2p-add-new').each(function() {
 		.removeClass('ajax-loading')
 		.addClass('waiting');
 
-	function show_spinner() {
-		$metabox.find('.p2p-recent').after( $spinner.show() );
+	function show_spinner(action) {
+		if ( 'search' === action ) {
+			$spinner.appendTo( $metabox.find('.p2p-search p') );
+		} else {
+			$spinner.insertAfter( $metabox.find('.p2p-recent') );
+		}
+
+		$spinner.show();
 	}
 
 	function hide_spinner() {
@@ -62,7 +68,7 @@ $('.p2p-add-new').each(function() {
 					post_id: $('#post_ID').val()
 				} );
 			
-			show_spinner();
+			show_spinner('delete');
 
 			$.post(ajaxurl, data, function(response) {
 				$connections
@@ -85,7 +91,7 @@ $('.p2p-add-new').each(function() {
 				p2p_id: $self.attr('data-p2p_id')
 			} );
 
-		show_spinner();
+		show_spinner('delete');
 
 		$.post(ajaxurl, data, function(response) {
 			$row.remove();
@@ -153,7 +159,7 @@ $('.p2p-add-new').each(function() {
 		}
 	}
 
-	function find_posts(new_page) {
+	function find_posts(new_page, action) {
 		new_page = new_page || current_page;
 
 		var data = $.extend( base_data, {
@@ -163,7 +169,7 @@ $('.p2p-add-new').each(function() {
 			post_id: $('#post_ID').val()
 		} );
 
-		show_spinner();
+		show_spinner(action);
 
 		$.getJSON(ajaxurl, data, function(data) {
 			current_page = new_page;
@@ -211,7 +217,7 @@ $('.p2p-add-new').each(function() {
 				}
 				old_value = $self.val();
 
-				find_posts(1);
+				find_posts(1, 'search');
 			}, 400);
 		});
 
@@ -225,7 +231,8 @@ $('.p2p-add-new').each(function() {
 		else
 			new_page++;
 
-		find_posts(new_page);
+		find_posts(new_page, 'paginate');
 	});
 });
 });
+
