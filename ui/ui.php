@@ -84,7 +84,8 @@ class P2P_Connection_Types {
 		wp_enqueue_style( 'p2p-admin', plugins_url( 'ui.css', __FILE__ ), array(), '0.7-alpha' );
 		wp_enqueue_script( 'p2p-admin', plugins_url( 'ui.js', __FILE__ ), array( 'jquery' ), '0.7-alpha', true );
 		wp_localize_script( 'p2p-admin', 'P2PAdmin_I18n', array(
-			'deleteConfirmMessage' => __( 'Are you sure you want to remove all connections?', 'posts-to-posts' )
+			'deleteConfirmMessage' => __( 'Are you sure you want to remove all connections?', 'posts-to-posts' ),
+			'nothingFoundMessage' => __( 'Nothing was found.', 'posts-to-posts' )
 		) );
 	}
 
@@ -146,7 +147,7 @@ class P2P_Connection_Types {
 
 	function _search_by_title( $sql, $wp_query ) {
 		remove_filter( current_filter(), array( __CLASS__, __FUNCTION__ ) );
-
+		
 		if ( $wp_query->is_search ) {
 			list( $sql ) = explode( ' OR ', $sql, 2 );
 			return $sql . '))';

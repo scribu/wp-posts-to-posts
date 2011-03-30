@@ -55,8 +55,7 @@ $('.p2p-add-new').each(function() {
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
 		var confirmation = confirm(P2PAdmin_I18n.deleteConfirmMessage);
 		if (confirmation) {
-			var $self = $(this),
-				data = $.extend( base_data, {
+			var data = $.extend( base_data, {
 					action: 'p2p_connections',
 					subaction: 'clear_connections',
 					post_id: $('#post_ID').val()
@@ -156,9 +155,10 @@ $('.p2p-add-new').each(function() {
 	function find_posts(new_page) {
 		new_page = new_page || current_page;
 
-		var data = $.extend( base_data, {
+		var $searchInput = $metabox.find('.p2p-search :text'),
+			data = $.extend( base_data, {
 			action: 'p2p_search',
-			s: $metabox.find('.p2p-search :text').val(),
+			s: $searchInput.val(),
 			paged: new_page,
 			post_id: $('#post_ID').val()
 		} );
@@ -172,8 +172,17 @@ $('.p2p-add-new').each(function() {
 			update_nav();
 
 			hide_spinner();
-
-			$metabox.find('.p2p-results tbody').html(data.rows);
+			
+			$metabox.find('.p2p-results tbody').each(function() {
+				$searchInput.siblings('.p2p-notice').remove();
+				if (data.rows.length < 1) {
+					$searchInput.after('<span class="p2p-notice">' + P2PAdmin_I18n.nothingFoundMessage + '</span>');
+					$(this).html('');
+				}
+				else {
+					$(this).html(data.rows);
+				}
+			});
 		});
 	}
 
@@ -202,10 +211,10 @@ $('.p2p-add-new').each(function() {
 				clearTimeout(delayed);
 			}
 
-			var $self = $(this),
-				$results = $metabox.find('.p2p-results tbody'),
+			var $self = $(this);
 
 			delayed = setTimeout(function() {
+				
 				if ( $self.val() === old_value ) {
 					return;
 				}

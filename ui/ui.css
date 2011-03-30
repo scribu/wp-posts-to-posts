@@ -140,3 +140,8 @@ th.p2p-col-delete a {
 	margin-right: 5px;
 }
 
+#side-sortables .p2p-notice {
+	display: block;
+	margin-top: 10px;
+}
+
