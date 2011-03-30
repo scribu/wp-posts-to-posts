@@ -39,6 +39,10 @@
 
 /* Connections */
 
+.p2p-results {
+	display: none;
+}
+
 .p2p-results,
 .p2p-connections {
 	background-color: #F9F9F9;

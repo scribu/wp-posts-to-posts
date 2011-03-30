@@ -26,6 +26,7 @@ if (!jQuery('<input placeholder="1" />')[0].placeholder) {
 $('.p2p-add-new').each(function() {
 	var $metabox = $(this).closest('.inside'),
 		$connections = $metabox.find('.p2p-connections'),
+		$results = $metabox.find('.p2p-results'),
 		$searchInput = $metabox.find('.p2p-search :text'),
 		$addNew = $metabox.find('.p2p-add-new'),
 		base_data = {
@@ -60,8 +61,7 @@ $('.p2p-add-new').each(function() {
 		$td.html( $spinner.show() );
 
 		$.post(ajaxurl, data, function(response) {
-			$connections
-				.hide()
+			$connections.hide()
 				.find('tbody').html('');
 
 			$td.html( $self );
@@ -106,8 +106,7 @@ $('.p2p-add-new').each(function() {
 		$td.html( $spinner.show() );
 
 		$.post(ajaxurl, data, function(response) {
-			$connections
-				.show()
+			$connections.show()
 				.find('tbody').append(response);
 
 			if ( $addNew.attr('data-prevent_duplicates') ) {
@@ -147,16 +146,16 @@ $('.p2p-add-new').each(function() {
 
 			current_page = new_page;
 
-			var $tbody = $metabox.find('.p2p-results tbody');
-
 			$metabox.find('.p2p-search').find('.p2p-notice').remove();
 
 			if ( 'undefined' === typeof response.rows ) {
 				$metabox.find('.p2p-search').append('<p class="p2p-notice">' + response.msg + '</p>');
-				$tbody.html('');
+				$results.hide()
+					.find('tbody').html('');
 				$metabox.find('.p2p-nav').hide();
 			} else {
-				$tbody.html(response.rows);
+				$results.show()
+					.find('tbody').html(response.rows);
 
 				total_pages = response.pages;
 
