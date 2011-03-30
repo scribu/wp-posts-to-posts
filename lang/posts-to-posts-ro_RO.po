@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Posts 2 Posts 0.3\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-to-posts\n"
-"POT-Creation-Date: 2010-10-11 13:40+0300\n"
-"PO-Revision-Date: 2010-10-11 13:42+0200\n"
-"Last-Translator: scribu <scribu@gmail.com>\n"
+"POT-Creation-Date: 2011-03-30 21:49+0300\n"
+"PO-Revision-Date: 2011-03-30 21:51+0200\n"
+"Last-Translator: scribu <mail@scribu.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -29,21 +29,53 @@ msgstr "Salvează schimbările"
 msgid "Settings"
 msgstr "Setări"
 
-#: ui/boxes.php:59
-msgid "No connections."
-msgstr "Nu există conexiuni."
+#: ui/boxes.php:88
+msgid "Create connections:"
+msgstr "Creează conexiuni:"
 
-#: ui/boxes.php:71
+#: ui/boxes.php:95
 msgid "Search"
 msgstr "Căutare"
 
-#: ui/boxes.php:79
-msgid "Start typing the title of a post you want to connect and then click on to connect it."
-msgstr "Începe să scrii titlul post-ului de conectat și apoi fă click pentru a-l conecta."
+#: ui/boxes.php:108
+msgid "Previous"
+msgstr "Anterioare"
 
-#: ui/boxes.php:89
-msgid "Enter IDs of posts to connect, separated by commas."
-msgstr "Intrdu ID-uri ale post-urilor de conectat, separate prin virgulă."
+#: ui/boxes.php:109
+msgid "of"
+msgstr "din"
+
+#: ui/boxes.php:110
+msgid "Next"
+msgstr "Următoare"
+
+#: ui/boxes.php:114
+msgid "Recent"
+msgstr "Recente"
+
+#: ui/boxes.php:174
+#: ui/boxes.php:175
+msgid "Create connection"
+msgstr "Crează conexiune"
+
+#: ui/boxes.php:182
+#: ui/boxes.php:183
+msgid "Delete connection"
+msgstr "Șterge conexiune"
+
+#: ui/boxes.php:189
+#: ui/boxes.php:190
+msgid "Delete all connections"
+msgstr "Șterge toate conexiunile"
+
+#: ui/ui.php:40
+#, php-format
+msgid "Connected %s"
+msgstr "%s conectate"
+
+#: ui/ui.php:87
+msgid "Are you sure you want to delete all connections?"
+msgstr "Sigur vreți să ștergeți toate conexiunile?"
 
 #. Plugin Name of the plugin/theme
 msgid "Posts 2 Posts"
@@ -65,6 +97,12 @@ msgstr ""
 msgid "http://scribu.net/"
 msgstr ""
 
-#~ msgid "Connected"
-#~ msgstr "Conectat"
+#~ msgid ""
+#~ "Start typing the title of a post you want to connect and then click on to "
+#~ "connect it."
+#~ msgstr ""
+#~ "Începe să scrii titlul post-ului de conectat și apoi fă click pentru a-l "
+#~ "conecta."
+#~ msgid "Enter IDs of posts to connect, separated by commas."
+#~ msgstr "Intrdu ID-uri ale post-urilor de conectat, separate prin virgulă."
 

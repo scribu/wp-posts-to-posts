@@ -1,15 +1,15 @@
-# Translation of the WordPress plugin Posts 2 Posts 0.4 by scribu.
-# Copyright (C) 2010 scribu
+# Translation of the WordPress plugin Posts 2 Posts 0.7-beta by scribu.
+# Copyright (C) 2011 scribu
 # This file is distributed under the same license as the Posts 2 Posts package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Posts 2 Posts 0.4\n"
+"Project-Id-Version: Posts 2 Posts 0.7-beta\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-to-posts\n"
-"POT-Creation-Date: 2010-10-11 13:40+0300\n"
-"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2011-03-30 21:49+0300\n"
+"PO-Revision-Date: 2011-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -29,22 +29,49 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: ui/boxes.php:59
-msgid "No connections."
+#: ui/boxes.php:88
+msgid "Create connections:"
 msgstr ""
 
-#: ui/boxes.php:71
+#: ui/boxes.php:95
 msgid "Search"
 msgstr ""
 
-#: ui/boxes.php:79
-msgid ""
-"Start typing the title of a post you want to connect and then click on to "
-"connect it."
+#: ui/boxes.php:108
+msgid "Previous"
 msgstr ""
 
-#: ui/boxes.php:89
-msgid "Enter IDs of posts to connect, separated by commas."
+#: ui/boxes.php:109
+msgid "of"
+msgstr ""
+
+#: ui/boxes.php:110
+msgid "Next"
+msgstr ""
+
+#: ui/boxes.php:114
+msgid "Recent"
+msgstr ""
+
+#: ui/boxes.php:174 ui/boxes.php:175
+msgid "Create connection"
+msgstr ""
+
+#: ui/boxes.php:182 ui/boxes.php:183
+msgid "Delete connection"
+msgstr ""
+
+#: ui/boxes.php:189 ui/boxes.php:190
+msgid "Delete all connections"
+msgstr ""
+
+#: ui/ui.php:40
+#, php-format
+msgid "Connected %s"
+msgstr ""
+
+#: ui/ui.php:87
+msgid "Are you sure you want to delete all connections?"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
