@@ -84,7 +84,7 @@ class P2P_Connection_Types {
 		wp_enqueue_style( 'p2p-admin', plugins_url( 'ui.css', __FILE__ ), array(), '0.7-alpha' );
 		wp_enqueue_script( 'p2p-admin', plugins_url( 'ui.js', __FILE__ ), array( 'jquery' ), '0.7-alpha', true );
 		wp_localize_script( 'p2p-admin', 'P2PAdmin_I18n', array(
-			'deleteConfirmMessage' => __( 'Are you sure you want to remove all connections?', 'posts-to-posts' ),
+			'deleteConfirmMessage' => __( 'Are you sure you want to delete all connections?', 'posts-to-posts' ),
 		) );
 	}
 

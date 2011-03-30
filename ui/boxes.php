@@ -85,7 +85,7 @@ class P2P_Box_Multiple extends P2P_Box {
 	</table>
 
 	<div class="p2p-add-new" <?php echo $data_attr; ?>>
-			<p><strong><?php _e( 'Add New Connection:', 'posts-to-posts' ); ?></strong></p>
+			<p><strong><?php _e( 'Create connections:', 'posts-to-posts' ); ?></strong></p>
 
 			<div class="p2p-search">
 				<?php echo html( 'input', array(
