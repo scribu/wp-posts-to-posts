@@ -208,6 +208,8 @@ $('.p2p-add-new').each(function() {
 			delayed = setTimeout(function() {
 				if ( !$self.val().length ) {
 					$results.html('');
+					total_pages = 0;
+					update_nav();
 					return;
 				}
 
