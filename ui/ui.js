@@ -53,7 +53,7 @@ $('.p2p-add-new').each(function() {
 	
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
-		var confirmation = confirm(P2PAdmin_I18n.deleteConfirmMessage);
+		var confirmation = confirm( P2PAdmin_I18n.deleteConfirmMessage );
 		if (confirmation) {
 			var data = $.extend( base_data, {
 					action: 'p2p_connections',
@@ -134,26 +134,25 @@ $('.p2p-add-new').each(function() {
 
 	function update_nav() {
 		if ( total_pages <= 1 ) {
-			$metabox.find('.p2p-prev, .p2p-next').hide();
+			$metabox.find('.p2p-nav').hide();
 		} else {
+			$metabox.find('.p2p-nav').show();
 			if ( 1 === current_page ) {
-				$metabox.find('.p2p-prev').hide();
-				$metabox.find('.p2p-next').css('margin-left', '29px' );
+				$metabox.find('.p2p-prev').addClass('inactive');
 			} else {
-				$metabox.find('.p2p-prev').show();
-				$metabox.find('.p2p-next').css('margin-left', '0' );
+				$metabox.find('.p2p-prev').removeClass('inactive');
 			}
 
 			if ( total_pages === current_page ) {
-				$metabox.find('.p2p-next').hide();
+				$metabox.find('.p2p-next').addClass('inactive');
 			} else {
-				$metabox.find('.p2p-next').show();
+				$metabox.find('.p2p-next').removeClass('inactive');
 			}
 		}
 	}
 
 	function find_posts(new_page) {
-		new_page = new_page || current_page;
+		new_page = new_page ? ( new_page > total_pages ? current_page : new_page ) : current_page;
 
 		var $searchInput = $metabox.find('.p2p-search :text'),
 			data = $.extend( base_data, {
@@ -172,6 +171,9 @@ $('.p2p-add-new').each(function() {
 			update_nav();
 
 			hide_spinner();
+			
+			$metabox.find('.p2p-current').html(current_page);
+			$metabox.find('.p2p-total').html(total_pages);
 			
 			$metabox.find('.p2p-results tbody').each(function() {
 				$searchInput.siblings('.p2p-notice').remove();
