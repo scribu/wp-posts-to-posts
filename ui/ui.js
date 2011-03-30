@@ -206,13 +206,6 @@ $('.p2p-add-new').each(function() {
 				$results = $metabox.find('.p2p-results tbody'),
 
 			delayed = setTimeout(function() {
-				if ( !$self.val().length ) {
-					$results.html('');
-					total_pages = 0;
-					update_nav();
-					return;
-				}
-
 				if ( $self.val() === old_value ) {
 					return;
 				}
