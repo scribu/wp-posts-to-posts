@@ -123,7 +123,7 @@ $('.p2p-add-new').each(function() {
 	var	current_page = 1,
 		total_pages = 0;
 
-	function find_posts(new_page, action) {
+	function find_posts(new_page, action, callback) {
 		new_page = new_page ? ( new_page > total_pages ? current_page : new_page ) : current_page;
 
 		var data = $.extend( base_data, {
@@ -175,17 +175,28 @@ $('.p2p-add-new').each(function() {
 
 				$metabox.find('.p2p-current').html(current_page);
 				$metabox.find('.p2p-total').html(total_pages);
+
+				if ( undefined !== callback )
+					callback();
 			}
 		});
 	}
 
 	// Delegate recent
 	$metabox.delegate('.p2p-recent', 'click', function() {
+		var $button = $(this);
+
+		if ( $button.hasClass('inactive') )
+			return false;
+
 		$metabox.find('.p2p-search :text')
 			.val('')
 			.blur();	// so that placeholder is shown again in IE
 
-		find_posts(1);
+		$button.addClass('inactive');
+		find_posts(1, 'recent', function() {
+			$button.removeClass('inactive');
+		});
 
 		return false;
 	});
