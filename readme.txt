@@ -63,12 +63,14 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Screenshots ==
 
-1. The metabox on the post editing screen
+1. Simple connection metabox
+2. Advanced connection metabox
 
 == Changelog ==
 
 = 0.7 =
 * improved UI
+* added 'fields', 'context' and 'prevent_duplicates' args to p2p_register_connection_type()
 
 = 0.6 =
 * added p2p_each_connected()

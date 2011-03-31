@@ -24,7 +24,15 @@ class P2P_Test {
 				'not_found' => 'No actors found.'
 			)
 		));
-		register_post_type('movie', array('label' => 'Movies', 'public' => true));
+		register_post_type('movie', array(
+			'public' => true,
+			'labels' => array(
+				'name' => 'Movies',
+				'singular_name' => 'Movie',
+				'search_items' => 'Search movies',
+				'not_found' => 'No movies found.',
+			)
+		) );
 
 		p2p_register_connection_type( array(
 			'from' => 'actor', 
@@ -32,12 +40,19 @@ class P2P_Test {
 			'reciprocal' => true,
 			'title' => array( 'from' => 'Doubles', 'to' => 'Main Actor' )
 		) );
+
 		p2p_register_connection_type( array(
 			'from' => 'actor', 
 			'to' => 'movie', 
 			'reciprocal' => true,
-			'title' => array( 'from' => 'Played In', 'to' => 'Cast' )
+			'fields' => array(
+				'role' => 'Role',
+				'role_type' => 'Role Type'
+			),
+			'prevent_duplicates' => false,
+			'title' => array( 'from' => 'Played In', 'to' => 'Cast' ),
 		) );
+
 		p2p_register_connection_type('actor', 'post');
 	}
 
