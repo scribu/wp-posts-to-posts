@@ -39,7 +39,7 @@ abstract class P2P_Box {
 		if ( empty( $title ) )
 			$title = sprintf( __( 'Connected %s', 'posts-to-posts' ), get_post_type_object( $this->to )->labels->name );
 		else if ( is_array( $title ) )
-			$title = $title[$from];
+			$title = $title[$this->direction];
 			
 		add_meta_box(
 			'p2p-connections-' . $this->box_id,
