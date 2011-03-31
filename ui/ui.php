@@ -34,13 +34,21 @@ abstract class P2P_Box {
 	}
 
 	function _register( $from ) {
-		$title = $this->title; 
+		if ( is_array( $this->title ) ) {
+			$key = $this->reversed ? 'to' : 'from';
 
-		if ( empty( $title ) )
+			if ( isset( $this->title[ $key ] ) )
+				$title = $this->title[ $key ];
+			else
+				$title = '';
+		} else {
+			$title = $this->title;
+		}
+
+		if ( empty( $title ) ) {
 			$title = sprintf( __( 'Connected %s', 'posts-to-posts' ), get_post_type_object( $this->to )->labels->name );
-		else if ( is_array( $title ) )
-			$title = $title[$this->direction];
-			
+		}
+
 		add_meta_box(
 			'p2p-connections-' . $this->box_id,
 			$title,
