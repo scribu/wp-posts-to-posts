@@ -5,13 +5,13 @@
  * This creates the appropriate meta box in the admin edit screen
  *
  * @param array $args Can be:
- *  - 'from' string|array The first end of the connection
- *  - 'to' string|array The second end of the connection
- *  - 'fields' array Additional metadata fields
- *  - 'prevent_duplicates' bool Wether to disallow duplicate connections between the same two posts
- *  - 'reciprocal' bool Wether to show the box on both sides of the connection
- *  - 'title' string The box's title
- *  - 'context' string Where should the box show up by default: 'advanced' or 'side'
+ *  - 'from' string The first end of the connection.
+ *  - 'to' string The second end of the connection.
+ *  - 'fields' array Additional metadata fields (optional).
+ *  - 'prevent_duplicates' bool Wether to disallow duplicate connections between the same two posts. Default: true.
+ *  - 'reciprocal' bool Wether to show the box on both sides of the connection. Default: false.
+ *  - 'title' string The box's title. Default: 'Connected {$post_type}s'
+ *  - 'context' string Where should the box show up by default. Possible values: 'advanced' or 'side'
  *  - 'box' string A class that handles displaying and saving connections. Default: P2P_Box_Multiple
  */
 function p2p_register_connection_type( $args ) {
@@ -33,16 +33,9 @@ function p2p_register_connection_type( $args ) {
 		'box' => 'P2P_Box_Multiple',
 	);
 
-	foreach ( (array) $args['from'] as $from ) {
-		foreach ( (array) $args['to'] as $to ) {
-			$args['from'] = $from;
-			$args['to'] = $to;
+	$args = wp_parse_args( $args, $defaults );
 
-			$args = wp_parse_args( $args, $defaults );
-
-			P2P_Connection_Types::register( $args );
-		}
-	}
+	P2P_Connection_Types::register( $args );
 }
 
 /**
