@@ -214,8 +214,6 @@ class P2P_Box_Multiple extends P2P_Box {
 			'post_type' => $this->to,
 			'post_status' => 'any',
 			'posts_per_page' => 5,
-			'order' => 'ASC',
-			'orderby' => 'title',
 			'suppress_filters' => false,
 			'update_post_term_cache' => false,
 			'update_post_meta_cache' => false
