@@ -4,7 +4,7 @@ Donate link: http://scribu.net/paypal
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.0
 Tested up to: 3.1
-Stable tag: 0.6
+Stable tag: trunk
 
 Create connections between posts
 
@@ -71,6 +71,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 = 0.7 =
 * improved UI
 * added 'fields', 'context' and 'prevent_duplicates' args to p2p_register_connection_type()
+* [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-7.html)
 
 = 0.6 =
 * added p2p_each_connected()
