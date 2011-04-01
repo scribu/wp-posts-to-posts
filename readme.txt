@@ -32,7 +32,7 @@ $connected = new WP_Query( array(
   'connected' => $some_page_id
 ) );
 
-while( $connected->have_posts() ) $connected->the_post();
+while( $connected->have_posts() ) : $connected->the_post();
   echo '<li>';
   the_title();
   echo '</li>';
