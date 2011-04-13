@@ -22,7 +22,8 @@ class P2P_Test {
 				'singular_name' => 'Actor',
 				'search_items' => 'Search Actors',
 				'not_found' => 'No actors found.'
-			)
+			),
+			'has_archive' => 'actors'
 		));
 		register_post_type('movie', array(
 			'public' => true,

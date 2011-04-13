@@ -12,38 +12,15 @@ Create connections between posts
 
 This plugin allows you to create many-to-many relationships between posts of all types.
 
-To register a connection type, add this code in your theme's functions.php file:
+You can use it to manually create lists of related posts.
 
-`
-function my_connection_types() {
-	if ( !function_exists('p2p_register_connection_type') )
-		return;
+Or, if you have a 'product' post type, you can make a by-directional connection to a 'review' post type.
 
-	p2p_register_connection_type( 'post', 'page' );
-}
-add_action('init', 'my_connection_types', 100);
-`
+The possibilities are endless.
 
-Then, after creating a few connections, you can list the posts associated to a page, using WP_Query:
+Head out to the [Wiki](https://github.com/scribu/wp-posts-to-posts/wiki) for tutorials and other resources.
 
-`
-$connected = new WP_Query( array(
-  'post_type' => 'post',
-  'connected' => $some_page_id
-) );
-
-while( $connected->have_posts() ) : $connected->the_post();
-  echo '<li>';
-  the_title();
-  echo '</li>';
-endwhile;
-
-wp_reset_postdata();
-`
-
-<br>
-
-Links: [API](http://plugins.trac.wordpress.org/browser/posts-to-posts/trunk/api.php) | [Plugin News](http://scribu.net/wordpress/posts-to-posts) | [Author's Site](http://scribu.net)
+Links: [Plugin News](http://scribu.net/wordpress/posts-to-posts) | [Author's Site](http://scribu.net)
 
 == Installation ==
 

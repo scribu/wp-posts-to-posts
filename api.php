@@ -39,7 +39,7 @@ function p2p_register_connection_type( $args ) {
 }
 
 /**
- * Connect a post to one or more other posts
+ * Connect a post to one or more other posts.
  *
  * @param int|array $from The first end of the connection
  * @param int|array $to The second end of the connection
@@ -54,7 +54,7 @@ function p2p_connect( $from, $to, $data = array() ) {
 }
 
 /**
- * Disconnect a post from or more other posts
+ * Disconnect a post from or more other posts.
  *
  * @param int|array $from The first end of the connection
  * @param int|array|string $to The second end of the connection
@@ -69,7 +69,9 @@ function p2p_disconnect( $from, $to, $data = array() ) {
 }
 
 /**
- * Get a list of connected posts
+ * Get a list of connected posts.
+ *
+ * Low-level function. Use new WP_Query( array( 'connected' => $post_id ) ) instead.
  *
  * @param int $post_id One end of the connection
  * @param string $direction The direction of the connection. Can be 'to', 'from' or 'any'
