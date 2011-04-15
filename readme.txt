@@ -4,7 +4,7 @@ Donate link: http://scribu.net/paypal
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.1
 Tested up to: 3.1
-Stable tag: trunk
+Stable tag: 0.7
 
 Create connections between posts
 
@@ -44,6 +44,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 2. Advanced connection metabox
 
 == Changelog ==
+
+= 0.8 =
+* cache connection information to reduce number of queries
 
 = 0.7 =
 * improved UI
