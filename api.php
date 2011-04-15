@@ -167,6 +167,7 @@ function p2p_each_connected( $direction, $prop_name, $search, $query = null ) {
 
 // Allows you to write query_posts( array( 'connected' => 123 ) );
 class P2P_Query {
+
 	static $qv_map = array(
 		'connected' => 'any',
 		'connected_to' => 'to',
@@ -174,10 +175,11 @@ class P2P_Query {
 	);
 
 	function init() {
-		new scbQueryManipulation( array( __CLASS__, 'query' ), false );		// 'posts_clauses'
+		add_filter( 'posts_clauses', array( __CLASS__, 'query' ), 10, 2 );
 		add_filter( 'the_posts', array( __CLASS__, 'the_posts' ), 11, 2 );
 	}
 
+	// Handles connected* query vars
 	function query( $clauses, $wp_query ) {
 		global $wpdb;
 
@@ -234,16 +236,21 @@ class P2P_Query {
 		return $clauses;
 	}
 
+	// Handles each_connected* query vars
 	function the_posts( $the_posts, $wp_query ) {
 		if ( empty( $the_posts ) )
 			return $the_posts;
+
+		if ( self::find_qv( $wp_query ) ) {
+			update_meta_cache( 'p2p', wp_list_pluck( $the_posts, 'p2p_id' ) );
+		}
 
 		$found = self::find_qv( $wp_query, 'each_' );
 
 		if ( !$found )
 			return $the_posts;
 
-		list( $search, $qv, $direction ) = $found;		
+		list( $search, $qv, $direction ) = $found;
 
 		$qv = explode('_', $qv);
 		$key = isset( $qv[1] ) ? $qv[1] : '';
@@ -255,7 +262,6 @@ class P2P_Query {
 
 	private function find_qv( $wp_query, $prefix = '' ) {
 		foreach ( self::$qv_map as $qv => $direction ) {
-
 			$search = $wp_query->get( $prefix . $qv );
 			if ( !empty( $search ) )
 				break;
