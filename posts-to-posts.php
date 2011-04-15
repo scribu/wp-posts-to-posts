@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Posts 2 Posts
-Version: 0.7
+Version: 0.8-alpha
 Plugin Author: scribu
 Description: Create many-to-many relationships between all types of posts
 Author URI: http://scribu.net/
