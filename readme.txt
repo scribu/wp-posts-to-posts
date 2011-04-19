@@ -47,6 +47,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 = 0.8 =
 * cache connection information to reduce number of queries
+* allow arrays in 'from' and 'to' args again
 
 = 0.7 =
 * improved UI

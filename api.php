@@ -5,8 +5,8 @@
  * This creates the appropriate meta box in the admin edit screen
  *
  * @param array $args Can be:
- *  - 'from' string The first end of the connection.
- *  - 'to' string The second end of the connection.
+ *  - 'from' string|array The first end of the connection.
+ *  - 'to' string|array The second end of the connection.
  *  - 'fields' array Additional metadata fields (optional).
  *  - 'prevent_duplicates' bool Wether to disallow duplicate connections between the same two posts. Default: true.
  *  - 'reciprocal' bool Wether to show the box on both sides of the connection. Default: false.
@@ -35,7 +35,11 @@ function p2p_register_connection_type( $args ) {
 
 	$args = wp_parse_args( $args, $defaults );
 
-	P2P_Connection_Types::register( $args );
+	foreach ( (array) $args['from'] as $from ) {
+		foreach ( (array) $args['to'] as $to ) {
+			P2P_Connection_Types::register( array_merge( $args, compact( 'from', 'to' ) ) );
+		}
+	}
 }
 
 /**

@@ -54,7 +54,7 @@ class P2P_Test {
 			'title' => array( 'from' => 'Played In', 'to' => 'Cast' ),
 		) );
 
-		p2p_register_connection_type('actor', 'post');
+		p2p_register_connection_type('actor', array('post', 'page'));
 	}
 
 	function setup() {
