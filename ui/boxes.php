@@ -161,10 +161,16 @@ class P2P_Box_Multiple extends P2P_Box {
 	}
 
 	protected function column_title( $post_id ) {
-		return html( 'a', array(
+		$output = html( 'a', array(
 			'href' => str_replace( '&amp;', '&', get_edit_post_link( $post_id ) ),
 			'title' => get_post_type_object( get_post_type( $post_id ) )->labels->edit_item,
 		), get_post_field( 'post_title', $post_id ) );
+
+		if ( 'draft' == get_post_field( 'post_status', $post_id ) ) {
+			$output .= html( 'strong', array(), __( ' - Draft', 'posts-to-posts' ) );
+		}
+
+		return $output;
 	}
 
 	protected function column_add( $post_id ) {
