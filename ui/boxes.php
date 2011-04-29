@@ -161,31 +161,23 @@ class P2P_Box_Multiple extends P2P_Box {
 	}
 
 	protected function column_title( $post_id ) {
-		switch ( get_post_field( 'post_status', $post_id ) ) {
-			case 'draft' :
-				$status = __( 'Draft', 'posts-to-posts' );
-				break;
+		$post_status = get_post_status( $post_id );
 
-			case 'pending' :
-				$status = __( 'Pending', 'posts-to-posts' );
-				break;
-
-			case 'private' :
-				$status = __( 'Private', 'posts-to-posts' );
-				break;
-
-			default :
-				$status = '';
-				break;
+		$status_text = '';
+		if ( 'publish' != $post_status ) {
+			$status_obj = get_post_status_object( $post_status );
+			if ( $status_obj ) {
+				$status_text = $status_obj->label;
+			}
 		}
 
-		if ( ! empty( $status ) )
-			$status = html( 'strong', ' - ', $status );
+		if ( ! empty( $status_text ) )
+			$status_text = html( 'span', array( 'class' => 'post-state' ), ' - ', $status_text );
 
 		return html( 'a', array(
 			'href' => str_replace( '&amp;', '&', get_edit_post_link( $post_id ) ),
 			'title' => get_post_type_object( get_post_type( $post_id ) )->labels->edit_item,
-		), get_post_field( 'post_title', $post_id ) ) . $status;
+		), get_post_field( 'post_title', $post_id ) ) . $status_text;
 	}
 
 	protected function column_add( $post_id ) {
