@@ -13,12 +13,13 @@
 	border-top: 1px solid #ddd;
 	clear: both;
 	padding: 7px;
-	margin: 0 -6px -8px;
+	margin: 6px -6px -8px;
 }
 
 .p2p-footer .p2p-recent {
 	float: right;
 }
+
 
 .p2p-placeholder {
 	color: #AAA;
@@ -26,6 +27,7 @@
 
 .p2p-connections,
 .p2p-search,
+.p2p-title-to-post,
 .p2p-results {
 	margin-bottom: 8px;
 }
@@ -123,21 +125,22 @@ th.p2p-col-delete a {
 	background: url("images/delete.png") no-repeat scroll 50% 50% transparent;
 }
 
-#poststuff .p2p-box .p2p-add-new p {
-	margin-left: 5px;
-}
-
 .p2p-search .waiting {
 	margin-left: -20px;
 	opacity: 0.8;
 	vertical-align: -0.3em;
 }
 
-.p2p-search input {
+.p2p-search input,
+.p2p-title-to-post {
 	background-color: transparent;
 	width: 150px;
 	padding-right: 22px;
 	margin: 0;
+}
+
+.p2p-title-to-post {
+	display: none;
 }
 
 .p2p-notice {

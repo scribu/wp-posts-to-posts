@@ -24,7 +24,8 @@ if (!jQuery('<input placeholder="1" />')[0].placeholder) {
 }
 
 $('.p2p-add-new').each(function() {
-	var $metabox = $(this).closest('.inside'),
+	var
+		$metabox = $(this).closest('.inside'),
 		$connections = $metabox.find('.p2p-connections'),
 		$results = $metabox.find('.p2p-results'),
 		$searchInput = $metabox.find('.p2p-search :text'),
@@ -33,14 +34,12 @@ $('.p2p-add-new').each(function() {
 		base_data = {
 			box_id: $addNew.attr('data-box_id'),
 			direction: $addNew.attr('data-direction')
-		};
-
-	// Save the wp-spinner
-	var $spinner = $('#publishing-action .ajax-loading')
-		.clone()
-		.removeAttr('id')
-		.removeClass('ajax-loading')
-		.addClass('waiting');
+		},
+		$spinner = $('#publishing-action .ajax-loading')
+			.clone()
+			.removeAttr('id')
+			.removeClass('ajax-loading')
+			.addClass('waiting');
 
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
@@ -69,7 +68,8 @@ $('.p2p-add-new').each(function() {
 
 	// Delete connection
 	$metabox.delegate('td.p2p-col-delete a', 'click', function() {
-		var $self = $(this),
+		var
+			$self = $(this),
 			$td = $self.closest('td'),
 			data = $.extend( base_data, {
 				action: 'p2p_connections',
@@ -91,7 +91,8 @@ $('.p2p-add-new').each(function() {
 
 	// Create connection
 	$metabox.delegate('td.p2p-col-add a', 'click', function() {
-		var $self = $(this),
+		var
+			$self = $(this),
 			$td = $self.closest('td'),
 			data = $.extend( base_data, {
 				action: 'p2p_connections',
@@ -120,18 +121,17 @@ $('.p2p-add-new').each(function() {
 	});
 
 	// Pagination
-	var	current_page = 1,
-		total_pages = 0;
+	var current_page = 1, total_pages = 0;
 
 	function find_posts(new_page, action, callback) {
-		new_page = new_page ? ( new_page > total_pages ? current_page : new_page ) : current_page;
-
 		var data = $.extend( base_data, {
-				action: 'p2p_search',
-				s: $searchInput.val(),
-				paged: new_page,
-				post_id: $('#post_ID').val()
-			} );
+			action: 'p2p_search',
+			s: $searchInput.val(),
+			paged: new_page,
+			post_id: $('#post_ID').val()
+		} );
+
+		new_page = new_page ? ( new_page > total_pages ? current_page : new_page ) : current_page;
 
 		// show spinner
 		if ( 'search' === action ) {
@@ -143,7 +143,6 @@ $('.p2p-add-new').each(function() {
 
 		$.getJSON(ajaxurl, data, function(response) {
 			$spinner.remove();
-
 			current_page = new_page;
 
 			$metabox.find('.p2p-search').find('.p2p-notice').remove();
@@ -187,7 +186,7 @@ $('.p2p-add-new').each(function() {
 	}
 
 	// Delegate recent
-	$metabox.delegate('.p2p-recent', 'click', function() {
+	$metabox.find('.p2p-recent').click(function() {
 		var $button = $(this);
 
 		if ( $button.hasClass('inactive') )
@@ -205,6 +204,48 @@ $('.p2p-add-new').each(function() {
 		return false;
 	});
 
+        // Toggle add new
+	$metabox.find('.p2p-topost-adder-toggle').click(function() {
+		$metabox
+			.find('.p2p-title-to-post').toggle()
+				.find(':text').focus();
+		return false;
+	});
+
+	// Delegate p2p-create-post
+	$metabox.delegate('.p2p-create-post', 'click', function() {
+		var $button = $(this);
+
+		if ( $button.hasClass('inactive') )
+			return false;
+
+		var title = $metabox.find('.p2p-title-to-post :text').val();
+		if ( '' === title ) {
+			$metabox.find('.p2p-title-to-post :text').focus();
+			return false;
+		}
+
+		$button.addClass('inactive');
+
+		var data = $.extend( base_data, {
+			action: 'p2p_connections',
+			subaction: 'create_post',
+			from: $('#post_ID').val(),
+			post_title: title
+		});
+
+		$.post(ajaxurl, data, function(response) {
+			$connections.show()
+				.find('tbody').append(response);
+
+			$metabox.find('.p2p-title-to-post :text').val('');
+			$metabox.find('.p2p-topost-adder-toggle').click();
+			$button.removeClass('inactive');
+		});
+
+		return false;
+	});
+
 	// Search posts
 	var delayed, old_value = '';
 
@@ -213,7 +254,6 @@ $('.p2p-add-new').each(function() {
 			if ( 13 === ev.keyCode )
 				return false;
 		})
-
 		.keyup(function (ev) {
 			if ( undefined !== delayed ) {
 				clearTimeout(delayed);
@@ -229,6 +269,7 @@ $('.p2p-add-new').each(function() {
 				old_value = $self.val();
 
 				find_posts(1, 'search');
+
 			}, 400);
 		});
 

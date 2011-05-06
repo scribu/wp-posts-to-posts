@@ -12,10 +12,21 @@ class P2P_Box_Multiple extends P2P_Box {
 		);
 	}
 
-	function connect() {
-		$from = absint( $_POST['from'] );
-		$to = absint( $_POST['to'] );
+	function create_post() {
+		$new_post_id = wp_insert_post( array(
+			'post_title' => $_POST['post_title'],
+			'post_author' => 1,
+			'post_type' => $this->to
+		) );
 
+		$this->safe_connect( absint( $_POST['from'] ), $new_post_id );
+	}
+
+	function connect() {
+		$this->safe_connect( absint( $_POST['from'] ), absint( $_POST['to'] ) );
+	}
+
+	protected function safe_connect( $from, $to ) {
 		if ( !$from || !$to )
 			die(-1);
 
@@ -67,39 +78,47 @@ class P2P_Box_Multiple extends P2P_Box {
 	<table class="p2p-connections" <?php if ( empty( $connected_ids ) ) echo 'style="display:none"'; ?>>
 		<thead>
 			<tr>
-			<?php 
-				foreach ( $this->columns as $key => $title ) {
-				echo html( 'th', array( 'class' => "p2p-col-$key" ), $title );
-				} 
-			?>
+				<?php foreach ( $this->columns as $key => $title ) {
+					echo html( 'th', array( 'class' => "p2p-col-$key" ), $title );
+				} ?>
 			</tr>
 		</thead>
 
 		<tbody>
-		<?php 
-			foreach ( $connected_ids as $p2p_id => $post_b ) {
-			$this->connection_row( $p2p_id, $post_b );
-			} 
-		?>
+			<?php foreach ( $connected_ids as $p2p_id => $post_b ) {
+				$this->connection_row( $p2p_id, $post_b );
+			} ?>
 		</tbody>
 	</table>
 
 	<div class="p2p-add-new" <?php echo $data_attr; ?>>
-			<p><strong><?php _e( 'Create connections:', 'posts-to-posts' ); ?></strong></p>
+		<p><strong><?php _e( 'Create connections:', 'posts-to-posts' ); ?></strong></p>
 
-			<div class="p2p-search">
+		<div class="p2p-search">
+			<?php echo html( 'input', array(
+				'type' => 'text',
+				'name' => 'p2p_search_' . $this->to,
+				'autocomplete' => 'off',
+				'placeholder' => get_post_type_object( $this->to )->labels->search_items
+			) ); ?>
+		</div>
+
+		<table class="p2p-results">
+			<tbody>
+			</tbody>
+		</table>
+
+                <div class="p2p-topost-adder">
+			<h4><a class="p2p-topost-adder-toggle" href="#">+ <?php echo get_post_type_object( $this->to )->labels->add_new_item; ?></a></h4>
+			<div class="p2p-title-to-post">
 				<?php echo html( 'input', array(
 					'type' => 'text',
-					'name' => 'p2p_search_' . $this->to,
+					'name' => 'p2p_new_title_' . $this->to,
 					'autocomplete' => 'off',
-					'placeholder' => get_post_type_object( $this->to )->labels->search_items
 				) ); ?>
+				<input type="button" class="p2p-create-post button" value="<?php esc_attr_e( 'Add', 'posts-to-posts' ); ?>" />
 			</div>
-
-			<table class="p2p-results">
-				<tbody>
-				</tbody>
-			</table>
+		</div>
 	</div><!--.p2p-add-new-->
 </div><!--.p2p-box-->
 
@@ -109,10 +128,8 @@ class P2P_Box_Multiple extends P2P_Box {
 		<div><span class="p2p-current"></span> <? _e( 'of', 'p2p-textdomain' ); ?> <span class="p2p-total"></span></div>
 		<div class="p2p-next button" title="<?php _e( 'Next', 'p2p-textdomain' ); ?>">&rsaquo;</div>
 	</div>
+	<a href="#" class="p2p-recent button" name="p2p-recent"><?php _e( 'Recent', 'posts-to-posts' ); ?></a>
 
-	<a href="#" class="p2p-recent button" name="p2p-recent">
-		<?php _e( 'Recent', 'posts-to-posts' ); ?>
-	</a>
 	<div class="clear">
 		<!-- Clearfix would be better -->
 	</div>
