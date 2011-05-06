@@ -3,11 +3,9 @@
 class P2P_Box_Multiple extends P2P_Box {
 
 	function setup() {
-		$ptype_obj = get_post_type_object( $this->to );
-
 		$this->columns = array_merge(
 			array( 'delete' => $this->clear_connections_link() ),
-			array( 'title' => $ptype_obj->labels->singular_name ),
+			array( 'title' => get_post_type_object( $this->to )->labels->singular_name ),
 			$this->fields
 		);
 	}
@@ -59,6 +57,7 @@ class P2P_Box_Multiple extends P2P_Box {
 
 	function clear_connections() {
 		$post_id = absint( $_POST['post_id'] );
+
 		p2p_disconnect( $post_id, $this->direction );
 
 		die(1);
@@ -72,6 +71,7 @@ class P2P_Box_Multiple extends P2P_Box {
 			$data_attr[] = "data-$key='" . $this->$key . "'";
 		$data_attr = implode( ' ', $data_attr );
 
+		$to_cpt = get_post_type_object( $this->to );
 ?>
 
 <div class="p2p-box">
@@ -99,7 +99,7 @@ class P2P_Box_Multiple extends P2P_Box {
 				'type' => 'text',
 				'name' => 'p2p_search_' . $this->to,
 				'autocomplete' => 'off',
-				'placeholder' => get_post_type_object( $this->to )->labels->search_items
+				'placeholder' => $to_cpt->labels->search_items
 			) ); ?>
 		</div>
 
@@ -108,8 +108,9 @@ class P2P_Box_Multiple extends P2P_Box {
 			</tbody>
 		</table>
 
+<?php if ( current_user_can( $to_cpt->cap->edit_posts ) ) { ?>
                 <div class="p2p-topost-adder">
-			<h4><a class="p2p-topost-adder-toggle" href="#">+ <?php echo get_post_type_object( $this->to )->labels->add_new_item; ?></a></h4>
+			<h4><a class="p2p-topost-adder-toggle" href="#">+ <?php echo $to_cpt->labels->add_new_item; ?></a></h4>
 			<div class="p2p-title-to-post">
 				<?php echo html( 'input', array(
 					'type' => 'text',
@@ -119,6 +120,7 @@ class P2P_Box_Multiple extends P2P_Box {
 				<input type="button" class="p2p-create-post button" value="<?php esc_attr_e( 'Add', 'posts-to-posts' ); ?>" />
 			</div>
 		</div>
+<?php } ?>
 	</div><!--.p2p-add-new-->
 </div><!--.p2p-box-->
 
