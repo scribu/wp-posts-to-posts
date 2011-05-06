@@ -46,6 +46,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 == Changelog ==
 
 = 0.8 =
+* ability to create draft posts from the connection box
 * cache connection information to reduce number of queries
 * allow arrays in 'from' and 'to' args again
 
