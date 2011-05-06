@@ -128,7 +128,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		<div><span class="p2p-current"></span> <? _e( 'of', 'p2p-textdomain' ); ?> <span class="p2p-total"></span></div>
 		<div class="p2p-next button" title="<?php _e( 'Next', 'p2p-textdomain' ); ?>">&rsaquo;</div>
 	</div>
-	<a href="#" class="p2p-recent button" name="p2p-recent"><?php _e( 'Recent', 'posts-to-posts' ); ?></a>
+	<input type="button" class="p2p-recent button" value="<?php esc_attr_e( 'Recent', 'posts-to-posts' ); ?>" />
 
 	<div class="clear">
 		<!-- Clearfix would be better -->
