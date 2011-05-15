@@ -46,12 +46,14 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 == Changelog ==
 
 = 0.8 =
-* ability to create draft posts from the connection box
-* cache connection information to reduce number of queries
+* added ability to create draft posts from the connection box. props Oren Kolker
+* show post status in the connection box. props [Michael Fields](http://wordpress.mfields.org/)
+* reduced number of queries by caching connection information
 * allow arrays in 'from' and 'to' args again
+* introduced p2p_list_posts()
 
 = 0.7 =
-* improved UI
+* improved UI. props [Alex Ciobica](http://ciobi.ca/)
 * added 'fields', 'context' and 'prevent_duplicates' args to p2p_register_connection_type()
 * [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-7.html)
 
