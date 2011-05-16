@@ -1,0 +1,95 @@
+# Translation of the WordPress plugin Posts 2 Posts 0.7-beta by scribu.
+# Copyright (C) 2011 scribu
+# This file is distributed under the same license as the Posts 2 Posts package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts 2 Posts 0.7-beta\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-to-posts\n"
+"POT-Creation-Date: 2011-03-30 21:56+0300\n"
+"PO-Revision-Date: 2011-05-16 21:57+0100\n"
+"Last-Translator: Michael Wassmer <mike@mwm-webdesign.com>\n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: scb/AdminPage.php:164
+msgid "Settings <strong>saved</strong>."
+msgstr "Réglages <strong>Enregistrés</strong>"
+
+#: scb/AdminPage.php:176
+#: scb/AdminPage.php:186
+msgid "Save Changes"
+msgstr "Enregistrer Modifications"
+
+#: scb/AdminPage.php:368
+msgid "Settings"
+msgstr "Réglages"
+
+#: ui/boxes.php:88
+msgid "Create connections:"
+msgstr "Créer une connexion:"
+
+#: ui/boxes.php:108
+msgid "Previous"
+msgstr "Précédent"
+
+#: ui/boxes.php:109
+msgid "of"
+msgstr "sur"
+
+#: ui/boxes.php:110
+msgid "Next"
+msgstr "Suivant"
+
+#: ui/boxes.php:114
+msgid "Recent"
+msgstr "Récent"
+
+#: ui/boxes.php:174
+#: ui/boxes.php:175
+msgid "Create connection"
+msgstr "Créer connexion"
+
+#: ui/boxes.php:182
+#: ui/boxes.php:183
+msgid "Delete connection"
+msgstr "Supprimer connexion"
+
+#: ui/boxes.php:189
+#: ui/boxes.php:190
+msgid "Delete all connections"
+msgstr "Supprimer toutes les connexions"
+
+#: ui/ui.php:40
+#, php-format
+msgid "Connected %s"
+msgstr "%s Connectées"
+
+#: ui/ui.php:87
+msgid "Are you sure you want to delete all connections?"
+msgstr "Etes-vous sûr de vouloir supprimer toutes les connexions?"
+
+#. Plugin Name of the plugin/theme
+msgid "Posts 2 Posts"
+msgstr "Posts 2 Posts"
+
+#. Plugin URI of the plugin/theme
+msgid "http://scribu.net/wordpress/posts-to-posts"
+msgstr "http://scribu.net/wordpress/posts-to-posts"
+
+#. Description of the plugin/theme
+msgid "Create many-to-many relationships between all types of posts"
+msgstr "Créer des relations multiples entre tous types d’articles et de pages"
+
+#. Author of the plugin/theme
+msgid "scribu"
+msgstr "scribu"
+
+#. Author URI of the plugin/theme
+msgid "http://scribu.net/"
+msgstr "http://scribu.net/"
+
