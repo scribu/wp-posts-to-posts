@@ -51,6 +51,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * reduced number of queries by caching connection information
 * allow arrays in 'from' and 'to' args again
 * introduced p2p_list_posts()
+* reversed $direction in p2p_each_connected() to make it more intuitive
 
 = 0.7 =
 * improved UI. props [Alex Ciobica](http://ciobi.ca/)

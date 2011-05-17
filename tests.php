@@ -36,22 +36,26 @@ class P2P_Test {
 		) );
 
 		p2p_register_connection_type( array(
-			'from' => 'actor', 
-			'to' => 'actor', 
-			'reciprocal' => true,
-			'title' => array( 'from' => 'Doubles', 'to' => 'Main Actor' )
-		) );
-
-		p2p_register_connection_type( array(
-			'from' => 'actor', 
-			'to' => 'movie', 
-			'reciprocal' => true,
+			'from' => 'actor',
+			'to' => 'movie',
 			'fields' => array(
 				'role' => 'Role',
 				'role_type' => 'Role Type'
 			),
 			'prevent_duplicates' => false,
-			'title' => array( 'from' => 'Played In', 'to' => 'Cast' ),
+			'context' => 'advanced',
+			'reciprocal' => true,
+			'title' => array(
+				'from' => 'Played In',
+				'to' => 'Cast'
+			)
+		) );
+
+		p2p_register_connection_type( array(
+			'from' => 'actor',
+			'to' => 'actor',
+			'reciprocal' => true,
+			'title' => array( 'from' => 'Doubles', 'to' => 'Main Actor' )
 		) );
 
 		p2p_register_connection_type('actor', array('post', 'page'));
@@ -93,7 +97,7 @@ class P2P_Test {
 
 		assert_options(ASSERT_CALLBACK, function ($file, $line, $code) use ( &$failed ) {
 			$failed = true;
-		
+
 			echo "<hr>Assertion Failed (line $line):<br />
 				<code>$code</code><br /><hr />";
 
@@ -212,7 +216,7 @@ class P2P_Test {
 
 		p2p_each_connected( 'any', 'movies', array( 'post_type' => 'movie' ), $query );
 
-		self::walk( $query->posts, 'movies' );
+#		self::walk( $query->posts, 'movies' );
 
 		if ( $failed )
 			self::debug();
