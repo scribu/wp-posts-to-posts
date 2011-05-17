@@ -278,3 +278,24 @@ class P2P_Query {
 	}
 }
 
+/**
+ * List some posts
+ *
+ * @param object|array A WP_Query instance, a list of post objects or a list of post ids
+ */
+function p2p_list_posts( $posts ) {
+	if ( is_object( $posts ) )
+		$posts = $posts->posts;
+
+	if ( empty( $posts ) )
+		return;
+
+	if ( is_object( $posts[0] ) )
+		$posts = wp_list_pluck( $posts, 'ID' );
+
+	echo '<ul>';
+	foreach ( $posts as $post_id ) {
+		echo html( 'li', html( 'a', array( 'href' => get_permalink( $post_id ) ), get_the_title( $post_id ) ) );
+	}
+	echo '</ul>';
+}
