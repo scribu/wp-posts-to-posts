@@ -146,10 +146,13 @@ function p2p_each_connected( $direction, $prop_name, $search, $query = null ) {
 	foreach ( array_keys( P2P_Query::$qv_map ) as $qv )
 		unset( $search[ $qv ] );
 
-	if ( 'any' == $direction )
-		$key = 'connected';
-	else
-		$key = 'connected_' . $direction;
+	$map = array(
+		'any' => 'connected',
+		'from' => 'connected_to',
+		'to' => 'connected_from'
+	);
+
+	$key = $map[ $direction ];
 
 	$search[ $key ] = array_keys( $posts );
 	$search[ 'suppress_filters' ] = false;
