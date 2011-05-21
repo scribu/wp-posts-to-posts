@@ -205,7 +205,7 @@ class P2P_Test {
 #			'suppress_filters' => false
 #		) );
 
-#		self::walk( $posts );
+		self::walk( $posts );
 
 		// test p2p_each_connected()
 		$query = new WP_Query( array(
@@ -214,15 +214,15 @@ class P2P_Test {
 			'nopaging' => true,
 		) );
 
-		p2p_each_connected( 'any', 'movies', array( 'post_type' => 'movie' ), $query );
+		p2p_each_connected( $query, array( 'post_type' => 'movie' ) );
 
-#		self::walk( $query->posts, 'movies' );
+		self::walk( $query->posts );
 
 		if ( $failed )
 			self::debug();
 	}
 
-	private function walk( $posts, $key = '', $level = 0 ) {
+	private function walk( $posts, $level = 0 ) {
 		if ( 0 == $level )
 			echo '<pre>';
 
@@ -233,7 +233,7 @@ class P2P_Test {
 			if ( isset( $post->p2p_id ) )
 				p2p_get_meta( $post->p2p_id, 'foo', true );
 
-			self::walk( (array) @$post->{"connected_$key"}, $key, $level+1 );
+			self::walk( (array) @$post->connected, $level+1 );
 		}
 
 		if ( 0 == $level )
