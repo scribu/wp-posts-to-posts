@@ -223,6 +223,9 @@ class P2P_Test {
 	}
 
 	private function walk( $posts, $level = 0 ) {
+		if ( !isset( $_GET['p2p_debug'] ) )
+			return;
+
 		if ( 0 == $level )
 			echo '<pre>';
 

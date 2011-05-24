@@ -49,9 +49,8 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * added ability to create draft posts from the connection box. props Oren Kolker
 * show post status in the connection box. props [Michael Fields](http://wordpress.mfields.org/)
 * reduced number of queries by caching connection information
-* allow arrays in 'from' and 'to' args again
+* revamped p2p_each_connected()
 * introduced p2p_list_posts()
-* reversed $direction in p2p_each_connected() to make it more intuitive
 
 = 0.7 =
 * improved UI. props [Alex Ciobica](http://ciobi.ca/)
