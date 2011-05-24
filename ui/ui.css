@@ -68,7 +68,7 @@ td.p2p-col-add {
 
 .p2p-col-delete a,
 .p2p-col-add a,
-.p2p-col-delete img, 
+.p2p-col-delete img,
 .p2p-col-add img {
 	padding: 5px 6px;
 }
@@ -134,13 +134,17 @@ th.p2p-col-delete a {
 .p2p-search input,
 .p2p-title-to-post {
 	background-color: transparent;
-	width: 150px;
 	padding-right: 22px;
 	margin: 0;
 }
 
 .p2p-title-to-post {
 	display: none;
+	width: 100%;
+}
+
+.p2p-title-to-post input[type="text"] {
+	width: 94%;
 }
 
 .p2p-notice {
