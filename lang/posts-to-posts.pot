@@ -1,21 +1,56 @@
-# Translation of the WordPress plugin Posts 2 Posts 0.7-beta by scribu.
-# Copyright (C) 2011 scribu
-# This file is distributed under the same license as the Posts 2 Posts package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
-#
-#, fuzzy
+# Copyright (C) 2010 
+# This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Posts 2 Posts 0.7-beta\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-to-posts\n"
-"POT-Creation-Date: 2011-03-30 21:56+0300\n"
-"PO-Revision-Date: 2011-MO-DA HO:MI+ZONE\n"
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
+"POT-Creation-Date: 2011-05-24 01:48:53+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+
+#: ui/ui.php:49
+msgid "Connected %s"
+msgstr ""
+
+#: ui/ui.php:97
+msgid "Are you sure you want to delete all connections?"
+msgstr ""
+
+#: ui/boxes.php:95
+msgid "Create connections:"
+msgstr ""
+
+#: ui/boxes.php:129
+msgid "Previous"
+msgstr ""
+
+#: ui/boxes.php:130
+msgid "of"
+msgstr ""
+
+#: ui/boxes.php:131
+msgid "Next"
+msgstr ""
+
+#: ui/boxes.php:133
+msgid "Recent"
+msgstr ""
+
+#: ui/boxes.php:206 ui/boxes.php:207
+msgid "Create connection"
+msgstr ""
+
+#: ui/boxes.php:214 ui/boxes.php:215
+msgid "Delete connection"
+msgstr ""
+
+#: ui/boxes.php:221 ui/boxes.php:222
+msgid "Delete all connections"
+msgstr ""
 
 #: scb/AdminPage.php:164
 msgid "Settings <strong>saved</strong>."
@@ -27,65 +62,4 @@ msgstr ""
 
 #: scb/AdminPage.php:368
 msgid "Settings"
-msgstr ""
-
-#: ui/boxes.php:88
-msgid "Create connections:"
-msgstr ""
-
-#: ui/boxes.php:108
-msgid "Previous"
-msgstr ""
-
-#: ui/boxes.php:109
-msgid "of"
-msgstr ""
-
-#: ui/boxes.php:110
-msgid "Next"
-msgstr ""
-
-#: ui/boxes.php:114
-msgid "Recent"
-msgstr ""
-
-#: ui/boxes.php:174 ui/boxes.php:175
-msgid "Create connection"
-msgstr ""
-
-#: ui/boxes.php:182 ui/boxes.php:183
-msgid "Delete connection"
-msgstr ""
-
-#: ui/boxes.php:189 ui/boxes.php:190
-msgid "Delete all connections"
-msgstr ""
-
-#: ui/ui.php:40
-#, php-format
-msgid "Connected %s"
-msgstr ""
-
-#: ui/ui.php:87
-msgid "Are you sure you want to delete all connections?"
-msgstr ""
-
-#. Plugin Name of the plugin/theme
-msgid "Posts 2 Posts"
-msgstr ""
-
-#. Plugin URI of the plugin/theme
-msgid "http://scribu.net/wordpress/posts-to-posts"
-msgstr ""
-
-#. Description of the plugin/theme
-msgid "Create many-to-many relationships between all types of posts"
-msgstr ""
-
-#. Author of the plugin/theme
-msgid "scribu"
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "http://scribu.net/"
 msgstr ""

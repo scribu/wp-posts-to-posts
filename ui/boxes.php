@@ -117,7 +117,7 @@ class P2P_Box_Multiple extends P2P_Box {
 					'name' => 'p2p_new_title_' . $this->to,
 					'autocomplete' => 'off',
 				) ); ?>
-				<input type="button" class="p2p-create-post button" value="<?php esc_attr_e( 'Add', 'posts-to-posts' ); ?>" />
+				<input type="button" class="p2p-create-post button" value="<?php echo $to_cpt->labels->add_new_item; ?>" />
 			</div>
 		</div>
 <?php } ?>
@@ -256,7 +256,7 @@ class P2P_Box_Multiple extends P2P_Box {
 
 		return $args;
 	}
-	
+
 	function get_recent_args( $post_id ) {
 		$args = array(
 			'numberposts' => 10,
