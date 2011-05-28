@@ -1,0 +1,3 @@
+[submodule "scb"]
+	path = scb
+	url = git://github.com/scribu/wp-scb-framework.git
