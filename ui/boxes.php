@@ -3,6 +3,9 @@
 class P2P_Box_Multiple extends P2P_Box {
 
 	function setup() {
+		if ( !class_exists( 'Mustache' ) )
+			require dirname(__FILE__) . '/../mustache/Mustache.php';
+
 		$this->columns = array_merge(
 			array( 'delete' => $this->clear_connections_link() ),
 			array( 'title' => get_post_type_object( $this->to )->labels->singular_name ),
@@ -66,79 +69,52 @@ class P2P_Box_Multiple extends P2P_Box {
 	function box( $post_id ) {
 		$connected_ids = $this->get_connected_ids( $post_id );
 
+		$to_cpt = get_post_type_object( $this->to );
+
+		$data = array(
+			'search-key' => 'p2p_search_' . $this->to,
+			'create' => __( 'Create connections:', 'posts-to-posts' ),
+			'placeholder' => $to_cpt->labels->search_items,
+
+			'prev' =>  __( 'Previous', 'p2p-textdomain' ),
+			'next' =>  __( 'Next', 'p2p-textdomain' ),
+			'of' => __( 'of', 'p2p-textdomain' ),
+			'recent' => __( 'Recent', 'p2p-textdomain' ),
+		);
+
+		if ( empty( $connected_ids ) )
+			$data['hide-connections'] = 'style="display:none"';
+
+		foreach ( $this->columns as $key => $title ) {
+			$data['thead'][] = array(
+				'class' => "p2p-col-$key",
+				'title' => $title
+			);
+		}
+
 		$data_attr = array();
 		foreach ( array( 'box_id', 'direction', 'prevent_duplicates' ) as $key )
 			$data_attr[] = "data-$key='" . $this->$key . "'";
-		$data_attr = implode( ' ', $data_attr );
+		$data['attributes'] = implode( ' ', $data_attr );
 
-		$to_cpt = get_post_type_object( $this->to );
-?>
+		// TODO: separate template?
+		ob_start();
+		foreach ( $connected_ids as $p2p_id => $post_b ) {
+			$this->connection_row( $p2p_id, $post_b );
+		}
+		$data['tbody'] = ob_get_clean();
 
-<div class="p2p-box">
-	<table class="p2p-connections" <?php if ( empty( $connected_ids ) ) echo 'style="display:none"'; ?>>
-		<thead>
-			<tr>
-				<?php foreach ( $this->columns as $key => $title ) {
-					echo html( 'th', array( 'class' => "p2p-col-$key" ), $title );
-				} ?>
-			</tr>
-		</thead>
+		if ( current_user_can( $to_cpt->cap->edit_posts ) ) {
+			$data['add-posts'] = array(
+				'key' => 'p2p_new_title_' . $this->to,
+				'title' => $to_cpt->labels->add_new_item
+			);
+		}
 
-		<tbody>
-			<?php foreach ( $connected_ids as $p2p_id => $post_b ) {
-				$this->connection_row( $p2p_id, $post_b );
-			} ?>
-		</tbody>
-	</table>
-
-	<div class="p2p-add-new" <?php echo $data_attr; ?>>
-		<p><strong><?php _e( 'Create connections:', 'posts-to-posts' ); ?></strong></p>
-
-		<div class="p2p-search">
-			<?php echo html( 'input', array(
-				'type' => 'text',
-				'name' => 'p2p_search_' . $this->to,
-				'autocomplete' => 'off',
-				'placeholder' => $to_cpt->labels->search_items
-			) ); ?>
-		</div>
-
-		<table class="p2p-results">
-			<tbody>
-			</tbody>
-		</table>
-
-<?php if ( current_user_can( $to_cpt->cap->edit_posts ) ) { ?>
-                <div class="p2p-topost-adder">
-			<h4><a class="p2p-topost-adder-toggle" href="#">+ <?php echo $to_cpt->labels->add_new_item; ?></a></h4>
-			<div class="p2p-title-to-post">
-				<?php echo html( 'input', array(
-					'type' => 'text',
-					'name' => 'p2p_new_title_' . $this->to,
-					'autocomplete' => 'off',
-				) ); ?>
-				<input type="button" class="p2p-create-post button" value="<?php echo $to_cpt->labels->add_new_item; ?>" />
-			</div>
-		</div>
-<?php } ?>
-	</div><!--.p2p-add-new-->
-</div><!--.p2p-box-->
-
-<div class="p2p-footer">
-	<div class="p2p-nav">
-		<div class="p2p-prev button" title="<?php _e( 'Previous', 'p2p-textdomain' ); ?>">&lsaquo;</div>
-		<div><span class="p2p-current"></span> <? _e( 'of', 'p2p-textdomain' ); ?> <span class="p2p-total"></span></div>
-		<div class="p2p-next button" title="<?php _e( 'Next', 'p2p-textdomain' ); ?>">&rsaquo;</div>
-	</div>
-	<input type="button" class="p2p-recent button" value="<?php esc_attr_e( 'Recent', 'posts-to-posts' ); ?>" />
-
-	<div class="clear">
-		<!-- Clearfix would be better -->
-	</div>
-</div>
-
-
-<?php
+		// Render the box
+		$template = file_get_contents( dirname(__FILE__) . '/box.html' );
+		$m = new Mustache;
+		echo $m->render( $template, $data );
 	}
 
 	protected function connection_row( $p2p_id, $post_id ) {

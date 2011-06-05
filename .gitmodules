@@ -1,3 +1,6 @@
 [submodule "scb"]
 	path = scb
 	url = git://github.com/scribu/wp-scb-framework.git
+[submodule "mustache"]
+	path = mustache
+	url = git://github.com/bobthecow/mustache.php.git

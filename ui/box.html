@@ -1,0 +1,51 @@
+<div class="p2p-box">
+	<table class="p2p-connections" {{hide-connections}}>
+		<thead>
+			<tr>
+				{{#thead}}
+				<th class={{class}}>{{{title}}}</th>
+				{{/thead}}
+			</tr>
+		</thead>
+
+		<tbody>
+			{{{tbody}}}
+		</tbody>
+	</table>
+
+	<div class="p2p-add-new" {{attributes}}>
+		<p><strong>{{create}}</strong></p>
+
+		<div class="p2p-search">
+			<input type="text" name="{{search-key}}" autocomplete="off" placeholder="{{placeholder}}" />
+		</div>
+
+		<table class="p2p-results">
+			<tbody>
+			</tbody>
+		</table>
+
+		{{#add-posts}}
+		<div class="p2p-topost-adder">
+			<h4><a class="p2p-topost-adder-toggle" href="#">+ {{title}}</a></h4>
+			<div class="p2p-title-to-post">
+				<input type="text" name="{{key}}" autocomplete="off" />
+				<input type="button" class="p2p-create-post button" value="{{title}}" />
+			</div>
+		</div>
+		{{/add-posts}}
+	</div><!--.p2p-add-new-->
+</div><!--.p2p-box-->
+
+<div class="p2p-footer">
+	<div class="p2p-nav">
+		<div class="p2p-prev button" title="{{prev}}">&lsaquo;</div>
+		<div><span class="p2p-current"></span> {{of}} <span class="p2p-total"></span></div>
+		<div class="p2p-next button" title="{{next}}">&rsaquo;</div>
+	</div>
+	<input type="button" class="p2p-recent button" value="{{recent}}" />
+
+	<div class="clear">
+		<!-- Clearfix would be better -->
+	</div>
+</div>
