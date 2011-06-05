@@ -6,6 +6,12 @@ class P2P_Box_Multiple extends P2P_Box {
 		if ( !class_exists( 'Mustache' ) )
 			require dirname(__FILE__) . '/../mustache/Mustache.php';
 
+		wp_enqueue_style( 'p2p-admin', plugins_url( 'box.css', __FILE__ ), array(), P2P_PLUGIN_VERSION );
+		wp_enqueue_script( 'p2p-admin', plugins_url( 'box.js', __FILE__ ), array( 'jquery' ), P2P_PLUGIN_VERSION, true );
+		wp_localize_script( 'p2p-admin', 'P2PAdmin_I18n', array(
+			'deleteConfirmMessage' => __( 'Are you sure you want to delete all connections?', 'posts-to-posts' ),
+		) );
+
 		$this->columns = array_merge(
 			array( 'delete' => $this->column_delete_all() ),
 			array( 'title' => get_post_type_object( $this->to )->labels->singular_name ),
