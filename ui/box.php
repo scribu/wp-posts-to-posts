@@ -150,7 +150,7 @@ class P2P_Box_Multiple extends P2P_Box {
 	}
 
 	private static function mustache_render( $file, $data ) {
-		$template = file_get_contents( dirname(__FILE__) . '/' . $file );
+		$template = file_get_contents( dirname(__FILE__) . '/templates/' . $file );
 		$m = new Mustache;
 		return $m->render( $template, $data );
 	}
