@@ -90,7 +90,7 @@ $('.p2p-add-new').each(function() {
 	});
 
 	// Create connection
-	$metabox.delegate('td.p2p-col-add a', 'click', function() {
+	$metabox.delegate('td.p2p-col-create a', 'click', function() {
 		var
 			$self = $(this),
 			$td = $self.closest('td'),

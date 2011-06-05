@@ -62,14 +62,14 @@
 
 th.p2p-col-delete,
 td.p2p-col-delete,
-td.p2p-col-add {
+td.p2p-col-create {
 	padding: 0;
 }
 
 .p2p-col-delete a,
-.p2p-col-add a,
+.p2p-col-create a,
 .p2p-col-delete img,
-.p2p-col-add img {
+.p2p-col-create img {
 	padding: 5px 6px;
 }
 
@@ -94,12 +94,12 @@ th.p2p-col-delete a {
 	width: 100%;
 }
 
-.p2p-col-add,
+.p2p-col-create,
 .p2p-col-delete {
 	width: 16px;
 }
 
-.p2p-col-add a,
+.p2p-col-create a,
 .p2p-col-delete a {
 	display: block;
 	height: 16px;
@@ -109,7 +109,7 @@ th.p2p-col-delete a {
 	width: 16px;
 }
 
-.p2p-col-add a:hover,
+.p2p-col-create a:hover,
 .p2p-col-delete a:hover {
 	background-color: #f5f5f5;
 	border-right: 1px solid #ddd;
@@ -117,7 +117,7 @@ th.p2p-col-delete a {
 	width: 15px;
 }
 
-.p2p-col-add a {
+.p2p-col-create a {
 	background: url("images/add.png") no-repeat scroll 50% 50% transparent;
 }
 
