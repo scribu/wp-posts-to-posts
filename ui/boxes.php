@@ -97,7 +97,6 @@ class P2P_Box_Multiple extends P2P_Box {
 			$data_attr[] = "data-$key='" . $this->$key . "'";
 		$data['attributes'] = implode( ' ', $data_attr );
 
-		// TODO: separate template?
 		ob_start();
 		foreach ( $connected_ids as $p2p_id => $post_b ) {
 			$this->connection_row( $p2p_id, $post_b );
@@ -112,36 +111,42 @@ class P2P_Box_Multiple extends P2P_Box {
 		}
 
 		// Render the box
-		$template = file_get_contents( dirname(__FILE__) . '/box.html' );
-		$m = new Mustache;
-		echo $m->render( $template, $data );
+		echo self::mustache_render( 'box.html', $data );
 	}
 
 	protected function connection_row( $p2p_id, $post_id ) {
-		echo '<tr>';
-
-	foreach ( array_keys( $this->columns ) as $key ) {
+		$data = array();
+		foreach ( array_keys( $this->columns ) as $key ) {
 			switch ( $key ) {
-				case 'title':
-					$value = $this->column_title( $post_id );
-					break;
+			case 'title':
+				$value = $this->column_title( $post_id );
+				break;
 
-				case 'delete':
-					$value = $this->column_delete( $p2p_id );
-					break;
+			case 'delete':
+				$value = $this->column_delete( $p2p_id );
+				break;
 
-				default:
-					$value = html( 'input', array(
-						'type' => 'text',
-						'name' => "p2p_meta[$p2p_id][$key]",
-						'value' => p2p_get_meta( $p2p_id, $key, true )
-					) );
+			default:
+				$value = html( 'input', array(
+					'type' => 'text',
+					'name' => "p2p_meta[$p2p_id][$key]",
+					'value' => p2p_get_meta( $p2p_id, $key, true )
+				) );
 			}
 
-			echo html( 'td', array( 'class' => "p2p-col-$key" ), $value );
+			$data['columns'][] = array(
+				'class' => "p2p-col-$key",
+				'content' => $value
+			);
 		}
 
-		echo '</tr>';
+		echo self::mustache_render( 'box-row.html', $data );
+	}
+
+	private static function mustache_render( $file, $data ) {
+		$template = file_get_contents( dirname(__FILE__) . '/' . $file );
+		$m = new Mustache;
+		return $m->render( $template, $data );
 	}
 
 	public function results_row( $post ) {
