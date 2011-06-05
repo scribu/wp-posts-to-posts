@@ -3,7 +3,7 @@
 		<thead>
 			<tr>
 				{{#thead}}
-				<th class={{class}}>{{{title}}}</th>
+				<th class="{{class}}">{{{title}}}</th>
 				{{/thead}}
 			</tr>
 		</thead>
@@ -25,7 +25,7 @@
 			</tbody>
 		</table>
 
-		{{#add-posts}}
+		{{#create-post}}
 		<div class="p2p-topost-adder">
 			<h4><a class="p2p-topost-adder-toggle" href="#">+ {{title}}</a></h4>
 			<div class="p2p-title-to-post">
@@ -33,7 +33,7 @@
 				<input type="button" class="p2p-create-post button" value="{{title}}" />
 			</div>
 		</div>
-		{{/add-posts}}
+		{{/create-post}}
 	</div><!--.p2p-add-new-->
 </div><!--.p2p-box-->
 

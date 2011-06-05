@@ -105,7 +105,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		$data['tbody'] = ob_get_clean();
 
 		if ( current_user_can( $to_cpt->cap->edit_posts ) ) {
-			$data['add-posts'] = array(
+			$data['create-post'] = array(
 				'key' => 'p2p_new_title_' . $this->to,
 				'title' => $to_cpt->labels->add_new_item
 			);
