@@ -109,7 +109,23 @@ class P2P_Box_Multiple extends P2P_Box {
 		}
 		$data['tbody'] = ob_get_clean();
 
+		$data['tabs'][] = array(
+			'ref' => '.p2p-create-connections',
+			'text' => __( 'Search', 'p2p-textdomain' ),
+			'is-active' => array(true)
+		);
+
+		$data['tabs'][] = array(
+			'ref' => '.p2p-recent',
+			'text' => __( 'Recent', 'p2p-textdomain' ),
+		);
+
 		if ( current_user_can( $to_cpt->cap->edit_posts ) ) {
+			$data['tabs'][] = array(
+				'ref' => '.p2p-create-post',
+				'text' => $to_cpt->labels->new_item
+			);
+
 			$data['create-post'] = array(
 				'key' => 'p2p_new_title_' . $this->to,
 				'title' => $to_cpt->labels->add_new_item

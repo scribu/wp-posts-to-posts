@@ -23,14 +23,14 @@ if (!jQuery('<input placeholder="1" />')[0].placeholder) {
 	});
 }
 
-$('.p2p-add-new').each(function() {
+$('.p2p-create-connections').each(function() {
 	var
-		$metabox = $(this).closest('.inside'),
+		$addNew = $(this),
+		$metabox = $addNew.closest('.inside'),
 		$connections = $metabox.find('.p2p-connections'),
 		$results = $metabox.find('.p2p-results'),
 		$searchInput = $metabox.find('.p2p-search :text'),
 		$pagination = $metabox.find('.p2p-nav'),
-		$addNew = $metabox.find('.p2p-add-new'),
 		base_data = {
 			box_id: $addNew.attr('data-box_id'),
 			direction: $addNew.attr('data-direction')
@@ -40,6 +40,23 @@ $('.p2p-add-new').each(function() {
 			.removeAttr('id')
 			.removeClass('ajax-loading')
 			.addClass('waiting');
+
+	// Tabs
+	$metabox.delegate('.wp-tab-bar li', 'click', function() {
+		var $tab = $(this);
+
+		// Set active tab
+		$metabox.find('.wp-tab-bar li').removeClass('wp-tab-active');
+		$tab.addClass('wp-tab-active');
+
+		// Set active panel
+		$metabox.find('.tabs-panel').hide();
+		$metabox.find( $tab.attr('data-ref') )
+			.show()
+			.find(':text').focus();
+
+		return false;
+	});
 
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
@@ -133,13 +150,7 @@ $('.p2p-add-new').each(function() {
 
 		new_page = new_page ? ( new_page > total_pages ? current_page : new_page ) : current_page;
 
-		// show spinner
-		if ( 'search' === action ) {
-			$spinner.insertAfter( $searchInput );
-		} else {
-			$spinner.insertAfter( $metabox.find('.p2p-recent') );
-		}
-		$spinner.show();
+		$spinner.insertAfter( $searchInput ).show();
 
 		$.getJSON(ajaxurl, data, function(response) {
 			$spinner.remove();
@@ -204,24 +215,15 @@ $('.p2p-add-new').each(function() {
 		return false;
 	});
 
-        // Toggle add new
-	$metabox.find('.p2p-topost-adder-toggle').click(function() {
-		$metabox
-			.find('.p2p-title-to-post').toggle()
-				.find(':text').focus();
-		return false;
-	});
-
-	// Delegate p2p-create-post
-	$metabox.delegate('.p2p-create-post', 'click', function() {
+	$metabox.delegate('.button', 'click', function() {
 		var $button = $(this);
 
 		if ( $button.hasClass('inactive') )
 			return false;
 
-		var title = $metabox.find('.p2p-title-to-post :text').val();
+		var title = $metabox.find('.p2p-create-post :text').val();
 		if ( '' === title ) {
-			$metabox.find('.p2p-title-to-post :text').focus();
+			$metabox.find('.p2p-create-post :text').focus();
 			return false;
 		}
 
@@ -238,7 +240,7 @@ $('.p2p-add-new').each(function() {
 			$connections.show()
 				.find('tbody').append(response);
 
-			$metabox.find('.p2p-title-to-post :text').val('');
+			$metabox.find('.p2p-create-post :text').val('');
 			$metabox.find('.p2p-topost-adder-toggle').click();
 			$button.removeClass('inactive');
 		});

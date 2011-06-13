@@ -1,38 +1,32 @@
-/* General */
-
-.button.inactive, .button.inactive:hover {
-	border-color: #bbb;
-	color: #aaa;
-	background: #f6f6f6;
-	text-shadow: none;
-	cursor: default;
-}
-
-.p2p-footer {
-	background-color: #f1f1f1;
-	border-top: 1px solid #ddd;
-	clear: both;
-	padding: 7px;
-	margin: 6px -6px -8px;
-}
-
-.p2p-footer .p2p-recent {
-	float: right;
-}
-
-
 .p2p-placeholder {
 	color: #AAA;
 }
 
 .p2p-connections,
 .p2p-search,
-.p2p-title-to-post,
+.p2p-create-post,
 .p2p-results {
 	margin-bottom: 8px;
 }
 
+/* Tabs */
+
+.p2p-box .tabs-panel {
+	border-width: 1px;
+	border-style: solid;
+	display: none;
+	padding: 0.5em 0.9em;
+}
+
+.p2p-box .p2p-create-connections {
+	display: block;
+}
+
 /* Connections */
+
+.p2p-connections {
+	margin-top: 4px;
+}
 
 .p2p-results,
 .p2p-connections {
@@ -132,18 +126,13 @@ th.p2p-col-delete a {
 }
 
 .p2p-search input,
-.p2p-title-to-post {
+.p2p-create-post {
 	background-color: transparent;
 	padding-right: 22px;
 	margin: 0;
 }
 
-.p2p-title-to-post {
-	display: none;
-	width: 100%;
-}
-
-.p2p-title-to-post input[type="text"] {
+.p2p-create-post input[type="text"] {
 	width: 94%;
 }
 
@@ -156,7 +145,22 @@ th.p2p-col-delete a {
 	margin-top: 10px;
 }
 
-.p2p-footer .waiting {
+/* Pagination */
+
+.p2p-navigation {
+	clear: both;
+	padding: 7px;
+}
+
+.p2p-navigation .button.inactive, .p2p-navigation .button.inactive:hover {
+	border-color: #bbb;
+	color: #aaa;
+	background: #f6f6f6;
+	text-shadow: none;
+	cursor: default;
+}
+
+.p2p-navigation .waiting {
 	float: right;
 	margin: 3px 6px 0;
 }

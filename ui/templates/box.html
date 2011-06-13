@@ -13,9 +13,15 @@
 		</tbody>
 	</table>
 
-	<div class="p2p-add-new" {{attributes}}>
-		<p><strong>{{create}}</strong></p>
+	<p><strong>{{create}}</strong></p>
 
+	<ul class="wp-tab-bar">
+		{{#tabs}}
+		<li {{#is-active}}class="wp-tab-active"{{/is-active}} data-ref="{{ref}}"><a href="#">{{text}}</a></li>
+		{{/tabs}}
+	</ul>
+
+	<div class="p2p-create-connections tabs-panel" {{attributes}}>
 		<div class="p2p-search">
 			<input type="text" name="{{search-key}}" autocomplete="off" placeholder="{{placeholder}}" />
 		</div>
@@ -25,27 +31,27 @@
 			</tbody>
 		</table>
 
-		{{#create-post}}
-		<div class="p2p-topost-adder">
-			<h4><a class="p2p-topost-adder-toggle" href="#">+ {{title}}</a></h4>
-			<div class="p2p-title-to-post">
-				<input type="text" name="{{key}}" autocomplete="off" />
-				<input type="button" class="p2p-create-post button" value="{{title}}" />
+		<div class="p2p-navigation">
+			<div class="p2p-nav">
+				<div class="p2p-prev button" title="{{prev}}">&lsaquo;</div>
+				<div><span class="p2p-current"></span> {{of}} <span class="p2p-total"></span></div>
+				<div class="p2p-next button" title="{{next}}">&rsaquo;</div>
+			</div>
+
+			<div class="clear">
+				<!-- Clearfix would be better -->
 			</div>
 		</div>
-		{{/create-post}}
-	</div><!--.p2p-add-new-->
+	</div><!--.p2p-create-connections-->
+
+	<div class="p2p-recent tabs-panel">
+		todo
+	</div>
+
+	{{#create-post}}
+	<div class="p2p-create-post tabs-panel">
+		<input type="text" name="{{key}}" autocomplete="off" />
+		<input type="button" class="button" value="{{title}}" />
+	</div>
+	{{/create-post}}
 </div><!--.p2p-box-->
-
-<div class="p2p-footer">
-	<div class="p2p-nav">
-		<div class="p2p-prev button" title="{{prev}}">&lsaquo;</div>
-		<div><span class="p2p-current"></span> {{of}} <span class="p2p-total"></span></div>
-		<div class="p2p-next button" title="{{next}}">&rsaquo;</div>
-	</div>
-	<input type="button" class="p2p-recent button" value="{{recent}}" />
-
-	<div class="clear">
-		<!-- Clearfix would be better -->
-	</div>
-</div>
