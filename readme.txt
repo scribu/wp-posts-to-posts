@@ -1,5 +1,5 @@
 === Posts 2 Posts ===
-Contributors: scribu
+Contributors: scribu, ciobi
 Donate link: http://scribu.net/paypal
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.1
