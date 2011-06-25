@@ -175,7 +175,7 @@ function _p2p_each_connected( $direction, $query, $search ) {
 	}
 }
 
-// Allows you to write query_posts( array( 'connected' => 123 ) );
+// Allows you to write query_posts( array( 'connected' => 123 ) ); etc.
 class P2P_Query {
 
 	static $qv_map = array(
@@ -184,13 +184,10 @@ class P2P_Query {
 		'connected_from' => 'from',
 	);
 
-	function init() {
-		add_filter( 'posts_clauses', array( __CLASS__, 'query' ), 10, 2 );
-		add_filter( 'the_posts', array( __CLASS__, 'the_posts' ), 11, 2 );
-	}
-
-	// Handles connected* query vars
-	function query( $clauses, $wp_query ) {
+	/**
+	 * Handles connected* query vars
+	 */
+	function posts_clauses( $clauses, $wp_query ) {
 		global $wpdb;
 
 		$found = self::find_qv( $wp_query );
@@ -246,7 +243,11 @@ class P2P_Query {
 		return $clauses;
 	}
 
-	// Handles each_connected* query vars
+	/**
+	 * Handles each_connected* query vars
+	 *
+	 * @priority 11
+	 */
 	function the_posts( $the_posts, $wp_query ) {
 		if ( empty( $the_posts ) )
 			return $the_posts;
@@ -280,6 +281,7 @@ class P2P_Query {
 		return array( $search, $qv, $direction );
 	}
 }
+scbHooks::add( 'P2P_Query' );
 
 /**
  * List some posts
