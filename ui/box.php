@@ -241,7 +241,7 @@ class P2P_Box_Multiple extends P2P_Box {
 			'suppress_filters' => false,
 		);
 
-		$post_ids = scbUtil::array_pluck( get_posts($args), 'ID' );
+		$post_ids = wp_list_pluck( get_posts($args), 'ID' );
 
 		return array_intersect( $connected_posts, $post_ids );	// to preserve p2p_id keys
 	}
