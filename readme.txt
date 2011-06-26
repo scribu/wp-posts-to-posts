@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Donate link: http://scribu.net/paypal
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.1
-Tested up to: 3.1
+Tested up to: 3.2
 Stable tag: 0.7
 
 Create connections between posts
@@ -51,6 +51,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * reduced number of queries by caching connection information
 * revamped p2p_each_connected()
 * introduced p2p_list_posts()
+* introduced 'p2p_orderby', 'p2p_order' and 'p2p_order_num' query vars
 
 = 0.7 =
 * improved UI. props [Alex Ciobica](http://ciobi.ca/)
