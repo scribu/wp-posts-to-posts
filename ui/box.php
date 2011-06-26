@@ -238,6 +238,8 @@ class P2P_Box_Multiple extends P2P_Box {
 			'post_type'=> $this->to,
 			'post_status' => 'any',
 			'nopaging' => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
 			'suppress_filters' => false,
 		);
 
