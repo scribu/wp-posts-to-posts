@@ -109,8 +109,6 @@ class P2P_Test {
 			'fields' => 'ids',
 			'post_type' => 'actor',
 			'post_status' => 'any',
-			'orderby' => 'post_title',
-			'order' => 'asc',
 			'nopaging' => true
 		) );
 
@@ -172,6 +170,18 @@ class P2P_Test {
 		}
 
 		assert( 'array_intersect_assoc($r, $raw) == $r' );
+
+		// test ordering
+		$query = new WP_Query( array(
+			'connected' => $actor_ids[0],
+			'post_type' => 'movie',
+			'post_status' => 'any',
+			'nopaging' => true,
+
+			'p2p_orderby' => 'role',
+			'p2p_order_num' => true,
+			'p2p_order' => 'asc'
+		) );
 
 		// test 'each_*' query vars
 		$posts = get_posts( array(
