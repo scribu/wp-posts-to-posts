@@ -53,7 +53,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		if ( !$p2p_id )
 			$p2p_id = P2P_Connections::connect( $args[0], $args[1] );
 
-		$this->connection_row( $p2p_id, $to );
+		echo $this->connection_row( $p2p_id, $to );
 	}
 
 	function disconnect() {
@@ -103,11 +103,11 @@ class P2P_Box_Multiple extends P2P_Box {
 			$data_attr[] = "data-$key='" . $this->$key . "'";
 		$data['attributes'] = implode( ' ', $data_attr );
 
-		ob_start();
+		$tbody = '';
 		foreach ( $connected_ids as $p2p_id => $post_b ) {
-			$this->connection_row( $p2p_id, $post_b );
+			$tbody .= $this->connection_row( $p2p_id, $post_b );
 		}
-		$data['tbody'] = ob_get_clean();
+		$data['tbody'] = $tbody;
 
 		$data['tabs'][] = array(
 			'ref' => '.p2p-create-connections',
@@ -162,7 +162,7 @@ class P2P_Box_Multiple extends P2P_Box {
 			);
 		}
 
-		echo self::mustache_render( 'box-row.html', $data );
+		return self::mustache_render( 'box-row.html', $data );
 	}
 
 	private static function mustache_render( $file, $data ) {
