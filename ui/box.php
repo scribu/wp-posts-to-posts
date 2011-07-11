@@ -78,7 +78,6 @@ class P2P_Box_Multiple extends P2P_Box {
 		$to_cpt = get_post_type_object( $this->to );
 
 		$data = array(
-			'search-key' => 'p2p_search_' . $this->to,
 			'create-label' => __( 'Create connections:', 'posts-to-posts' ),
 			'placeholder' => $to_cpt->labels->search_items,
 
