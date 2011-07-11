@@ -81,6 +81,10 @@ class P2P_Box_Multiple extends P2P_Box {
 		$data = array(
 			'create-label' => __( 'Create connections:', 'posts-to-posts' ),
 			'placeholder' => $to_cpt->labels->search_items,
+			'recent-posts' => $this->post_rows( new WP_Query( array(
+				'posts_per_page' => self::POSTS_PER_PAGE,
+				'post_type' => $this->to
+			) ) )
 		);
 
 		if ( empty( $connected_ids ) )
