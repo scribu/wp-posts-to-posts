@@ -192,7 +192,7 @@ function p2p_delete_meta($p2p_id, $meta_key, $meta_value = '') {
 
 function _p2p_meta_sql_helper( $data ) {
 	global $wpdb;
-	
+
 	if ( isset( $data[0] ) ) {
 		$meta_query = $data;
 	}
@@ -204,79 +204,6 @@ function _p2p_meta_sql_helper( $data ) {
 		}
 	}
 
-	return p2p_get_meta_sql( $meta_query, 'p2p', $wpdb->p2p, 'p2p_id' );
-}
-
-// WP < 3.1-alpha
-function p2p_get_meta_sql( $meta_query, $meta_type, $primary_table, $primary_id_column ) {
-	global $wpdb;
-
-	if ( ! $meta_table = _get_meta_table( $meta_type ) )
-		return false;
-
-	$meta_id_column = esc_sql( $meta_type . '_id' );
-
-	$clauses = array();
-
-	$join = '';
-	$where = '';
-	$i = 0;
-	foreach ( $meta_query as $q ) {
-		$meta_key = isset( $q['key'] ) ? trim( $q['key'] ) : '';
-		$meta_value = isset( $q['value'] ) ? $q['value'] : '';
-		$meta_compare = isset( $q['compare'] ) ? strtoupper( $q['compare'] ) : '=';
-		$meta_type = isset( $q['type'] ) ? strtoupper( $q['type'] ) : 'CHAR';
-
-		if ( ! in_array( $meta_compare, array( '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN' ) ) )
-			$meta_compare = '=';
-
-		if ( 'NUMERIC' == $meta_type )
-			$meta_type = 'SIGNED';
-		elseif ( ! in_array( $meta_type, array( 'BINARY', 'CHAR', 'DATE', 'DATETIME', 'DECIMAL', 'SIGNED', 'TIME', 'UNSIGNED' ) ) )
-			$meta_type = 'CHAR';
-
-		if ( empty( $meta_key ) && empty( $meta_value ) )
-			continue;
-
-		$alias = $i ? 'mt' . $i : $meta_table;
-
-		$join .= "\nINNER JOIN $meta_table";
-		$join .= $i ? " AS $alias" : '';
-		$join .= " ON ($primary_table.$primary_id_column = $alias.$meta_id_column)";
-
-		$i++;
-
-		if ( !empty( $meta_key ) )
-			$where .= $wpdb->prepare( " AND $alias.meta_key = %s", $meta_key );
-
-		if ( in_array( $meta_compare, array( 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN' ) ) ) {
-			if ( ! is_array( $meta_value ) )
-				$meta_value = preg_split( '/[,\s]+/', $meta_value );
-		} else {
-			$meta_value = trim( $meta_value );
-		}
-
-		if ( empty( $meta_value ) )
-			continue;
-
-		if ( 'IN' == substr( $meta_compare, -2) ) {
-			$meta_field_types = substr( str_repeat( ',%s', count( $meta_value ) ), 1 );
-			$meta_compare_string = "($meta_field_types)";
-			unset( $meta_field_types );
-		} elseif ( 'BETWEEN' == substr( $meta_compare, -7) ) {
-			$meta_value = array_slice( $meta_value, 0, 2 );
-			$meta_compare_string = '%s AND %s';
-		} elseif ( 'LIKE' == substr( $meta_compare, -4 ) ) {
-			$meta_value = '%' . like_escape( $meta_value ) . '%';
-			$meta_compare_string = '%s';
-		} else {
-			$meta_compare_string = '%s';
-		}
-		$where .= $wpdb->prepare( " AND CAST($alias.meta_value AS {$meta_type}) {$meta_compare} {$meta_compare_string}", $meta_value );
-
-		unset( $meta_compare_string );
-	}
-
-	return compact( 'join', 'where' );
+	return get_meta_sql( $meta_query, 'p2p', $wpdb->p2p, 'p2p_id' );
 }
 

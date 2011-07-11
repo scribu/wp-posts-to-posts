@@ -151,6 +151,14 @@ function _p2p_each_connected( $direction, $query, $search ) {
 	foreach ( array_keys( P2P_Query::$qv_map ) as $qv )
 		unset( $search[ $qv ] );
 
+	// ignore pagination
+	$search['nopaging'] = true;
+	foreach ( array( 'showposts', 'posts_per_page', 'posts_per_archive_page' ) as $disabled_qv ) {
+		if ( isset( $search[ $disabled_qv ] ) ) {
+			trigger_error( "Can't use '$disabled_qv' in an inner query", E_USER_WARNING );
+		}
+	}
+
 	$map = array(
 		'any' => 'connected',
 		'from' => 'connected_to',
