@@ -79,13 +79,12 @@ class P2P_Box_Multiple extends P2P_Box {
 
 		$data = array(
 			'search-key' => 'p2p_search_' . $this->to,
-			'create' => __( 'Create connections:', 'posts-to-posts' ),
+			'create-label' => __( 'Create connections:', 'posts-to-posts' ),
 			'placeholder' => $to_cpt->labels->search_items,
 
-			'prev' =>  __( 'Previous', 'p2p-textdomain' ),
-			'next' =>  __( 'Next', 'p2p-textdomain' ),
-			'of' => __( 'of', 'p2p-textdomain' ),
-			'recent' => __( 'Recent', 'p2p-textdomain' ),
+			'prev-label' =>  __( 'Previous', 'p2p-textdomain' ),
+			'next-label' =>  __( 'Next', 'p2p-textdomain' ),
+			'of-label' => __( 'of', 'p2p-textdomain' ),
 		);
 
 		if ( empty( $connected_ids ) )
