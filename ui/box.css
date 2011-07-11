@@ -149,7 +149,7 @@ th.p2p-col-delete a {
 
 .p2p-navigation {
 	clear: both;
-	padding: 7px;
+	overflow: hidden;
 }
 
 .p2p-navigation .button.inactive, .p2p-navigation .button.inactive:hover {
