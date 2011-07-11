@@ -93,7 +93,7 @@ class P2P_Box_Multiple extends P2P_Box {
 
 		foreach ( $this->columns as $key => $title ) {
 			$data['thead'][] = array(
-				'class' => "p2p-col-$key",
+				'column' => $key,
 				'title' => $title
 			);
 		}
@@ -157,7 +157,7 @@ class P2P_Box_Multiple extends P2P_Box {
 			}
 
 			$data['columns'][] = array(
-				'class' => "p2p-col-$key",
+				'column' => $key,
 				'content' => $value
 			);
 		}
@@ -179,7 +179,7 @@ class P2P_Box_Multiple extends P2P_Box {
 
 			foreach ( array( 'create', 'title' ) as $key ) {
 				$data['columns'][] = array(
-					'class' => "p2p-col-$key",
+					'column' => $key,
 					'content' => call_user_func( array( $this, "column_$key" ), $post->ID )
 				);
 			}
