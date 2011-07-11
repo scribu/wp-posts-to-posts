@@ -80,10 +80,6 @@ class P2P_Box_Multiple extends P2P_Box {
 		$data = array(
 			'create-label' => __( 'Create connections:', 'posts-to-posts' ),
 			'placeholder' => $to_cpt->labels->search_items,
-
-			'prev-label' =>  __( 'Previous', 'p2p-textdomain' ),
-			'next-label' =>  __( 'Next', 'p2p-textdomain' ),
-			'of-label' => __( 'of', 'p2p-textdomain' ),
 		);
 
 		if ( empty( $connected_ids ) )
@@ -163,29 +159,46 @@ class P2P_Box_Multiple extends P2P_Box {
 		return self::mustache_render( 'box-row.html', $data );
 	}
 
-	private static function mustache_render( $file, $data ) {
-		$template = file_get_contents( dirname(__FILE__) . '/templates/' . $file );
+	private static function mustache_render( $file, $data, $partials = array() ) {
+		$partial_data = array();
+		foreach ( $partials as $partial ) {
+			$partial_data[$partial] = self::load_template( $partial . '.html' );
+		}
+
 		$m = new Mustache;
-		return $m->render( $template, $data );
+
+		return $m->render( self::load_template( $file ), $data, $partial_data );
 	}
 
-	public function result_rows( $posts ) {
-		$out = '';
+	private function load_template( $file ) {
+		return file_get_contents( dirname(__FILE__) . '/templates/' . $file );
+	}
 
-		foreach ( $posts as $post ) {
-			$data = array();
+	public function post_rows( $query ) {
+		$data = array(
+			'prev-label' =>  __( 'Previous', 'p2p-textdomain' ),
+			'next-label' =>  __( 'Next', 'p2p-textdomain' ),
+			'of-label' => __( 'of', 'p2p-textdomain' ),
+		);
+
+		foreach ( $query->posts as $post ) {
+			$row = array();
 
 			foreach ( array( 'create', 'title' ) as $key ) {
-				$data['columns'][] = array(
+				$row['columns'][] = array(
 					'column' => $key,
 					'content' => call_user_func( array( $this, "column_$key" ), $post->ID )
 				);
 			}
 
-			$out .= self::mustache_render( 'box-row.html', $data );
+			$data['rows'][] = $row;
 		}
 
-		return $out;
+		if ( $query->max_num_pages > 1 ) {
+			$data['navigation'] = array(true);
+		}
+
+		return self::mustache_render( 'post-rows.html', $data, array( 'box-row' ) );
 	}
 
 	protected function column_title( $post_id ) {

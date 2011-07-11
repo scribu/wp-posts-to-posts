@@ -1,0 +1,17 @@
+<table class="p2p-results">
+	<tbody>
+		{{#rows}}
+			{{>box-row}}
+		{{/rows}}
+	</tbody>
+</table>
+
+{{#navigation}}
+<div class="p2p-navigation">
+	<div class="p2p-nav">
+		<div class="p2p-prev button" title="{{prev-label}}">&lsaquo;</div>
+		<div><span class="p2p-current"></span> {{of-label}} <span class="p2p-total"></span></div>
+		<div class="p2p-next button" title="{{next-label}}">&rsaquo;</div>
+	</div>
+</div>
+{{/navigation}}

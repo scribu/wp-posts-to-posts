@@ -131,8 +131,7 @@ class P2P_Connection_Types {
 			);
 		} else {
 			$results = array(
-				'rows' => $box->result_rows( $query->posts ),
-				'pages' => $query->max_num_pages
+				'rows' => $box->post_rows( $query ),
 			);
 		}
 
