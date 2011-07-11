@@ -28,7 +28,6 @@ $('.p2p-create-connections').each(function() {
 		$addNew = $(this),
 		$metabox = $addNew.closest('.inside'),
 		$connections = $metabox.find('.p2p-connections'),
-		$results = $metabox.find('.p2p-results'),
 		$searchInput = $metabox.find('.p2p-search :text'),
 		$pagination = $metabox.find('.p2p-nav'),
 		base_data = {
@@ -156,39 +155,15 @@ $('.p2p-create-connections').each(function() {
 			$spinner.remove();
 			current_page = new_page;
 
+			$metabox.find('.p2p-results, .p2p-navigation').remove();
 			$metabox.find('.p2p-search').find('.p2p-notice').remove();
-
-			$pagination.hide();
 
 			if ( 'undefined' === typeof response.rows ) {
 				$metabox.find('.p2p-search').append('<p class="p2p-notice">' + response.msg + '</p>');
-				$results.hide()
-					.find('tbody').html('');
 			} else {
-				$results.show()
-					.find('tbody').html(response.rows);
+				$searchInput.after(response.rows);
 
 				total_pages = response.pages;
-
-				// update pagination
-				if ( total_pages > 1 ) {
-					$pagination.show();
-				}
-
-				if ( 1 === current_page ) {
-					$metabox.find('.p2p-prev').addClass('inactive');
-				} else {
-					$metabox.find('.p2p-prev').removeClass('inactive');
-				}
-
-				if ( total_pages === current_page ) {
-					$metabox.find('.p2p-next').addClass('inactive');
-				} else {
-					$metabox.find('.p2p-next').removeClass('inactive');
-				}
-
-				$metabox.find('.p2p-current').html(current_page);
-				$metabox.find('.p2p-total').html(total_pages);
 
 				if ( undefined !== callback )
 					callback();

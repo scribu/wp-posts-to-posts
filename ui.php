@@ -132,6 +132,7 @@ class P2P_Connection_Types {
 		} else {
 			$results = array(
 				'rows' => $box->post_rows( $query ),
+				'pages' => $query->max_num_pages
 			);
 		}
 

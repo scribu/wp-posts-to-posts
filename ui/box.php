@@ -1,6 +1,7 @@
 <?php
 
 class P2P_Box_Multiple extends P2P_Box {
+	const POSTS_PER_PAGE = 5;
 
 	function setup() {
 		if ( !class_exists( 'Mustache' ) )
@@ -175,11 +176,7 @@ class P2P_Box_Multiple extends P2P_Box {
 	}
 
 	public function post_rows( $query ) {
-		$data = array(
-			'prev-label' =>  __( 'Previous', 'p2p-textdomain' ),
-			'next-label' =>  __( 'Next', 'p2p-textdomain' ),
-			'of-label' => __( 'of', 'p2p-textdomain' ),
-		);
+		$data = array();
 
 		foreach ( $query->posts as $post ) {
 			$row = array();
@@ -194,8 +191,21 @@ class P2P_Box_Multiple extends P2P_Box {
 			$data['rows'][] = $row;
 		}
 
-		if ( $query->max_num_pages > 1 ) {
-			$data['navigation'] = array(true);
+		$current_page = max( 1, $query->get('paged') );
+		$total_pages = $query->max_num_pages;
+
+		if ( $total_pages > 1 ) {
+			$data['navigation'] = array(
+				'current-page' => $current_page,
+				'total-pages' => $total_pages,
+
+				'prev-inactive' => ( 1 == $current_page ) ? 'inactive' : '',
+				'next-inactive' => ( $total_pages == $current_page ) ? 'inactive' : '',
+
+				'prev-label' =>  __( 'Previous', 'p2p-textdomain' ),
+				'next-label' =>  __( 'Next', 'p2p-textdomain' ),
+				'of-label' => __( 'of', 'p2p-textdomain' ),
+			);
 		}
 
 		return self::mustache_render( 'post-rows.html', $data, array( 'box-row' ) );
@@ -271,7 +281,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		$args = array_merge( $args, array(
 			'post_type' => $this->to,
 			'post_status' => 'any',
-			'posts_per_page' => 5,
+			'posts_per_page' => self::POSTS_PER_PAGE,
 			'suppress_filters' => false,
 			'update_post_term_cache' => false,
 			'update_post_meta_cache' => false

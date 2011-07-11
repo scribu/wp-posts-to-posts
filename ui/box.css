@@ -39,7 +39,7 @@
 }
 
 .p2p-results {
-	display: none;
+	margin-top: 7px;
 }
 
 .p2p-results td,
@@ -165,11 +165,7 @@ th.p2p-col-delete a {
 	margin: 3px 6px 0;
 }
 
-.p2p-nav {
-	display: none;
-}
-
-.p2p-nav > * {
+.p2p-navigation > * {
 	float: left;
 	line-height: 13px;
 	padding-top: 3px;
