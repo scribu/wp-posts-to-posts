@@ -175,14 +175,16 @@ class P2P_Box_Multiple extends P2P_Box {
 		$out = '';
 
 		foreach ( $posts as $post ) {
-			$out .= '<tr>';
+			$data = array();
 
 			foreach ( array( 'create', 'title' ) as $key ) {
-				$method = "column_$key";
-				$out .= html( 'td', array( 'class' => "p2p-col-$key" ), $this->$method( $post->ID ) );
+				$data['columns'][] = array(
+					'class' => "p2p-col-$key",
+					'content' => call_user_func( array( $this, "column_$key" ), $post->ID )
+				);
 			}
 
-			$out .= '</tr>';
+			$out .= self::mustache_render( 'box-row.html', $data );
 		}
 
 		return $out;
