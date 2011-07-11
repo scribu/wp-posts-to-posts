@@ -130,13 +130,8 @@ class P2P_Connection_Types {
 				'msg' => get_post_type_object( $box->to )->labels->not_found,
 			);
 		} else {
-			ob_start();
-			foreach ( $query->posts as $post ) {
-				$box->results_row( $post );
-			}
-
 			$results = array(
-				'rows' => ob_get_clean(),
+				'rows' => $box->result_rows( $query->posts ),
 				'pages' => $query->max_num_pages
 			);
 		}

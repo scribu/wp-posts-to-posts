@@ -171,15 +171,21 @@ class P2P_Box_Multiple extends P2P_Box {
 		return $m->render( $template, $data );
 	}
 
-	public function results_row( $post ) {
-		echo '<tr>';
+	public function result_rows( $posts ) {
+		$out = '';
 
-		foreach ( array( 'create', 'title' ) as $key ) {
-			$method = "column_$key";
-			echo html( 'td', array( 'class' => "p2p-col-$key" ), $this->$method( $post->ID ) );
+		foreach ( $posts as $post ) {
+			$out .= '<tr>';
+
+			foreach ( array( 'create', 'title' ) as $key ) {
+				$method = "column_$key";
+				$out .= html( 'td', array( 'class' => "p2p-col-$key" ), $this->$method( $post->ID ) );
+			}
+
+			$out .= '</tr>';
 		}
 
-		echo '</tr>';
+		return $out;
 	}
 
 	protected function column_title( $post_id ) {
