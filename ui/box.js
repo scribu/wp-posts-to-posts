@@ -41,23 +41,6 @@ $('.p2p-create-connections').each(function() {
 			.removeClass('ajax-loading')
 			.addClass('waiting');
 
-	// Tabs
-	$metabox.delegate('.wp-tab-bar li', 'click', function() {
-		var $tab = $(this);
-
-		// Set active tab
-		$metabox.find('.wp-tab-bar li').removeClass('wp-tab-active');
-		$tab.addClass('wp-tab-active');
-
-		// Set active panel
-		$metabox.find('.tabs-panel').hide();
-		$metabox.find( $tab.attr('data-ref') )
-			.show()
-			.find(':text').focus();
-
-		return false;
-	});
-
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
 		if ( !confirm(P2PAdmin_I18n.deleteConfirmMessage) )
@@ -137,6 +120,23 @@ $('.p2p-create-connections').each(function() {
 		return false;
 	});
 
+	// Tabs
+	$metabox.delegate('.wp-tab-bar li', 'click', function() {
+		var $tab = $(this);
+
+		// Set active tab
+		$metabox.find('.wp-tab-bar li').removeClass('wp-tab-active');
+		$tab.addClass('wp-tab-active');
+
+		// Set active panel
+		$metabox.find('.tabs-panel').hide();
+		$metabox.find( $tab.attr('data-ref') )
+			.show()
+			.find(':text').focus();
+
+		return false;
+	});
+
 	// Pagination
 	var current_page = 1, total_pages = 0;
 
@@ -196,25 +196,7 @@ $('.p2p-create-connections').each(function() {
 		});
 	}
 
-	// Delegate recent
-	$metabox.find('.p2p-recent').click(function() {
-		var $button = $(this);
-
-		if ( $button.hasClass('inactive') )
-			return false;
-
-		$metabox.find('.p2p-search :text')
-			.val('')
-			.blur();	// so that placeholder is shown again in IE
-
-		$button.addClass('inactive');
-		find_posts(1, 'recent', function() {
-			$button.removeClass('inactive');
-		});
-
-		return false;
-	});
-
+	// Post creation
 	$metabox.delegate('.button', 'click', function() {
 		var $button = $(this);
 
