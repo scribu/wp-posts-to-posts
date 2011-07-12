@@ -23,7 +23,7 @@ if (!jQuery('<input placeholder="1" />')[0].placeholder) {
 	});
 }
 
-$('.p2p-create-connections').each(function() {
+$('.p2p-search-tab').each(function() {
 	var
 		$addNew = $(this),
 		$metabox = $addNew.closest('.inside'),

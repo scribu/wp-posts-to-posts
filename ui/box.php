@@ -109,7 +109,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		$data['tbody'] = $tbody;
 
 		$data['tabs'][] = array(
-			'ref' => '.p2p-create-connections',
+			'ref' => '.p2p-search-tab',
 			'text' => __( 'Search', 'p2p-textdomain' ),
 			'is-active' => array(true)
 		);
