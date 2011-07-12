@@ -114,41 +114,19 @@ class P2P_Connection_Types {
 	}
 
 	function wp_ajax_p2p_search() {
-		add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
-
 		$box = self::ajax_make_box();
 
-		$args = array(
-			's' => $_GET['s'],
-			'paged' => $_GET['paged']
-		);
+		$rows = $box->handle_search( $_GET['post_id'], $_GET['paged'], $_GET['s'] );
 
-		$query = new WP_Query( $box->get_search_args( $args, $_GET['post_id'] ) );
-
-		if ( !$query->have_posts() ) {
+		if ( $rows ) {
+			$results = compact( 'rows' );
+		} else {
 			$results = array(
 				'msg' => get_post_type_object( $box->to )->labels->not_found,
 			);
-		} else {
-			$results = array(
-				'rows' => $box->post_rows( $query ),
-			);
 		}
 
-		echo json_encode( $results );
-
-		die;
-	}
-
-	function _search_by_title( $sql, $wp_query ) {
-		remove_filter( current_filter(), array( __CLASS__, __FUNCTION__ ) );
-
-		if ( $wp_query->is_search ) {
-			list( $sql ) = explode( ' OR ', $sql, 2 );
-			return $sql . '))';
-		}
-
-		return $sql;
+		die( json_encode( $results ) );
 	}
 
 	private static function ajax_make_box() {

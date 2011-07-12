@@ -81,10 +81,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		$data = array(
 			'create-label' => __( 'Create connections:', 'posts-to-posts' ),
 			'placeholder' => $to_cpt->labels->search_items,
-			'recent-posts' => $this->post_rows( new WP_Query( array(
-				'posts_per_page' => self::POSTS_PER_PAGE,
-				'post_type' => $this->to
-			) ) )
+			'recent-posts' => $this->handle_search( $post_id )
 		);
 
 		if ( empty( $connected_ids ) )
@@ -179,7 +176,43 @@ class P2P_Box_Multiple extends P2P_Box {
 		return file_get_contents( dirname(__FILE__) . '/templates/' . $file );
 	}
 
-	public function post_rows( $query ) {
+	public function handle_search( $post_id, $page = 1, $search = '' ) {
+		$args = array(
+			'paged' => $page,
+			'post_type' => $this->to,
+			'post_status' => 'any',
+			'posts_per_page' => self::POSTS_PER_PAGE,
+			'suppress_filters' => false,
+			'update_post_term_cache' => false,
+			'update_post_meta_cache' => false
+		);
+
+		if ( $search ) {
+			add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
+			$args['s'] = $search;
+		}
+
+		if ( $this->prevent_duplicates )
+			$args['post__not_in'] = p2p_get_connected( $post_id, $this->direction );
+
+		$query = new WP_Query( $args );
+
+		if ( !$query->have_posts() )
+			return false;
+
+		return $this->post_rows( $query );
+	}
+
+	function _search_by_title( $sql, $wp_query ) {
+		if ( $wp_query->is_search ) {
+			list( $sql ) = explode( ' OR ', $sql, 2 );
+			return $sql . '))';
+		}
+
+		return $sql;
+	}
+
+	protected function post_rows( $query ) {
 		$data = array();
 
 		foreach ( $query->posts as $post ) {
@@ -279,38 +312,6 @@ class P2P_Box_Multiple extends P2P_Box {
 		$post_ids = wp_list_pluck( get_posts($args), 'ID' );
 
 		return array_intersect( $connected_posts, $post_ids );	// to preserve p2p_id keys
-	}
-
-	function get_search_args( $args, $post_id ) {
-		$args = array_merge( $args, array(
-			'post_type' => $this->to,
-			'post_status' => 'any',
-			'posts_per_page' => self::POSTS_PER_PAGE,
-			'suppress_filters' => false,
-			'update_post_term_cache' => false,
-			'update_post_meta_cache' => false
-		) );
-
-		if ( $this->prevent_duplicates )
-			$args['post__not_in'] = p2p_get_connected( $post_id, $this->direction );
-
-		return $args;
-	}
-
-	function get_recent_args( $post_id ) {
-		$args = array(
-			'numberposts' => 10,
-			'orderby' => 'post_date',
-			'order' => 'DESC',
-			'post_type' => $this->to,
-			'post_status' => 'publish',
-			'suppress_filters' => false //true
-		);
-
-		if ( $this->prevent_duplicates )
-			$args['post__not_in'] = p2p_get_connected( $post_id, $this->direction );
-
-		return $args;
 	}
 }
 
