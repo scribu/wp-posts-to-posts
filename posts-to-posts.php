@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Posts 2 Posts
-Version: 0.8-alpha2
+Version: 0.8-beta
 Plugin Author: scribu
 Description: Create many-to-many relationships between all types of posts
 Author URI: http://scribu.net/
@@ -10,7 +10,7 @@ Text Domain: posts-to-posts
 Domain Path: /lang
 
 
-Copyright (C) 2010 Cristi Burcă (scribu@gmail.com)
+Copyright (C) 2010-2011 Cristi Burcă (scribu@gmail.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-define( 'P2P_PLUGIN_VERSION', '0.8-alpha2' );
+define( 'P2P_PLUGIN_VERSION', '0.8-beta' );
 
 require dirname( __FILE__ ) . '/scb/load.php';
 
