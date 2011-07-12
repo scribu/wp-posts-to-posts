@@ -137,19 +137,21 @@ $('.p2p-create-connections').each(function() {
 	});
 
 	// Pagination
-	var current_page = 1, total_pages = 0;
+	var current_page = 1, total_pages = $metabox.find('.p2p-total').text();
 
 	function find_posts(new_page, action, callback) {
 		var data = $.extend( base_data, {
 			action: 'p2p_search',
-			s: $searchInput.val(),
-			paged: new_page,
-			post_id: $('#post_ID').val()
+			post_id: $('#post_ID').val(),
+			paged: new_page
 		} );
 
-		new_page = new_page ? ( new_page > total_pages ? current_page : new_page ) : current_page;
+		if ( 'search' == action ) {
+			data.s = $searchInput.val();
+			$spinner.insertAfter($searchInput).show();
+		}
 
-		$spinner.insertAfter( $searchInput ).show();
+		new_page = new_page ? ( new_page > total_pages ? current_page : new_page ) : current_page;
 
 		$.getJSON(ajaxurl, data, function(response) {
 			$spinner.remove();
@@ -163,7 +165,7 @@ $('.p2p-create-connections').each(function() {
 			} else {
 				$searchInput.after(response.rows);
 
-				total_pages = response.pages;
+				total_pages = $metabox.find('.p2p-total').text();
 
 				if ( undefined !== callback )
 					callback();
