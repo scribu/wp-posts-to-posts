@@ -23,16 +23,15 @@ if (!jQuery('<input placeholder="1" />')[0].placeholder) {
 	});
 }
 
-$('.p2p-search-tab').each(function() {
+$('.p2p-box').each(function() {
 	var
-		$addNew = $(this),
-		$metabox = $addNew.closest('.inside'),
+		$metabox = $(this),
 		$connections = $metabox.find('.p2p-connections'),
 		$searchInput = $metabox.find('.p2p-search :text'),
 		$pagination = $metabox.find('.p2p-nav'),
 		base_data = {
-			box_id: $addNew.attr('data-box_id'),
-			direction: $addNew.attr('data-direction')
+			box_id: $metabox.attr('data-box_id'),
+			direction: $metabox.attr('data-direction')
 		},
 		$spinner = $('#publishing-action .ajax-loading')
 			.clone()
@@ -106,7 +105,7 @@ $('.p2p-search-tab').each(function() {
 			$connections.show()
 				.find('tbody').append(response);
 
-			if ( $addNew.attr('data-prevent_duplicates') ) {
+			if ( $metabox.attr('data-prevent_duplicates') ) {
 				$td.closest('tr').remove();
 
 				if ( !$results.find('tbody tr').length )
