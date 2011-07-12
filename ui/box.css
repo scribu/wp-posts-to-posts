@@ -2,10 +2,7 @@
 	color: #AAA;
 }
 
-.p2p-connections,
-.p2p-tab-search,
-.p2p-tab-create-post,
-.p2p-results {
+.p2p-connections {
 	margin-bottom: 8px;
 }
 
@@ -38,8 +35,10 @@
 	border-width: 1px;
 }
 
-.p2p-results {
-	margin-top: 7px;
+.p2p-search + .p2p-results,
+.p2p-results + .p2p-navigation,
+.p2p-tab-create-post .button {
+	margin-top: 8px;
 }
 
 .p2p-results td,
@@ -136,13 +135,9 @@ th.p2p-col-delete a {
 	width: 94%;
 }
 
-.p2p-notice {
-	margin-left: 5px;
-}
-
 #side-sortables .p2p-notice {
 	display: block;
-	margin-top: 10px;
+	margin-top: 8px;
 }
 
 /* Pagination */

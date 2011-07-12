@@ -185,11 +185,10 @@ $('.p2p-box').each(function() {
 		update_rows: function(response) {
 			$spinner.remove();
 
-			this.tab.find('.p2p-results, .p2p-navigation').remove();
-			this.tab.find('.p2p-search').find('.p2p-notice').remove();
+			this.tab.find('.p2p-results, .p2p-navigation, .p2p-notice').remove();
 
 			if ( 'undefined' === typeof response.rows ) {
-				this.tab.find('.p2p-search').append('<p class="p2p-notice">' + response.msg + '</p>');
+				this.tab.append( $('<div class="p2p-notice">').html(response.msg) );
 			} else {
 				this.tab.append(response.rows);
 
