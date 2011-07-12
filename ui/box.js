@@ -222,6 +222,8 @@ $('.p2p-box').each(function() {
 
 				searchTab.data.s = searchStr;
 
+				$spinner.insertAfter($searchInput).show();
+
 				searchTab.find_posts(1);
 			}, 400);
 		});
