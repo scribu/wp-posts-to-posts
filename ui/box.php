@@ -115,7 +115,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		);
 
 		$data['tabs'][] = array(
-			'ref' => '.p2p-recent',
+			'ref' => '.p2p-recent-tab',
 			'text' => __( 'Recent', 'p2p-textdomain' ),
 		);
 
