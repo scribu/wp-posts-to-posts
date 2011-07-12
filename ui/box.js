@@ -27,7 +27,6 @@ $('.p2p-box').each(function() {
 	var
 		$metabox = $(this),
 		$connections = $metabox.find('.p2p-connections'),
-		$searchInput = $metabox.find('.p2p-search :text'),
 		$spinner = $('#publishing-action .ajax-loading')
 			.clone()
 			.removeAttr('id')
@@ -201,7 +200,7 @@ $('.p2p-box').each(function() {
 	var recentTab = new PostsTab('.p2p-tab-recent');
 
 	// Search posts
-	var delayed;
+	var delayed, $searchInput = $metabox.find('.p2p-tab-search :text');
 
 	$searchInput
 		.keypress(function (ev) {
@@ -227,17 +226,20 @@ $('.p2p-box').each(function() {
 		});
 
 	// Post creation
-	$metabox.find('.p2p-tab-create-post').delegate('.button', 'click', function () {
+	var
+		$createButton = $metabox.find('.p2p-tab-create-post .button'),
+		$createInput = $metabox.find('.p2p-tab-create-post :text');
+
+	$createButton.click(function () {
 		var $button = $(this);
 
 		if ( $button.hasClass('inactive') )
 			return false;
 
-		var $titleInput = $metabox.find('.p2p-tab-create-post :text');
-		var title = $titleInput.val();
+		var title = $createInput.val();
 
 		if ( '' === title ) {
-			$titleInput.focus();
+			$createInput.focus();
 			return false;
 		}
 
@@ -260,6 +262,14 @@ $('.p2p-box').each(function() {
 		});
 
 		return false;
+	});
+
+	$createInput.keypress(function (ev) {
+		if ( 13 === ev.keyCode ) {
+			$createButton.click();
+
+			return false;
+		}
 	});
 });
 });
