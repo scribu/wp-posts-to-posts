@@ -123,7 +123,6 @@ class P2P_Box_Multiple extends P2P_Box {
 			);
 
 			$data['create-post'] = array(
-				'key' => 'p2p_new_title_' . $this->to,
 				'title' => $to_cpt->labels->add_new_item
 			);
 		}

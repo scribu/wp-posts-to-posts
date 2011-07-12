@@ -227,15 +227,17 @@ $('.p2p-box').each(function() {
 		});
 
 	// Post creation
-	$('.p2p-tab-create-post').delegate('.button', 'click', function () {
+	$metabox.find('.p2p-tab-create-post').delegate('.button', 'click', function () {
 		var $button = $(this);
 
 		if ( $button.hasClass('inactive') )
 			return false;
 
-		var title = $metabox.find('.p2p-create-post :text').val();
+		var $titleInput = $metabox.find('.p2p-tab-create-post :text');
+		var title = $titleInput.val();
+
 		if ( '' === title ) {
-			$metabox.find('.p2p-create-post :text').focus();
+			$titleInput.focus();
 			return false;
 		}
 
