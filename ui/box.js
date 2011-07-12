@@ -215,11 +215,13 @@ $('.p2p-box').each(function() {
 			}
 
 			delayed = setTimeout(function () {
-				if ( $searchInput.val() === searchTab.data.s ) {
+				var searchStr = $searchInput.val();
+
+				if ( '' == searchStr || searchStr === searchTab.data.s ) {
 					return;
 				}
 
-				searchTab.data.s = $searchInput.val();
+				searchTab.data.s = searchStr;
 
 				searchTab.find_posts(1);
 			}, 400);
