@@ -152,6 +152,7 @@ $('.p2p-box').each(function() {
 	}
 
 	$.extend(PostsTab.prototype, {
+
 		init_pagination_data: function() {
 		      this.current_page = this.tab.find('.p2p-current').text() || 1;
 		      this.total_pages = this.tab.find('.p2p-total').text() || 1;
@@ -256,8 +257,8 @@ $('.p2p-box').each(function() {
 			$connections.show()
 				.find('tbody').append(response);
 
-			$metabox.find('.p2p-create-post :text').val('');
-			$metabox.find('.p2p-topost-adder-toggle').click();
+			$createInput.val('');
+
 			$button.removeClass('inactive');
 		});
 
