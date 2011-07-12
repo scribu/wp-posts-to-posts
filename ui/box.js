@@ -28,25 +28,28 @@ $('.p2p-box').each(function() {
 		$metabox = $(this),
 		$connections = $metabox.find('.p2p-connections'),
 		$searchInput = $metabox.find('.p2p-search :text'),
-		$pagination = $metabox.find('.p2p-nav'),
-		base_data = {
-			box_id: $metabox.attr('data-box_id'),
-			direction: $metabox.attr('data-direction')
-		},
 		$spinner = $('#publishing-action .ajax-loading')
 			.clone()
 			.removeAttr('id')
 			.removeClass('ajax-loading')
 			.addClass('waiting');
 
+	function get_base_data() {
+		return {
+			box_id: $metabox.attr('data-box_id'),
+			direction: $metabox.attr('data-direction')
+		};
+	}
+
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
 		if ( !confirm(P2PAdmin_I18n.deleteConfirmMessage) )
 			return false;
 
-		var $self = $(this),
+		var
+			$self = $(this),
 			$td = $self.closest('td'),
-			data = $.extend( base_data, {
+			data = $.extend( get_base_data(), {
 				action: 'p2p_connections',
 				subaction: 'clear_connections',
 				post_id: $('#post_ID').val()
@@ -58,7 +61,7 @@ $('.p2p-box').each(function() {
 			$connections.hide()
 				.find('tbody').html('');
 
-			$td.html( $self );
+			$td.html($self);
 		});
 
 		return false;
@@ -69,7 +72,7 @@ $('.p2p-box').each(function() {
 		var
 			$self = $(this),
 			$td = $self.closest('td'),
-			data = $.extend( base_data, {
+			data = $.extend( get_base_data(), {
 				action: 'p2p_connections',
 				subaction: 'disconnect',
 				p2p_id: $self.attr('data-p2p_id')
@@ -92,7 +95,7 @@ $('.p2p-box').each(function() {
 		var
 			$self = $(this),
 			$td = $self.closest('td'),
-			data = $.extend( base_data, {
+			data = $.extend( get_base_data(), {
 				action: 'p2p_connections',
 				subaction: 'connect',
 				from: $('#post_ID').val(),
@@ -135,45 +138,95 @@ $('.p2p-box').each(function() {
 		return false;
 	});
 
-	// Pagination
-	var current_page = 1, total_pages = $metabox.find('.p2p-total').text();
+	function PostsTab(selector) {
+		this.tab = $metabox.find(selector);
 
-	function find_posts(new_page, action, callback) {
-		var data = $.extend( base_data, {
+		this.init_pagination_data();
+
+		this.tab.delegate('.p2p-prev, .p2p-next', 'click', $.proxy(this, 'change_page'));
+
+		this.data = $.extend( get_base_data(), {
 			action: 'p2p_search',
 			post_id: $('#post_ID').val(),
-			paged: new_page
+			s: ''
 		} );
-
-		if ( 'search' == action ) {
-			data.s = $searchInput.val();
-			$spinner.insertAfter($searchInput).show();
-		}
-
-		new_page = new_page ? ( new_page > total_pages ? current_page : new_page ) : current_page;
-
-		$.getJSON(ajaxurl, data, function(response) {
-			$spinner.remove();
-			current_page = new_page;
-
-			$metabox.find('.p2p-results, .p2p-navigation').remove();
-			$metabox.find('.p2p-search').find('.p2p-notice').remove();
-
-			if ( 'undefined' === typeof response.rows ) {
-				$metabox.find('.p2p-search').append('<p class="p2p-notice">' + response.msg + '</p>');
-			} else {
-				$searchInput.after(response.rows);
-
-				total_pages = $metabox.find('.p2p-total').text();
-
-				if ( undefined !== callback )
-					callback();
-			}
-		});
 	}
 
+	$.extend(PostsTab.prototype, {
+		init_pagination_data: function() {
+		      this.current_page = this.tab.find('.p2p-current').text() || 1;
+		      this.total_pages = this.tab.find('.p2p-total').text() || 1;
+		},
+
+		change_page: function(ev) {
+			var
+				$navButton = $(ev.target),
+				new_page = this.current_page;
+
+			if ( $navButton.hasClass('inactive') )
+				return false;
+
+			if ( $navButton.hasClass('p2p-prev') )
+				new_page--;
+			else
+				new_page++;
+
+			this.find_posts(new_page);
+
+			return false;
+		},
+
+		find_posts: function (new_page) {
+			this.data.paged = new_page ? ( new_page > this.total_pages ? this.current_page : new_page ) : this.current_page;
+
+			$.getJSON(ajaxurl, this.data, $.proxy(this, 'update_rows'));
+		},
+
+		update_rows: function(response) {
+			$spinner.remove();
+
+			this.tab.find('.p2p-results, .p2p-navigation').remove();
+			this.tab.find('.p2p-search').find('.p2p-notice').remove();
+
+			if ( 'undefined' === typeof response.rows ) {
+				this.tab.find('.p2p-search').append('<p class="p2p-notice">' + response.msg + '</p>');
+			} else {
+				this.tab.append(response.rows);
+
+				this.init_pagination_data();
+			}
+		}
+	});
+
+	var searchTab = new PostsTab('.p2p-tab-search');
+	var recentTab = new PostsTab('.p2p-tab-recent');
+
+	// Search posts
+	var delayed;
+
+	$searchInput
+		.keypress(function (ev) {
+			if ( 13 === ev.keyCode )
+				return false;
+		})
+		.keyup(function (ev) {
+			if ( undefined !== delayed ) {
+				clearTimeout(delayed);
+			}
+
+			delayed = setTimeout(function () {
+				if ( $searchInput.val() === searchTab.data.s ) {
+					return;
+				}
+
+				searchTab.data.s = $searchInput.val();
+
+				searchTab.find_posts(1);
+			}, 400);
+		});
+
 	// Post creation
-	$metabox.delegate('.button', 'click', function() {
+	$('.p2p-tab-create-post').delegate('.button', 'click', function () {
 		var $button = $(this);
 
 		if ( $button.hasClass('inactive') )
@@ -187,14 +240,14 @@ $('.p2p-box').each(function() {
 
 		$button.addClass('inactive');
 
-		var data = $.extend( base_data, {
+		var data = $.extend( get_base_data(), {
 			action: 'p2p_connections',
 			subaction: 'create_post',
 			from: $('#post_ID').val(),
 			post_title: title
 		});
 
-		$.post(ajaxurl, data, function(response) {
+		$.post(ajaxurl, data, function (response) {
 			$connections.show()
 				.find('tbody').append(response);
 
@@ -202,51 +255,6 @@ $('.p2p-box').each(function() {
 			$metabox.find('.p2p-topost-adder-toggle').click();
 			$button.removeClass('inactive');
 		});
-
-		return false;
-	});
-
-	// Search posts
-	var delayed, old_value = '';
-
-	$metabox.find('.p2p-search :text')
-		.keypress(function (ev) {
-			if ( 13 === ev.keyCode )
-				return false;
-		})
-		.keyup(function (ev) {
-			if ( undefined !== delayed ) {
-				clearTimeout(delayed);
-			}
-
-			var $self = $(this);
-
-			delayed = setTimeout(function() {
-
-				if ( $self.val() === old_value ) {
-					return;
-				}
-				old_value = $self.val();
-
-				find_posts(1, 'search');
-
-			}, 400);
-		});
-
-	// Pagination
-	$metabox.delegate('.p2p-prev, .p2p-next', 'click', function() {
-		var $self = $(this),
-			new_page = current_page;
-
-		if ( $self.hasClass('inactive') )
-			return false;
-
-		if ( $self.hasClass('p2p-prev') )
-			new_page--;
-		else
-			new_page++;
-
-		find_posts(new_page, 'paginate');
 
 		return false;
 	});
