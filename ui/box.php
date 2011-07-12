@@ -23,7 +23,7 @@ class P2P_Box_Multiple extends P2P_Box {
 	function create_post() {
 		$new_post_id = wp_insert_post( array(
 			'post_title' => $_POST['post_title'],
-			'post_author' => 1,
+			'post_author' => get_current_user_id(),
 			'post_type' => $this->to
 		) );
 
