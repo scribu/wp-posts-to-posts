@@ -106,10 +106,12 @@ $('.p2p-box').each(function() {
 				.find('tbody').append(response);
 
 			if ( $metabox.attr('data-prevent_duplicates') ) {
-				$td.closest('tr').remove();
+				var $table = $td.closest('table');
 
-				if ( !$results.find('tbody tr').length )
-					$results.hide();
+				if ( 1 == $table.find('tbody tr').length )
+					$table.remove();
+				else
+					$td.closest('tr').remove();
 			} else {
 				$td.html( $self );
 			}
