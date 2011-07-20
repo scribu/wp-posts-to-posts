@@ -179,6 +179,7 @@ $('.p2p-box').each(function() {
 		find_posts: function (new_page) {
 			this.data.paged = new_page ? ( new_page > this.total_pages ? this.current_page : new_page ) : this.current_page;
 
+			$spinner.appendTo( this.tab.find('.p2p-navigation') );
 			$.getJSON(ajaxurl, this.data, $.proxy(this, 'update_rows'));
 		},
 

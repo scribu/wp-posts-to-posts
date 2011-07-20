@@ -155,11 +155,6 @@ th.p2p-col-delete a {
 	cursor: default;
 }
 
-.p2p-navigation .waiting {
-	float: right;
-	margin: 3px 6px 0;
-}
-
 .p2p-navigation > * {
 	float: left;
 	line-height: 13px;
