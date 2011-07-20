@@ -178,9 +178,9 @@ class P2P_Test {
 			'post_status' => 'any',
 			'nopaging' => true,
 
-			'p2p_orderby' => 'role',
-			'p2p_order_num' => true,
-			'p2p_order' => 'asc'
+			'connected_orderby' => 'role',
+			'connected_order_num' => true,
+			'connected_order' => 'asc'
 		) );
 
 		// test 'each_*' query vars

@@ -249,20 +249,20 @@ class P2P_Query {
 		}
 
 		// Handle ordering
-		$p2p_orderby = $wp_query->get( 'p2p_orderby' );
-		if ( $p2p_orderby ) {
+		$connected_orderby = $wp_query->get( 'connected_orderby' );
+		if ( $connected_orderby ) {
 			$clauses['join'] .= $wpdb->prepare( "
 				LEFT JOIN $wpdb->p2pmeta ON ($wpdb->p2p.p2p_id = $wpdb->p2pmeta.p2p_id AND $wpdb->p2pmeta.meta_key = %s )
-			", $p2p_orderby );
+			", $connected_orderby );
 
-			$p2p_order = ( 'DESC' == strtoupper( $wp_query->get('p2p_order') ) ) ? 'DESC' : 'ASC';
+			$connected_order = ( 'DESC' == strtoupper( $wp_query->get('connected_order') ) ) ? 'DESC' : 'ASC';
 
 			$field = 'meta_value';
 
-			if ( $wp_query->get('p2p_order_num') )
+			if ( $wp_query->get('connected_order_num') )
 				$field .= '+0';
 
-			$clauses['orderby'] = "$wpdb->p2pmeta.$field $p2p_order";
+			$clauses['orderby'] = "$wpdb->p2pmeta.$field $connected_order";
 		}
 
 		return $clauses;
