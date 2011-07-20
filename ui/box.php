@@ -20,7 +20,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		);
 	}
 
-	function create_post() {
+	public function ajax_create_post() {
 		$new_post_id = wp_insert_post( array(
 			'post_title' => $_POST['post_title'],
 			'post_author' => get_current_user_id(),
@@ -30,7 +30,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		$this->safe_connect( absint( $_POST['from'] ), $new_post_id );
 	}
 
-	function connect() {
+	public function ajax_connect() {
 		$this->safe_connect( absint( $_POST['from'] ), absint( $_POST['to'] ) );
 	}
 
@@ -57,7 +57,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		echo $this->connection_row( $p2p_id, $to );
 	}
 
-	function disconnect() {
+	public function ajax_disconnect() {
 		$p2p_id = absint( $_POST['p2p_id'] );
 
 		p2p_delete_connection( $p2p_id );
@@ -65,7 +65,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		die(1);
 	}
 
-	function clear_connections() {
+	public function ajax_clear_connections() {
 		$post_id = absint( $_POST['post_id'] );
 
 		p2p_disconnect( $post_id, $this->direction );
@@ -175,7 +175,21 @@ class P2P_Box_Multiple extends P2P_Box {
 		return file_get_contents( dirname(__FILE__) . '/templates/' . $file );
 	}
 
-	public function handle_search( $post_id, $page = 1, $search = '' ) {
+	public function ajax_search() {
+		$rows = $this->handle_search( $_GET['post_id'], $_GET['paged'], $_GET['s'] );
+
+		if ( $rows ) {
+			$results = compact( 'rows' );
+		} else {
+			$results = array(
+				'msg' => get_post_type_object( $this->to )->labels->not_found,
+			);
+		}
+
+		die( json_encode( $results ) );
+	}
+
+	protected function handle_search( $post_id, $page = 1, $search = '' ) {
 		$args = array(
 			'paged' => $page,
 			'post_type' => $this->to,

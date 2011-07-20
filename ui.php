@@ -95,32 +95,18 @@ class P2P_Connection_Types {
 		}
 	}
 
-	function wp_ajax_p2p_connections() {
+	function wp_ajax_p2p_box() {
 		$box = self::ajax_make_box();
 
 		$ptype_obj = get_post_type_object( $box->from );
 		if ( !current_user_can( $ptype_obj->cap->edit_posts ) )
 			die(-1);
 
-		$subaction = $_POST['subaction'];
+		$method = 'ajax_' . $_REQUEST['subaction'];
 
-		$box->$subaction();
-	}
+		$box->$method();
 
-	function wp_ajax_p2p_search() {
-		$box = self::ajax_make_box();
-
-		$rows = $box->handle_search( $_GET['post_id'], $_GET['paged'], $_GET['s'] );
-
-		if ( $rows ) {
-			$results = compact( 'rows' );
-		} else {
-			$results = array(
-				'msg' => get_post_type_object( $box->to )->labels->not_found,
-			);
-		}
-
-		die( json_encode( $results ) );
+		die;
 	}
 
 	private static function ajax_make_box() {
