@@ -107,12 +107,6 @@ class P2P_Connection_Types {
 		$box->$subaction();
 	}
 
-	function ajax_disconnect() {
-		$box = self::ajax_make_box();
-
-		$box->disconnect();
-	}
-
 	function wp_ajax_p2p_search() {
 		$box = self::ajax_make_box();
 
