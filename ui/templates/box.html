@@ -17,24 +17,13 @@
 
 	<ul class="wp-tab-bar clearfix">
 		{{#tabs}}
-		<li {{#is-active}}class="wp-tab-active"{{/is-active}} data-ref="{{ref}}"><a href="#">{{text}}</a></li>
+		<li {{#is-active}}class="wp-tab-active"{{/is-active}} data-ref=".p2p-tab-{{tab-id}}"><a href="#">{{tab-title}}</a></li>
 		{{/tabs}}
 	</ul>
 
-	<div class="p2p-tab-search tabs-panel">
-		<div class="p2p-search">
-			<input type="text" name="p2p_search" autocomplete="off" placeholder="{{placeholder}}" />
-		</div>
+	{{#tabs}}
+	<div class="p2p-tab-{{tab-id}} tabs-panel">
+		{{{tab-content}}}
 	</div>
-
-	<div class="p2p-tab-recent tabs-panel">
-		{{{recent-posts}}}
-	</div>
-
-	{{#create-post}}
-	<div class="p2p-tab-create-post tabs-panel">
-		<input type="text" name="p2p_new_title" autocomplete="off" />
-		<input type="button" class="button" value="{{title}}" />
-	</div>
-	{{/create-post}}
+	{{/tabs}}
 </div><!--.p2p-box-->

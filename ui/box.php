@@ -31,8 +31,6 @@ class P2P_Box_Multiple extends P2P_Box {
 
 		$data = array(
 			'create-label' => __( 'Create connections:', 'posts-to-posts' ),
-			'placeholder' => $to_cpt->labels->search_items,
-			'recent-posts' => $this->handle_search( $post_id )
 		);
 
 		if ( empty( $connected_ids ) )
@@ -56,25 +54,35 @@ class P2P_Box_Multiple extends P2P_Box {
 		}
 		$data['tbody'] = $tbody;
 
-		$data['tabs'][] = array(
-			'ref' => '.p2p-tab-search',
-			'text' => __( 'Search', 'p2p-textdomain' ),
-			'is-active' => array(true)
-		);
+		// Search tab
+		$tab_content = self::mustache_render( 'tab-search.html', array(
+			'placeholder' => $to_cpt->labels->search_items,
+		) );
 
 		$data['tabs'][] = array(
-			'ref' => '.p2p-tab-recent',
-			'text' => __( 'Recent', 'p2p-textdomain' ),
+			'tab-id' => 'search',
+			'tab-title' => __( 'Search', 'p2p-textdomain' ),
+			'is-active' => array(true),
+			'tab-content' => $tab_content
 		);
 
+		// Recent tab
+		$data['tabs'][] = array(
+			'tab-id' => 'recent',
+			'tab-title' => __( 'Recent', 'p2p-textdomain' ),
+			'tab-content' => $this->handle_search( $post_id )
+		);
+
+		// Create post tab
 		if ( current_user_can( $to_cpt->cap->edit_posts ) ) {
-			$data['tabs'][] = array(
-				'ref' => '.p2p-tab-create-post',
-				'text' => $to_cpt->labels->new_item
-			);
-
-			$data['create-post'] = array(
+			$tab_content = self::mustache_render( 'tab-create-post.html', array(
 				'title' => $to_cpt->labels->add_new_item
+			) );
+
+			$data['tabs'][] = array(
+				'tab-id' => 'create-post',
+				'tab-title' => $to_cpt->labels->new_item,
+				'tab-content' => $tab_content
 			);
 		}
 
@@ -143,7 +151,7 @@ class P2P_Box_Multiple extends P2P_Box {
 			);
 		}
 
-		return self::mustache_render( 'post-rows.html', $data, array( 'box-row' ) );
+		return self::mustache_render( 'tab-recent.html', $data, array( 'box-row' ) );
 	}
 
 
