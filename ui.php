@@ -3,17 +3,36 @@
 define( 'P2P_BOX_NONCE', 'p2p-box' );
 
 abstract class P2P_Box {
+	public $box_id;
+
 	public $from;
 	public $to;
 
 	protected $reversed;
 	protected $direction;
 
-	protected $box_id;
-
 	abstract function box( $post_id );
 
 	function setup() {}
+
+	function get_box_title() {
+		if ( is_array( $this->title ) ) {
+			$key = $this->reversed ? 'to' : 'from';
+
+			if ( isset( $this->title[ $key ] ) )
+				$title = $this->title[ $key ];
+			else
+				$title = '';
+		} else {
+			$title = $this->title;
+		}
+
+		if ( empty( $title ) ) {
+			$title = sprintf( __( 'Connected %s', 'posts-to-posts' ), get_post_type_object( $this->to )->labels->name );
+		}
+
+		return $title;
+	}
 
 
 // Internal stuff
@@ -35,32 +54,6 @@ abstract class P2P_Box {
 		$this->setup();
 	}
 
-	function _register( $from ) {
-		if ( is_array( $this->title ) ) {
-			$key = $this->reversed ? 'to' : 'from';
-
-			if ( isset( $this->title[ $key ] ) )
-				$title = $this->title[ $key ];
-			else
-				$title = '';
-		} else {
-			$title = $this->title;
-		}
-
-		if ( empty( $title ) ) {
-			$title = sprintf( __( 'Connected %s', 'posts-to-posts' ), get_post_type_object( $this->to )->labels->name );
-		}
-
-		add_meta_box(
-			'p2p-connections-' . $this->box_id,
-			$title,
-			array( $this, '_box' ),
-			$from,
-			$this->context,
-			'default'
-		);
-	}
-
 	function _box( $post ) {
 		$this->box( $post->ID );
 	}
@@ -78,9 +71,17 @@ class P2P_Connection_Types {
 	static function add_meta_boxes( $from ) {
 		foreach ( self::$ctypes as $box_id => $args ) {
 			$box = self::make_box( $box_id, $from );
+			if ( !$box )
+				continue;
 
-			if ( $box )
-				$box->_register( $from );
+			add_meta_box(
+				'p2p-connections-' . $box->box_id,
+				$box->get_box_title(),
+				array( $box, '_box' ),
+				$box->from,
+				$box->context,
+				'default'
+			);
 		}
 	}
 
