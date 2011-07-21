@@ -38,7 +38,7 @@ $('.p2p-box').each(function() {
 			action: 'p2p_box',
 			nonce: P2PAdmin_I18n.nonce,
 			box_id: $metabox.attr('data-box_id'),
-			direction: $metabox.attr('data-direction')
+			post_type: $('#post_type').val()
 		};
 	}
 

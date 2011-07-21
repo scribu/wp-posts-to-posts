@@ -100,7 +100,13 @@ class P2P_Connection_Types {
 	function wp_ajax_p2p_box() {
 		check_ajax_referer( P2P_BOX_NONCE, 'nonce' );
 
-		$box = self::ajax_make_box();
+		$box_id = absint( $_REQUEST['box_id'] );
+		$boxes = self::filter_ctypes( $_REQUEST['post_type'] );
+
+		if ( !isset( $boxes[ $box_id ] ) )
+			die(0);
+
+		$box = $boxes[ $box_id ];
 
 		$ptype_obj = get_post_type_object( $box->from );
 		if ( !current_user_can( $ptype_obj->cap->edit_posts ) )
@@ -109,18 +115,6 @@ class P2P_Connection_Types {
 		$method = 'ajax_' . $_REQUEST['subaction'];
 
 		$box->$method();
-	}
-
-	private static function ajax_make_box() {
-		$box_id = absint( $_REQUEST['box_id'] );
-		$direction = $_REQUEST['direction'];
-
-		if ( !isset( self::$ctypes[ $box_id ] ) )
-			die(0);
-
-		$args = self::$ctypes[ $box_id ];
-
-		return new $args['box']($args, $direction, $box_id);
 	}
 
 	private static function filter_ctypes( $post_type ) {
