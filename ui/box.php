@@ -273,6 +273,15 @@ class P2P_Box_Multiple extends P2P_Box {
 	}
 
 	protected function handle_search( $post_id, $page = 1, $search = '' ) {
+		$query = new WP_Query( $this->get_query_vars( $post_id, $page, $search ) );
+
+		if ( !$query->have_posts() )
+			return false;
+
+		return $this->post_rows( $query );
+	}
+
+	protected function get_query_vars( $post_id, $page, $search ) {
 		$args = array(
 			'paged' => $page,
 			'post_type' => $this->to,
@@ -291,12 +300,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		if ( $this->prevent_duplicates )
 			$args['post__not_in'] = p2p_get_connected( $post_id, $this->direction );
 
-		$query = new WP_Query( $args );
-
-		if ( !$query->have_posts() )
-			return false;
-
-		return $this->post_rows( $query );
+		return $args;
 	}
 
 	function _search_by_title( $sql, $wp_query ) {
