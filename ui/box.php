@@ -55,7 +55,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		if ( !$p2p_id )
 			$p2p_id = P2P_Connections::connect( $args[0], $args[1] );
 
-		echo $this->connection_row( $p2p_id, $to );
+		die( $this->connection_row( $p2p_id, $to ) );
 	}
 
 	public function ajax_disconnect() {

@@ -109,8 +109,6 @@ class P2P_Connection_Types {
 		$method = 'ajax_' . $_REQUEST['subaction'];
 
 		$box->$method();
-
-		die;
 	}
 
 	private static function ajax_make_box() {
