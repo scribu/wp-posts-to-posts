@@ -36,6 +36,7 @@ $('.p2p-box').each(function() {
 	function get_base_data() {
 		return {
 			action: 'p2p_box',
+			nonce: P2PAdmin_I18n.nonce,
 			box_id: $metabox.attr('data-box_id'),
 			direction: $metabox.attr('data-direction')
 		};

@@ -1,5 +1,7 @@
 <?php
 
+define( 'P2P_BOX_NONCE', 'p2p-box' );
+
 abstract class P2P_Box {
 	public $from;
 	public $to;
@@ -96,6 +98,8 @@ class P2P_Connection_Types {
 	}
 
 	function wp_ajax_p2p_box() {
+		check_ajax_referer( P2P_BOX_NONCE, 'nonce' );
+
 		$box = self::ajax_make_box();
 
 		$ptype_obj = get_post_type_object( $box->from );

@@ -10,6 +10,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		wp_enqueue_style( 'p2p-admin', plugins_url( 'box.css', __FILE__ ), array(), P2P_PLUGIN_VERSION );
 		wp_enqueue_script( 'p2p-admin', plugins_url( 'box.js', __FILE__ ), array( 'jquery' ), P2P_PLUGIN_VERSION, true );
 		wp_localize_script( 'p2p-admin', 'P2PAdmin_I18n', array(
+			'nonce' => wp_create_nonce( P2P_BOX_NONCE ),
 			'deleteConfirmMessage' => __( 'Are you sure you want to delete all connections?', 'posts-to-posts' ),
 		) );
 
