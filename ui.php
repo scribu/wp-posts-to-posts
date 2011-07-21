@@ -11,9 +11,11 @@ abstract class P2P_Box {
 	protected $reversed;
 	protected $direction;
 
-	abstract function box( $post_id );
-
+	// Enqueue scripts here
 	function setup() {}
+
+	// This is where the box content goes
+	abstract function render_box( $post_id );
 
 	function get_box_title() {
 		if ( is_array( $this->title ) ) {
@@ -55,7 +57,7 @@ abstract class P2P_Box {
 	}
 
 	function _box( $post ) {
-		$this->box( $post->ID );
+		$this->render_box( $post->ID );
 	}
 }
 

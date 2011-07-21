@@ -74,7 +74,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		die(1);
 	}
 
-	function box( $post_id ) {
+	function render_box( $post_id ) {
 		$connected_ids = $this->get_connected_ids( $post_id );
 
 		$to_cpt = get_post_type_object( $this->to );
