@@ -21,6 +21,7 @@ class P2P_Test {
 				'name' => 'Actors',
 				'singular_name' => 'Actor',
 				'search_items' => 'Search Actors',
+				'new_item' => 'New Actor',
 				'not_found' => 'No actors found.'
 			),
 			'has_archive' => 'actors',
@@ -32,6 +33,7 @@ class P2P_Test {
 				'name' => 'Movies',
 				'singular_name' => 'Movie',
 				'search_items' => 'Search movies',
+				'new_item' => 'New Movie',
 				'not_found' => 'No movies found.',
 			)
 		) );
