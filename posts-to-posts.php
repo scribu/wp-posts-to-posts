@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Posts 2 Posts
-Version: 0.8-beta
+Version: 0.8
 Plugin Author: scribu
 Description: Create many-to-many relationships between all types of posts
 Author URI: http://scribu.net/
@@ -26,7 +26,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-define( 'P2P_PLUGIN_VERSION', '0.8-beta' );
+define( 'P2P_PLUGIN_VERSION', '0.8' );
 
 require dirname( __FILE__ ) . '/scb/load.php';
 
