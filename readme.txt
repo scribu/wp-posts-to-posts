@@ -1,7 +1,7 @@
 === Posts 2 Posts ===
 Contributors: scribu, ciobi
 Tags: cms, custom post types, relationships, many-to-many
-Requires at least: 3.1
+Requires at least: 3.2
 Tested up to: 3.2
 Stable tag: 0.8
 
