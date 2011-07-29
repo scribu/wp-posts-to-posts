@@ -28,10 +28,12 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 define( 'P2P_PLUGIN_VERSION', '0.8' );
 
+define( 'P2P_TEXTDOMAIN', 'posts-to-posts' );
+
 require dirname( __FILE__ ) . '/scb/load.php';
 
 function _p2p_init() {
-	load_plugin_textdomain( 'posts-to-posts', '', dirname( plugin_basename( __FILE__ ) ) . '/lang' );
+	load_plugin_textdomain( P2P_TEXTDOMAIN, '', dirname( plugin_basename( __FILE__ ) ) . '/lang' );
 
 	require_once dirname( __FILE__ ) . '/storage.php';
 	require_once dirname( __FILE__ ) . '/api.php';

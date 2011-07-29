@@ -11,7 +11,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		wp_enqueue_script( 'p2p-admin', plugins_url( 'box.js', __FILE__ ), array( 'jquery' ), P2P_PLUGIN_VERSION, true );
 		wp_localize_script( 'p2p-admin', 'P2PAdmin_I18n', array(
 			'nonce' => wp_create_nonce( P2P_BOX_NONCE ),
-			'deleteConfirmMessage' => __( 'Are you sure you want to delete all connections?', 'posts-to-posts' ),
+			'deleteConfirmMessage' => __( 'Are you sure you want to delete all connections?', P2P_TEXTDOMAIN ),
 		) );
 
 		$this->columns = array_merge(
@@ -30,7 +30,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		$to_cpt = get_post_type_object( $this->to );
 
 		$data = array(
-			'create-label' => __( 'Create connections:', 'posts-to-posts' ),
+			'create-label' => __( 'Create connections:', P2P_TEXTDOMAIN ),
 		);
 
 		if ( empty( $connected_ids ) )
@@ -61,7 +61,7 @@ class P2P_Box_Multiple extends P2P_Box {
 
 		$data['tabs'][] = array(
 			'tab-id' => 'search',
-			'tab-title' => __( 'Search', 'p2p-textdomain' ),
+			'tab-title' => __( 'Search', P2P_TEXTDOMAIN ),
 			'is-active' => array(true),
 			'tab-content' => $tab_content
 		);
@@ -69,7 +69,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		// Recent tab
 		$data['tabs'][] = array(
 			'tab-id' => 'recent',
-			'tab-title' => __( 'Recent', 'p2p-textdomain' ),
+			'tab-title' => __( 'Recent', P2P_TEXTDOMAIN ),
 			'tab-content' => $this->handle_search( $post_id )
 		);
 
@@ -145,9 +145,9 @@ class P2P_Box_Multiple extends P2P_Box {
 				'prev-inactive' => ( 1 == $current_page ) ? 'inactive' : '',
 				'next-inactive' => ( $total_pages == $current_page ) ? 'inactive' : '',
 
-				'prev-label' =>  __( 'Previous', 'p2p-textdomain' ),
-				'next-label' =>  __( 'Next', 'p2p-textdomain' ),
-				'of-label' => __( 'of', 'p2p-textdomain' ),
+				'prev-label' =>  __( 'Previous', P2P_TEXTDOMAIN ),
+				'next-label' =>  __( 'Next', P2P_TEXTDOMAIN ),
+				'of-label' => __( 'of', P2P_TEXTDOMAIN ),
 			);
 		}
 
@@ -179,7 +179,7 @@ class P2P_Box_Multiple extends P2P_Box {
 	protected function column_create( $post_id ) {
 		$data = array(
 			'post_id' => $post_id,
-			'title' => __( 'Create connection', 'posts-to-posts' )
+			'title' => __( 'Create connection', P2P_TEXTDOMAIN )
 		);
 
 		return self::mustache_render( 'column-create.html', $data );
@@ -188,7 +188,7 @@ class P2P_Box_Multiple extends P2P_Box {
 	protected function column_delete( $p2p_id ) {
 		$data = array(
 			'p2p_id' => $p2p_id,
-			'title' => __( 'Delete connection', 'posts-to-posts' )
+			'title' => __( 'Delete connection', P2P_TEXTDOMAIN )
 		);
 
 		return self::mustache_render( 'column-delete.html', $data );
@@ -196,7 +196,7 @@ class P2P_Box_Multiple extends P2P_Box {
 
 	protected function column_delete_all() {
 		$data = array(
-			'title' => __( 'Delete all connections', 'posts-to-posts' )
+			'title' => __( 'Delete all connections', P2P_TEXTDOMAIN )
 		);
 
 		return self::mustache_render( 'column-delete-all.html', $data );
