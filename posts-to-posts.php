@@ -33,7 +33,7 @@ define( 'P2P_TEXTDOMAIN', 'posts-to-posts' );
 require dirname( __FILE__ ) . '/scb/load.php';
 
 function _p2p_init() {
-	load_plugin_textdomain( P2P_TEXTDOMAIN, '', dirname( plugin_basename( __FILE__ ) ) . '/lang' );
+	load_plugin_textdomain( P2P_TEXTDOMAIN, '', basename( dirname( __FILE__ ) ) . '/lang' );
 
 	require_once dirname( __FILE__ ) . '/storage.php';
 	require_once dirname( __FILE__ ) . '/api.php';
