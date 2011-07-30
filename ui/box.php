@@ -102,11 +102,7 @@ class P2P_Box_Multiple extends P2P_Box {
 				break;
 
 			default:
-				$value = html( 'input', array(
-					'type' => 'text',
-					'name' => "p2p_meta[$p2p_id][$key]",
-					'value' => p2p_get_meta( $p2p_id, $key, true )
-				) );
+				$value = $this->column_default( $p2p_id, $key );
 			}
 
 			$data['columns'][] = array(
@@ -202,6 +198,13 @@ class P2P_Box_Multiple extends P2P_Box {
 		return self::mustache_render( 'column-delete-all.html', $data );
 	}
 
+	protected function column_default( $p2p_id, $key ) {
+		return html( 'input', array(
+			'type' => 'text',
+			'name' => "p2p_meta[$p2p_id][$key]",
+			'value' => p2p_get_meta( $p2p_id, $key, true )
+		) );
+	}
 
 	// Ajax handlers
 
