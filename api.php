@@ -7,7 +7,8 @@
  * @param array $args Can be:
  *  - 'from' string|array The first end of the connection.
  *  - 'to' string|array The second end of the connection.
- *  - 'fields' array Additional metadata fields (optional).
+ *  - 'fields' array( key => Title ) Metadata fields editable by the user (optional).
+ *  - 'data' array( key => value ) Metadata fields not editable by the user (optional).
  *  - 'prevent_duplicates' bool Wether to disallow duplicate connections between the same two posts. Default: true.
  *  - 'reciprocal' bool Wether to show the box on both sides of the connection. Default: false.
  *  - 'title' string The box's title. Default: 'Connected {$post_type}s'
@@ -26,6 +27,7 @@ function p2p_register_connection_type( $args ) {
 		'from' => '',
 		'to' => '',
 		'fields' => array(),
+		'data' => array(),
 		'prevent_duplicates' => true,
 		'reciprocal' => false,
 		'title' => '',

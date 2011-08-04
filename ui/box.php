@@ -233,14 +233,15 @@ class P2P_Box_Multiple extends P2P_Box {
 
 		$p2p_id = false;
 		if ( $this->prevent_duplicates ) {
-			$p2p_ids = P2P_Connections::get( $args[0], $args[1] );
+			$p2p_ids = P2P_Connections::get( $args[0], $args[1], $this->data );
 
 			if ( !empty( $p2p_ids ) )
 				$p2p_id = $p2p_ids[0];
 		}
 
-		if ( !$p2p_id )
-			$p2p_id = P2P_Connections::connect( $args[0], $args[1] );
+		if ( !$p2p_id ) {
+			$p2p_id = P2P_Connections::connect( $args[0], $args[1], $this->data );
+		}
 
 		die( $this->connection_row( $p2p_id, $to ) );
 	}
@@ -301,7 +302,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		}
 
 		if ( $this->prevent_duplicates )
-			$args['post__not_in'] = p2p_get_connected( $post_id, $this->direction );
+			$args['post__not_in'] = $this->get_connected( $post_id );
 
 		return $args;
 	}
@@ -319,7 +320,7 @@ class P2P_Box_Multiple extends P2P_Box {
 	// Helpers
 
 	protected function get_connected_ids( $post_id ) {
-		$connected_posts = p2p_get_connected( $post_id, $this->direction );
+		$connected_posts = $this->get_connected( $post_id );
 
 		if ( empty( $connected_posts ) )
 			return array();
@@ -339,6 +340,9 @@ class P2P_Box_Multiple extends P2P_Box {
 		return array_intersect( $connected_posts, $post_ids );	// to preserve p2p_id keys
 	}
 
+	protected function get_connected( $post_id ) {
+		return P2P_Connections::get( $post_id, $this->direction, $this->data );
+	}
 
 	private static function mustache_render( $file, $data, $partials = array() ) {
 		$partial_data = array();
