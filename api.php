@@ -254,7 +254,9 @@ class P2P_Query {
 		$connected_orderby = $wp_query->get( 'connected_orderby' );
 		if ( $connected_orderby ) {
 			$clauses['join'] .= $wpdb->prepare( "
-				LEFT JOIN $wpdb->p2pmeta ON ($wpdb->p2p.p2p_id = $wpdb->p2pmeta.p2p_id AND $wpdb->p2pmeta.meta_key = %s )
+				LEFT JOIN $wpdb->p2pmeta AS p2pm_order ON (
+					$wpdb->p2p.p2p_id = p2pm_order.p2p_id AND p2pm_order.meta_key = %s
+				)
 			", $connected_orderby );
 
 			$connected_order = ( 'DESC' == strtoupper( $wp_query->get('connected_order') ) ) ? 'DESC' : 'ASC';
@@ -264,7 +266,7 @@ class P2P_Query {
 			if ( $wp_query->get('connected_order_num') )
 				$field .= '+0';
 
-			$clauses['orderby'] = "$wpdb->p2pmeta.$field $connected_order";
+			$clauses['orderby'] = "p2pm_order.$field $connected_order";
 		}
 
 		return $clauses;

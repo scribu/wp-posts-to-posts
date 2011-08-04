@@ -189,6 +189,8 @@ class P2P_Test {
 			'post_status' => 'any',
 			'nopaging' => true,
 
+			'connected_meta' => array( 'foo' => 'bar' ),
+
 			'connected_orderby' => 'role',
 			'connected_order_num' => true,
 			'connected_order' => 'asc'
