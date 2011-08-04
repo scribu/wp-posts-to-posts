@@ -107,11 +107,10 @@ class P2P_Connections {
 	 * @param int $from post id
 	 * @param int $to post id
 	 * @param array $data additional data about the connection
-	 * @param string $duplicates Duplicate prevention strategy: 'none', 'matching_data', 'strict'
 	 *
 	 * @return int|bool connection id or False on failure
 	 */
-	function connect( $from, $to, $data = array(), $duplicates = 'matching_data' ) {
+	function connect( $from, $to, $data = array() ) {
 		global $wpdb;
 
 		$from = absint( $from );
