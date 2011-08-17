@@ -11,22 +11,21 @@ Create connections between posts
 
 This plugin allows you to create many-to-many relationships between posts of all types.
 
-You can use it to manually create lists of related posts.
+A few example use cases:
 
-Or, if you have a 'product' post type, you can make a by-directional connection to a 'review' post type.
+* 'review' post types connected to 'product' post types
+* manually curated lists of related posts
+etc.
 
-The possibilities are endless.
-
-Head out to the [Wiki](https://github.com/scribu/wp-posts-to-posts/wiki) for tutorials and other resources.
-
-Links: [Plugin News](http://scribu.net/wordpress/posts-to-posts) | [Author's Site](http://scribu.net)
+Links: [**Documentation**](http://github.com/scribu/wp-posts-to-posts/wiki) | [Plugin News](http://scribu.net/wordpress/posts-to-posts) | [Author's Site](http://scribu.net)
 
 == Installation ==
 
-You can either install it automatically from the WordPress admin, or do it manually:
+See [Installing Plugins](http://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
 
-1. Unzip the "Posts 2 Posts" archive and put the folder into your plugins folder (/wp-content/plugins/).
-1. Activate the plugin from the Plugins menu.
+After activating it, refer to the [Basic usage](https://github.com/scribu/wp-posts-to-posts/wiki/Basic-usage) tutorial.
+
+Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-posts/wiki).
 
 == Frequently Asked Questions ==
 
