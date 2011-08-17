@@ -9,12 +9,13 @@ Create connections between posts
 
 == Description ==
 
-This plugin allows you to create many-to-many relationships between posts of all types.
+This plugin allows you to create many-to-many relationships between posts of any type: post, page, custom etc.
 
 A few example use cases:
 
-* 'review' post types connected to 'product' post types
+* 'review' posts connected to 'product' posts
 * manually curated lists of related posts
+
 etc.
 
 Links: [**Documentation**](http://github.com/scribu/wp-posts-to-posts/wiki) | [Plugin News](http://scribu.net/wordpress/posts-to-posts) | [Author's Site](http://scribu.net)
@@ -38,7 +39,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Screenshots ==
 
-1. Simple connection metabox
+1. Basic connection metabox
 2. Advanced connection metabox
 
 == Changelog ==
