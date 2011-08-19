@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Posts 2 Posts
+Description: Create many-to-many relationships between all types of posts.
 Version: 0.8.1-alpha2
-Plugin Author: scribu
-Description: Create many-to-many relationships between all types of posts
+Author: scribu
 Author URI: http://scribu.net/
 Plugin URI: http://scribu.net/wordpress/posts-to-posts
 Text Domain: posts-to-posts
