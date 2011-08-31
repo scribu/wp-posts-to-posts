@@ -1,0 +1,74 @@
+# Copyright (C) 2010 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts 2 Posts 0.4\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
+"POT-Creation-Date: 2011-07-22 13:03:03+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2011-08-31 17:26-0300\n"
+"Last-Translator: Marcelo Minholi <minholi@gmail.com>\n"
+"Language-Team: \n"
+"X-Poedit-Language: Portuguese\n"
+"X-Poedit-Country: BRAZIL\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: scb/AdminPage.php:161
+msgid "Settings <strong>saved</strong>."
+msgstr "Configurações <strong>salvas</strong>."
+
+#: scb/AdminPage.php:174
+#: scb/AdminPage.php:185
+msgid "Save Changes"
+msgstr "Salvar Alterações"
+
+#: scb/AdminPage.php:367
+msgid "Settings"
+msgstr "Configurações"
+
+#: ui/box.php:14
+msgid "Are you sure you want to delete all connections?"
+msgstr "Você tem certeza que quer apagar todas as relações?"
+
+#: ui/box.php:33
+msgid "Create connections:"
+msgstr "Criar relações:"
+
+#: ui/box.php:64
+msgid "Search"
+msgstr "Buscar"
+
+#: ui/box.php:72
+msgid "Recent"
+msgstr "Recentes"
+
+#: ui/box.php:148
+msgid "Previous"
+msgstr "Anteriores"
+
+#: ui/box.php:149
+msgid "Next"
+msgstr "Próximas"
+
+#: ui/box.php:150
+msgid "of"
+msgstr "de"
+
+#: ui/box.php:182
+msgid "Create connection"
+msgstr "Criar relação"
+
+#: ui/box.php:191
+msgid "Delete connection"
+msgstr "Apagar relação"
+
+#: ui/box.php:199
+msgid "Delete all connections"
+msgstr "Apagar todas as relações"
+
+#: ui.php:33
+msgid "Connected %s"
+msgstr "%s Relacionado(a)"
+
