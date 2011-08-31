@@ -302,7 +302,7 @@ class P2P_Box_Multiple extends P2P_Box {
 		}
 
 		if ( $this->prevent_duplicates )
-			$args['post__not_in'] = $this->get_connected( $post_id );
+			$args['post__not_in'] = P2P_Connections::get( $post_id, $this->direction, $this->data );
 
 		return $args;
 	}
@@ -320,13 +320,8 @@ class P2P_Box_Multiple extends P2P_Box {
 	// Helpers
 
 	protected function get_connected_ids( $post_id ) {
-		$connected_posts = $this->get_connected( $post_id );
-
-		if ( empty( $connected_posts ) )
-			return array();
-
 		$args = array(
-			'post__in' => $connected_posts,
+			array_search( $this->direction, P2P_Query::$qv_map ) => $post_id,
 			'post_type'=> $this->to,
 			'post_status' => 'any',
 			'nopaging' => true,
@@ -335,13 +330,7 @@ class P2P_Box_Multiple extends P2P_Box {
 			'suppress_filters' => false,
 		);
 
-		$post_ids = wp_list_pluck( get_posts($args), 'ID' );
-
-		return array_intersect( $connected_posts, $post_ids );	// to preserve p2p_id keys
-	}
-
-	protected function get_connected( $post_id ) {
-		return P2P_Connections::get( $post_id, $this->direction, $this->data );
+		return scb_list_fold( get_posts( $args ), 'p2p_id', 'ID' );
 	}
 
 	private static function mustache_render( $file, $data, $partials = array() ) {

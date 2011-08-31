@@ -161,13 +161,7 @@ function _p2p_each_connected( $direction, $query, $search ) {
 		}
 	}
 
-	$map = array(
-		'any' => 'connected',
-		'from' => 'connected_to',
-		'to' => 'connected_from'
-	);
-
-	$search[ $map[ $direction ] ] = array_keys( $posts );
+	$search[ array_search( $direction, P2P_Query::$qv_map ) ] = array_keys( $posts );
 	$search[ 'suppress_filters' ] = false;
 
 	foreach ( get_posts( $search ) as $inner_post ) {
