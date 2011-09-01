@@ -11,6 +11,11 @@ class P2P_Query {
 		'connected_from' => 'from',
 	);
 
+	function init() {
+		add_filter( 'posts_clauses', array( 'P2P_Query', 'posts_clauses' ), 10, 2 );
+		add_filter( 'the_posts', array( 'P2P_Query', 'the_posts' ), 11, 2 );
+	}
+
 	/**
 	 * Handles connected* query vars
 	 */
@@ -91,8 +96,6 @@ class P2P_Query {
 
 	/**
 	 * Handles each_connected* query vars
-	 *
-	 * @priority 11
 	 */
 	function the_posts( $the_posts, $wp_query ) {
 		if ( empty( $the_posts ) )
@@ -118,8 +121,6 @@ class P2P_Query {
 	 * Optimized inner query, after the outer query was executed.
 	 *
 	 * Populates each of the outer querie's $post objects with a 'connected' property, containing a list of connected posts
-	 *
-	 * @nohook
 	 *
 	 * @param string $direction The direction of the connection. Can be 'to', 'from' or 'any'
 	 * @param object $query The outer query.
@@ -181,5 +182,6 @@ class P2P_Query {
 		return array( $search, $qv, $direction );
 	}
 }
-scbHooks::add( 'P2P_Query' );
+
+P2P_Query::init();
 
