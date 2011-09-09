@@ -322,6 +322,7 @@ class P2P_Box_Multiple extends P2P_Box {
 	protected function get_connected_ids( $post_id ) {
 		$args = array(
 			array_search( $this->direction, P2P_Query::$qv_map ) => $post_id,
+			'connected_meta' => $this->data,
 			'post_type'=> $this->to,
 			'post_status' => 'any',
 			'nopaging' => true,
