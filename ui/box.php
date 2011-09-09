@@ -327,10 +327,12 @@ class P2P_Box_Multiple extends P2P_Box {
 			'nopaging' => true,
 			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
-			'suppress_filters' => false,
+			'ignore_sticky_posts' => true,
 		);
 
-		return scb_list_fold( get_posts( $args ), 'p2p_id', 'ID' );
+		$q = new WP_Query( $args );
+
+		return scb_list_fold( $q->posts, 'p2p_id', 'ID' );
 	}
 
 	private static function mustache_render( $file, $data, $partials = array() ) {

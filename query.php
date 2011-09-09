@@ -46,12 +46,14 @@ class P2P_Query {
 					$clauses['where'] .= " AND $wpdb->p2p.p2p_from IN ($search)";
 				}
 				break;
+
 			case 'to':
 				$clauses['where'] .= " AND $wpdb->posts.ID = $wpdb->p2p.p2p_from";
 				if ( $search ) {
 					$clauses['where'] .= " AND $wpdb->p2p.p2p_to IN ($search)";
 				}
 				break;
+
 			case 'any':
 				if ( $search ) {
 					$clauses['where'] .= " AND (
@@ -132,7 +134,6 @@ class P2P_Query {
 
 		$prop_name = 'connected';
 
-		// re-index by ID
 		$posts = array();
 		foreach ( $query->posts as $post ) {
 			$post->$prop_name = array();
@@ -143,6 +144,9 @@ class P2P_Query {
 		foreach ( array_keys( self::$qv_map ) as $qv )
 			unset( $search[ $qv ] );
 
+		// set appropriate 'connected' qv
+		$search[ array_search( $direction, self::$qv_map ) ] = array_keys( $posts );
+
 		// ignore pagination
 		$search['nopaging'] = true;
 		foreach ( array( 'showposts', 'posts_per_page', 'posts_per_archive_page' ) as $disabled_qv ) {
@@ -151,10 +155,11 @@ class P2P_Query {
 			}
 		}
 
-		$search[ array_search( $direction, self::$qv_map ) ] = array_keys( $posts );
-		$search[ 'suppress_filters' ] = false;
+		$search[ 'ignore_sticky_posts' ] = true;
 
-		foreach ( get_posts( $search ) as $inner_post ) {
+		$q = new WP_Query( $search );
+
+		foreach ( $q->posts as $inner_post ) {
 			if ( $inner_post->ID == $inner_post->p2p_from )
 				$outer_post_id = $inner_post->p2p_to;
 			elseif ( $inner_post->ID == $inner_post->p2p_to )
