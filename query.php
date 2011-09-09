@@ -144,8 +144,14 @@ class P2P_Query {
 		foreach ( array_keys( self::$qv_map ) as $qv )
 			unset( $search[ $qv ] );
 
-		// set appropriate 'connected' qv
-		$search[ array_search( $direction, self::$qv_map ) ] = array_keys( $posts );
+		// inverted map
+		$map = array(
+			'any' => 'connected',
+			'from' => 'connected_to',
+			'to' => 'connected_from'
+		);
+
+		$search[ $map[ $direction ] ] = array_keys( $posts );
 
 		// ignore pagination
 		$search['nopaging'] = true;
