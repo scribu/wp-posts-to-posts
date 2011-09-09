@@ -50,11 +50,7 @@ class P2P_Connections {
 			$to = self::_get( $post_id, 'to', $data );
 
 			// array_merge() doesn't preserve numeric keys
-			foreach ( $to as $p2p_id => $post_id ) {
-				$from[ $p2p_id ] = $post_id;
-			}
-
-			return $from;
+			return $from + $to;
 		}
 
 		return self::_get( $post_id, $direction, $data );
