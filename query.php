@@ -57,8 +57,8 @@ class P2P_Query {
 			case 'any':
 				if ( $search ) {
 					$clauses['where'] .= " AND (
-						($wpdb->posts.ID = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from IN ($search) ) OR
-						($wpdb->posts.ID = $wpdb->p2p.p2p_from AND $wpdb->p2p.p2p_to IN ($search) )
+						($wpdb->posts.ID = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from IN ($search)) OR
+						($wpdb->posts.ID = $wpdb->p2p.p2p_from AND $wpdb->p2p.p2p_to IN ($search))
 					)";
 				} else {
 					$clauses['where'] .= " AND ($wpdb->posts.ID = $wpdb->p2p.p2p_to OR $wpdb->posts.ID = $wpdb->p2p.p2p_from)";
@@ -154,14 +154,14 @@ class P2P_Query {
 		$search[ $map[ $direction ] ] = array_keys( $posts );
 
 		// ignore pagination
-		$search['nopaging'] = true;
 		foreach ( array( 'showposts', 'posts_per_page', 'posts_per_archive_page' ) as $disabled_qv ) {
 			if ( isset( $search[ $disabled_qv ] ) ) {
 				trigger_error( "Can't use '$disabled_qv' in an inner query", E_USER_WARNING );
 			}
 		}
+		$search['nopaging'] = true;
 
-		$search[ 'ignore_sticky_posts' ] = true;
+		$search['ignore_sticky_posts'] = true;
 
 		$q = new WP_Query( $search );
 

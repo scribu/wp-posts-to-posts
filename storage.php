@@ -49,6 +49,7 @@ class P2P_Connections {
 			$from = self::_get( $post_id, 'from', $data );
 			$to = self::_get( $post_id, 'to', $data );
 
+			// array_merge() doesn't preserve numeric keys
 			foreach ( $to as $p2p_id => $post_id ) {
 				$from[ $p2p_id ] = $post_id;
 			}
@@ -72,10 +73,12 @@ class P2P_Connections {
 				$fields .= ', p2p_to AS post_id';
 				$where .= $wpdb->prepare( "p2p_from = %d", $from );
 				break;
+
 			case 'to':
 				$fields .= ', p2p_from AS post_id';
 				$where .= $wpdb->prepare( "p2p_to = %d", $from );
 				break;
+
 			default:
 				$where .= $wpdb->prepare( "p2p_from = %d AND p2p_to = %d", $from, $to );
 				$_return_p2p_ids = true;
