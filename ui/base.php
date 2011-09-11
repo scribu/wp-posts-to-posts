@@ -2,67 +2,16 @@
 
 define( 'P2P_BOX_NONCE', 'p2p-box' );
 
-abstract class P2P_Box {
-	public $box_id;
 
-	public $from;
-	public $to;
-
-	protected $reversed;
-	protected $direction;
-
-	// Enqueue scripts here
-	function setup() {}
-
-	// This is where the box content goes
-	abstract function render_box( $post_id );
-
-	function get_box_title() {
-		if ( is_array( $this->title ) ) {
-			$key = $this->reversed ? 'to' : 'from';
-
-			if ( isset( $this->title[ $key ] ) )
-				$title = $this->title[ $key ];
-			else
-				$title = '';
-		} else {
-			$title = $this->title;
-		}
-
-		if ( empty( $title ) ) {
-			$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), get_post_type_object( $this->to )->labels->name );
-		}
-
-		return $title;
-	}
-
-
-// Internal stuff
-
-
-	public function __construct( $args, $direction, $box_id ) {
-		foreach ( $args as $key => $value )
-			$this->$key = $value;
-
-		$this->box_id = $box_id;
-
-		$this->direction = $direction;
-
-		$this->reversed = ( 'to' == $direction );
-
-		if ( $this->reversed )
-			list( $this->to, $this->from ) = array( $this->from, $this->to );
-
-		$this->setup();
-	}
-
-	function _box( $post ) {
-		$this->render_box( $post->ID );
-	}
+interface P2P_Box_UI {
+	function get_title();
+	function render( $post );
 }
 
 
-class P2P_Connection_Types {
+scbHooks::add( 'P2P_Box_Factory' );
+
+class P2P_Box_Factory {
 
 	private static $ctypes = array();
 
@@ -77,11 +26,11 @@ class P2P_Connection_Types {
 				continue;
 
 			add_meta_box(
-				'p2p-connections-' . $box->box_id,
-				$box->get_box_title(),
-				array( $box, '_box' ),
-				$box->from,
-				$box->context,
+				'p2p-connections-' . $box->data->box_id,
+				$box->get_title(),
+				array( $box, 'render' ),
+				$box->data->from,
+				$box->data->context,
 				'default'
 			);
 		}
@@ -124,7 +73,9 @@ class P2P_Connection_Types {
 		if ( !$direction )
 			return false;
 
-		return new $args['box']( $args, $direction, $box_id );
+		$box_data = new P2P_Box_Data( $args, $direction, $box_id );
+
+		return new $args['box']( $box_data );
 	}
 
 	private static function get_direction( $post_type, $args ) {
@@ -141,5 +92,4 @@ class P2P_Connection_Types {
 		return $direction;
 	}
 }
-scbHooks::add( 'P2P_Connection_Types' );
 

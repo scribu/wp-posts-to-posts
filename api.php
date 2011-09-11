@@ -39,7 +39,7 @@ function p2p_register_connection_type( $args ) {
 
 	foreach ( (array) $args['from'] as $from ) {
 		foreach ( (array) $args['to'] as $to ) {
-			P2P_Connection_Types::register( array_merge( $args, compact( 'from', 'to' ) ) );
+			P2P_Box_Factory::register( array_merge( $args, compact( 'from', 'to' ) ) );
 		}
 	}
 }
