@@ -16,30 +16,18 @@ class P2P_Connections_Handler {
 	}
 
 	public function create_post( $title ) {
-		return wp_insert_post( $this->get_new_post_args( $title ) );
-	}
-
-	protected function get_new_post_args( $title ) {
 		$args = array(
 			'post_title' => $title,
 			'post_author' => get_current_user_id(),
 			'post_type' => $this->to
 		);
 
-		return apply_filters( 'p2p_new_post_args', $args, $this );
+		$args = apply_filters( 'p2p_new_post_args', $args, $this );
+
+		return wp_insert_post( $args );
 	}
 
 	public function get_connection_candidates( $current_post_id, $page, $search ) {
-		$query = new WP_Query( $this->get_query_vars( $current_post_id, $page, $search ) );
-
-		return (object) array(
-			'posts' => $query->posts,
-			'current_page' => max( 1, $query->get('paged') ),
-			'total_pages' => $query->max_num_pages
-		);
-	}
-
-	protected function get_query_vars( $post_id, $page, $search ) {
 		$args = array(
 			'paged' => $page,
 			'post_type' => $this->to,
@@ -58,7 +46,15 @@ class P2P_Connections_Handler {
 		if ( $this->prevent_duplicates )
 			$args['post__not_in'] = P2P_Connections::get( $post_id, $this->direction, $this->data );
 
-		return apply_filters( 'p2p_possible_connections_args', $args, $this );
+		$args = apply_filters( 'p2p_possible_connections_args', $args, $this );
+
+		$query = new WP_Query( $args );
+
+		return (object) array(
+			'posts' => $query->posts,
+			'current_page' => max( 1, $query->get('paged') ),
+			'total_pages' => $query->max_num_pages
+		);
 	}
 
 	function _search_by_title( $sql, $wp_query ) {
