@@ -36,26 +36,26 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 	}
 
 	function __get( $key ) {
-		if ( 'title' == $key ) {
-			$title = $this->metabox_args['title'];
+		return $this->metabox_args[ $key ];
+	}
 
-			if ( is_array( $title ) ) {
-				$key = $this->reversed ? 'to' : 'from';
+	function get_title() {
+		$title = $this->title;
 
-				if ( isset( $title[ $key ] ) )
-					$title = $title[ $key ];
-				else
-					$title = '';
-			}
+		if ( is_array( $title ) ) {
+			$key = $this->reversed ? 'to' : 'from';
 
-			if ( empty( $title ) ) {
-				$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), $this->ptype->labels->name );
-			}
-
-			return $title;
+			if ( isset( $title[ $key ] ) )
+				$title = $title[ $key ];
+			else
+				$title = '';
 		}
 
-		return $this->metabox_args[ $key ];
+		if ( empty( $title ) ) {
+			$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), $this->ptype->labels->name );
+		}
+
+		return $title;
 	}
 
 
@@ -297,6 +297,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 
 		die( json_encode( $results ) );
 	}
+
 
 	// Helpers
 

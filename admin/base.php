@@ -4,6 +4,7 @@ define( 'P2P_BOX_NONCE', 'p2p-box' );
 
 
 interface P2P_Box_UI {
+	function get_title();
 	function render( $post );
 }
 
@@ -33,7 +34,7 @@ class P2P_Connection_Types {
 
 			add_meta_box(
 				'p2p-connections-' . $box->box_id,
-				$box->title,
+				$box->get_title(),
 				array( $box, 'render' ),
 				$box->from,
 				$box->context,
