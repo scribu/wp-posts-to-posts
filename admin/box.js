@@ -27,16 +27,12 @@ $('.p2p-box').each(function() {
 	var
 		$metabox = $(this),
 		$connections = $metabox.find('.p2p-connections'),
-		$spinner = $('#publishing-action .ajax-loading')
-			.clone()
-			.removeAttr('id')
-			.removeClass('ajax-loading')
-			.addClass('waiting');
+		$spinner = $('<img>', {'src': P2PAdmin.spinner});
 
 	function get_base_data() {
 		return {
 			action: 'p2p_box',
-			nonce: P2PAdmin_I18n.nonce,
+			nonce: P2PAdmin.nonce,
 			box_id: $metabox.attr('data-box_id'),
 			post_type: $('#post_type').val()
 		};
@@ -44,7 +40,7 @@ $('.p2p-box').each(function() {
 
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
-		if ( !confirm(P2PAdmin_I18n.deleteConfirmMessage) )
+		if ( !confirm(P2PAdmin.deleteConfirmMessage) )
 			return false;
 
 		var

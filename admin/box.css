@@ -64,6 +64,7 @@ td.p2p-col-create {
 .p2p-col-delete img,
 .p2p-col-create img {
 	padding: 5px 6px;
+	vertical-align: middle;
 }
 
 th.p2p-col-delete a {
