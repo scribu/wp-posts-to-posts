@@ -9,14 +9,18 @@ interface P2P_Box_UI {
 }
 
 
-scbHooks::add( 'P2P_Connection_Types' );
-
 class P2P_Connection_Types {
 
 	private static $ctypes = array();
 
 	static public function register( $args ) {
 		self::$ctypes[] = $args;
+	}
+
+	function init() {
+		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
+		add_action( 'save_post', array( __CLASS__, 'save_post' ), 10, 2 );
+		add_action( 'wp_ajax_p2p_box', array( __CLASS__, 'wp_ajax_p2p_box' ) );
 	}
 
 	/**
@@ -101,4 +105,6 @@ class P2P_Connection_Types {
 		return $direction;
 	}
 }
+
+P2P_Connection_Types::init();
 
