@@ -46,7 +46,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 = 0.9 =
 * introduce 'data' arg to p2p_register_connection_type()
-* replace 'box' with 'connections_handler' arg
+* replace 'box' arg with hooks
 * allow using 'connected_meta' and 'connected_orderby' toghether
 * fix some translations
 
