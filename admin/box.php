@@ -29,7 +29,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 	}
 
 	function get_title() {
-		$title = $this->data->get_title();
+		$title = $this->data->title;
 
 		if ( empty( $title ) ) {
 			$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), $this->ptype->labels->name );
@@ -243,9 +243,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 	}
 
 	public function ajax_disconnect() {
-		$p2p_id = absint( $_POST['p2p_id'] );
-
-		p2p_delete_connection( $p2p_id );
+		p2p_delete_connection( $_POST['p2p_id'] );
 
 		die(1);
 	}

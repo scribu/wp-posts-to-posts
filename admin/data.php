@@ -6,18 +6,15 @@
 class P2P_Box_Data {
 	public $box_id;
 
-	public $from;
-	public $to;
-
 	public $direction;
 
 	protected $reversed;
+	protected $args;
 
 	public function __construct( $args, $direction, $box_id ) {
-		foreach ( $args as $key => $value )
-			$this->$key = $value;
-
 		$this->box_id = $box_id;
+
+		$this->args = $args;
 
 		$this->direction = $direction;
 
@@ -27,17 +24,23 @@ class P2P_Box_Data {
 			list( $this->to, $this->from ) = array( $this->from, $this->to );
 	}
 
-	function get_title() {
-		if ( is_array( $this->title ) ) {
-			$key = $this->reversed ? 'to' : 'from';
+	function __get( $key ) {
+		if ( 'title' == $key ) {
+			$title = $this->args['title'];
 
-			if ( isset( $this->title[ $key ] ) )
-				$title = $this->title[ $key ];
-			else
-				$title = '';
-		} else {
-			$title = $this->title;
+			if ( is_array( $title ) ) {
+				$key = $this->reversed ? 'to' : 'from';
+
+				if ( isset( $title[ $key ] ) )
+					$title = $title[ $key ];
+				else
+					$title = '';
+			}
+
+			return $title;
 		}
+
+		return $this->args[$key];
 	}
 
 	function get_new_post_args() {
