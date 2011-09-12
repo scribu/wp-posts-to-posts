@@ -138,5 +138,9 @@ class P2P_Box_Data {
 	function disconnect( $post_id ) {
 		p2p_disconnect( $post_id, $this->direction, $this->data );
 	}
+
+	function delete_connection( $p2p_id ) {
+		p2p_delete_connection( $p2p_id );
+	}
 }
 

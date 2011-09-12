@@ -245,7 +245,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 	}
 
 	public function ajax_disconnect() {
-		p2p_delete_connection( $_POST['p2p_id'] );
+		$this->data->delete_connection( $_POST['p2p_id'] );
 
 		die(1);
 	}
