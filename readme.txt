@@ -44,9 +44,10 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
-= 0.8.1 =
+= 0.9 =
+* introduce 'data' arg to p2p_register_connection_type()
+* replace 'box' with 'connections_handler' arg
 * allow using 'connected_meta' and 'connected_orderby' toghether
-* add 'data' arg to p2p_register_connection_type()
 * fix some translations
 
 = 0.8 =
