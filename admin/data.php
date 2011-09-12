@@ -136,7 +136,7 @@ class P2P_Box_Data {
 	}
 
 	function disconnect( $post_id ) {
-		p2p_disconnect( $post_id, $this->direction );
+		p2p_disconnect( $post_id, $this->direction, $this->data );
 	}
 }
 
