@@ -107,10 +107,10 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 			'tab-content' => $tab_content
 		);
 
-		// Recent tab
+		// List tab
 		$data['tabs'][] = array(
 			'tab-id' => 'recent',
-			'tab-title' => __( 'Recent', P2P_TEXTDOMAIN ),
+			'tab-title' => __( 'View All', P2P_TEXTDOMAIN ),
 			'tab-content' => $this->post_rows( $post_id )
 		);
 
