@@ -22,7 +22,7 @@ class P2P_Connections_Handler {
 			'post_type' => $this->to
 		);
 
-		$args = apply_filters( 'p2p_new_post_args', $args, $this );
+		$args = apply_filters( 'p2p_new_post_args', $args, $this->args );
 
 		return wp_insert_post( $args );
 	}
@@ -46,7 +46,7 @@ class P2P_Connections_Handler {
 		if ( $this->prevent_duplicates )
 			$args['post__not_in'] = P2P_Connections::get( $post_id, $this->direction, $this->data );
 
-		$args = apply_filters( 'p2p_possible_connections_args', $args, $this );
+		$args = apply_filters( 'p2p_possible_connections_args', $args, $this->args );
 
 		$query = new WP_Query( $args );
 
@@ -78,7 +78,7 @@ class P2P_Connections_Handler {
 			'ignore_sticky_posts' => true,
 		);
 
-		$args = apply_filters( 'p2p_current_connections_args', $args, $this );
+		$args = apply_filters( 'p2p_current_connections_args', $args, $this->args );
 
 		$q = new WP_Query( $args );
 
