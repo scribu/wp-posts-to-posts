@@ -43,15 +43,29 @@ class P2P_Box_Data {
 		return $this->args[$key];
 	}
 
-	function get_new_post_args() {
+	public function create_post( $title ) {
+		return wp_insert_post( $this->get_new_post_args( $title ) );
+	}
+
+	protected function get_new_post_args( $title ) {
 		return array(
-			'post_title' => $_POST['post_title'],
+			'post_title' => $title,
 			'post_author' => get_current_user_id(),
 			'post_type' => $this->to
 		);
 	}
 
-	function get_query_vars( $post_id, $page, $search ) {
+	public function get_connection_candidates( $current_post_id, $page, $search ) {
+		$query = new WP_Query( $this->get_query_vars( $current_post_id, $page, $search ) );
+
+		return (object) array(
+			'posts' => $query->posts,
+			'current_page' => max( 1, $query->get('paged') ),
+			'total_pages' => $query->max_num_pages
+		);
+	}
+
+	protected function get_query_vars( $post_id, $page, $search ) {
 		$args = array(
 			'paged' => $page,
 			'post_type' => $this->to,

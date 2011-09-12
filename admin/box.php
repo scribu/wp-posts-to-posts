@@ -84,7 +84,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 		$data['tabs'][] = array(
 			'tab-id' => 'recent',
 			'tab-title' => __( 'Recent', P2P_TEXTDOMAIN ),
-			'tab-content' => $this->handle_search( $post_id )
+			'tab-content' => $this->post_rows( $post_id )
 		);
 
 		// Create post tab
@@ -128,10 +128,15 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 		return self::mustache_render( 'box-row.html', $data );
 	}
 
-	protected function post_rows( $query ) {
+	protected function post_rows( $current_post_id, $page = 1, $search = '' ) {
+		$candidate = $this->data->get_connection_candidates( $current_post_id, $page, $search );
+
+		if ( empty( $candidate->posts ) )
+			return false;
+
 		$data = array();
 
-		foreach ( $query->posts as $post ) {
+		foreach ( $candidate->posts as $post ) {
 			$row = array();
 
 			foreach ( array( 'create', 'title' ) as $key ) {
@@ -144,16 +149,13 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 			$data['rows'][] = $row;
 		}
 
-		$current_page = max( 1, $query->get('paged') );
-		$total_pages = $query->max_num_pages;
-
-		if ( $total_pages > 1 ) {
+		if ( $candidate->total_pages > 1 ) {
 			$data['navigation'] = array(
-				'current-page' => $current_page,
-				'total-pages' => $total_pages,
+				'current-page' => $candidate->current_page,
+				'total-pages' => $candidate->total_pages,
 
-				'prev-inactive' => ( 1 == $current_page ) ? 'inactive' : '',
-				'next-inactive' => ( $total_pages == $current_page ) ? 'inactive' : '',
+				'prev-inactive' => ( 1 == $candidate->current_page ) ? 'inactive' : '',
+				'next-inactive' => ( $candidate->total_pages == $candidate->current_page ) ? 'inactive' : '',
 
 				'prev-label' =>  __( 'Previous', P2P_TEXTDOMAIN ),
 				'next-label' =>  __( 'Next', P2P_TEXTDOMAIN ),
@@ -223,7 +225,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 	// Ajax handlers
 
 	public function ajax_create_post() {
-		$this->safe_connect( wp_insert_post( $this->data->get_new_post_args() ) );
+		$this->safe_connect( $this->data->create_post( $_POST['post_title'] ) );
 	}
 
 	public function ajax_connect() {
@@ -255,7 +257,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 	}
 
 	public function ajax_search() {
-		$rows = $this->handle_search( $_GET['post_id'], $_GET['paged'], $_GET['s'] );
+		$rows = $this->post_rows( $_GET['post_id'], $_GET['paged'], $_GET['s'] );
 
 		if ( $rows ) {
 			$results = compact( 'rows' );
@@ -266,15 +268,6 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 		}
 
 		die( json_encode( $results ) );
-	}
-
-	protected function handle_search( $post_id, $page = 1, $search = '' ) {
-		$query = new WP_Query( $this->data->get_query_vars( $post_id, $page, $search ) );
-
-		if ( !$query->have_posts() )
-			return false;
-
-		return $this->post_rows( $query );
 	}
 
 	// Helpers
