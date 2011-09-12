@@ -3,16 +3,12 @@
 /**
  * Takes care of everything related to connection data: currently connected posts, potentially connected posts etc.
  */
-class P2P_Box_Data {
+class P2P_Connections_Handler {
 
-	public $direction;
-
-	protected $reversed;
 	protected $args;
 
 	public function __construct( $args ) {
-		foreach ( $args as $key => $value )
-			$this->$key = $value;
+		$this->args = $args;
 	}
 
 	public function __get( $key ) {

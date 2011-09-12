@@ -81,37 +81,36 @@ class P2P_Connection_Types {
 
 		$args = self::$ctypes[ $box_id ];
 
-		$direction = self::get_direction( $post_type, $args );
-		if ( !$direction )
-			return false;
+		$reciprocal = _p2p_pluck( $args, 'reciprocal' );
 
-		$reversed = ( 'to' == $direction );
-		if ( $reversed )
-			list( $args['to'], $args['from'] ) = array( $args['from'], $args['to'] );
-
-		$metabox_args = array();
-		foreach ( array( 'context', 'from', 'title' ) as $key ) {
-			$metabox_args[ $key ] = $args[ $key ];
-			unset( $args[ $key ] );
-		}
-
-		$box_data = new P2P_Box_Data( compact( 'args', 'direction', 'reversed' ) );
-
-		return new $args['box']( $box_id, $box_data, $metabox_args );
-	}
-
-	private static function get_direction( $post_type, $args ) {
 		$direction = false;
 
-		if ( $args['reciprocal'] && $post_type == $args['from'] && $args['from'] == $args['to'] ) {
+		if ( $reciprocal && $post_type == $args['from'] && $args['from'] == $args['to'] ) {
 			$direction = 'any';
-		} elseif ( $args['reciprocal'] && $post_type == $args['to'] ) {
+		} elseif ( $reciprocal && $post_type == $args['to'] ) {
 			$direction = 'to';
 		} elseif ( $post_type == $args['from'] ) {
 			$direction = 'from';
 		}
 
-		return $direction;
+		if ( !$direction )
+			return false;
+
+		$reversed = ( 'to' == $direction );
+
+		if ( $reversed )
+			list( $args['to'], $args['from'] ) = array( $args['from'], $args['to'] );
+
+		$metabox_args = array();
+		foreach ( array( 'context', 'from', 'title' ) as $key ) {
+			$metabox_args[ $key ] = _p2p_pluck( $args, $key );
+		}
+
+		$handler = _p2p_pluck( $args, 'connections_handler' );
+
+		$box_data = new $handler( array_merge( $args, compact( 'direction', 'reversed' ) ) );
+
+		return new P2P_Box_Multiple( $box_id, $box_data, $metabox_args );
 	}
 }
 

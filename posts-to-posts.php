@@ -80,3 +80,12 @@ class P2P_Migrate {
 	}
 }
 
+
+function _p2p_pluck( &$args, $key ) {
+	$value = $args[ $key ];
+
+	unset( $args[ $key ] );
+
+	return $value;
+}
+

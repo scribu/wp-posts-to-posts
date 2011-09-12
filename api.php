@@ -13,7 +13,7 @@
  *  - 'reciprocal' bool Wether to show the box on both sides of the connection. Default: false.
  *  - 'title' string The box's title. Default: 'Connected {$post_type}s'
  *  - 'context' string Where should the box show up by default. Possible values: 'advanced' or 'side'
- *  - 'box' string A class that handles displaying and saving connections. Default: P2P_Box_Multiple
+ *  - 'connections_handler' string A class that handles existing and potential connections. Default: P2P_Connections_Handler
  */
 function p2p_register_connection_type( $args ) {
 	$argv = func_get_args();
@@ -29,10 +29,10 @@ function p2p_register_connection_type( $args ) {
 		'fields' => array(),
 		'data' => array(),
 		'prevent_duplicates' => true,
+		'connections_handler' => 'P2P_Connections_Handler',
 		'reciprocal' => false,
 		'title' => '',
 		'context' => 'side',
-		'box' => 'P2P_Box_Multiple',
 	);
 
 	$args = wp_parse_args( $args, $defaults );
@@ -166,3 +166,4 @@ function p2p_list_posts( $posts ) {
 	}
 	echo '</ul>';
 }
+
