@@ -24,7 +24,7 @@ class P2P_Box_Data {
 			list( $this->to, $this->from ) = array( $this->from, $this->to );
 	}
 
-	function __get( $key ) {
+	public function __get( $key ) {
 		if ( 'title' == $key ) {
 			$title = $this->args['title'];
 
@@ -96,7 +96,7 @@ class P2P_Box_Data {
 		return $sql;
 	}
 
-	function get_connected_ids( $post_id ) {
+	public function get_current_connections( $post_id ) {
 		$args = array(
 			array_search( $this->direction, P2P_Query::$qv_map ) => $post_id,
 			'connected_meta' => $this->data,
@@ -113,7 +113,7 @@ class P2P_Box_Data {
 		return scb_list_fold( $q->posts, 'p2p_id', 'ID' );
 	}
 
-	function connect( $from, $to ) {
+	public function connect( $from, $to ) {
 		$args = array( $from, $to );
 
 		if ( $this->reversed )
@@ -135,11 +135,11 @@ class P2P_Box_Data {
 		return $p2p_id;
 	}
 
-	function disconnect( $post_id ) {
+	public function disconnect( $post_id ) {
 		p2p_disconnect( $post_id, $this->direction, $this->data );
 	}
 
-	function delete_connection( $p2p_id ) {
+	public function delete_connection( $p2p_id ) {
 		p2p_delete_connection( $p2p_id );
 	}
 }

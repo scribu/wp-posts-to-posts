@@ -41,7 +41,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 	// Initial rendering
 
 	function render( $post ) {
-		$connected_ids = $this->data->get_connected_ids( $post->ID );
+		$connected_ids = $this->data->get_current_connections( $post->ID );
 
 		$data = array(
 			'create-label' => __( 'Create connections:', P2P_TEXTDOMAIN ),
