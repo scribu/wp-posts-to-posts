@@ -4,42 +4,18 @@
  * Takes care of everything related to connection data: currently connected posts, potentially connected posts etc.
  */
 class P2P_Box_Data {
-	public $box_id;
 
 	public $direction;
 
 	protected $reversed;
 	protected $args;
 
-	public function __construct( $args, $direction, $box_id ) {
-		$this->box_id = $box_id;
-
-		$this->args = $args;
-
-		$this->direction = $direction;
-
-		$this->reversed = ( 'to' == $direction );
-
-		if ( $this->reversed )
-			list( $this->to, $this->from ) = array( $this->from, $this->to );
+	public function __construct( $args ) {
+		foreach ( $args as $key => $value )
+			$this->$key = $value;
 	}
 
 	public function __get( $key ) {
-		if ( 'title' == $key ) {
-			$title = $this->args['title'];
-
-			if ( is_array( $title ) ) {
-				$key = $this->reversed ? 'to' : 'from';
-
-				if ( isset( $title[ $key ] ) )
-					$title = $title[ $key ];
-				else
-					$title = '';
-			}
-
-			return $title;
-		}
-
 		return $this->args[$key];
 	}
 

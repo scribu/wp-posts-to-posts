@@ -1,14 +1,21 @@
 <?php
 
 class P2P_Box_Multiple implements P2P_Box_UI {
-	public $data;
+	public $box_id;
+
+	private $data;
+
+	private $metabox_args;
 
 	private $ptype;
 	private $columns;
 
-	function __construct( $data ) {
+	function __construct( $box_id, $data, $metabox_args ) {
+		$this->box_id = $box_id;
 		$this->data = $data;
-		$this->ptype = get_post_type_object( $data->to );
+		$this->metabox_args = $metabox_args;
+
+		$this->ptype = get_post_type_object( $this->data->to );
 
 		if ( !class_exists( 'Mustache' ) )
 			require dirname(__FILE__) . '/../mustache/Mustache.php';
@@ -28,15 +35,29 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 		) );
 	}
 
-	function get_title() {
-		$title = $this->data->title;
+	function __get( $key ) {
+		if ( 'title' == $key ) {
+			$title = $this->metabox_args['title'];
 
-		if ( empty( $title ) ) {
-			$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), $this->ptype->labels->name );
+			if ( is_array( $title ) ) {
+				$key = $this->reversed ? 'to' : 'from';
+
+				if ( isset( $title[ $key ] ) )
+					$title = $title[ $key ];
+				else
+					$title = '';
+			}
+
+			if ( empty( $title ) ) {
+				$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), $this->ptype->labels->name );
+			}
+
+			return $title;
 		}
 
-		return $title;
+		return $this->metabox_args[ $key ];
 	}
+
 
 	// Initial rendering
 
@@ -57,10 +78,16 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 			);
 		}
 
-		$data_attr = array();
-		foreach ( array( 'box_id', 'direction', 'prevent_duplicates' ) as $key )
-			$data_attr[] = "data-$key='" . $this->data->$key . "'";
-		$data['attributes'] = implode( ' ', $data_attr );
+		$data_attr = array(
+			'box_id' => $this->box_id,
+			'direction' => $this->data->direction,
+			'prevent_duplicates' => $this->data->prevent_duplicates,
+		);
+
+		$data_attr_str = array();
+		foreach ( $data_attr as $key => $value )
+			$data_attr_str[] = "data-$key='" . $value . "'";
+		$data['attributes'] = implode( ' ', $data_attr_str );
 
 		$tbody = '';
 		foreach ( $connected_ids as $p2p_id => $post_b ) {
@@ -221,6 +248,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 			'value' => p2p_get_meta( $p2p_id, $key, true )
 		) );
 	}
+
 
 	// Ajax handlers
 
