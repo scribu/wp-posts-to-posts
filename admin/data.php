@@ -20,11 +20,13 @@ class P2P_Connections_Handler {
 	}
 
 	protected function get_new_post_args( $title ) {
-		return array(
+		$args = array(
 			'post_title' => $title,
 			'post_author' => get_current_user_id(),
 			'post_type' => $this->to
 		);
+
+		return apply_filters( 'p2p_new_post_args', $args, $this );
 	}
 
 	public function get_connection_candidates( $current_post_id, $page, $search ) {
@@ -56,7 +58,7 @@ class P2P_Connections_Handler {
 		if ( $this->prevent_duplicates )
 			$args['post__not_in'] = P2P_Connections::get( $post_id, $this->direction, $this->data );
 
-		return $args;
+		return apply_filters( 'p2p_possible_connections_args', $args, $this );
 	}
 
 	function _search_by_title( $sql, $wp_query ) {
@@ -79,6 +81,8 @@ class P2P_Connections_Handler {
 			'update_post_term_cache' => false,
 			'ignore_sticky_posts' => true,
 		);
+
+		$args = apply_filters( 'p2p_current_connections_args', $args, $this );
 
 		$q = new WP_Query( $args );
 
