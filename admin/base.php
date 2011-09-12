@@ -9,9 +9,9 @@ interface P2P_Box_UI {
 }
 
 
-scbHooks::add( 'P2P_Box_Factory' );
+scbHooks::add( 'P2P_Connection_Types' );
 
-class P2P_Box_Factory {
+class P2P_Connection_Types {
 
 	private static $ctypes = array();
 
@@ -19,6 +19,9 @@ class P2P_Box_Factory {
 		self::$ctypes[] = $args;
 	}
 
+	/**
+	 * Add all the metaboxes.
+	 */
 	static function add_meta_boxes( $from ) {
 		foreach ( self::$ctypes as $box_id => $args ) {
 			$box = self::make_box( $box_id, $from );
@@ -36,6 +39,9 @@ class P2P_Box_Factory {
 		}
 	}
 
+	/**
+	 * Collect metadata from all boxes.
+	 */
 	function save_post( $post_id, $post ) {
 		if ( 'revision' == $post->post_type || !isset( $_POST['p2p_meta'] ) )
 			return;
@@ -47,6 +53,9 @@ class P2P_Box_Factory {
 		}
 	}
 
+	/**
+	 * Controller for all box ajax requests.
+	 */
 	function wp_ajax_p2p_box() {
 		check_ajax_referer( P2P_BOX_NONCE, 'nonce' );
 
