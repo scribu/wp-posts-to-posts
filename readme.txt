@@ -2,7 +2,7 @@
 Contributors: scribu, ciobi
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.2
-Tested up to: 3.2
+Tested up to: 3.3
 Stable tag: 0.8
 
 Create connections between posts
@@ -45,6 +45,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 == Changelog ==
 
 = 0.9 =
+* introduce dropdown connection fields
 * introduce 'data' arg to p2p_register_connection_type()
 * replace 'box' arg with hooks
 * allow using 'connected_meta' and 'connected_orderby' toghether
