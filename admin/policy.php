@@ -1,8 +1,7 @@
 <?php
 
 /**
- * Enforces various policies for a given connection type:
- * which posts can be connected, total number of connections per post etc.
+ * A connection-type aware API
  */
 class P2P_Connections_Policy {
 
