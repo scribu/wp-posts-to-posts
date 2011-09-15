@@ -1,5 +1,101 @@
 <?php
 
+interface P2P_Field {
+	function get_title();
+	function render( $key, $p2p_id, $post_id );
+}
+
+class P2P_Field_Create implements P2P_Field {
+
+	function get_title() {
+		// Not needed
+		return '';
+	}
+
+	function render( $key, $p2p_id, $post_id ) {
+		$data = array(
+			'post_id' => $post_id,
+			'title' => __( 'Create connection', P2P_TEXTDOMAIN )
+		);
+
+		return _p2p_mustache_render( 'column-create.html', $data );
+	}
+}
+
+class P2P_Field_Delete implements P2P_Field {
+
+	function get_title() {
+		$data = array(
+			'title' => __( 'Delete all connections', P2P_TEXTDOMAIN )
+		);
+
+		return _p2p_mustache_render( 'column-delete-all.html', $data );
+	}
+
+	function render( $key, $p2p_id, $post_id ) {
+		$data = array(
+			'p2p_id' => $p2p_id,
+			'title' => __( 'Delete connection', P2P_TEXTDOMAIN )
+		);
+
+		return _p2p_mustache_render( 'column-delete.html', $data );
+	}
+}
+
+class P2P_Field_Title implements P2P_Field {
+
+	protected $title;
+
+	function __construct( $title = '' ) {
+		$this->title = $title;
+	}
+
+	function get_title() {
+		return $this->title;
+	}
+
+	function render( $key, $p2p_id, $post_id ) {
+		$data = array(
+			'title-attr' => get_post_type_object( get_post_type( $post_id ) )->labels->edit_item,
+			'title' => get_post_field( 'post_title', $post_id ),
+			'url' => get_edit_post_link( $post_id ),
+		);
+
+		$post_status = get_post_status( $post_id );
+
+		if ( 'publish' != $post_status ) {
+			$status_obj = get_post_status_object( $post_status );
+			if ( $status_obj ) {
+				$data['status']['text'] = $status_obj->label;
+			}
+		}
+
+		return _p2p_mustache_render( 'column-title.html', $data );
+	}
+}
+
+class P2P_Field_Generic implements P2P_Field {
+
+	protected $title;
+
+	function __construct( $title ) {
+		$this->title = $title;
+	}
+
+	function get_title() {
+		return $this->title;
+	}
+
+	function render( $key, $p2p_id, $post_id ) {
+		return html( 'input', array(
+			'type' => 'text',
+			'name' => "p2p_meta[$p2p_id][$key]",
+			'value' => p2p_get_meta( $p2p_id, $key, true )
+		) );
+	}
+}
+
+
 class P2P_Box_Multiple implements P2P_Box_UI {
 	public $box_id;
 
@@ -20,11 +116,14 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 		if ( !class_exists( 'Mustache' ) )
 			require dirname(__FILE__) . '/../mustache/Mustache.php';
 
-		$this->columns = array_merge(
-			array( 'delete' => $this->column_delete_all() ),
-			array( 'title' => $this->ptype->labels->singular_name ),
-			$this->data->fields
+		$this->columns = array(
+			'delete' => new P2P_Field_Delete,
+			'title' => new P2P_Field_Title( $this->ptype->labels->singular_name ),
 		);
+
+		foreach ( $this->data->fields as $key => $data ) {
+			$this->columns[ $key ] = new P2P_Field_Generic( $data );
+		}
 
 		wp_enqueue_style( 'p2p-admin', plugins_url( 'box.css', __FILE__ ), array(), P2P_PLUGIN_VERSION );
 		wp_enqueue_script( 'p2p-admin', plugins_url( 'box.js', __FILE__ ), array( 'jquery' ), P2P_PLUGIN_VERSION, true );
@@ -39,6 +138,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 		return $this->metabox_args[ $key ];
 	}
 
+	// Returns the title for the metabox
 	function get_title() {
 		$title = $this->title;
 
@@ -71,10 +171,10 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 		if ( empty( $connected_ids ) )
 			$data['hide-connections'] = 'style="display:none"';
 
-		foreach ( $this->columns as $key => $title ) {
+		foreach ( $this->columns as $key => $field ) {
 			$data['thead'][] = array(
 				'column' => $key,
-				'title' => $title
+				'title' => $field->get_title()
 			);
 		}
 
@@ -96,7 +196,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 		$data['tbody'] = $tbody;
 
 		// Search tab
-		$tab_content = self::mustache_render( 'tab-search.html', array(
+		$tab_content = _p2p_mustache_render( 'tab-search.html', array(
 			'placeholder' => $this->ptype->labels->search_items,
 		) );
 
@@ -116,7 +216,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 
 		// Create post tab
 		if ( current_user_can( $this->ptype->cap->edit_posts ) ) {
-			$tab_content = self::mustache_render( 'tab-create-post.html', array(
+			$tab_content = _p2p_mustache_render( 'tab-create-post.html', array(
 				'title' => $this->ptype->labels->add_new_item
 			) );
 
@@ -127,32 +227,20 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 			);
 		}
 
-		echo self::mustache_render( 'box.html', $data );
+		echo _p2p_mustache_render( 'box.html', $data );
 	}
 
 	protected function connection_row( $p2p_id, $post_id ) {
 		$data = array();
-		foreach ( array_keys( $this->columns ) as $key ) {
-			switch ( $key ) {
-			case 'title':
-				$value = $this->column_title( $post_id );
-				break;
 
-			case 'delete':
-				$value = $this->column_delete( $p2p_id );
-				break;
-
-			default:
-				$value = $this->column_default( $p2p_id, $key );
-			}
-
+		foreach ( $this->columns as $key => $field ) {
 			$data['columns'][] = array(
 				'column' => $key,
-				'content' => $value
+				'content' => $field->render( $key, $p2p_id, $post_id )
 			);
 		}
 
-		return self::mustache_render( 'box-row.html', $data );
+		return _p2p_mustache_render( 'box-row.html', $data );
 	}
 
 	protected function post_rows( $current_post_id, $page = 1, $search = '' ) {
@@ -163,13 +251,18 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 
 		$data = array();
 
+		$columns = array(
+			'create' => new P2P_Field_Create,
+			'title' => new P2P_Field_Title,
+		);
+
 		foreach ( $candidate->posts as $post ) {
 			$row = array();
 
-			foreach ( array( 'create', 'title' ) as $key ) {
+			foreach ( $columns as $key => $field ) {
 				$row['columns'][] = array(
 					'column' => $key,
-					'content' => call_user_func( array( $this, "column_$key" ), $post->ID )
+					'content' => $field->render( $key, 0, $post->ID )
 				);
 			}
 
@@ -184,80 +277,24 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 				'prev-inactive' => ( 1 == $candidate->current_page ) ? 'inactive' : '',
 				'next-inactive' => ( $candidate->total_pages == $candidate->current_page ) ? 'inactive' : '',
 
-				'prev-label' =>  __( 'Previous', P2P_TEXTDOMAIN ),
-				'next-label' =>  __( 'Next', P2P_TEXTDOMAIN ),
-				'of-label' => __( 'of', P2P_TEXTDOMAIN ),
+				'prev-label' =>  __( 'previous', p2p_textdomain ),
+				'next-label' =>  __( 'next', p2p_textdomain ),
+				'of-label' => __( 'of', p2p_textdomain ),
 			);
 		}
 
-		return self::mustache_render( 'tab-recent.html', $data, array( 'box-row' ) );
-	}
-
-
-	// Column rendering
-
-	protected function column_title( $post_id ) {
-		$data = array(
-			'title-attr' => get_post_type_object( get_post_type( $post_id ) )->labels->edit_item,
-			'title' => get_post_field( 'post_title', $post_id ),
-			'url' => get_edit_post_link( $post_id ),
-		);
-
-		$post_status = get_post_status( $post_id );
-
-		if ( 'publish' != $post_status ) {
-			$status_obj = get_post_status_object( $post_status );
-			if ( $status_obj ) {
-				$data['status']['text'] = $status_obj->label;
-			}
-		}
-
-		return self::mustache_render( 'column-title.html', $data );
-	}
-
-	protected function column_create( $post_id ) {
-		$data = array(
-			'post_id' => $post_id,
-			'title' => __( 'Create connection', P2P_TEXTDOMAIN )
-		);
-
-		return self::mustache_render( 'column-create.html', $data );
-	}
-
-	protected function column_delete( $p2p_id ) {
-		$data = array(
-			'p2p_id' => $p2p_id,
-			'title' => __( 'Delete connection', P2P_TEXTDOMAIN )
-		);
-
-		return self::mustache_render( 'column-delete.html', $data );
-	}
-
-	protected function column_delete_all() {
-		$data = array(
-			'title' => __( 'Delete all connections', P2P_TEXTDOMAIN )
-		);
-
-		return self::mustache_render( 'column-delete-all.html', $data );
-	}
-
-	protected function column_default( $p2p_id, $key ) {
-		return html( 'input', array(
-			'type' => 'text',
-			'name' => "p2p_meta[$p2p_id][$key]",
-			'value' => p2p_get_meta( $p2p_id, $key, true )
-		) );
+		return _p2p_mustache_render( 'tab-recent.html', $data, array( 'box-row' ) );
 	}
 
 
 	// Ajax handlers
 
 	public function ajax_create_post() {
-		$this->safe_connect( $this->data->create_post( $_POST['post_title'] ) );
+		$this->safe_connect( $this->data->create_post( $_post['post_title'] ) );
 	}
 
 	public function ajax_connect() {
-		$this->safe_connect( $_POST['to'] );
+		$this->safe_connect( $_post['to'] );
 	}
 
 	private function safe_connect( $to ) {
@@ -297,23 +334,23 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 
 		die( json_encode( $results ) );
 	}
+}
 
 
-	// Helpers
+// Helpers
 
-	private static function mustache_render( $file, $data, $partials = array() ) {
-		$partial_data = array();
-		foreach ( $partials as $partial ) {
-			$partial_data[$partial] = self::load_template( $partial . '.html' );
-		}
-
-		$m = new Mustache;
-
-		return $m->render( self::load_template( $file ), $data, $partial_data );
+function _p2p_mustache_render( $file, $data, $partials = array() ) {
+	$partial_data = array();
+	foreach ( $partials as $partial ) {
+		$partial_data[$partial] = _p2p_load_template( $partial . '.html' );
 	}
 
-	private function load_template( $file ) {
-		return file_get_contents( dirname(__FILE__) . '/templates/' . $file );
-	}
+	$m = new Mustache;
+
+	return $m->render( _p2p_load_template( $file ), $data, $partial_data );
+}
+
+function _p2p_load_template( $file ) {
+	return file_get_contents( dirname(__FILE__) . '/templates/' . $file );
 }
 
