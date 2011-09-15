@@ -11,12 +11,6 @@ interface P2P_Box_UI {
 
 class P2P_Connection_Types {
 
-	private static $ctypes = array();
-
-	static public function register( $args ) {
-		self::$ctypes[] = $args;
-	}
-
 	function init() {
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
 		add_action( 'save_post', array( __CLASS__, 'save_post' ), 10, 2 );
@@ -27,7 +21,7 @@ class P2P_Connection_Types {
 	 * Add all the metaboxes.
 	 */
 	static function add_meta_boxes( $from ) {
-		foreach ( self::$ctypes as $box_id => $args ) {
+		foreach ( $GLOBALS['_p2p_connection_types'] as $box_id => $args ) {
 			$box = self::make_box( $box_id, $from );
 			if ( !$box )
 				continue;
@@ -77,10 +71,10 @@ class P2P_Connection_Types {
 	}
 
 	private static function make_box( $box_id, $post_type ) {
-		if ( !isset( self::$ctypes[ $box_id ] ) )
+		if ( !isset( $GLOBALS['_p2p_connection_types'][ $box_id ] ) )
 			return false;
 
-		$args = self::$ctypes[ $box_id ];
+		$args = $GLOBALS['_p2p_connection_types'][ $box_id ];
 
 		$reciprocal = _p2p_pluck( $args, 'reciprocal' );
 

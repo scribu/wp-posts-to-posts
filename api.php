@@ -25,10 +25,14 @@ function p2p_register_connection_type( $args ) {
 	$defaults = array(
 		'from' => '',
 		'to' => '',
+		'reciprocal' => false,
+
 		'fields' => array(),
 		'data' => array(),
+
 		'prevent_duplicates' => true,
-		'reciprocal' => false,
+		'connections_per_post' => false,
+
 		'title' => '',
 		'context' => 'side',
 	);
@@ -37,7 +41,7 @@ function p2p_register_connection_type( $args ) {
 
 	foreach ( (array) $args['from'] as $from ) {
 		foreach ( (array) $args['to'] as $to ) {
-			P2P_Connection_Types::register( array_merge( $args, compact( 'from', 'to' ) ) );
+			$GLOBALS['_p2p_connection_types'][] = array_merge( $args, compact( 'from', 'to' ) );
 		}
 	}
 }
