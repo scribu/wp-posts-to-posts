@@ -1,9 +1,10 @@
 <?php
 
 /**
- * Takes care of everything related to connection data: currently connected posts, potentially connected posts etc.
+ * Enforces various policies for a given connection type:
+ * which posts can be connected, total number of connections per post etc.
  */
-class P2P_Connections_Handler {
+class P2P_Connections_Policy {
 
 	protected $args;
 

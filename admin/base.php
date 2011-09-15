@@ -107,7 +107,7 @@ class P2P_Connection_Types {
 			$metabox_args[ $key ] = _p2p_pluck( $args, $key );
 		}
 
-		$box_data = new P2P_Connections_Handler( array_merge( $args, compact( 'direction', 'reversed' ) ) );
+		$box_data = new P2P_Connections_Policy( array_merge( $args, compact( 'direction', 'reversed' ) ) );
 
 		return new P2P_Box_Multiple( $box_id, $box_data, $metabox_args );
 	}
