@@ -143,7 +143,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 		$title = $this->title;
 
 		if ( is_array( $title ) ) {
-			$key = $this->reversed ? 'to' : 'from';
+			$key = $this->data->reversed ? 'to' : 'from';
 
 			if ( isset( $title[ $key ] ) )
 				$title = $title[ $key ];
@@ -211,7 +211,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 		$data['tabs'][] = array(
 			'tab-id' => 'recent',
 			'tab-title' => __( 'View All', P2P_TEXTDOMAIN ),
-			'tab-content' => $this->post_rows( $post_id )
+			'tab-content' => $this->post_rows( $post->ID )
 		);
 
 		// Create post tab
@@ -277,9 +277,9 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 				'prev-inactive' => ( 1 == $candidate->current_page ) ? 'inactive' : '',
 				'next-inactive' => ( $candidate->total_pages == $candidate->current_page ) ? 'inactive' : '',
 
-				'prev-label' =>  __( 'previous', p2p_textdomain ),
-				'next-label' =>  __( 'next', p2p_textdomain ),
-				'of-label' => __( 'of', p2p_textdomain ),
+				'prev-label' =>  __( 'previous', P2P_TEXTDOMAIN ),
+				'next-label' =>  __( 'next', P2P_TEXTDOMAIN ),
+				'of-label' => __( 'of', P2P_TEXTDOMAIN ),
 			);
 		}
 
@@ -290,11 +290,11 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 	// Ajax handlers
 
 	public function ajax_create_post() {
-		$this->safe_connect( $this->data->create_post( $_post['post_title'] ) );
+		$this->safe_connect( $this->data->create_post( $_POST['post_title'] ) );
 	}
 
 	public function ajax_connect() {
-		$this->safe_connect( $_post['to'] );
+		$this->safe_connect( $_POST['to'] );
 	}
 
 	private function safe_connect( $to ) {

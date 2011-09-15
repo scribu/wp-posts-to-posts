@@ -44,7 +44,7 @@ class P2P_Connections_Handler {
 		}
 
 		if ( $this->prevent_duplicates )
-			$args['post__not_in'] = P2P_Connections::get( $post_id, $this->direction, $this->data );
+			$args['post__not_in'] = P2P_Connections::get( $current_post_id, $this->direction, $this->data );
 
 		$args = apply_filters( 'p2p_possible_connections_args', $args, $this->args );
 
