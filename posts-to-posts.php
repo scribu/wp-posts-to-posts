@@ -42,6 +42,7 @@ function _p2p_init() {
 	require_once dirname( __FILE__ ) . '/admin/base.php';
 	require_once dirname( __FILE__ ) . '/admin/data.php';
 	require_once dirname( __FILE__ ) . '/admin/box.php';
+	require_once dirname( __FILE__ ) . '/admin/fields.php';
 
 	P2P_Connections::init( __FILE__ );
 

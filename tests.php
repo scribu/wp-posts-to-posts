@@ -43,7 +43,7 @@ class P2P_Test {
 			'to' => 'movie',
 			'fields' => array(
 				'role' => 'Role',
-				'role_type' => 'Role Type'
+				'role_type' => array( 'title' => 'Role Type', 'values' => array( 'lead', 'secondary', 'episodic' ) ),
 			),
 			'prevent_duplicates' => false,
 			'context' => 'advanced',
