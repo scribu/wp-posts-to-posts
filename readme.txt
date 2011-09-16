@@ -46,6 +46,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 = 0.9 =
 * introduce dropdown connection fields
+* introduce 'sortable' arg to p2p_register_connection_type()
 * introduce 'data' arg to p2p_register_connection_type()
 * replace 'box' arg with hooks
 * allow using 'connected_meta' and 'connected_orderby' toghether
