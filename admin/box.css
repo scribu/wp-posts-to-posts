@@ -119,6 +119,11 @@ th.p2p-col-delete a {
 	background: url("images/delete.png") no-repeat scroll 50% 50% transparent;
 }
 
+tr:hover td.p2p-col-order {
+	cursor: move;
+	background: url("images/sort.png") no-repeat scroll 50% 50% transparent;
+}
+
 .p2p-search .waiting {
 	margin-left: -20px;
 	opacity: 0.8;

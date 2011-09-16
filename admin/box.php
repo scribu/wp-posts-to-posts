@@ -35,6 +35,10 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 			$this->columns[ $key ] = new P2P_Field_Generic( $data );
 		}
 
+		if ( $this->data->sortable && !$this->data->reversed ) {
+			$this->columns['order'] = new P2P_Field_Order( $this->data->sortable );
+		}
+
 		wp_enqueue_style( 'p2p-admin', plugins_url( 'box.css', __FILE__ ), array(), P2P_PLUGIN_VERSION );
 		wp_enqueue_script( 'p2p-admin', plugins_url( 'box.js', __FILE__ ), array( 'jquery' ), P2P_PLUGIN_VERSION, true );
 		wp_localize_script( 'p2p-admin', 'P2PAdmin', array(

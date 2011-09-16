@@ -39,6 +39,28 @@ class P2P_Field_Delete implements P2P_Field {
 }
 
 
+class P2P_Field_Order implements P2P_Field {
+
+	protected $sort_key;
+
+	function __construct( $sort_key ) {
+		$this->sort_key = $sort_key;
+	}
+
+	function get_title() {
+		return '';
+	}
+
+	function render( $key, $p2p_id, $post_id ) {
+		return html( 'input', array(
+			'type' => 'hidden',
+			'name' => "p2p_order[$this->sort_key][]",
+			'value' => $p2p_id
+		) );
+	}
+}
+
+
 class P2P_Field_Title implements P2P_Field {
 
 	protected $title;

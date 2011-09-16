@@ -44,9 +44,17 @@ class P2P_Connection_Types {
 		if ( 'revision' == $post->post_type || !isset( $_POST['p2p_meta'] ) )
 			return;
 
+		// Custom fields
 		foreach ( $_POST['p2p_meta'] as $p2p_id => $data ) {
 			foreach ( $data as $key => $value ) {
 				p2p_update_meta( $p2p_id, $key, $value );
+			}
+		}
+
+		// Ordering
+		foreach ( $_POST['p2p_order'] as $key => $list ) {
+			foreach ( $list as $i => $p2p_id ) {
+				p2p_update_meta( $p2p_id, $key, $i );
 			}
 		}
 	}

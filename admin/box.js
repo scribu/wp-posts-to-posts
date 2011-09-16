@@ -38,6 +38,19 @@ $('.p2p-box').each(function() {
 		};
 	}
 
+	// Make sortable
+	if ( $connections.find('th.p2p-col-order').length ) {
+		$connections.find('tbody').sortable({
+			handle: 'td.p2p-col-order',
+			helper: function(e, ui) {
+				ui.children().each(function() {
+					$(this).width($(this).width());
+				});
+				return ui;
+			}
+		});
+	}
+
 	// Delete all connections
 	$metabox.delegate('th.p2p-col-delete a', 'click', function() {
 		if ( !confirm(P2PAdmin.deleteConfirmMessage) )

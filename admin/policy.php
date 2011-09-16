@@ -78,6 +78,12 @@ class P2P_Connections_Policy {
 			'ignore_sticky_posts' => true,
 		);
 
+		if ( $this->sortable ) {
+			$args['connected_orderby'] = $this->sortable;
+			$args['connected_order'] = 'ASC';
+			$args['connected_order_num'] = true;
+		}
+
 		$args = apply_filters( 'p2p_current_connections_args', $args, $this->args );
 
 		$q = new WP_Query( $args );

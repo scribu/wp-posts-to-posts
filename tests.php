@@ -10,7 +10,7 @@ class P2P_Test {
 
 		add_action('init', array(__CLASS__, '_init'));
 #		add_action('admin_init', array(__CLASS__, 'setup'));
-		add_action('load-index.php', array(__CLASS__, 'test'));
+#		add_action('load-index.php', array(__CLASS__, 'test'));
 #		add_action('load-index.php', array(__CLASS__, 'debug'));
 	}
 
@@ -45,6 +45,7 @@ class P2P_Test {
 				'role' => 'Role',
 				'role_type' => array( 'title' => 'Role Type', 'values' => array( 'lead', 'secondary', 'episodic' ) ),
 			),
+			'sortable' => 'order',
 			'prevent_duplicates' => false,
 			'context' => 'advanced',
 			'reciprocal' => true,
@@ -59,7 +60,8 @@ class P2P_Test {
 			'to' => 'actor',
 			'reciprocal' => true,
 			'title' => array( 'from' => 'Doubles', 'to' => 'Main Actor' ),
-			'data' => array( 'type' => 'doubles' )
+			'data' => array( 'type' => 'doubles' ),
+			'sortable' => 'order'
 		) );
 
 		p2p_register_connection_type( array(
