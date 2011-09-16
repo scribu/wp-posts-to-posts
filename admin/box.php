@@ -6,8 +6,8 @@ interface P2P_Field {
 }
 
 
-class P2P_Box_Multiple implements P2P_Box_UI {
-	public $box_id;
+class P2P_Box_Multiple {
+	private $box_id;
 
 	private $data;
 
@@ -35,7 +35,7 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 			$this->columns[ $key ] = new P2P_Field_Generic( $data );
 		}
 
-		if ( $this->data->sortable && !$this->data->reversed ) {
+		if ( $this->data->sortable ) {
 			$this->columns['order'] = new P2P_Field_Order( $this->data->sortable );
 		}
 
@@ -52,28 +52,22 @@ class P2P_Box_Multiple implements P2P_Box_UI {
 		return $this->metabox_args[ $key ];
 	}
 
-	// Returns the title for the metabox
-	function get_title() {
-		$title = $this->title;
-
-		if ( is_array( $title ) ) {
-			$key = $this->data->reversed ? 'to' : 'from';
-
-			if ( isset( $title[ $key ] ) )
-				$title = $title[ $key ];
-			else
-				$title = '';
-		}
+	public function register() {
+		$title = $this->data->title;
 
 		if ( empty( $title ) ) {
 			$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), $this->ptype->labels->name );
 		}
 
-		return $title;
+		add_meta_box(
+			'p2p-connections-' . $this->box_id,
+			$title,
+			array( $this, 'render' ),
+			$this->data->from,
+			$this->context,
+			'default'
+		);
 	}
-
-
-	// Initial rendering
 
 	function render( $post ) {
 		$connected_ids = $this->data->get_current_connections( $post->ID );

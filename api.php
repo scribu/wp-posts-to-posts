@@ -31,9 +31,7 @@ function p2p_register_connection_type( $args ) {
 		'fields' => array(),
 		'data' => array(),
 		'sortable' => false,
-
 		'prevent_duplicates' => true,
-		'connections_per_post' => false,
 
 		'title' => '',
 		'context' => 'side',

@@ -7,11 +7,35 @@ class P2P_Connections_Policy {
 
 	protected $args;
 
+	protected $reversed;
+
 	public function __construct( $args ) {
 		$this->args = $args;
+		$this->reversed = ( 'to' == $this->direction );
+
+		if ( $this->reversed )
+			list( $this->args['to'], $this->args['from'] ) = array( $this->args['from'], $this->args['to'] );
 	}
 
 	public function __get( $key ) {
+		if ( 'sortable' == $key && $this->reversed )
+			return false;
+
+		if ( 'title' == $key ) {
+			$title = $this->args['title'];
+
+			if ( is_array( $title ) ) {
+				$key = $this->reversed ? 'to' : 'from';
+
+				if ( isset( $title[ $key ] ) )
+					$title = $title[ $key ];
+				else
+					$title = '';
+			}
+
+			return $title;
+		}
+
 		return $this->args[$key];
 	}
 
@@ -22,7 +46,7 @@ class P2P_Connections_Policy {
 			'post_type' => $this->to
 		);
 
-		$args = apply_filters( 'p2p_new_post_args', $args, $this->args );
+		$args = apply_filters( 'p2p_new_post_args', $args, $this );
 
 		return wp_insert_post( $args );
 	}
@@ -46,7 +70,7 @@ class P2P_Connections_Policy {
 		if ( $this->prevent_duplicates )
 			$args['post__not_in'] = P2P_Connections::get( $current_post_id, $this->direction, $this->data );
 
-		$args = apply_filters( 'p2p_possible_connections_args', $args, $this->args );
+		$args = apply_filters( 'p2p_possible_connections_args', $args, $this );
 
 		$query = new WP_Query( $args );
 
@@ -84,7 +108,7 @@ class P2P_Connections_Policy {
 			$args['connected_order_num'] = true;
 		}
 
-		$args = apply_filters( 'p2p_current_connections_args', $args, $this->args );
+		$args = apply_filters( 'p2p_current_connections_args', $args, $this );
 
 		$q = new WP_Query( $args );
 

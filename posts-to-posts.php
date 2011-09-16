@@ -43,9 +43,10 @@ function _p2p_init() {
 
 	P2P_Migrate::init();
 
+	require_once dirname( __FILE__ ) . '/policy.php';
+
 	if ( is_admin() ) {
 		require_once dirname( __FILE__ ) . '/admin/base.php';
-		require_once dirname( __FILE__ ) . '/admin/policy.php';
 		require_once dirname( __FILE__ ) . '/admin/box.php';
 		require_once dirname( __FILE__ ) . '/admin/fields.php';
 	}

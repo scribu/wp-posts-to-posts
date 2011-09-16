@@ -2,13 +2,6 @@
 
 define( 'P2P_BOX_NONCE', 'p2p-box' );
 
-
-interface P2P_Box_UI {
-	function get_title();
-	function render( $post );
-}
-
-
 class P2P_Connection_Types {
 
 	function init() {
@@ -26,14 +19,7 @@ class P2P_Connection_Types {
 			if ( !$box )
 				continue;
 
-			add_meta_box(
-				'p2p-connections-' . $box->box_id,
-				$box->get_title(),
-				array( $box, 'render' ),
-				$box->from,
-				$box->context,
-				'default'
-			);
+			$box->register();
 		}
 	}
 
@@ -99,19 +85,16 @@ class P2P_Connection_Types {
 		if ( !$direction )
 			return false;
 
-		$reversed = ( 'to' == $direction );
-
-		if ( $reversed )
-			list( $args['to'], $args['from'] ) = array( $args['from'], $args['to'] );
+		$args['direction'] = $direction;
 
 		$metabox_args = array();
-		foreach ( array( 'context', 'from', 'title' ) as $key ) {
+		foreach ( array( 'context' ) as $key ) {
 			$metabox_args[ $key ] = _p2p_pluck( $args, $key );
 		}
 
-		$box_data = new P2P_Connections_Policy( array_merge( $args, compact( 'direction', 'reversed' ) ) );
+		$policy = new P2P_Connections_Policy( $args );
 
-		return new P2P_Box_Multiple( $box_id, $box_data, $metabox_args );
+		return new P2P_Box_Multiple( $box_id, $policy, $metabox_args );
 	}
 }
 
