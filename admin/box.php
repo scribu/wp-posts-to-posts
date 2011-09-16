@@ -6,7 +6,7 @@ interface P2P_Field {
 }
 
 
-class P2P_Box_Multiple {
+class P2P_Box {
 	private $box_id;
 
 	private $data;

@@ -27,20 +27,24 @@ class P2P_Connection_Types {
 	 * Collect metadata from all boxes.
 	 */
 	function save_post( $post_id, $post ) {
-		if ( 'revision' == $post->post_type || !isset( $_POST['p2p_meta'] ) )
+		if ( 'revision' == $post->post_type || defined( 'DOING_AJAX' ) )
 			return;
 
 		// Custom fields
-		foreach ( $_POST['p2p_meta'] as $p2p_id => $data ) {
-			foreach ( $data as $key => $value ) {
-				p2p_update_meta( $p2p_id, $key, $value );
+		if ( isset( $_POST['p2p_meta'] ) ) {
+			foreach ( $_POST['p2p_meta'] as $p2p_id => $data ) {
+				foreach ( $data as $key => $value ) {
+					p2p_update_meta( $p2p_id, $key, $value );
+				}
 			}
 		}
 
 		// Ordering
-		foreach ( $_POST['p2p_order'] as $key => $list ) {
-			foreach ( $list as $i => $p2p_id ) {
-				p2p_update_meta( $p2p_id, $key, $i );
+		if ( isset( $_POST['p2p_order'] ) ) {
+			foreach ( $_POST['p2p_order'] as $key => $list ) {
+				foreach ( $list as $i => $p2p_id ) {
+					p2p_update_meta( $p2p_id, $key, $i );
+				}
 			}
 		}
 	}
@@ -94,7 +98,7 @@ class P2P_Connection_Types {
 
 		$policy = new P2P_Connections_Policy( $args );
 
-		return new P2P_Box_Multiple( $box_id, $policy, $metabox_args );
+		return new P2P_Box( $box_id, $policy, $metabox_args );
 	}
 }
 
