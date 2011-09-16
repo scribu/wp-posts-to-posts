@@ -53,15 +53,9 @@ class P2P_Box {
 	}
 
 	public function register() {
-		$title = $this->data->title;
-
-		if ( empty( $title ) ) {
-			$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), $this->ptype->labels->name );
-		}
-
 		add_meta_box(
 			'p2p-connections-' . $this->box_id,
-			$title,
+			$this->data->get_title(),
 			array( $this, 'render' ),
 			$this->data->from,
 			$this->context,

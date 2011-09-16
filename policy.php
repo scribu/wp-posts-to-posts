@@ -12,31 +12,39 @@ class P2P_Connections_Policy {
 	public function __construct( $args ) {
 		$this->args = $args;
 		$this->reversed = ( 'to' == $this->direction );
-
-		if ( $this->reversed )
-			list( $this->args['to'], $this->args['from'] ) = array( $this->args['from'], $this->args['to'] );
 	}
 
 	public function __get( $key ) {
-		if ( 'sortable' == $key && $this->reversed )
-			return false;
+		if ( $this->reversed ) {
+			if ( 'sortable' == $key )
+				return false;
 
-		if ( 'title' == $key ) {
-			$title = $this->args['title'];
-
-			if ( is_array( $title ) ) {
-				$key = $this->reversed ? 'to' : 'from';
-
-				if ( isset( $title[ $key ] ) )
-					$title = $title[ $key ];
-				else
-					$title = '';
-			}
-
-			return $title;
+			if ( 'from' == $key )
+				$key = 'to';
+			elseif ( 'to' == $key )
+				$key = 'from';
 		}
 
 		return $this->args[$key];
+	}
+
+	public function get_title() {
+		$title = $this->args['title'];
+
+		if ( is_array( $title ) ) {
+			$key = $this->reversed ? 'to' : 'from';
+
+			if ( isset( $title[ $key ] ) )
+				$title = $title[ $key ];
+			else
+				$title = '';
+		}
+
+		if ( empty( $title ) ) {
+			$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), get_post_type_object( $this->to )->labels->name );
+		}
+
+		return $title;
 	}
 
 	public function create_post( $title ) {
