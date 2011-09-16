@@ -59,8 +59,7 @@ class P2P_Connection_Types {
 		if ( !$box )
 			die(0);
 
-		$ptype_obj = get_post_type_object( $box->from );
-		if ( !current_user_can( $ptype_obj->cap->edit_posts ) )
+		if ( !current_user_can( $box->ptype->cap->edit_posts ) )
 			die(-1);
 
 		$method = 'ajax_' . $_REQUEST['subaction'];

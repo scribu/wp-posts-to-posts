@@ -13,7 +13,8 @@ class P2P_Box {
 
 	private $metabox_args;
 
-	private $ptype;
+	public $ptype;
+
 	private $columns;
 
 	function __construct( $box_id, $data, $metabox_args ) {
