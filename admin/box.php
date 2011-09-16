@@ -65,13 +65,13 @@ class P2P_Box {
 	}
 
 	function render( $post ) {
-		$connected_ids = $this->data->get_current_connections( $post->ID );
+		$connected_posts = $this->data->get_current_connections( $post->ID );
 
 		$data = array(
 			'create-label' => __( 'Create connections:', P2P_TEXTDOMAIN ),
 		);
 
-		if ( empty( $connected_ids ) )
+		if ( empty( $connected_posts ) )
 			$data['hide-connections'] = 'style="display:none"';
 
 		foreach ( $this->columns as $key => $field ) {
@@ -93,8 +93,8 @@ class P2P_Box {
 		$data['attributes'] = implode( ' ', $data_attr_str );
 
 		$tbody = '';
-		foreach ( $connected_ids as $p2p_id => $post_b ) {
-			$tbody .= $this->connection_row( $p2p_id, $post_b );
+		foreach ( $connected_posts as $post ) {
+			$tbody .= $this->connection_row( $post->p2p_id, $post->ID );
 		}
 		$data['tbody'] = $tbody;
 

@@ -120,7 +120,7 @@ class P2P_Connections_Policy {
 
 		$q = new WP_Query( $args );
 
-		return scb_list_fold( $q->posts, 'p2p_id', 'ID' );
+		return $q->posts;
 	}
 
 	public function connect( $from, $to ) {
