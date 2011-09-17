@@ -57,7 +57,7 @@ class P2P_Connection_Type {
 		$args = array(
 			'post_title' => $title,
 			'post_author' => get_current_user_id(),
-			'post_type' => $this->to
+			'post_type' => $this->to // FIXME
 		);
 
 		$args = apply_filters( 'p2p_new_post_args', $args, $this );
@@ -66,33 +66,15 @@ class P2P_Connection_Type {
 	}
 
 	public function get_connected( $post_id ) {
-		$post = get_post( $post_id );
-		if ( !$post )
+		$direction = $this->get_direction_from_id( $post_id );
+		if ( !$direction )
 			return array();
 
-		$direction = $this->get_direction( $post->post_type );
-
-		if ( !$direction ) {
-			trigger_error( sprintf( "Invalid post type. Expected '%s' or '%s', but received '%s'.",
-				$this->args['from'],
-				$this->args['to'],
-				$post->post_type
-			), E_USER_WARNING );
-			return array();
-		}
-
-		$other_post_type = 'from' == $direction ? $this->args['to'] : $this->args['from'];
-
-		$args = array(
+		$args = array_merge( $this->get_base_args( $direction ), array(
 			array_search( $direction, P2P_Query::$qv_map ) => $post_id,
 			'connected_meta' => $this->data,
-			'post_type'=> $other_post_type,
-			'post_status' => 'any',
 			'nopaging' => true,
-			'update_post_meta_cache' => false,
-			'update_post_term_cache' => false,
-			'ignore_sticky_posts' => true,
-		);
+		) );
 
 		if ( $this->sortable && 'to' != $direction ) {
 			$args['connected_orderby'] = $this->sortable;
@@ -108,15 +90,14 @@ class P2P_Connection_Type {
 	}
 
 	public function get_connectable( $post_id, $page, $search ) {
-		$args = array(
+		$direction = $this->get_direction_from_id( $post_id );
+		if ( !$direction )
+			return array();
+
+		$args = array_merge( $this->get_base_args( $direction ), array(
 			'paged' => $page,
-			'post_type' => $this->to,
-			'post_status' => 'any',
 			'posts_per_page' => 5,
-			'suppress_filters' => false,
-			'update_post_term_cache' => false,
-			'update_post_meta_cache' => false
-		);
+		) );
 
 		if ( $search ) {
 			add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
@@ -124,7 +105,7 @@ class P2P_Connection_Type {
 		}
 
 		if ( $this->prevent_duplicates )
-			$args['post__not_in'] = P2P_Storage::get( $post_id, $this->direction, $this->data );
+			$args['post__not_in'] = P2P_Storage::get( $post_id, $direction, $this->data );
 
 		$args = apply_filters( 'p2p_connectable_args', $args, $this );
 
@@ -139,20 +120,43 @@ class P2P_Connection_Type {
 		);
 	}
 
-	function _search_by_title( $sql, $wp_query ) {
-		if ( $wp_query->is_search ) {
-			list( $sql ) = explode( ' OR ', $sql, 2 );
-			return $sql . '))';
+	private function get_direction_from_id( $post_id ) {
+		$post = get_post( $post_id );
+		if ( !$post )
+			return false;
+
+		$direction = $this->get_direction( $post->post_type );
+
+		if ( !$direction ) {
+			trigger_error( sprintf( "Invalid post type. Expected '%s' or '%s', but received '%s'.",
+				$this->args['from'],
+				$this->args['to'],
+				$post->post_type
+			), E_USER_WARNING );
 		}
 
-		return $sql;
+		return $direction;
+	}
+
+	private function get_other_post_type( $direction ) {
+		return 'from' == $direction ? $this->to : $this->from;
+	}
+
+	private function get_base_args( $direction ) {
+		return array(
+			'post_type' => $this->get_other_post_type( $direction ),
+			'post_status' => 'any',
+			'suppress_filters' => false,
+			'update_post_term_cache' => false,
+			'update_post_meta_cache' => false
+		);
 	}
 
 	public function connect( $from, $to ) {
 		$post_from = get_post( $from );
 		$post_to = get_post( $to );
 
-		if ( !$post_a || !$post_b ) {
+		if ( !$post_from || !$post_to ) {
 			return false;
 		}
 
@@ -183,6 +187,15 @@ class P2P_Connection_Type {
 
 	public function delete_connection( $p2p_id ) {
 		p2p_delete_connection( $p2p_id );
+	}
+
+	function _search_by_title( $sql, $wp_query ) {
+		if ( $wp_query->is_search ) {
+			list( $sql ) = explode( ' OR ', $sql, 2 );
+			return $sql . '))';
+		}
+
+		return $sql;
 	}
 }
 

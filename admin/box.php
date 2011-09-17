@@ -58,14 +58,18 @@ class P2P_Box {
 	}
 
 	function render( $post ) {
-		$connected_posts = $this->data->get_connected( $post->ID );
+		$data = array();
 
-		$data = array(
-			'create-label' => __( 'Create connections:', P2P_TEXTDOMAIN ),
-		);
+		$connected_posts = $this->data->get_connected( $post->ID );
 
 		if ( empty( $connected_posts ) )
 			$data['hide-connections'] = 'style="display:none"';
+
+		$tbody = '';
+		foreach ( $connected_posts as $connected ) {
+			$tbody .= $this->connection_row( $connected->p2p_id, $connected->ID );
+		}
+		$data['tbody'] = $tbody;
 
 		foreach ( $this->columns as $key => $field ) {
 			$data['thead'][] = array(
@@ -84,11 +88,7 @@ class P2P_Box {
 			$data_attr_str[] = "data-$key='" . $value . "'";
 		$data['attributes'] = implode( ' ', $data_attr_str );
 
-		$tbody = '';
-		foreach ( $connected_posts as $post ) {
-			$tbody .= $this->connection_row( $post->p2p_id, $post->ID );
-		}
-		$data['tbody'] = $tbody;
+		$data['create-label'] = __( 'Create connections:', P2P_TEXTDOMAIN );
 
 		// Search tab
 		$tab_content = _p2p_mustache_render( 'tab-search.html', array(
