@@ -12,17 +12,21 @@ class P2P_Box {
 	private $data;
 
 	private $current_ptype;
+	private $direction;
+
 	public $ptype;
 
 	private $columns;
 
-	function __construct( $box_id, $data, $current_ptype, $other_ptype ) {
+	function __construct( $box_id, $data, $current_ptype, $direction ) {
 		$this->box_id = $box_id;
 		$this->data = $data;
 
-		$this->current_ptype = $current_ptype;;
+		$this->direction = $direction;
 
-		$this->ptype = get_post_type_object( $other_ptype );
+		$this->current_ptype = $current_ptype;
+
+		$this->ptype = get_post_type_object( $this->data->get_other_post_type( $direction ) );
 
 		if ( !class_exists( 'Mustache' ) )
 			require dirname(__FILE__) . '/../mustache/Mustache.php';
@@ -50,9 +54,15 @@ class P2P_Box {
 	}
 
 	public function register() {
+		$title = $this->data->get_title( $this->direction );
+
+		if ( empty( $title ) ) {
+			$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), $this->ptype->labels->name );
+		}
+
 		add_meta_box(
 			'p2p-connections-' . $this->box_id,
-			$this->data->get_title(),
+			$title,
 			array( $this, 'render' ),
 			$this->current_ptype,
 			$this->data->context,
@@ -188,7 +198,19 @@ class P2P_Box {
 	// Ajax handlers
 
 	public function ajax_create_post() {
-		$this->safe_connect( $this->data->create_post( $_POST['post_title'] ) );
+		$this->safe_connect( $this->create_post( $_POST['post_title'] ) );
+	}
+
+	private function create_post( $title ) {
+		$args = array(
+			'post_title' => $title,
+			'post_author' => get_current_user_id(),
+			'post_type' => $this->ptype->name
+		);
+
+		$args = apply_filters( 'p2p_new_post_args', $args, $this->data );
+
+		return wp_insert_post( $args );
 	}
 
 	public function ajax_connect() {
@@ -208,7 +230,7 @@ class P2P_Box {
 	}
 
 	public function ajax_disconnect() {
-		$this->data->delete_connection( $_POST['p2p_id'] );
+		p2p_delete_connection( $_POST['p2p_id'] );
 
 		die(1);
 	}

@@ -4,9 +4,6 @@ class P2P_Connection_Type {
 
 	protected $args;
 
-	protected $direction = 'from';
-	protected $reversed = false;
-
 	public function __construct( $args ) {
 		$this->args = $args;
 	}
@@ -28,17 +25,11 @@ class P2P_Connection_Type {
 		return false;
 	}
 
-	// TODO: remove
-	public function set_direction( $direction ) {
-		$this->direction = $direction;
-		$this->reversed = ( 'to' == $direction );
-	}
-
-	public function get_title() {
+	public function get_title( $direction ) {
 		$title = $this->args['title'];
 
 		if ( is_array( $title ) ) {
-			$key = $this->reversed ? 'to' : 'from';
+			$key = ( 'to' == $direction ) ? 'to' : 'from';
 
 			if ( isset( $title[ $key ] ) )
 				$title = $title[ $key ];
@@ -46,23 +37,7 @@ class P2P_Connection_Type {
 				$title = '';
 		}
 
-		if ( empty( $title ) ) {
-			$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), get_post_type_object( $this->to )->labels->name );
-		}
-
 		return $title;
-	}
-
-	public function create_post( $title ) {
-		$args = array(
-			'post_title' => $title,
-			'post_author' => get_current_user_id(),
-			'post_type' => $this->to // FIXME
-		);
-
-		$args = apply_filters( 'p2p_new_post_args', $args, $this );
-
-		return wp_insert_post( $args );
 	}
 
 	public function get_connected( $post_id ) {
@@ -182,11 +157,7 @@ class P2P_Connection_Type {
 	}
 
 	public function disconnect( $post_id ) {
-		p2p_disconnect( $post_id, $this->direction, $this->data );
-	}
-
-	public function delete_connection( $p2p_id ) {
-		p2p_delete_connection( $p2p_id );
+		p2p_disconnect( $post_id, $this->get_direction_from_id( $post_id ), $this->data );
 	}
 
 	function _search_by_title( $sql, $wp_query ) {

@@ -78,9 +78,7 @@ class P2P_Box_Factory {
 		if ( !$direction || ( !$ctype->reciprocal && 'from' != $direction ) )
 			return false;
 
-		$ctype->set_direction( $direction ); // TODO: always calculate on the fly?
-
-		return new P2P_Box( $box_id, $ctype, $post_type, $ctype->get_other_post_type( $direction ) );
+		return new P2P_Box( $box_id, $ctype, $post_type, $direction );
 	}
 }
 
