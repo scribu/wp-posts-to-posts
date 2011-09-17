@@ -65,45 +65,6 @@ class P2P_Connection_Type {
 		return wp_insert_post( $args );
 	}
 
-	public function get_connectable( $current_post_id, $page, $search ) {
-		$args = array(
-			'paged' => $page,
-			'post_type' => $this->to,
-			'post_status' => 'any',
-			'posts_per_page' => 5,
-			'suppress_filters' => false,
-			'update_post_term_cache' => false,
-			'update_post_meta_cache' => false
-		);
-
-		if ( $search ) {
-			add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
-			$args['s'] = $search;
-		}
-
-		if ( $this->prevent_duplicates )
-			$args['post__not_in'] = P2P_Storage::get( $current_post_id, $this->direction, $this->data );
-
-		$args = apply_filters( 'p2p_possible_connections_args', $args, $this );
-
-		$query = new WP_Query( $args );
-
-		return (object) array(
-			'posts' => $query->posts,
-			'current_page' => max( 1, $query->get('paged') ),
-			'total_pages' => $query->max_num_pages
-		);
-	}
-
-	function _search_by_title( $sql, $wp_query ) {
-		if ( $wp_query->is_search ) {
-			list( $sql ) = explode( ' OR ', $sql, 2 );
-			return $sql . '))';
-		}
-
-		return $sql;
-	}
-
 	public function get_connected( $post_id ) {
 		$post = get_post( $post_id );
 		if ( !$post )
@@ -144,6 +105,45 @@ class P2P_Connection_Type {
 		$q = new WP_Query( $args );
 
 		return $q->posts;
+	}
+
+	public function get_connectable( $post_id, $page, $search ) {
+		$args = array(
+			'paged' => $page,
+			'post_type' => $this->to,
+			'post_status' => 'any',
+			'posts_per_page' => 5,
+			'suppress_filters' => false,
+			'update_post_term_cache' => false,
+			'update_post_meta_cache' => false
+		);
+
+		if ( $search ) {
+			add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
+			$args['s'] = $search;
+		}
+
+		if ( $this->prevent_duplicates )
+			$args['post__not_in'] = P2P_Storage::get( $post_id, $this->direction, $this->data );
+
+		$args = apply_filters( 'p2p_possible_connections_args', $args, $this );
+
+		$query = new WP_Query( $args );
+
+		return (object) array(
+			'posts' => $query->posts,
+			'current_page' => max( 1, $query->get('paged') ),
+			'total_pages' => $query->max_num_pages
+		);
+	}
+
+	function _search_by_title( $sql, $wp_query ) {
+		if ( $wp_query->is_search ) {
+			list( $sql ) = explode( ' OR ', $sql, 2 );
+			return $sql . '))';
+		}
+
+		return $sql;
 	}
 
 	public function connect( $from, $to ) {
