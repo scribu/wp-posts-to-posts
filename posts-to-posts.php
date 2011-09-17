@@ -42,46 +42,12 @@ function _p2p_init() {
 
 	P2P_Storage::init( __FILE__ );
 
-	P2P_Migrate::init();
-
 	if ( is_admin() ) {
 		foreach ( array( 'base', 'box', 'fields' ) as $file )
 			require_once "$base/admin/$file.php";
 	}
 }
 scb_init( '_p2p_init' );
-
-
-class P2P_Migrate {
-
-	function init() {
-		add_action( 'admin_notices', array( __CLASS__, 'migrate' ) );
-	}
-
-	function migrate() {
-		if ( !isset( $_GET['migrate_p2p'] ) || !current_user_can( 'administrator' ) )
-			return;
-
-		$tax = 'p2p';
-
-		register_taxonomy( $tax, 'post', array( 'public' => false ) );
-
-		$count = 0;
-		foreach ( get_terms( $tax ) as $term ) {
-			$post_b = (int) substr( $term->slug, 1 );
-			$post_a = get_objects_in_term( $term->term_id, $tax );
-
-			p2p_connect( $post_a, $post_b );
-
-			wp_delete_term( $term->term_id, $tax );
-
-			$count += count( $post_a );
-		}
-
-		printf( "<div class='updated'><p>Migrated %d connections.</p></div>", $count );
-	}
-}
-
 
 function _p2p_pluck( &$args, $key ) {
 	$value = $args[ $key ];
