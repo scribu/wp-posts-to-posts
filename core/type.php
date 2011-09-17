@@ -138,7 +138,7 @@ class P2P_Connection_Type {
 		return $direction;
 	}
 
-	private function get_other_post_type( $direction ) {
+	public function get_other_post_type( $direction ) {
 		return 'from' == $direction ? $this->to : $this->from;
 	}
 

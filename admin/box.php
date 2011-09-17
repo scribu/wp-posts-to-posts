@@ -11,15 +11,18 @@ class P2P_Box {
 
 	private $data;
 
+	private $current_ptype;
 	public $ptype;
 
 	private $columns;
 
-	function __construct( $box_id, $data, $post_type ) {
+	function __construct( $box_id, $data, $current_ptype, $other_ptype ) {
 		$this->box_id = $box_id;
 		$this->data = $data;
 
-		$this->ptype = get_post_type_object( $post_type );
+		$this->current_ptype = $current_ptype;;
+
+		$this->ptype = get_post_type_object( $other_ptype );
 
 		if ( !class_exists( 'Mustache' ) )
 			require dirname(__FILE__) . '/../mustache/Mustache.php';
@@ -51,7 +54,7 @@ class P2P_Box {
 			'p2p-connections-' . $this->box_id,
 			$this->data->get_title(),
 			array( $this, 'render' ),
-			$this->ptype->name,
+			$this->current_ptype,
 			$this->data->context,
 			'default'
 		);
