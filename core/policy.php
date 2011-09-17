@@ -76,7 +76,7 @@ class P2P_Connections_Policy {
 		}
 
 		if ( $this->prevent_duplicates )
-			$args['post__not_in'] = P2P_Connections::get( $current_post_id, $this->direction, $this->data );
+			$args['post__not_in'] = P2P_Storage::get( $current_post_id, $this->direction, $this->data );
 
 		$args = apply_filters( 'p2p_possible_connections_args', $args, $this );
 
@@ -132,14 +132,14 @@ class P2P_Connections_Policy {
 		$p2p_id = false;
 
 		if ( $this->prevent_duplicates ) {
-			$p2p_ids = P2P_Connections::get( $args[0], $args[1], $this->data );
+			$p2p_ids = P2P_Storage::get( $args[0], $args[1], $this->data );
 
 			if ( !empty( $p2p_ids ) )
 				$p2p_id = $p2p_ids[0];
 		}
 
 		if ( !$p2p_id ) {
-			$p2p_id = P2P_Connections::connect( $args[0], $args[1], $this->data );
+			$p2p_id = P2P_Storage::connect( $args[0], $args[1], $this->data );
 		}
 
 		return $p2p_id;

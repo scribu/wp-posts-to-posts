@@ -40,7 +40,7 @@ function _p2p_init() {
 	foreach ( array( 'storage', 'query', 'policy', 'api' ) as $file )
 		require_once "$base/core/$file.php";
 
-	P2P_Connections::init( __FILE__ );
+	P2P_Storage::init( __FILE__ );
 
 	P2P_Migrate::init();
 

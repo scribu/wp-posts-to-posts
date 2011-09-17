@@ -1,6 +1,6 @@
 <?php
 
-class P2P_Connections {
+class P2P_Storage {
 
 	function init( $file ) {
 		$table = new scbTable( 'p2p', $file, "

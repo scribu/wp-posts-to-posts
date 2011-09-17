@@ -56,7 +56,7 @@ function p2p_register_connection_type( $args ) {
 function p2p_connect( $from, $to, $data = array() ) {
 	foreach ( (array) $from as $from ) {
 		foreach ( (array) $to as $to ) {
-			P2P_Connections::connect( $from, $to, $data );
+			P2P_Storage::connect( $from, $to, $data );
 		}
 	}
 }
@@ -71,7 +71,7 @@ function p2p_connect( $from, $to, $data = array() ) {
 function p2p_disconnect( $from, $to, $data = array() ) {
 	foreach ( (array) $from as $from ) {
 		foreach ( (array) $to as $to ) {
-			P2P_Connections::disconnect( $from, $to, $data );
+			P2P_Storage::disconnect( $from, $to, $data );
 		}
 	}
 }
@@ -88,7 +88,7 @@ function p2p_disconnect( $from, $to, $data = array() ) {
  * @return array( p2p_id => post_id )
  */
 function p2p_get_connected( $post_id, $direction = 'any', $data = array() ) {
-	return P2P_Connections::get( $post_id, $direction, $data );
+	return P2P_Storage::get( $post_id, $direction, $data );
 }
 
 /**
@@ -114,7 +114,7 @@ function p2p_is_connected( $from, $to, $data = array() ) {
  * @return int Number of connections deleted
  */
 function p2p_delete_connection( $p2p_id ) {
-	return P2P_Connections::delete( $p2p_id );
+	return P2P_Storage::delete( $p2p_id );
 }
 
 /**
