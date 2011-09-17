@@ -4,7 +4,7 @@ define( 'P2P_BOX_NONCE', 'p2p-box' );
 
 $GLOBALS['_p2p_connection_types'] = array();
 
-class P2P_Connection_Types {
+class P2P_Box_Factory {
 
 	function init() {
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
@@ -86,5 +86,5 @@ class P2P_Connection_Types {
 	}
 }
 
-P2P_Connection_Types::init();
+P2P_Box_Factory::init();
 

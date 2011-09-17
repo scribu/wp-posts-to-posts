@@ -3,7 +3,7 @@
 /**
  * A connection-type aware API
  */
-class P2P_Connections_Policy {
+class P2P_Connection_Type {
 
 	protected $args;
 

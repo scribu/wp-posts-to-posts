@@ -15,7 +15,7 @@
  *  - 'reciprocal' bool Wether to show the box on both sides of the connection. Default: false.
  *  - 'context' string Where should the box show up by default. Possible values: 'advanced' or 'side'
  *
- *  @return bool|object False on failure, P2P_Connections_Policy instance on success.
+ *  @return bool|object False on failure, P2P_Connection_Type instance on success.
  */
 function p2p_register_connection_type( $args ) {
 	$argv = func_get_args();
@@ -47,7 +47,7 @@ function p2p_register_connection_type( $args ) {
 		}
 	}
 
-	$instance = new P2P_Connections_Policy( $args );
+	$instance = new P2P_Connection_Type( $args );
 
 	$GLOBALS['_p2p_connection_types'][] = $instance;
 
