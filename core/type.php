@@ -147,9 +147,16 @@ class P2P_Connection_Type {
 	}
 
 	public function connect( $from, $to ) {
+		$post_from = get_post( $from );
+		$post_to = get_post( $to );
+
+		if ( !$post_a || !$post_b ) {
+			return false;
+		}
+
 		$args = array( $from, $to );
 
-		if ( $this->reversed )
+		if ( $post_from->post_type == $this->to )
 			$args = array_reverse( $args );
 
 		$p2p_id = false;
