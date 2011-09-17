@@ -28,6 +28,19 @@ class P2P_Connections_Policy {
 		return $this->args[$key];
 	}
 
+	protected function get_direction( $post_type ) {
+		if ( $this->args['to'] == $this->args['from'] )
+			return 'any';
+
+		if ( $this->args['to'] == $post_type )
+			return 'to';
+
+		if ( $this->args['from'] == $post_type )
+			return 'from';
+
+		return false;
+	}
+
 	public function get_title() {
 		$title = $this->args['title'];
 
@@ -99,10 +112,27 @@ class P2P_Connections_Policy {
 	}
 
 	public function get_current_connections( $post_id ) {
+		$post = get_post( $post_id );
+		if ( !$post )
+			return array();
+
+		$direction = $this->get_direction( $post->post_type );
+
+		if ( !$direction ) {
+			trigger_error( sprintf( "Invalid post type. Expected '%s' or '%s', but received '%s'.",
+				$this->args['from'],
+				$this->args['to'],
+				$post->post_type
+			), E_USER_WARNING );
+			return array();
+		}
+
+		$other_post_type = 'from' == $direction ? $this->args['to'] : $this->args['from'];
+
 		$args = array(
-			array_search( $this->direction, P2P_Query::$qv_map ) => $post_id,
+			array_search( $direction, P2P_Query::$qv_map ) => $post_id,
 			'connected_meta' => $this->data,
-			'post_type'=> $this->to,
+			'post_type'=> $other_post_type,
 			'post_status' => 'any',
 			'nopaging' => true,
 			'update_post_meta_cache' => false,

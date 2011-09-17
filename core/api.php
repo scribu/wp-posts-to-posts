@@ -26,14 +26,13 @@ function p2p_register_connection_type( $args ) {
 	$defaults = array(
 		'from' => '',
 		'to' => '',
-		'reciprocal' => false,
-
 		'fields' => array(),
 		'data' => array(),
 		'sortable' => false,
 		'prevent_duplicates' => true,
-
 		'title' => '',
+
+		'reciprocal' => false,
 		'context' => 'side',
 	);
 
