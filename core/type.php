@@ -1,14 +1,11 @@
 <?php
 
-/**
- * A connection-type aware API
- */
 class P2P_Connection_Type {
 
 	protected $args;
 
-	public $direction;
-	protected $reversed;
+	protected $direction = 'from';
+	protected $reversed = false;
 
 	public function __construct( $args ) {
 		$this->args = $args;

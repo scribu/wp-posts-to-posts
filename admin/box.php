@@ -76,7 +76,6 @@ class P2P_Box {
 
 		$data_attr = array(
 			'box_id' => $this->box_id,
-			'direction' => $this->data->direction,
 			'prevent_duplicates' => $this->data->prevent_duplicates,
 		);
 
