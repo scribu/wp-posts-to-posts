@@ -58,7 +58,7 @@ class P2P_Box {
 	}
 
 	function render( $post ) {
-		$connected_posts = $this->data->get_current_connections( $post->ID );
+		$connected_posts = $this->data->get_connected( $post->ID );
 
 		$data = array(
 			'create-label' => __( 'Create connections:', P2P_TEXTDOMAIN ),
@@ -139,7 +139,7 @@ class P2P_Box {
 	}
 
 	protected function post_rows( $current_post_id, $page = 1, $search = '' ) {
-		$candidate = $this->data->get_connection_candidates( $current_post_id, $page, $search );
+		$candidate = $this->data->get_connectable( $current_post_id, $page, $search );
 
 		if ( empty( $candidate->posts ) )
 			return false;

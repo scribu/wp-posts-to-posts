@@ -65,7 +65,7 @@ class P2P_Connection_Type {
 		return wp_insert_post( $args );
 	}
 
-	public function get_connection_candidates( $current_post_id, $page, $search ) {
+	public function get_connectable( $current_post_id, $page, $search ) {
 		$args = array(
 			'paged' => $page,
 			'post_type' => $this->to,
@@ -104,7 +104,7 @@ class P2P_Connection_Type {
 		return $sql;
 	}
 
-	public function get_current_connections( $post_id ) {
+	public function get_connected( $post_id ) {
 		$post = get_post( $post_id );
 		if ( !$post )
 			return array();
