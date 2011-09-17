@@ -100,7 +100,7 @@ class P2P_Connection_Type {
 			$args['connected_order_num'] = true;
 		}
 
-		$args = apply_filters( 'p2p_current_connections_args', $args, $this );
+		$args = apply_filters( 'p2p_connected_args', $args, $this );
 
 		$q = new WP_Query( $args );
 
@@ -126,9 +126,11 @@ class P2P_Connection_Type {
 		if ( $this->prevent_duplicates )
 			$args['post__not_in'] = P2P_Storage::get( $post_id, $this->direction, $this->data );
 
-		$args = apply_filters( 'p2p_possible_connections_args', $args, $this );
+		$args = apply_filters( 'p2p_connectable_args', $args, $this );
 
 		$query = new WP_Query( $args );
+
+		remove_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
 
 		return (object) array(
 			'posts' => $query->posts,
