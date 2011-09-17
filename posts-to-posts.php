@@ -33,22 +33,20 @@ define( 'P2P_TEXTDOMAIN', 'posts-to-posts' );
 require dirname( __FILE__ ) . '/scb/load.php';
 
 function _p2p_init() {
-	load_plugin_textdomain( P2P_TEXTDOMAIN, '', basename( dirname( __FILE__ ) ) . '/lang' );
+	$base = dirname( __FILE__ );
 
-	require_once dirname( __FILE__ ) . '/storage.php';
-	require_once dirname( __FILE__ ) . '/query.php';
-	require_once dirname( __FILE__ ) . '/api.php';
+	load_plugin_textdomain( P2P_TEXTDOMAIN, '', basename( $base ) . '/lang' );
+
+	foreach ( array( 'storage', 'query', 'policy', 'api' ) as $file )
+		require_once "$base/core/$file.php";
 
 	P2P_Connections::init( __FILE__ );
 
 	P2P_Migrate::init();
 
-	require_once dirname( __FILE__ ) . '/policy.php';
-
 	if ( is_admin() ) {
-		require_once dirname( __FILE__ ) . '/admin/base.php';
-		require_once dirname( __FILE__ ) . '/admin/box.php';
-		require_once dirname( __FILE__ ) . '/admin/fields.php';
+		foreach ( array( 'base', 'box', 'fields' ) as $file )
+			require_once "$base/admin/$file.php";
 	}
 }
 scb_init( '_p2p_init' );
