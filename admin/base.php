@@ -2,8 +2,6 @@
 
 define( 'P2P_BOX_NONCE', 'p2p-box' );
 
-$GLOBALS['_p2p_connection_types'] = array();
-
 class P2P_Box_Factory {
 
 	function init() {
