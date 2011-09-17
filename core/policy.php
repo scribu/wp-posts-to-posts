@@ -7,28 +7,18 @@ class P2P_Connections_Policy {
 
 	protected $args;
 
+	public $direction;
 	protected $reversed;
 
 	public function __construct( $args ) {
 		$this->args = $args;
-		$this->reversed = ( 'to' == $this->direction );
 	}
 
 	public function __get( $key ) {
-		if ( $this->reversed ) {
-			if ( 'sortable' == $key )
-				return false;
-
-			if ( 'from' == $key )
-				$key = 'to';
-			elseif ( 'to' == $key )
-				$key = 'from';
-		}
-
 		return $this->args[$key];
 	}
 
-	protected function get_direction( $post_type ) {
+	public function get_direction( $post_type ) {
 		if ( $this->args['to'] == $this->args['from'] )
 			return 'any';
 
@@ -39,6 +29,12 @@ class P2P_Connections_Policy {
 			return 'from';
 
 		return false;
+	}
+
+	// TODO: remove
+	public function set_direction( $direction ) {
+		$this->direction = $direction;
+		$this->reversed = ( 'to' == $direction );
 	}
 
 	public function get_title() {
@@ -140,7 +136,7 @@ class P2P_Connections_Policy {
 			'ignore_sticky_posts' => true,
 		);
 
-		if ( $this->sortable ) {
+		if ( $this->sortable && 'to' != $direction ) {
 			$args['connected_orderby'] = $this->sortable;
 			$args['connected_order'] = 'ASC';
 			$args['connected_order_num'] = true;
