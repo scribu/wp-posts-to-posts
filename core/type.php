@@ -16,13 +16,13 @@ class P2P_Connection_Type {
 	}
 
 	public function get_direction( $post_type ) {
-		if ( $this->args['to'] == $this->args['from'] )
+		if ( $post_type == $this->to && $this->from == $post_type )
 			return 'any';
 
-		if ( $this->args['to'] == $post_type )
+		if ( $this->to == $post_type )
 			return 'to';
 
-		if ( $this->args['from'] == $post_type )
+		if ( $this->from == $post_type )
 			return 'from';
 
 		return false;

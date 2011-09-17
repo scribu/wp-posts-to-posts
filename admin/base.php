@@ -80,7 +80,7 @@ class P2P_Box_Factory {
 
 		$ctype->set_direction( $direction ); // TODO: always calculate on the fly?
 
-		return new P2P_Box( $box_id, $ctype );
+		return new P2P_Box( $box_id, $ctype, $post_type );
 	}
 }
 
