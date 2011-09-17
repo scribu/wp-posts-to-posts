@@ -73,26 +73,16 @@ class P2P_Connection_Types {
 		if ( !isset( $GLOBALS['_p2p_connection_types'][ $box_id ] ) )
 			return false;
 
-		$args = $GLOBALS['_p2p_connection_types'][ $box_id ];
-
-		$reciprocal = _p2p_pluck( $args, 'reciprocal' );
-
-		$direction = false;
-
-		$metabox_args = array();
-		foreach ( array( 'context' ) as $key ) {
-			$metabox_args[ $key ] = _p2p_pluck( $args, $key );
-		}
-
-		$policy = new P2P_Connections_Policy( $args );
+		$policy = $GLOBALS['_p2p_connection_types'][ $box_id ];
 
 		$direction = $policy->get_direction( $post_type );
-		if ( !$direction || ( !$reciprocal && 'from' != $direction ) )
+
+		if ( !$direction || ( !$policy->reciprocal && 'from' != $direction ) )
 			return false;
 
 		$policy->set_direction( $direction ); // TODO: always calculate on the fly?
 
-		return new P2P_Box( $box_id, $policy, $metabox_args );
+		return new P2P_Box( $box_id, $policy );
 	}
 }
 

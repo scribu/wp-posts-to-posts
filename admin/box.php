@@ -11,16 +11,13 @@ class P2P_Box {
 
 	private $data;
 
-	private $metabox_args;
-
 	public $ptype;
 
 	private $columns;
 
-	function __construct( $box_id, $data, $metabox_args ) {
+	function __construct( $box_id, $data ) {
 		$this->box_id = $box_id;
 		$this->data = $data;
-		$this->metabox_args = $metabox_args;
 
 		$this->ptype = get_post_type_object( $this->data->to );
 
@@ -49,17 +46,13 @@ class P2P_Box {
 		) );
 	}
 
-	function __get( $key ) {
-		return $this->metabox_args[ $key ];
-	}
-
 	public function register() {
 		add_meta_box(
 			'p2p-connections-' . $this->box_id,
 			$this->data->get_title(),
 			array( $this, 'render' ),
 			$this->data->from,
-			$this->context,
+			$this->data->context,
 			'default'
 		);
 	}

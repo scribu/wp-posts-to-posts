@@ -49,11 +49,3 @@ function _p2p_init() {
 }
 scb_init( '_p2p_init' );
 
-function _p2p_pluck( &$args, $key ) {
-	$value = $args[ $key ];
-
-	unset( $args[ $key ] );
-
-	return $value;
-}
-

@@ -72,7 +72,8 @@ class P2P_Test {
 			'data' => array( 'type' => 'friends' )
 		) );
 
-		p2p_register_connection_type('actor', array('post', 'page'));
+		foreach ( array('post', 'page') as $to )
+			p2p_register_connection_type( 'actor', $to );
 	}
 
 	function setup() {

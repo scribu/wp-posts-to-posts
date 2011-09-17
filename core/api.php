@@ -5,15 +5,17 @@
  * This creates the appropriate meta box in the admin edit screen
  *
  * @param array $args Can be:
- *  - 'from' string|array The first end of the connection.
- *  - 'to' string|array The second end of the connection.
+ *  - 'from' string The first end of the connection.
+ *  - 'to' string The second end of the connection.
  *  - 'fields' array( key => Title ) Metadata fields editable by the user (optional).
  *  - 'data' array( key => value ) Metadata fields not editable by the user (optional).
  *  - 'sortable' string A custom field key used to add a special column that allows manual connection ordering. Default: false.
  *  - 'prevent_duplicates' bool Wether to disallow duplicate connections between the same two posts. Default: true.
- *  - 'reciprocal' bool Wether to show the box on both sides of the connection. Default: false.
  *  - 'title' string The box's title. Default: 'Connected {$post_type}s'
+ *  - 'reciprocal' bool Wether to show the box on both sides of the connection. Default: false.
  *  - 'context' string Where should the box show up by default. Possible values: 'advanced' or 'side'
+ *
+ *  @return bool|object False on failure, P2P_Connections_Policy instance on success.
  */
 function p2p_register_connection_type( $args ) {
 	$argv = func_get_args();
@@ -38,11 +40,18 @@ function p2p_register_connection_type( $args ) {
 
 	$args = wp_parse_args( $args, $defaults );
 
-	foreach ( (array) $args['from'] as $from ) {
-		foreach ( (array) $args['to'] as $to ) {
-			$GLOBALS['_p2p_connection_types'][] = array_merge( $args, compact( 'from', 'to' ) );
+	foreach ( array( 'from', 'to' ) as $key ) {
+		if ( !post_type_exists( $args[$key] ) ) {
+			trigger_error( "Invalid post type: $args[$key]", E_USER_WARNING );
+			return false;
 		}
 	}
+
+	$instance = new P2P_Connections_Policy( $args );
+
+	$GLOBALS['_p2p_connection_types'][] = $instance;
+
+	return $instance;
 }
 
 /**
