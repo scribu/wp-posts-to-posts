@@ -71,16 +71,16 @@ class P2P_Box_Factory {
 		if ( !isset( $GLOBALS['_p2p_connection_types'][ $box_id ] ) )
 			return false;
 
-		$policy = $GLOBALS['_p2p_connection_types'][ $box_id ];
+		$ctype = $GLOBALS['_p2p_connection_types'][ $box_id ];
 
-		$direction = $policy->get_direction( $post_type );
+		$direction = $ctype->get_direction( $post_type );
 
-		if ( !$direction || ( !$policy->reciprocal && 'from' != $direction ) )
+		if ( !$direction || ( !$ctype->reciprocal && 'from' != $direction ) )
 			return false;
 
-		$policy->set_direction( $direction ); // TODO: always calculate on the fly?
+		$ctype->set_direction( $direction ); // TODO: always calculate on the fly?
 
-		return new P2P_Box( $box_id, $policy );
+		return new P2P_Box( $box_id, $ctype );
 	}
 }
 
