@@ -12,19 +12,6 @@ class P2P_Connection_Type {
 		return $this->args[$key];
 	}
 
-	public function get_direction( $post_type ) {
-		if ( $post_type == $this->to && $this->from == $post_type )
-			return 'any';
-
-		if ( $this->to == $post_type )
-			return 'to';
-
-		if ( $this->from == $post_type )
-			return 'from';
-
-		return false;
-	}
-
 	public function get_title( $direction ) {
 		$title = $this->args['title'];
 
@@ -95,26 +82,21 @@ class P2P_Connection_Type {
 		);
 	}
 
-	private function get_direction_from_id( $post_id ) {
-		$post = get_post( $post_id );
-		if ( !$post )
-			return false;
+	public function each_connected( $query, $qv = array() ) {
+		if ( empty( $query->posts ) || !is_object( $query->posts[0] ) )
+			return;
 
-		$direction = $this->get_direction( $post->post_type );
+		$post_type = $query->get( 'post_type' );
+		if ( is_array( $post_type ) )
+			return;
 
-		if ( !$direction ) {
-			trigger_error( sprintf( "Invalid post type. Expected '%s' or '%s', but received '%s'.",
-				$this->args['from'],
-				$this->args['to'],
-				$post->post_type
-			), E_USER_WARNING );
-		}
+		$direction = $this->get_direction( $post_type );
+		if ( !$direction )
+			return;
 
-		return $direction;
-	}
+		$qv['post_type'] = $this->get_other_post_type( $direction );
 
-	public function get_other_post_type( $direction ) {
-		return 'from' == $direction ? $this->to : $this->from;
+		P2P_Query::_each_connected( $direction, $query, $qv );
 	}
 
 	private function get_base_args( $direction ) {
@@ -125,6 +107,23 @@ class P2P_Connection_Type {
 			'update_post_term_cache' => false,
 			'update_post_meta_cache' => false
 		);
+	}
+
+	public function get_direction( $post_type ) {
+		if ( $post_type == $this->to && $this->from == $post_type )
+			return 'any';
+
+		if ( $this->to == $post_type )
+			return 'to';
+
+		if ( $this->from == $post_type )
+			return 'from';
+
+		return false;
+	}
+
+	public function get_other_post_type( $direction ) {
+		return 'from' == $direction ? $this->to : $this->from;
 	}
 
 	public function connect( $from, $to ) {
@@ -160,21 +159,22 @@ class P2P_Connection_Type {
 		p2p_disconnect( $post_id, $this->get_direction_from_id( $post_id ), $this->data );
 	}
 
-	public function each_connected( $query, $qv = array() ) {
-		if ( empty( $query->posts ) || !is_object( $query->posts[0] ) )
-			return;
+	private function get_direction_from_id( $post_id ) {
+		$post = get_post( $post_id );
+		if ( !$post )
+			return false;
 
-		$post_type = $query->get( 'post_type' );
-		if ( is_array( $post_type ) )
-			return;
+		$direction = $this->get_direction( $post->post_type );
 
-		$direction = $this->get_direction( $post_type );
-		if ( !$direction )
-			return;
+		if ( !$direction ) {
+			trigger_error( sprintf( "Invalid post type. Expected '%s' or '%s', but received '%s'.",
+				$this->args['from'],
+				$this->args['to'],
+				$post->post_type
+			), E_USER_WARNING );
+		}
 
-		$qv['post_type'] = $this->get_other_post_type( $direction );
-
-		P2P_Query::_each_connected( $direction, $query, $qv );
+		return $direction;
 	}
 
 	function _search_by_title( $sql, $wp_query ) {
