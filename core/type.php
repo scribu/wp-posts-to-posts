@@ -15,8 +15,8 @@ class P2P_Connection_Type {
 	/**
 	 * Get connection direction.
 	 *
-	 * @param int|string $arg A post id or a post type
-	 * @param bool $warn Wether to trigger a notice on error
+	 * @param int|string $arg A post id or a post type.
+	 * @param bool $warn Wether to trigger a notice on error.
 	 *
 	 * @return bool|string False on failure, 'any', 'to' or 'from' on success.
 	 */
@@ -82,9 +82,9 @@ class P2P_Connection_Type {
 	/**
 	 * Get a list of posts that are connected to a given post.
 	 *
-	 * @param int $post_id A post id
+	 * @param int $post_id A post id.
 	 *
-	 * @return object A WP_Query instance
+	 * @return object A WP_Query instance.
 	 */
 	public function get_connected( $post_id ) {
 		$direction = $this->get_direction( $post_id );
@@ -111,11 +111,11 @@ class P2P_Connection_Type {
 	/**
 	 * Get a list of posts that could be connected to a given post.
 	 *
-	 * @param int $post_id A post id
-	 * @param int $page A page number
-	 * @param string $search A search string
+	 * @param int $post_id A post id.
+	 * @param int $page A page number.
+	 * @param string $search A search string.
 	 *
-	 * @return object A WP_Query instance
+	 * @return object A WP_Query instance.
 	 */
 	public function get_connectable( $post_id, $page, $search ) {
 		$direction = $this->get_direction( $post_id );
