@@ -134,9 +134,10 @@ function p2p_list_posts( $posts, $args = array() ) {
 	if ( is_object( $posts ) )
 		$posts = $posts->posts;
 
-	$args = wp_parse_args( array(
+	$args = wp_parse_args( $args, array(
 		'before_list' => '<ul>', 'after_list' => '</ul>',
 		'before_item' => '<li>', 'after_item' => '</li>',
+		'template' => false
 	) );
 
 	extract( $args, EXTR_SKIP );
@@ -145,11 +146,24 @@ function p2p_list_posts( $posts, $args = array() ) {
 		return;
 
 	echo $before_list;
+
 	foreach ( $posts as $post ) {
+		$GLOBALS['post'] = $post;
+
+		setup_postdata( $post );
+
 		echo $before_item;
-		echo html( 'a', array( 'href' => get_permalink( $post->ID ) ), get_the_title( $post->ID ) );
+
+		if ( $template )
+			locate_template( $template, true, false );
+		else
+			echo html( 'a', array( 'href' => get_permalink( $post->ID ) ), get_the_title( $post->ID ) );
+
 		echo $after_item;
 	}
+
 	echo $after_list;
+
+	wp_reset_postdata();
 }
 
