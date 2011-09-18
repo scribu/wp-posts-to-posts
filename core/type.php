@@ -4,12 +4,23 @@ class P2P_Connection_Type {
 
 	protected $args;
 
-	public function __construct( $args ) {
+	protected function __construct( $args ) {
 		$this->args = $args;
 	}
 
 	public function __get( $key ) {
 		return $this->args[$key];
+	}
+
+	public function get_instance( $args ) {
+		foreach ( array( 'from', 'to' ) as $key ) {
+			if ( !post_type_exists( $args[$key] ) ) {
+				trigger_error( "Invalid post type: $args[$key]", E_USER_WARNING );
+				return false;
+			}
+		}
+
+		return new P2P_Connection_Type( $args );
 	}
 
 	/**

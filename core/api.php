@@ -39,14 +39,7 @@ function p2p_register_connection_type( $args ) {
 
 	$args = wp_parse_args( $args, $defaults );
 
-	foreach ( array( 'from', 'to' ) as $key ) {
-		if ( !post_type_exists( $args[$key] ) ) {
-			trigger_error( "Invalid post type: $args[$key]", E_USER_WARNING );
-			return false;
-		}
-	}
-
-	$instance = new P2P_Connection_Type( $args );
+	$instance = P2P_Connection_Type::get_instance( $args );
 
 	$GLOBALS['_p2p_connection_types'][] = $instance;
 
