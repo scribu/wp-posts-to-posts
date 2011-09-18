@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
-"POT-Creation-Date: 2011-07-22 13:03:03+00:00\n"
+"POT-Creation-Date: 2011-09-18 21:35:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,58 +12,58 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: scb/AdminPage.php:161
+#: scb/AdminPage.php:163
 msgid "Settings <strong>saved</strong>."
 msgstr ""
 
-#: scb/AdminPage.php:174 scb/AdminPage.php:185
+#: scb/AdminPage.php:176 scb/AdminPage.php:187
 msgid "Save Changes"
 msgstr ""
 
-#: scb/AdminPage.php:367
+#: scb/AdminPage.php:348
 msgid "Settings"
 msgstr ""
 
-#: ui/box.php:14
-msgid "Are you sure you want to delete all connections?"
-msgstr ""
-
-#: ui/box.php:33
-msgid "Create connections:"
-msgstr ""
-
-#: ui/box.php:64
-msgid "Search"
-msgstr ""
-
-#: ui/box.php:72
-msgid "Recent"
-msgstr ""
-
-#: ui/box.php:148
-msgid "Previous"
-msgstr ""
-
-#: ui/box.php:149
-msgid "Next"
-msgstr ""
-
-#: ui/box.php:150
-msgid "of"
-msgstr ""
-
-#: ui/box.php:182
+#: admin/fields.php:13
 msgid "Create connection"
 msgstr ""
 
-#: ui/box.php:191
-msgid "Delete connection"
-msgstr ""
-
-#: ui/box.php:199
+#: admin/fields.php:25
 msgid "Delete all connections"
 msgstr ""
 
-#: ui.php:33
+#: admin/fields.php:34
+msgid "Delete connection"
+msgstr ""
+
+#: admin/box.php:58
+msgid "Are you sure you want to delete all connections?"
+msgstr ""
+
+#: admin/box.php:68
 msgid "Connected %s"
+msgstr ""
+
+#: admin/box.php:115
+msgid "Create connections:"
+msgstr ""
+
+#: admin/box.php:124
+msgid "Search"
+msgstr ""
+
+#: admin/box.php:132
+msgid "View All"
+msgstr ""
+
+#: admin/box.php:215
+msgid "previous"
+msgstr ""
+
+#: admin/box.php:216
+msgid "next"
+msgstr ""
+
+#: admin/box.php:217
+msgid "of"
 msgstr ""
