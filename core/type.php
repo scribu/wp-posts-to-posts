@@ -69,38 +69,39 @@ class P2P_Connection_Type {
 		return $title;
 	}
 
-	private function get_base_args( $direction ) {
-		return array(
+	private function get_base_args( $direction, $extra_qv ) {
+		return array_merge( $extra_qv, array(
 			'post_type' => $this->get_other_post_type( $direction ),
-			'post_status' => 'any',
 			'suppress_filters' => false,
-			'update_post_term_cache' => false,
-			'update_post_meta_cache' => false
-		);
+		) );
 	}
 
 	/**
 	 * Get a list of posts that are connected to a given post.
 	 *
 	 * @param int $post_id A post id.
+	 * @param array $extra_qv Additional query variables to use
 	 *
 	 * @return object A WP_Query instance.
 	 */
-	public function get_connected( $post_id ) {
+	public function get_connected( $post_id, $extra_qv = array() ) {
 		$direction = $this->get_direction( $post_id );
 		if ( !$direction )
 			return array();
 
-		$args = array_merge( $this->get_base_args( $direction ), array(
+		$args = $this->get_base_args( $direction, $extra_qv );
+
+		_p2p_append( $args, array(
 			P2P_Query::get_qv( $direction ) => $post_id,
 			'connected_meta' => $this->data,
-			'nopaging' => true,
 		) );
 
 		if ( $this->sortable && 'to' != $direction ) {
-			$args['connected_orderby'] = $this->sortable;
-			$args['connected_order'] = 'ASC';
-			$args['connected_order_num'] = true;
+			_p2p_append( $args, array(
+				'connected_orderby' => $this->sortable,
+				'connected_order' => 'ASC',
+				'connected_order_num' => true,
+			) );
 		}
 
 		$args = apply_filters( 'p2p_connected_args', $args, $this );
@@ -117,31 +118,24 @@ class P2P_Connection_Type {
 	 *
 	 * @return object A WP_Query instance.
 	 */
-	public function get_connectable( $post_id, $page, $search ) {
+	public function get_connectable( $post_id, $extra_qv ) {
 		$direction = $this->get_direction( $post_id );
 		if ( !$direction )
 			return array();
 
-		$args = array_merge( $this->get_base_args( $direction ), array(
-			'paged' => $page,
-			'posts_per_page' => 5,
-		) );
+		$args = $this->get_base_args( $direction, $extra_qv );
 
-		if ( $search ) {
-			add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
-			$args['s'] = $search;
+		if ( $this->prevent_duplicates ) {
+			if ( !isset( $args['post__not_in'] ) ) {
+				$args['post__not_in'] = array();
+			}
+
+			_p2p_append( $args['post__not_in'], P2P_Storage::get( $post_id, $direction, $this->data ) );
 		}
-
-		if ( $this->prevent_duplicates )
-			$args['post__not_in'] = P2P_Storage::get( $post_id, $direction, $this->data );
 
 		$args = apply_filters( 'p2p_connectable_args', $args, $this );
 
-		$query = new WP_Query( $args );
-
-		remove_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
-
-		return $query;
+		return new WP_Query( $args );
 	}
 
 	/**
@@ -239,15 +233,6 @@ class P2P_Connection_Type {
 
 	public function disconnect( $post_id ) {
 		p2p_disconnect( $post_id, $this->get_direction( $post_id ), $this->data );
-	}
-
-	function _search_by_title( $sql, $wp_query ) {
-		if ( $wp_query->is_search ) {
-			list( $sql ) = explode( ' OR ', $sql, 2 );
-			return $sql . '))';
-		}
-
-		return $sql;
 	}
 }
 

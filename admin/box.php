@@ -18,6 +18,12 @@ class P2P_Box {
 
 	private $columns;
 
+	private static $extra_qv = array(
+		'update_post_term_cache' => false,
+		'update_post_meta_cache' => false,
+		'post_status' => 'any',
+	);
+
 	function __construct( $box_id, $data, $current_ptype, $direction ) {
 		$this->box_id = $box_id;
 		$this->data = $data;
@@ -51,6 +57,8 @@ class P2P_Box {
 			'spinner' => admin_url( 'images/wpspin_light.gif' ),
 			'deleteConfirmMessage' => __( 'Are you sure you want to delete all connections?', P2P_TEXTDOMAIN ),
 		) );
+
+		add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
 	}
 
 	public function register() {
@@ -73,7 +81,10 @@ class P2P_Box {
 	function render( $post ) {
 		$data = array();
 
-		$connected_posts = $this->data->get_connected( $post->ID )->posts;
+		$qv = self::$extra_qv;
+		$qv['nopaging'] = true;
+
+		$connected_posts = $this->data->get_connected( $post->ID, $qv )->posts;
 
 		if ( empty( $connected_posts ) )
 			$data['hide-connections'] = 'style="display:none"';
@@ -152,16 +163,26 @@ class P2P_Box {
 	}
 
 	protected function post_rows( $current_post_id, $page = 1, $search = '' ) {
-		$query = $this->data->get_connectable( $current_post_id, $page, $search );
+		$args = array_merge( self::$extra_qv, array(
+			'paged' => $page,
+			'posts_per_page' => 5,
+		) );
+
+		if ( $search ) {
+			$args['_p2p_box'] = true;
+			$args['s'] = $search;
+		}
+
+		$query = $this->data->get_connectable( $current_post_id, $args );
+
+		if ( empty( $query->posts ) )
+			return false;
 
 		$candidate = (object) array(
 			'posts' => $query->posts,
 			'current_page' => max( 1, $query->get('paged') ),
 			'total_pages' => $query->max_num_pages
 		);
-
-		if ( empty( $candidate->posts ) )
-			return false;
 
 		$data = array();
 
@@ -259,6 +280,15 @@ class P2P_Box {
 		}
 
 		die( json_encode( $results ) );
+	}
+
+	function _search_by_title( $sql, $wp_query ) {
+		if ( $wp_query->is_search && $wp_query->get( '_p2p_box' ) ) {
+			list( $sql ) = explode( ' OR ', $sql, 2 );
+			return $sql . '))';
+		}
+
+		return $sql;
 	}
 }
 

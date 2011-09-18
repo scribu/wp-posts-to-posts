@@ -49,3 +49,7 @@ function _p2p_init() {
 }
 scb_init( '_p2p_init' );
 
+function _p2p_append( &$arr, $values ) {
+	$arr = array_merge( $arr, $values );
+}
+
