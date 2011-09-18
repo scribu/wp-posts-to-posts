@@ -44,8 +44,6 @@ function _p2p_init() {
 		foreach ( array( 'base', 'box', 'fields' ) as $file )
 			require_once "$base/admin/$file.php";
 	}
-
-	$GLOBALS['_p2p_connection_types'] = array();
 }
 scb_init( '_p2p_init' );
 

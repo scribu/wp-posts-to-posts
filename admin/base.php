@@ -14,7 +14,7 @@ class P2P_Box_Factory {
 	 * Add all the metaboxes.
 	 */
 	static function add_meta_boxes( $from ) {
-		foreach ( $GLOBALS['_p2p_connection_types'] as $box_id => $args ) {
+		foreach ( P2P_Connection_Type::$instances as $box_id => $args ) {
 			$box = self::make_box( $box_id, $from );
 			if ( !$box )
 				continue;
@@ -68,10 +68,13 @@ class P2P_Box_Factory {
 	}
 
 	private static function make_box( $box_id, $post_type ) {
-		if ( !isset( $GLOBALS['_p2p_connection_types'][ $box_id ] ) )
+		if ( !isset( P2P_Connection_Type::$instances[ $box_id ] ) )
 			return false;
 
-		$ctype = $GLOBALS['_p2p_connection_types'][ $box_id ];
+		$ctype = P2P_Connection_Type::$instances[ $box_id ];
+
+		if ( !$ctype->show_ui )
+			return false;
 
 		$direction = $ctype->get_direction( $post_type, false );
 

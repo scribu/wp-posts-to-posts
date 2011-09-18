@@ -2,6 +2,8 @@
 
 class P2P_Connection_Type {
 
+	static $instances = array();
+
 	protected $args;
 
 	protected function __construct( $args ) {
@@ -13,6 +15,15 @@ class P2P_Connection_Type {
 	}
 
 	public function get_instance( $args ) {
+		$args = wp_parse_args( $args, array(
+			'from' => '',
+			'to' => '',
+			'data' => array(),
+			'sortable' => false,
+			'prevent_duplicates' => true,
+			'title' => '',
+		) );
+
 		foreach ( array( 'from', 'to' ) as $key ) {
 			if ( !post_type_exists( $args[$key] ) ) {
 				trigger_error( "Invalid post type: $args[$key]", E_USER_WARNING );
@@ -20,7 +31,11 @@ class P2P_Connection_Type {
 			}
 		}
 
-		return new P2P_Connection_Type( $args );
+		$instance = new P2P_Connection_Type( $args );
+
+		self::$instances[] = $instance;
+
+		return $instance;
 	}
 
 	/**

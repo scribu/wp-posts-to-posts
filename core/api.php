@@ -25,25 +25,14 @@ function p2p_register_connection_type( $args ) {
 		@list( $args['from'], $args['to'], $args['reciprocal'] ) = $argv;
 	}
 
-	$defaults = array(
-		'from' => '',
-		'to' => '',
+	$args = wp_parse_args( $args, array(
+		'show_ui' => true,
 		'fields' => array(),
-		'data' => array(),
-		'sortable' => false,
-		'prevent_duplicates' => true,
-		'title' => '',
 		'reciprocal' => false,
 		'context' => 'side',
-	);
+	) );
 
-	$args = wp_parse_args( $args, $defaults );
-
-	$instance = P2P_Connection_Type::get_instance( $args );
-
-	$GLOBALS['_p2p_connection_types'][] = $instance;
-
-	return $instance;
+	return P2P_Connection_Type::get_instance( $args );
 }
 
 /**
