@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.2
 Tested up to: 3.3
-Stable tag: 0.8
+Stable tag: 0.9
 
 Create connections between posts
 
@@ -52,6 +52,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * replace p2p_each_connected() with P2P_Post_Type->each_connected()
 * allow using 'connected_meta' and 'connected_orderby' together
 * fix some translations
+* [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-9.html)
 
 = 0.8 =
 * added ability to create draft posts from the connection box. props Oren Kolker
