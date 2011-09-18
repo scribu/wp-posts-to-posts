@@ -73,7 +73,7 @@ class P2P_Box_Factory {
 
 		$ctype = $GLOBALS['_p2p_connection_types'][ $box_id ];
 
-		$direction = $ctype->get_direction( $post_type );
+		$direction = $ctype->get_direction( $post_type, false );
 
 		if ( !$direction || ( !$ctype->reciprocal && 'from' != $direction ) )
 			return false;
