@@ -40,8 +40,6 @@ function _p2p_init() {
 	foreach ( array( 'storage', 'query', 'type', 'api' ) as $file )
 		require_once "$base/core/$file.php";
 
-	P2P_Storage::init( __FILE__ );
-
 	if ( is_admin() ) {
 		foreach ( array( 'base', 'box', 'fields' ) as $file )
 			require_once "$base/admin/$file.php";

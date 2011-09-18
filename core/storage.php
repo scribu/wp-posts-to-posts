@@ -2,8 +2,10 @@
 
 class P2P_Storage {
 
-	function init( $file ) {
-		$table = new scbTable( 'p2p', $file, "
+	private static $version = 3;
+
+	function init() {
+		$table = new scbTable( 'p2p', false, "
 			p2p_id bigint(20) unsigned NOT NULL auto_increment,
 			p2p_from bigint(20) unsigned NOT NULL,
 			p2p_to bigint(20) unsigned NOT NULL,
@@ -12,7 +14,7 @@ class P2P_Storage {
 			KEY p2p_to (p2p_to)
 		" );
 
-		$table2 = new scbTable( 'p2pmeta', $file, "
+		$table2 = new scbTable( 'p2pmeta', false, "
 			meta_id bigint(20) unsigned NOT NULL auto_increment,
 			p2p_id bigint(20) unsigned NOT NULL default '0',
 			meta_key varchar(255) default NULL,
@@ -22,9 +24,12 @@ class P2P_Storage {
 			KEY meta_key (meta_key)
 		" );
 
-// FORCE UPDATE
-#add_action('init', array($table, 'install'));
-#add_action('init', array($table2, 'install'));
+		if ( is_admin() && self::$version != get_option( 'p2p_storage' ) ) {
+			$table->install();
+			$table2->install();
+
+			update_option( 'p2p_storage', self::$version );
+		}
 
 		add_action( 'delete_post', array( __CLASS__, 'delete_post' ) );
 	}
@@ -170,6 +175,8 @@ class P2P_Storage {
 		return count( $p2p_ids );
 	}
 }
+
+P2P_Storage::init();
 
 
 function p2p_get_meta($p2p_id, $key, $single = false) {
