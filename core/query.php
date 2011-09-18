@@ -5,7 +5,7 @@
  */
 class P2P_Query {
 
-	private static $qv_map = array(
+	public static $qv_map = array(
 		'connected' => 'any',
 		'connected_to' => 'to',
 		'connected_from' => 'from',
@@ -112,64 +112,6 @@ class P2P_Query {
 		}
 
 		return $the_posts;
-	}
-
-	/**
-	 * Optimized inner query, after the outer query was executed.
-	 *
-	 * Populates each of the outer querie's $post objects with a 'connected' property, containing a list of connected posts
-	 *
-	 * @param string $direction The direction of the connection. Can be 'to', 'from' or 'any'
-	 * @param object|array $list WP_Query instance or list of post objects.
-	 * @param string|array $args The query vars for the inner query.
-	 */
-	function _each_connected( $direction, $list, $search ) {
-		if ( is_object( $list ) )
-			$list = $list->posts;
-
-		if ( empty( $list ) )
-			return;
-
-		$prop_name = 'connected';
-
-		$posts = array();
-
-		foreach ( $list as $post ) {
-			$post->$prop_name = array();
-			$posts[ $post->ID ] = $post;
-		}
-
-		// ignore other 'connected' query vars for the inner query
-		foreach ( array_keys( self::$qv_map ) as $qv )
-			unset( $search[ $qv ] );
-
-		$search[ self::get_qv( $direction ) ] = array_keys( $posts );
-
-		// ignore pagination
-		foreach ( array( 'showposts', 'posts_per_page', 'posts_per_archive_page' ) as $disabled_qv ) {
-			if ( isset( $search[ $disabled_qv ] ) ) {
-				trigger_error( "Can't use '$disabled_qv' in an inner query", E_USER_WARNING );
-			}
-		}
-		$search['nopaging'] = true;
-
-		$search['ignore_sticky_posts'] = true;
-
-		$q = new WP_Query( $search );
-
-		foreach ( $q->posts as $inner_post ) {
-			if ( $inner_post->ID == $inner_post->p2p_from )
-				$outer_post_id = $inner_post->p2p_to;
-			elseif ( $inner_post->ID == $inner_post->p2p_to )
-				$outer_post_id = $inner_post->p2p_from;
-			else
-				throw new Exception( 'Corrupted data.' );
-
-			if ( $outer_post_id == $inner_post->ID )
-				throw new Exception( 'Post connected to itself.' );
-
-			array_push( $posts[ $outer_post_id ]->$prop_name, $inner_post );
-		}
 	}
 
 	public function get_qv( $direction ) {

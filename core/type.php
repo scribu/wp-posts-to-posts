@@ -82,7 +82,15 @@ class P2P_Connection_Type {
 		);
 	}
 
-	public function each_connected( $query, $qv = array() ) {
+	/**
+	 * Optimized inner query, after the outer query was executed.
+	 *
+	 * Populates each of the outer querie's $post objects with a 'connected' property, containing a list of connected posts
+	 *
+	 * @param object $query WP_Query instance.
+	 * @param string|array $search Additional query vars for the inner query.
+	 */
+	public function each_connected( $query, $search = array() ) {
 		if ( empty( $query->posts ) || !is_object( $query->posts[0] ) )
 			return;
 
@@ -94,9 +102,48 @@ class P2P_Connection_Type {
 		if ( !$direction )
 			return;
 
-		$qv['post_type'] = $this->get_other_post_type( $direction );
+		$search['post_type'] = $this->get_other_post_type( $direction );
 
-		P2P_Query::_each_connected( $direction, $query, $qv );
+		$prop_name = 'connected';
+
+		$posts = array();
+
+		foreach ( $query->posts as $post ) {
+			$post->$prop_name = array();
+			$posts[ $post->ID ] = $post;
+		}
+
+		// ignore other 'connected' query vars for the inner query
+		foreach ( array_keys( P2P_Query::$qv_map ) as $qv )
+			unset( $search[ $qv ] );
+
+		$search[ P2P_Query::get_qv( $direction ) ] = array_keys( $posts );
+
+		// ignore pagination
+		foreach ( array( 'showposts', 'posts_per_page', 'posts_per_archive_page' ) as $disabled_qv ) {
+			if ( isset( $search[ $disabled_qv ] ) ) {
+				trigger_error( "Can't use '$disabled_qv' in an inner query", E_USER_WARNING );
+			}
+		}
+		$search['nopaging'] = true;
+
+		$search['ignore_sticky_posts'] = true;
+
+		$q = new WP_Query( $search );
+
+		foreach ( $q->posts as $inner_post ) {
+			if ( $inner_post->ID == $inner_post->p2p_from )
+				$outer_post_id = $inner_post->p2p_to;
+			elseif ( $inner_post->ID == $inner_post->p2p_to )
+				$outer_post_id = $inner_post->p2p_from;
+			else
+				throw new Exception( 'Corrupted data.' );
+
+			if ( $outer_post_id == $inner_post->ID )
+				throw new Exception( 'Post connected to itself.' );
+
+			array_push( $posts[ $outer_post_id ]->$prop_name, $inner_post );
+		}
 	}
 
 	private function get_base_args( $direction ) {
