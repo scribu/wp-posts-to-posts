@@ -49,7 +49,8 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * introduce 'sortable' arg to p2p_register_connection_type()
 * introduce 'data' arg to p2p_register_connection_type()
 * replace 'box' arg with hooks
-* allow using 'connected_meta' and 'connected_orderby' toghether
+* replace p2p_each_connected() with P2P_Post_Type->each_connected()
+* allow using 'connected_meta' and 'connected_orderby' together
 * fix some translations
 
 = 0.8 =
