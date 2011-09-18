@@ -125,17 +125,20 @@ class P2P_Query {
 	 * Populates each of the outer querie's $post objects with a 'connected' property, containing a list of connected posts
 	 *
 	 * @param string $direction The direction of the connection. Can be 'to', 'from' or 'any'
-	 * @param object $query The outer query.
+	 * @param object|array $list WP_Query instance or list of post objects.
 	 * @param string|array $args The query vars for the inner query.
 	 */
-	function _each_connected( $direction, $query, $search ) {
-		if ( empty( $query->posts ) )
+	function _each_connected( $direction, $list, $search ) {
+		if ( is_object( $list ) )
+			$list = $list->posts;
+
+		if ( empty( $list ) )
 			return;
 
 		$prop_name = 'connected';
 
 		$posts = array();
-		foreach ( $query->posts as $post ) {
+		foreach ( $list as $post ) {
 			$post->$prop_name = array();
 			$posts[ $post->ID ] = $post;
 		}
