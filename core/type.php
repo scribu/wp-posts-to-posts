@@ -46,9 +46,7 @@ class P2P_Connection_Type {
 
 		$args = apply_filters( 'p2p_connected_args', $args, $this );
 
-		$q = new WP_Query( $args );
-
-		return $q->posts;
+		return new WP_Query( $args );
 	}
 
 	public function get_connectable( $post_id, $page, $search ) {
@@ -75,11 +73,7 @@ class P2P_Connection_Type {
 
 		remove_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
 
-		return (object) array(
-			'posts' => $query->posts,
-			'current_page' => max( 1, $query->get('paged') ),
-			'total_pages' => $query->max_num_pages
-		);
+		return $query;
 	}
 
 	/**

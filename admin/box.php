@@ -73,7 +73,7 @@ class P2P_Box {
 	function render( $post ) {
 		$data = array();
 
-		$connected_posts = $this->data->get_connected( $post->ID );
+		$connected_posts = $this->data->get_connected( $post->ID )->posts;
 
 		if ( empty( $connected_posts ) )
 			$data['hide-connections'] = 'style="display:none"';
@@ -152,7 +152,13 @@ class P2P_Box {
 	}
 
 	protected function post_rows( $current_post_id, $page = 1, $search = '' ) {
-		$candidate = $this->data->get_connectable( $current_post_id, $page, $search );
+		$query = $this->data->get_connectable( $current_post_id, $page, $search );
+
+		$candidate = (object) array(
+			'posts' => $query->posts,
+			'current_page' => max( 1, $query->get('paged') ),
+			'total_pages' => $query->max_num_pages
+		);
 
 		if ( empty( $candidate->posts ) )
 			return false;
