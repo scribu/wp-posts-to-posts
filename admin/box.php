@@ -46,7 +46,7 @@ class P2P_Box {
 			$this->columns[ $key ] = new P2P_Field_Generic( $data );
 		}
 
-		if ( $this->data->sortable ) {
+		if ( $this->data->sortable && 'from' == $direction ) {
 			$this->columns['order'] = new P2P_Field_Order( $this->data->sortable );
 		}
 

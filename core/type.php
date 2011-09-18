@@ -122,7 +122,7 @@ class P2P_Connection_Type {
 			'connected_meta' => $this->data,
 		) );
 
-		if ( $this->sortable && 'to' != $direction ) {
+		if ( $this->sortable && 'from' == $direction ) {
 			_p2p_append( $args, array(
 				'connected_orderby' => $this->sortable,
 				'connected_order' => 'ASC',
