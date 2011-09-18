@@ -27,6 +27,13 @@ class P2P_Connection_Type {
 		return $title;
 	}
 
+	/**
+	 * Get a list of posts that are connected to a given post.
+	 *
+	 * @param int $post_id A post id
+	 *
+	 * @return object A WP_Query instance
+	 */
 	public function get_connected( $post_id ) {
 		$direction = $this->get_direction_from_id( $post_id );
 		if ( !$direction )
@@ -49,6 +56,15 @@ class P2P_Connection_Type {
 		return new WP_Query( $args );
 	}
 
+	/**
+	 * Get a list of posts that could be connected to a given post.
+	 *
+	 * @param int $post_id A post id
+	 * @param int $page A page number
+	 * @param string $search A search string
+	 *
+	 * @return object A WP_Query instance
+	 */
 	public function get_connectable( $post_id, $page, $search ) {
 		$direction = $this->get_direction_from_id( $post_id );
 		if ( !$direction )
