@@ -126,36 +126,6 @@ function p2p_delete_connection( $p2p_id ) {
 }
 
 /**
- * Optimized inner query, after the outer query was executed. (any direction)
- *
- * @param object|array $list WP_Query instance or list of post objects.
- * @param string|array $args The query vars for the inner query.
- */
-function p2p_each_connected( $query, $qv ) {
-	return P2P_Query::_each_connected( 'any', $query, $qv );
-}
-
-/**
- * Optimized inner query, after the outer query was executed. ('to' direction)
- *
- * @param object|array $list WP_Query instance or list of post objects.
- * @param string|array $args The query vars for the inner query.
- */
-function p2p_each_connected_to( $query, $qv ) {
-	return P2P_Query::_each_connected( 'to', $query, $qv );
-}
-
-/**
- * Optimized inner query, after the outer query was executed. ('from' direction)
- *
- * @param object|array $list WP_Query instance or list of post objects.
- * @param string|array $args The query vars for the inner query.
- */
-function p2p_each_connected_from( $query, $qv ) {
-	return P2P_Query::_each_connected( 'from', $query, $qv );
-}
-
-/**
  * List some posts
  *
  * @param object|array A WP_Query instance, a list of post objects or a list of post ids
