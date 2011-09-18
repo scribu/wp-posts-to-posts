@@ -46,7 +46,7 @@ class P2P_Connection_Type {
 			return array();
 
 		$args = array_merge( $this->get_base_args( $direction ), array(
-			array_search( $direction, P2P_Query::$qv_map ) => $post_id,
+			P2P_Query::get_qv( $direction ) => $post_id,
 			'connected_meta' => $this->data,
 			'nopaging' => true,
 		) );
@@ -158,6 +158,23 @@ class P2P_Connection_Type {
 
 	public function disconnect( $post_id ) {
 		p2p_disconnect( $post_id, $this->get_direction_from_id( $post_id ), $this->data );
+	}
+
+	public function each_connected( $query, $qv = array() ) {
+		if ( empty( $query->posts ) || !is_object( $query->posts[0] ) )
+			return;
+
+		$post_type = $query->get( 'post_type' );
+		if ( is_array( $post_type ) )
+			return;
+
+		$direction = $this->get_direction( $post_type );
+		if ( !$direction )
+			return;
+
+		$qv['post_type'] = $this->get_other_post_type( $direction );
+
+		P2P_Query::_each_connected( $direction, $query, $qv );
 	}
 
 	function _search_by_title( $sql, $wp_query ) {

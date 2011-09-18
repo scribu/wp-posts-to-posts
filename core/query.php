@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Handles {each_}connected{_to|_from} query vars
+ * Handles connected{_to|_from} query vars
  */
 class P2P_Query {
 
-	static $qv_map = array(
+	private static $qv_map = array(
 		'connected' => 'any',
 		'connected_to' => 'to',
 		'connected_from' => 'from',
@@ -22,12 +22,16 @@ class P2P_Query {
 	function posts_clauses( $clauses, $wp_query ) {
 		global $wpdb;
 
-		$found = self::find_qv( $wp_query );
+		foreach ( self::$qv_map as $key => $direction ) {
+			$search = $wp_query->get( $key );
+			if ( !empty( $search ) )
+				break;
+		}
 
-		if ( !$found )
+		if ( empty( $search ) )
 			return $clauses;
 
-		list( $search, $key, $direction ) = $found;
+		$wp_query->_p2p_cache = true;
 
 		$clauses['fields'] .= ", $wpdb->p2p.*";
 
@@ -97,24 +101,15 @@ class P2P_Query {
 	}
 
 	/**
-	 * Handles each_connected* query vars
+	 * Pre-populates the p2p meta cache to decrease the number of queries.
 	 */
 	function the_posts( $the_posts, $wp_query ) {
 		if ( empty( $the_posts ) )
 			return $the_posts;
 
-		if ( self::find_qv( $wp_query ) ) {
+		if ( isset( $wp_query->_p2p_cache ) ) {
 			update_meta_cache( 'p2p', wp_list_pluck( $the_posts, 'p2p_id' ) );
 		}
-
-		$found = self::find_qv( $wp_query, 'each_' );
-
-		if ( !$found )
-			return $the_posts;
-
-		list( $search, $qv, $direction ) = $found;
-
-		self::_each_connected( $direction, $wp_query, $search );
 
 		return $the_posts;
 	}
@@ -138,6 +133,7 @@ class P2P_Query {
 		$prop_name = 'connected';
 
 		$posts = array();
+
 		foreach ( $list as $post ) {
 			$post->$prop_name = array();
 			$posts[ $post->ID ] = $post;
@@ -147,14 +143,7 @@ class P2P_Query {
 		foreach ( array_keys( self::$qv_map ) as $qv )
 			unset( $search[ $qv ] );
 
-		// inverted map
-		$map = array(
-			'any' => 'connected',
-			'from' => 'connected_to',
-			'to' => 'connected_from'
-		);
-
-		$search[ $map[ $direction ] ] = array_keys( $posts );
+		$search[ self::get_qv( $direction ) ] = array_keys( $posts );
 
 		// ignore pagination
 		foreach ( array( 'showposts', 'posts_per_page', 'posts_per_archive_page' ) as $disabled_qv ) {
@@ -183,17 +172,8 @@ class P2P_Query {
 		}
 	}
 
-	private function find_qv( $wp_query, $prefix = '' ) {
-		foreach ( self::$qv_map as $qv => $direction ) {
-			$search = $wp_query->get( $prefix . $qv );
-			if ( !empty( $search ) )
-				break;
-		}
-
-		if ( empty( $search ) )
-			return false;
-
-		return array( $search, $qv, $direction );
+	public function get_qv( $direction ) {
+		return array_search( $direction, self::$qv_map );
 	}
 }
 
