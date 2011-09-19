@@ -18,6 +18,10 @@
  *  @return bool|object False on failure, P2P_Connection_Type instance on success.
  */
 function p2p_register_connection_type( $args ) {
+	if ( !did_action('init') ) {
+		trigger_error( "Connection types should not be registered before the 'init' hook.", E_USER_NOTICE );
+	}
+
 	$argv = func_get_args();
 
 	if ( count( $argv ) > 1 ) {

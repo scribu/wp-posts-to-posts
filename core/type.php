@@ -26,7 +26,7 @@ class P2P_Connection_Type {
 
 		foreach ( array( 'from', 'to' ) as $key ) {
 			if ( !post_type_exists( $args[$key] ) ) {
-				trigger_error( "Invalid post type: $args[$key]", E_USER_WARNING );
+				trigger_error( "The '$args[$key]' post type does not exist.", E_USER_WARNING );
 				return false;
 			}
 		}
