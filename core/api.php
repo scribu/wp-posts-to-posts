@@ -22,7 +22,6 @@ function p2p_register_connection_type( $args ) {
 	$args = wp_parse_args( $args, array(
 		'show_ui' => true,
 		'fields' => array(),
-		'reciprocal' => false,
 		'context' => 'side',
 	) );
 

@@ -27,6 +27,7 @@ class P2P_Connection_Type {
 			'from' => '',
 			'to' => '',
 			'data' => array(),
+			'reciprocal' => false,
 			'sortable' => false,
 			'prevent_duplicates' => true,
 			'title' => '',
