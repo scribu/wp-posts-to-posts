@@ -15,6 +15,13 @@ class P2P_Connection_Type {
 		return $this->args[$key];
 	}
 
+	public function get_instance( $hash ) {
+		if ( isset( self::$instances[ $hash ] ) )
+			return self::$instances[ $hash ];
+
+		return false;
+	}
+
 	public function make_instance( $args ) {
 		$args = wp_parse_args( $args, array(
 			'from' => '',
@@ -50,7 +57,7 @@ class P2P_Connection_Type {
 	 *
 	 * @return bool|string False on failure, 'any', 'to' or 'from' on success.
 	 */
-	public function get_direction( $arg, $warn = true ) {
+	public function get_direction( $arg ) {
 		if ( $post_id = (int) $arg ) {
 			$post = get_post( $post_id );
 			if ( !$post )
@@ -68,14 +75,6 @@ class P2P_Connection_Type {
 
 		if ( $this->from == $post_type )
 			return 'from';
-
-		if ( $warn ) {
-			trigger_error( sprintf( "Invalid post type. Expected '%s' or '%s', but received '%s'.",
-				$this->args['from'],
-				$this->args['to'],
-				$post_type
-			), E_USER_WARNING );
-		}
 
 		return false;
 	}
@@ -112,12 +111,12 @@ class P2P_Connection_Type {
 	 * @param int $post_id A post id.
 	 * @param array $extra_qv Additional query variables to use
 	 *
-	 * @return object A WP_Query instance.
+	 * @return bool|object False on failure; A WP_Query instance on success.
 	 */
 	public function get_connected( $post_id, $extra_qv = array() ) {
 		$direction = $this->get_direction( $post_id );
 		if ( !$direction )
-			return array();
+			return false;
 
 		$args = $this->get_base_args( $direction, $extra_qv );
 
@@ -146,12 +145,12 @@ class P2P_Connection_Type {
 	 * @param int $page A page number.
 	 * @param string $search A search string.
 	 *
-	 * @return object A WP_Query instance.
+	 * @return bool|object False on failure; A WP_Query instance on success.
 	 */
 	public function get_connectable( $post_id, $extra_qv ) {
 		$direction = $this->get_direction( $post_id );
 		if ( !$direction )
-			return array();
+			return false;
 
 		$args = $this->get_base_args( $direction, $extra_qv );
 
