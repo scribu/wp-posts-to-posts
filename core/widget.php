@@ -89,7 +89,7 @@ class P2P_Widget extends scbWidget {
 		return $label;
 	}
 
-	private function cpt_label( $post_type ) {
+	private static function cpt_label( $post_type ) {
 		return get_post_type_object( $post_type )->label;
 	}
 }
