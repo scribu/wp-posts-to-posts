@@ -53,11 +53,11 @@ class P2P_Connection_Type {
 	 * Get connection direction.
 	 *
 	 * @param int|string $arg A post id or a post type.
-	 * @param bool $warn Wether to trigger a notice on error.
+	 * @param bool $respect_reciprocal Whether to take the 'reciprocal' arg into consideration.
 	 *
 	 * @return bool|string False on failure, 'any', 'to' or 'from' on success.
 	 */
-	public function get_direction( $arg ) {
+	public function get_direction( $arg, $respect_reciprocal = false ) {
 		if ( $post_id = (int) $arg ) {
 			$post = get_post( $post_id );
 			if ( !$post )
@@ -68,15 +68,18 @@ class P2P_Connection_Type {
 		}
 
 		if ( $post_type == $this->to && $this->from == $post_type )
-			return 'any';
+			$direction = 'any';
+		elseif ( $this->to == $post_type )
+			$direction = 'to';
+		elseif ( $this->from == $post_type )
+			$direction = 'from';
+		else
+			return false;
 
-		if ( $this->to == $post_type )
-			return 'to';
+		if ( $respect_reciprocal && !$this->reciprocal && 'to' == $direction )
+			return false;
 
-		if ( $this->from == $post_type )
-			return 'from';
-
-		return false;
+		return $direction;
 	}
 
 	public function get_other_post_type( $direction ) {

@@ -37,8 +37,8 @@ class P2P_Widget extends scbWidget {
 		if ( !$ctype )
 			return;
 
-		$direction = $ctype->get_direction( get_queried_object_id() );
-		if ( !$direction || ( !$ctype->reciprocal && 'from' != $direction ) )
+		$direction = $ctype->get_direction( get_queried_object_id(), true );
+		if ( !$direction )
 			return;
 
 		$connected = $ctype->get_connected( get_queried_object_id() );
