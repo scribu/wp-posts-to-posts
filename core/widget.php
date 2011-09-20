@@ -20,7 +20,7 @@ class P2P_Widget extends scbWidget {
 		if ( empty( $instance ) )
 			$instance = $this->defaults;
 
-		$ctypes = array_map( array( __CLASS__, 'get_ctype_label' ), P2P_Connection_Type::$instances );
+		$ctypes = array_map( array( __CLASS__, 'ctype_label' ), P2P_Connection_Type::$instances );
 
 		echo $this->input( array(
 			'type' => 'select',
@@ -66,9 +66,13 @@ class P2P_Widget extends scbWidget {
 		echo $after_widget;
 	}
 
-	private static function get_ctype_label( $ctype ) {
-		$from = get_post_type_object( $ctype->from )->label;
-		$to = get_post_type_object( $ctype->to )->label;
+	private static function ctype_label( $ctype ) {
+		if ( is_array( $ctype->from ) )
+			$from = implode( ', ', array_map( array( __CLASS__, 'cpt_label' ), $ctype->from ) );
+		else
+			$from = self::cpt_label( $ctype->from );
+
+		$to = self::cpt_label( $ctype->to );
 
 		if ( $ctype->reciprocal || $ctype->to == $ctype->from )
 			$arrow = '&harr;';
@@ -83,6 +87,10 @@ class P2P_Widget extends scbWidget {
 			$label .= " ($title)";
 
 		return $label;
+	}
+
+	private function cpt_label( $post_type ) {
+		return get_post_type_object( $post_type )->label;
 	}
 }
 

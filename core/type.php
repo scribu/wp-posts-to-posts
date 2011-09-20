@@ -33,9 +33,28 @@ class P2P_Connection_Type {
 			'title' => '',
 		) );
 
-		foreach ( array( 'from', 'to' ) as $key ) {
-			if ( !post_type_exists( $args[$key] ) ) {
-				trigger_error( "The '$args[$key]' post type does not exist.", E_USER_WARNING );
+		if ( is_array( $args['to'] ) ) {
+			trigger_error( "'to' argument can't be an array.", E_USER_WARNING );
+			return false;
+		}
+
+		if ( is_array( $args['from'] ) ) {
+			if ( in_array( $args['to'], $args['from'] ) ) {
+				trigger_error( "'to' post type {$args['to']} appears in 'from' array.", E_USER_WARNING );
+				return false;
+			}
+
+			$args['reciprocal'] = false;
+		}
+
+		if ( !post_type_exists( $args['to'] ) ) {
+			trigger_error( "The '{$args['to']}' post type does not exist.", E_USER_WARNING );
+			return false;
+		}
+
+		foreach ( (array) $args['from'] as $ptype ) {
+			if ( !post_type_exists( $ptype ) ) {
+				trigger_error( "The '$ptype' post type does not exist.", E_USER_WARNING );
 				return false;
 			}
 		}
@@ -72,6 +91,8 @@ class P2P_Connection_Type {
 			$direction = 'any';
 		elseif ( $this->to == $post_type )
 			$direction = 'to';
+		elseif ( is_array( $this->from ) && in_array( $post_type, $this->from ) )
+			$direction = 'from';
 		elseif ( $this->from == $post_type )
 			$direction = 'from';
 		else
