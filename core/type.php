@@ -15,7 +15,7 @@ class P2P_Connection_Type {
 		return $this->args[$key];
 	}
 
-	public function get_instance( $args ) {
+	public function make_instance( $args ) {
 		$args = wp_parse_args( $args, array(
 			'from' => '',
 			'to' => '',

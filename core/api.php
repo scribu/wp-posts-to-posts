@@ -26,7 +26,7 @@ function p2p_register_connection_type( $args ) {
 		'context' => 'side',
 	) );
 
-	return P2P_Connection_Type::get_instance( $args );
+	return P2P_Connection_Type::make_instance( $args );
 }
 
 /**
