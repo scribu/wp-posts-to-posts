@@ -30,7 +30,7 @@ class P2P_Widget extends scbWidget {
 	}
 
 	function widget( $args, $instance ) {
-		if ( !is_single() )
+		if ( !is_singular() )
 			return;
 
 		$ctype = P2P_Connection_Type::get_instance( $instance['ctype'] );
@@ -38,14 +38,21 @@ class P2P_Widget extends scbWidget {
 			return;
 
 		$direction = $ctype->get_direction( get_queried_object_id() );
-		if ( !$direction )
+		if ( !$direction || ( !$ctype->reciprocal && 'from' != $direction ) )
 			return;
 
 		$connected = $ctype->get_connected( get_queried_object_id() );
 		if ( !$connected->have_posts() )
 			return;
 
-		$title = apply_filters( 'widget_title', $ctype->get_title( $direction ), $instance, $this->id_base );
+		$title = $ctype->get_title( $direction );
+
+		if ( empty( $title ) ) {
+			$ptype = get_post_type_object( $ctype->get_other_post_type( $direction ) );
+			$title = sprintf( __( 'Related %s', P2P_TEXTDOMAIN ), $ptype->label );
+		}
+
+		$title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
 
 		extract( $args );
 
