@@ -44,6 +44,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 0.9.1 =
+* add widget
+
 = 0.9 =
 * introduce dropdown connection fields
 * introduce 'sortable' arg to p2p_register_connection_type()
