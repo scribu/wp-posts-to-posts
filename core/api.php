@@ -4,18 +4,8 @@
  * Register a connection between two post types.
  * This creates the appropriate meta box in the admin edit screen
  *
- * @param array $args Can be:
- *  - 'from' string The first end of the connection.
- *  - 'to' string The second end of the connection.
- *  - 'fields' array( key => Title ) Metadata fields editable by the user (optional).
- *  - 'data' array( key => value ) Metadata fields not editable by the user (optional).
- *  - 'sortable' string A custom field key used to add a special column that allows manual connection ordering. Default: false.
- *  - 'prevent_duplicates' bool Wether to disallow duplicate connections between the same two posts. Default: true.
- *  - 'title' string The box's title. Default: 'Connected {$post_type}s'
- *  - 'reciprocal' bool Wether to show the box on both sides of the connection. Default: false.
- *  - 'context' string Where should the box show up by default. Possible values: 'advanced' or 'side'
- *
- *  @return bool|object False on failure, P2P_Connection_Type instance on success.
+ * @param array $args See https://github.com/scribu/wp-posts-to-posts/wiki/p2p_register_connection_type()
+ * @return bool|object False on failure, P2P_Connection_Type instance on success.
  */
 function p2p_register_connection_type( $args ) {
 	if ( !did_action('init') ) {
