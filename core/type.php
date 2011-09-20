@@ -8,6 +8,7 @@ class P2P_Connection_Type {
 
 	protected function __construct( $args ) {
 		$this->args = $args;
+
 	}
 
 	public function __get( $key ) {
@@ -31,11 +32,14 @@ class P2P_Connection_Type {
 			}
 		}
 
-		$instance = new P2P_Connection_Type( $args );
+		$hash = md5( serialize( wp_array_slice_assoc( $args, array( 'from', 'to', 'data' ) ) ) );
 
-		self::$instances[] = $instance;
+		if ( isset( self::$instances[ $hash ] ) ) {
+			trigger_error( 'Connection type is already defined.', E_USER_NOTICE );
+			return self::$instances[ $hash ];
+		}
 
-		return $instance;
+		return self::$instances[ $hash ] = new P2P_Connection_Type( $args );
 	}
 
 	/**
