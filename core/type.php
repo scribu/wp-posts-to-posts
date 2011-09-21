@@ -33,31 +33,32 @@ class P2P_Connection_Type {
 			'title' => '',
 		) );
 
-		if ( is_array( $args['to'] ) ) {
-			trigger_error( "'to' argument can't be an array.", E_USER_WARNING );
+		foreach ( array( 'from', 'to' ) as $key ) {
+			$args[ $key ] = array_filter( (array) $args[ $key ] );
+			sort( $args[ $key ] );
+		}
+
+		$common = array_intersect( $args['from'], $args['to'] );
+		if ( !empty( $common ) && count( $args['from'] ) + count( $args['to'] ) > 2 ) {
+			trigger_error(
+				"Some post types appear both in 'to' and 'from' arguments: " . implode( ' ', $common ),
+				E_USER_WARNING );
 			return false;
 		}
 
-		if ( is_array( $args['from'] ) ) {
-			if ( in_array( $args['to'], $args['from'] ) ) {
-				trigger_error( "'to' post type {$args['to']} appears in 'from' array.", E_USER_WARNING );
-				return false;
-			}
+		$error = false;
 
-			$args['reciprocal'] = false;
+		foreach ( array( 'from', 'to' ) as $key ) {
+			foreach ( $args[$key] as $ptype ) {
+				if ( !post_type_exists( $ptype ) ) {
+					trigger_error( "The '$ptype' post type does not exist.", E_USER_WARNING );
+					$error = true;
+				}
+			}
 		}
 
-		if ( !post_type_exists( $args['to'] ) ) {
-			trigger_error( "The '{$args['to']}' post type does not exist.", E_USER_WARNING );
+		if ( $error )
 			return false;
-		}
-
-		foreach ( (array) $args['from'] as $ptype ) {
-			if ( !post_type_exists( $ptype ) ) {
-				trigger_error( "The '$ptype' post type does not exist.", E_USER_WARNING );
-				return false;
-			}
-		}
 
 		$hash = md5( serialize( wp_array_slice_assoc( $args, array( 'from', 'to', 'data' ) ) ) );
 
@@ -87,13 +88,11 @@ class P2P_Connection_Type {
 			$post_type = $arg;
 		}
 
-		if ( $post_type == $this->to && $this->from == $post_type )
+		if ( $post_type == $this->to[0] && $this->from[0] == $post_type )
 			$direction = 'any';
-		elseif ( $this->to == $post_type )
+		elseif ( in_array( $post_type, $this->to ) )
 			$direction = 'to';
-		elseif ( is_array( $this->from ) && in_array( $post_type, $this->from ) )
-			$direction = 'from';
-		elseif ( $this->from == $post_type )
+		elseif ( in_array( $post_type, $this->from ) )
 			$direction = 'from';
 		else
 			return false;
@@ -106,6 +105,15 @@ class P2P_Connection_Type {
 
 	public function get_other_post_type( $direction ) {
 		return 'from' == $direction ? $this->to : $this->from;
+	}
+
+	public function can_create_post( $direction ) {
+		$ptype = $this->get_other_post_type( $direction );
+
+		if ( count( $ptype ) > 1 )
+			return false;
+
+		return current_user_can( get_post_type_object( $ptype[0] )->cap->edit_posts );
 	}
 
 	public function get_title( $direction ) {

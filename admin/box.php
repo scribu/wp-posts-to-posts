@@ -32,7 +32,8 @@ class P2P_Box {
 
 		$this->current_ptype = $current_ptype;
 
-		$this->ptype = get_post_type_object( $this->data->get_other_post_type( $direction ) );
+		$other_ptype = $this->data->get_other_post_type( $direction );
+		$this->ptype = get_post_type_object( $other_ptype[0] );
 
 		if ( !class_exists( 'Mustache' ) )
 			require dirname(__FILE__) . '/../mustache/Mustache.php';
@@ -134,7 +135,7 @@ class P2P_Box {
 		);
 
 		// Create post tab
-		if ( current_user_can( $this->ptype->cap->edit_posts ) ) {
+		if ( $this->data->can_create_post( $this->direction ) ) {
 			$tab_content = _p2p_mustache_render( 'tab-create-post.html', array(
 				'title' => $this->ptype->labels->add_new_item
 			) );
