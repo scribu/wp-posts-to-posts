@@ -4,13 +4,15 @@
 
 class P2P_Test {
 
+	private static $ctype;
+
 	function init() {
 		if ( !function_exists('p2p_register_connection_type') )
 			return;
 
 		add_action('init', array(__CLASS__, '_init'));
 #		add_action('admin_init', array(__CLASS__, 'setup'));
-#		add_action('load-index.php', array(__CLASS__, 'test'));
+		add_action('load-index.php', array(__CLASS__, 'test'));
 #		add_action('load-index.php', array(__CLASS__, 'debug'));
 	}
 
@@ -27,6 +29,7 @@ class P2P_Test {
 			'has_archive' => 'actors',
 			'taxonomies' => array( 'category' )
 		));
+
 		register_post_type('movie', array(
 			'public' => true,
 			'labels' => array(
@@ -72,7 +75,7 @@ class P2P_Test {
 			'data' => array( 'type' => 'friends' )
 		) );
 
-		p2p_register_connection_type( array( 'actor', 'post' ), array( 'page', 'movie' ), true );
+		self::$ctype = p2p_register_connection_type( array( 'actor', 'post' ), array( 'page', 'movie' ), true );
 	}
 
 	function setup() {
@@ -100,23 +103,23 @@ class P2P_Test {
 	function test() {
 		global $wpdb;
 
-		$wpdb->query("TRUNCATE $wpdb->p2p");
-		$wpdb->query("TRUNCATE $wpdb->p2pmeta");
-
 		assert_options(ASSERT_ACTIVE, 1);
 		assert_options(ASSERT_WARNING, 0);
 		assert_options(ASSERT_QUIET_EVAL, 1);
 
-		$failed = false;
-
-		assert_options(ASSERT_CALLBACK, function ($file, $line, $code) use ( &$failed ) {
-			$failed = true;
-
+		assert_options(ASSERT_CALLBACK, function ($file, $line, $code) {
 			echo "<hr>Assertion Failed (line $line):<br />
 				<code>$code</code><br /><hr />";
 
-			add_action('admin_notices', array(__CLASS__, 'debug'));
+			add_action('admin_notices', array('P2P_Test', 'debug'));
 		});
+
+		self::test_each_connected();
+	}
+
+	function test_basic_api() {
+		$wpdb->query("TRUNCATE $wpdb->p2p");
+		$wpdb->query("TRUNCATE $wpdb->p2pmeta");
 
 		$actor_ids = get_posts( array(
 			'fields' => 'ids',
@@ -177,14 +180,12 @@ class P2P_Test {
 			'cache_results' => false,
 		) );
 
-		$r = array();
-		foreach ( $posts as $post ) {
-			$r[ $post->p2p_id ] = $post->ID;
-		}
+		$r = scb_list_fold( $posts, 'p2p_id', 'ID' );
 
 		assert( 'array_intersect_assoc($r, $raw) == $r' );
+	}
 
-		// test ordering
+	function test_ordering() {
 		$query = new WP_Query( array(
 			'connected' => $actor_ids[0],
 			'post_type' => 'movie',
@@ -198,54 +199,15 @@ class P2P_Test {
 			'connected_order' => 'asc'
 		) );
 
-		// test 'each_*' query vars
-		$posts = get_posts( array(
-			'post_type' => 'actor',
-			'post_status' => 'any',
-			'nopaging' => true,
-			'each_connected' => array(
-				'post_type' => 'movie',
-				'post_status' => 'any',
-				'nopaging' => true,
-			),
-			'suppress_filters' => false
-		) );
-
-#		self::walk( $posts );
-
-		// test 'each_*' query vars
-#		$posts = get_posts( array(
-#			'post_type' => 'actor',
-#			'post_status' => 'any',
-#			'nopaging' => true,
-#			'each_connected' => array(
-#				'post_type' => 'actor',
-#				'post_status' => 'any',
-#				'nopaging' => true,
-#				'each_connected' => array(
-#					'post_type' => 'actor',
-#					'post_status' => 'any',
-#					'nopaging' => true,
-#				),
-#			),
-#			'suppress_filters' => false
-#		) );
-
 		self::walk( $posts );
+	}
 
-		// test p2p_each_connected()
-		$query = new WP_Query( array(
-			'post_type' => 'actor',
-			'post_status' => 'any',
-			'nopaging' => true,
-		) );
+	function test_each_connected() {
+		$query = new WP_Query( array( 'post_status' => 'publish' ) );
 
-		p2p_each_connected( $query, array( 'post_type' => 'movie' ) );
+		self::$ctype->each_connected( $query );
 
 		self::walk( $query->posts );
-
-		if ( $failed )
-			self::debug();
 	}
 
 	private function walk( $posts, $level = 0 ) {
@@ -253,20 +215,16 @@ class P2P_Test {
 			return;
 
 		if ( 0 == $level )
-			echo '<pre>';
+			echo "<pre>\n";
 
 		foreach ( $posts as $post ) {
 			echo str_repeat( "\t", $level ) . "$post->ID: $post->post_title\n";
-
-			// Meta cache test
-			if ( isset( $post->p2p_id ) )
-				p2p_get_meta( $post->p2p_id, 'foo', true );
 
 			self::walk( (array) @$post->connected, $level+1 );
 		}
 
 		if ( 0 == $level )
-			echo '</pre>';
+			echo "</pre>\n";
 	}
 
 	function debug() {
