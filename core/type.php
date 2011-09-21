@@ -142,12 +142,12 @@ class P2P_Connection_Type {
 	 * Get a list of posts that are connected to a given post.
 	 *
 	 * @param int $post_id A post id.
-	 * @param array $extra_qv Additional query variables to use
+	 * @param array $extra_qv Additional query variables to use.
 	 *
 	 * @return bool|object False on failure; A WP_Query instance on success.
 	 */
-	public function get_connected( $post_id, $extra_qv = array() ) {
-		$direction = $this->get_direction( $post_id );
+	public function get_connected( $post_id, $extra_qv = array(), $_direction = false ) {
+		$direction = $_direction ? $_direction : $this->get_direction( $post_id );
 		if ( !$direction )
 			return false;
 
@@ -175,13 +175,12 @@ class P2P_Connection_Type {
 	 * Get a list of posts that could be connected to a given post.
 	 *
 	 * @param int $post_id A post id.
-	 * @param int $page A page number.
-	 * @param string $search A search string.
+	 * @param array $extra_qv Additional query variables to use.
 	 *
 	 * @return bool|object False on failure; A WP_Query instance on success.
 	 */
-	public function get_connectable( $post_id, $extra_qv ) {
-		$direction = $this->get_direction( $post_id );
+	public function get_connectable( $post_id, $extra_qv, $_direction = false ) {
+		$direction = $_direction ? $_direction : $this->get_direction( $post_id );
 		if ( !$direction )
 			return false;
 
@@ -293,8 +292,9 @@ class P2P_Connection_Type {
 		return $p2p_id;
 	}
 
-	public function disconnect( $post_id ) {
-		p2p_disconnect( $post_id, $this->get_direction( $post_id ), $this->data );
+	public function disconnect( $post_id, $_direction = false ) {
+		$direction = $_direction ? $_direction : $this->get_direction( $post_id );
+		p2p_disconnect( $post_id, $direction, $this->data );
 	}
 }
 

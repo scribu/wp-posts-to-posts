@@ -85,7 +85,7 @@ class P2P_Box {
 		$qv = self::$extra_qv;
 		$qv['nopaging'] = true;
 
-		$connected_posts = $this->data->get_connected( $post->ID, $qv )->posts;
+		$connected_posts = $this->data->get_connected( $post->ID, $qv, $this->direction )->posts;
 
 		if ( empty( $connected_posts ) )
 			$data['hide-connections'] = 'style="display:none"';
@@ -174,7 +174,7 @@ class P2P_Box {
 			$args['s'] = $search;
 		}
 
-		$query = $this->data->get_connectable( $current_post_id, $args );
+		$query = $this->data->get_connectable( $current_post_id, $args, $this->direction );
 
 		if ( empty( $query->posts ) )
 			return false;
@@ -264,7 +264,7 @@ class P2P_Box {
 	}
 
 	public function ajax_clear_connections() {
-		$this->data->disconnect( $_POST['post_id'] );
+		$this->data->disconnect( $_POST['post_id'], $this->direction );
 
 		die(1);
 	}
