@@ -72,7 +72,7 @@ class P2P_Test {
 			'data' => array( 'type' => 'friends' )
 		) );
 
-		p2p_register_connection_type( array( 'actor', 'post' ), 'page', true );
+		p2p_register_connection_type( array( 'actor', 'post' ), array( 'page', 'movie' ), true );
 	}
 
 	function setup() {

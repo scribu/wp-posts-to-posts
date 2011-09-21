@@ -67,12 +67,9 @@ class P2P_Widget extends scbWidget {
 	}
 
 	private static function ctype_label( $ctype ) {
-		if ( is_array( $ctype->from ) )
-			$from = implode( ', ', array_map( array( __CLASS__, 'cpt_label' ), $ctype->from ) );
-		else
-			$from = self::cpt_label( $ctype->from );
-
-		$to = self::cpt_label( $ctype->to );
+		foreach ( array( 'from', 'to' ) as $key ) {
+			$$key = implode( ', ', array_map( array( __CLASS__, 'cpt_label' ), $ctype->$key ) );
+		}
 
 		if ( $ctype->reciprocal || $ctype->to == $ctype->from )
 			$arrow = '&harr;';
