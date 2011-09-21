@@ -206,9 +206,9 @@ class P2P_Connection_Type {
 	 * Populates each of the outer querie's $post objects with a 'connected' property, containing a list of connected posts
 	 *
 	 * @param object $query WP_Query instance.
-	 * @param string|array $search Additional query vars for the inner query.
+	 * @param string|array $extra_qv Additional query vars for the inner query.
 	 */
-	public function each_connected( $query, $search = array() ) {
+	public function each_connected( $query, $extra_qv = array() ) {
 		if ( empty( $query->posts ) || !is_object( $query->posts[0] ) )
 			return;
 
@@ -219,8 +219,6 @@ class P2P_Connection_Type {
 		$direction = $this->get_direction( $post_type );
 		if ( !$direction )
 			return;
-
-		$search['post_type'] = $this->get_other_post_type( $direction );
 
 		$prop_name = 'connected';
 
@@ -233,32 +231,32 @@ class P2P_Connection_Type {
 
 		// ignore other 'connected' query vars for the inner query
 		foreach ( array_keys( P2P_Query::$qv_map ) as $qv )
-			unset( $search[ $qv ] );
-
-		$search[ P2P_Query::get_qv( $direction ) ] = array_keys( $posts );
+			unset( $extra_qv[ $qv ] );
 
 		// ignore pagination
 		foreach ( array( 'showposts', 'posts_per_page', 'posts_per_archive_page' ) as $disabled_qv ) {
-			if ( isset( $search[ $disabled_qv ] ) ) {
+			if ( isset( $extra_qv[ $disabled_qv ] ) ) {
 				trigger_error( "Can't use '$disabled_qv' in an inner query", E_USER_WARNING );
 			}
 		}
-		$search['nopaging'] = true;
+		$extra_qv['nopaging'] = true;
 
-		$search['ignore_sticky_posts'] = true;
-
-		$q = new WP_Query( $search );
+		$q = $this->get_connected( array_keys( $posts ), $extra_qv, $direction );
 
 		foreach ( $q->posts as $inner_post ) {
 			if ( $inner_post->ID == $inner_post->p2p_from )
 				$outer_post_id = $inner_post->p2p_to;
 			elseif ( $inner_post->ID == $inner_post->p2p_to )
 				$outer_post_id = $inner_post->p2p_from;
-			else
-				throw new Exception( 'Corrupted data.' );
+			else {
+				trigger_error( "Corrupted data for post $inner_post->ID", E_USER_WARNING );
+				continue;
+			}
 
-			if ( $outer_post_id == $inner_post->ID )
-				throw new Exception( 'Post connected to itself.' );
+			if ( $outer_post_id == $inner_post->ID ) {
+				trigger_error( 'Post connected to itself.', E_USER_WARNING );
+				continue;
+			}
 
 			array_push( $posts[ $outer_post_id ]->$prop_name, $inner_post );
 		}
