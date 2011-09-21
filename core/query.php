@@ -5,31 +5,41 @@
  */
 class P2P_Query {
 
-	public static $qv_map = array(
-		'connected' => 'any',
-		'connected_to' => 'to',
-		'connected_from' => 'from',
-	);
-
 	function init() {
+		add_action( 'parse_query', array( 'P2P_Query', 'parse_legacy_qv' ) );
 		add_filter( 'posts_clauses', array( 'P2P_Query', 'posts_clauses' ), 10, 2 );
 		add_filter( 'the_posts', array( 'P2P_Query', 'the_posts' ), 11, 2 );
 	}
 
-	/**
-	 * Handles connected* query vars
-	 */
+	function parse_legacy_qv( $wp_query ) {
+		$qv_map = array(
+			'connected' => 'any',
+			'connected_to' => 'to',
+			'connected_from' => 'from',
+		);
+
+		foreach ( $qv_map as $key => $direction ) {
+			$search = $wp_query->get( $key );
+			if ( !empty( $search ) ) {
+				trigger_error( "'$key' query var is deprecated. Use 'connected_ids' + 'connected_direction' instead.", E_USER_NOTICE );
+				$wp_query->set( 'connected_ids', $search );
+				$wp_query->set( 'connected_direction', $direction );
+
+				$wp_query->set( $key, false );
+			}
+		}
+	}
+
 	function posts_clauses( $clauses, $wp_query ) {
 		global $wpdb;
 
-		foreach ( self::$qv_map as $key => $direction ) {
-			$search = $wp_query->get( $key );
-			if ( !empty( $search ) )
-				break;
-		}
-
+		$search = $wp_query->get( 'connected_ids' );
 		if ( empty( $search ) )
 			return $clauses;
+
+		$direction = $wp_query->get( 'connected_direction' );
+		if ( empty( $direction ) )
+			$direction = 'any';
 
 		$wp_query->_p2p_cache = true;
 
@@ -112,10 +122,6 @@ class P2P_Query {
 		}
 
 		return $the_posts;
-	}
-
-	public function get_qv( $direction ) {
-		return array_search( $direction, self::$qv_map );
 	}
 }
 
