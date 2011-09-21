@@ -213,8 +213,8 @@ class P2P_Connection_Type {
 			return;
 
 		$post_type = $query->get( 'post_type' );
-		if ( is_array( $post_type ) )
-			return;
+		if ( empty( $post_type ) )
+			$post_type = 'post';
 
 		$direction = $this->get_direction( $post_type );
 		if ( !$direction )
