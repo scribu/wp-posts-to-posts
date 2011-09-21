@@ -135,6 +135,7 @@ class P2P_Connection_Type {
 		return array_merge( $extra_qv, array(
 			'post_type' => $this->get_other_post_type( $direction ),
 			'suppress_filters' => false,
+			'ignore_sticky_posts' => true
 		) );
 	}
 
