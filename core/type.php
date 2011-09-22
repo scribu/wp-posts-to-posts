@@ -155,7 +155,7 @@ class P2P_Connection_Type {
 		$args = $this->get_base_args( $direction, $extra_qv );
 
 		_p2p_append( $args, array(
-			'connected_ids' => $post_id,
+			'connected' => $post_id,
 			'connected_direction' => $direction,
 			'connected_meta' => $this->data,
 		) );

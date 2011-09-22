@@ -13,7 +13,6 @@ class P2P_Query {
 
 	function parse_legacy_qv( $wp_query ) {
 		$qv_map = array(
-			'connected' => 'any',
 			'connected_to' => 'to',
 			'connected_from' => 'from',
 		);
@@ -21,8 +20,8 @@ class P2P_Query {
 		foreach ( $qv_map as $key => $direction ) {
 			$search = $wp_query->get( $key );
 			if ( !empty( $search ) ) {
-				trigger_error( "'$key' query var is deprecated. Use 'connected_ids' + 'connected_direction' instead.", E_USER_NOTICE );
-				$wp_query->set( 'connected_ids', $search );
+				trigger_error( "'$key' query var is deprecated. Use 'connected' + 'connected_direction' instead.", E_USER_NOTICE );
+				$wp_query->set( 'connected', $search );
 				$wp_query->set( 'connected_direction', $direction );
 
 				$wp_query->set( $key, false );
@@ -33,7 +32,7 @@ class P2P_Query {
 	function posts_clauses( $clauses, $wp_query ) {
 		global $wpdb;
 
-		$search = $wp_query->get( 'connected_ids' );
+		$search = $wp_query->get( 'connected' );
 		if ( empty( $search ) )
 			return $clauses;
 
