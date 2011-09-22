@@ -1,8 +1,6 @@
 <?php
 
-// Automated testing suite for the Posts 2 Posts plugin
-
-class P2P_Test {
+class P2P_Debug {
 
 	private static $ctype;
 
@@ -11,9 +9,7 @@ class P2P_Test {
 			return;
 
 		add_action('init', array(__CLASS__, '_init'));
-#		add_action('admin_init', array(__CLASS__, 'setup'));
 		add_action('load-index.php', array(__CLASS__, 'test'));
-#		add_action('load-index.php', array(__CLASS__, 'debug'));
 	}
 
 	function _init() {
@@ -101,88 +97,7 @@ class P2P_Test {
 	}
 
 	function test() {
-		global $wpdb;
-
-		assert_options(ASSERT_ACTIVE, 1);
-		assert_options(ASSERT_WARNING, 0);
-		assert_options(ASSERT_QUIET_EVAL, 1);
-
-		assert_options(ASSERT_CALLBACK, function ($file, $line, $code) {
-			echo "<hr>Assertion Failed (line $line):<br />
-				<code>$code</code><br /><hr />";
-
-			add_action('admin_notices', array('P2P_Test', 'debug'));
-		});
-
 		self::test_each_connected();
-	}
-
-	function test_basic_api() {
-		$wpdb->query("TRUNCATE $wpdb->p2p");
-		$wpdb->query("TRUNCATE $wpdb->p2pmeta");
-
-		$actor_ids = get_posts( array(
-			'fields' => 'ids',
-			'post_type' => 'actor',
-			'post_status' => 'any',
-			'nopaging' => true
-		) );
-
-		$movie_ids = get_posts( array(
-			'fields' => 'ids',
-			'post_type' => 'movie',
-			'post_status' => 'any',
-			'orderby' => 'post_title',
-			'order' => 'asc',
-			'nopaging' => true
-		) );
-
-		// basic API correctness
-		p2p_connect( array_slice( $actor_ids, 0, 5 ), array_slice( $movie_ids, 0, 3 ) );
-		p2p_connect( $movie_ids[0], $actor_ids[10] );
-
-		$result = array_values( p2p_get_connected( $actor_ids[0], 'from' ) );
-		sort( $result );
-		$expected = array_slice( $movie_ids, 0, 3 );
-		sort($expected);
-		assert( '$expected == $result' );
-
-		$result = array_values( p2p_get_connected( $movie_ids[0], 'any' ) );
-		sort( $result );
-		$expected = array( $actor_ids[0], $actor_ids[10] );
-		sort( $expected );
-		assert( '$expected == $result' );
-
-		assert( 'true == p2p_is_connected( $actor_ids[0], $movie_ids[0] )' );
-		assert( 'false == p2p_is_connected( $actor_ids[0], $movie_ids[10] )' );
-
-		// 'actor' => 'actor'
-		$posts = get_posts( array(
-			'connected' => $actor_ids[0],
-			'post_type' => 'actor',
-			'post_status' => 'any',
-			'suppress_filters' => false,
-			'fields' => 'ids',
-		) );
-		assert( 'array() == $posts' );
-
-		// compare p2p_get_connected() to 'connected' => 123
-		p2p_connect( $actor_ids[2], $actor_ids[10] );
-		p2p_connect( $actor_ids[10], $actor_ids[2] );
-
-		$raw = p2p_get_connected($actor_ids[2], 'any');
-
-		$posts = get_posts( array(
-			'connected' => $actor_ids[2],
-			'post_type' => 'actor',
-			'post_status' => 'any',
-			'suppress_filters' => false,
-			'cache_results' => false,
-		) );
-
-		$r = scb_list_fold( $posts, 'p2p_id', 'ID' );
-
-		assert( 'array_intersect_assoc($r, $raw) == $r' );
 	}
 
 	function test_ordering() {
@@ -242,5 +157,5 @@ class P2P_Test {
 	}
 }
 
-add_action( 'plugins_loaded', array('P2P_Test', 'init'), 11 );
+add_action( 'plugins_loaded', array( 'P2P_Debug', 'init' ), 11 );
 
