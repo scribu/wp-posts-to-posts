@@ -68,7 +68,7 @@ class P2P_Test {
 		) );
 
 		p2p_register_connection_type( array(
-			'from' => 'actor',
+			'from' => array( 'foo', 'actor' ),
 			'to' => 'actor',
 			'reciprocal' => true,
 			'title' => 'Friends with',
