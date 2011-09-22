@@ -34,7 +34,11 @@ class P2P_Connection_Type {
 		) );
 
 		foreach ( array( 'from', 'to' ) as $key ) {
-			$args[ $key ] = array_filter( (array) $args[ $key ] );
+			$args[ $key ] = array_values( array_filter( (array) $args[ $key ], 'post_type_exists' ) );
+			if ( empty( $args[ $key ] ) ) {
+				trigger_error( "'$key' arg doesn't contain any valid post types", E_USER_WARNING );
+				return false;
+			}
 			sort( $args[ $key ] );
 		}
 
