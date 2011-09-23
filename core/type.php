@@ -294,7 +294,11 @@ class P2P_Connection_Type {
 
 	public function disconnect( $post_id, $_direction = false ) {
 		$direction = $_direction ? $_direction : $this->get_direction( $post_id );
-		p2p_disconnect( $post_id, $direction, $this->data );
+		P2P_Storage::disconnect( $post_id, $direction, $this->data );
+	}
+
+	public function delete_connection( $p2p_id ) {
+		return P2P_Storage::delete( $p2p_id );
 	}
 }
 
