@@ -1,0 +1,259 @@
+# Placeholder support for IE
+if !jQuery('<input placeholder="1" />')[0].placeholder
+	setVal = ->
+		$this = jQuery(this)
+		if !$this.val()
+			$this.val($this.attr('placeholder'))
+			$this.addClass('p2p-placeholder')
+		void
+
+	clearVal = ->
+		$this = jQuery(this)
+		if $this.hasClass('p2p-placeholder')
+			$this.val('')
+			$this.removeClass('p2p-placeholder')
+		void
+
+	jQuery('.p2p-search input[placeholder]')
+		.each setVal
+		.focus clearVal
+		.blur setVal
+
+jQuery ->
+	jQuery('.p2p-box').each ->
+		$metabox = jQuery(this)
+		$connections = $metabox.find('.p2p-connections')
+		$spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
+
+		get_base_data = ->
+			return {
+				action: 'p2p_box'
+				nonce: P2PAdmin.nonce
+				box_id: $metabox.attr('data-box_id')
+				post_type: jQuery('#post_type').val()
+			}
+
+		# Make sortable
+		if $connections.find('th.p2p-col-order').length
+			$connections.find('tbody').sortable {
+				handle: 'td.p2p-col-order'
+				helper: (e, ui) ->
+					ui.children().each ->
+						jQuery(this).width(jQuery(this).width())
+					return ui
+			}
+
+		# Delete all connections
+		$metabox.delegate 'th.p2p-col-delete a', 'click', ->
+			if !confirm(P2PAdmin.deleteConfirmMessage)
+				return false
+
+			$self = jQuery(this)
+			$td = $self.closest('td')
+
+			data = get_base_data()
+			data <<<
+				subaction: 'clear_connections'
+				post_id: jQuery('#post_ID').val()
+
+			$td.html( $spinner.show() )
+
+			jQuery.post ajaxurl, data, (response) ->
+				$connections.hide()
+					.find('tbody').html('')
+
+				$td.html($self)
+
+			return false
+
+		# Delete connection
+		$metabox.delegate 'td.p2p-col-delete a', 'click', ->
+			$self = jQuery(this)
+			$td = $self.closest('td')
+
+			data = get_base_data()
+			data <<<
+				subaction: 'disconnect'
+				p2p_id: $self.attr('data-p2p_id')
+
+			$td.html $spinner.show()
+
+			jQuery.post ajaxurl, data, (response) ->
+				$td.closest('tr').remove()
+
+				if !$connections.find('tbody tr').length
+					$connections.hide()
+
+			return false
+
+		# Create connection
+		$metabox.delegate 'td.p2p-col-create a', 'click', ->
+			$self = jQuery(this)
+			$td = $self.closest('td')
+
+			data = get_base_data()
+			data <<<
+				subaction: 'connect'
+				from: jQuery('#post_ID').val()
+				to: $self.attr('data-post_id')
+
+			$td.html $spinner.show()
+
+			jQuery.post ajaxurl, data, (response) ->
+				$connections.show()
+					.find('tbody').append(response)
+
+				if $metabox.attr('data-prevent_duplicates')
+					$table = $td.closest('table')
+
+					if 1 == $table.find('tbody tr').length
+						$table.remove()
+					else
+						$td.closest('tr').remove()
+				else
+					$td.html $self
+
+			return false
+
+		# Tabs
+		$metabox.delegate '.wp-tab-bar li', 'click', ->
+			$tab = jQuery(this)
+
+			# Set active tab
+			$metabox.find('.wp-tab-bar li').removeClass('wp-tab-active')
+			$tab.addClass('wp-tab-active')
+
+			# Set active panel
+			$metabox.find('.tabs-panel').hide()
+			$metabox.find( $tab.attr('data-ref') )
+				.show()
+				.find(':text').focus()
+
+			return false
+
+		class PostsTab
+			(selector) ->
+				@tab = $metabox.find(selector)
+
+				@init_pagination_data()
+
+				@tab.delegate('.p2p-prev, .p2p-next', 'click', this.~change_page)
+
+				@data = get_base_data() <<<
+					subaction: 'search'
+					post_id: jQuery('#post_ID').val()
+					s: ''
+
+			init_pagination_data: ->
+				@current_page = @tab.find('.p2p-current').text() || 1
+				@total_pages = @tab.find('.p2p-total').text() || 1
+
+			change_page: (ev) ->
+				$navButton = jQuery(ev.target)
+				new_page = @current_page
+
+				if $navButton.hasClass('inactive')
+					return false
+
+				if $navButton.hasClass('p2p-prev')
+					new_page--
+				else
+					new_page++
+
+				@find_posts(new_page)
+
+				return false
+
+			find_posts: (new_page) ->
+				@data.paged =
+					if new_page then
+						if new_page > @total_pages then
+							@current_page
+						else
+							new_page
+					else
+						@current_page
+
+				$spinner.appendTo( @tab.find('.p2p-navigation') )
+				jQuery.getJSON(ajaxurl, @data, this.~update_rows)
+
+			update_rows: (response) ->
+				$spinner.remove()
+
+				@tab.find('.p2p-results, .p2p-navigation, .p2p-notice').remove()
+
+				if not response.rows
+					@tab.append( jQuery('<div class="p2p-notice">').html(response.msg) )
+				else
+					@tab.append(response.rows)
+
+					@init_pagination_data()
+
+		searchTab = new PostsTab('.p2p-tab-search')
+		listTab = new PostsTab('.p2p-tab-list')
+
+		# Search posts
+		$searchInput = $metabox.find('.p2p-tab-search :text')
+
+		$searchInput
+			.keypress (ev) ->
+				if 13 === ev.keyCode
+					return false
+
+			.keyup (ev) ->
+				if undefined !== delayed
+					clearTimeout(delayed)
+
+				delayed = setTimeout ->
+					searchStr = $searchInput.val()
+
+					if '' == searchStr || searchStr === searchTab.data.s
+						return
+
+					searchTab.data.s = searchStr
+
+					$spinner.insertAfter($searchInput).show()
+
+					searchTab.find_posts(1)
+				, 400
+
+		# Post creation
+		$createButton = $metabox.find('.p2p-tab-create-post .button')
+		$createInput = $metabox.find('.p2p-tab-create-post :text')
+
+		$createButton.click ->
+			$button = jQuery(this)
+
+			if $button.hasClass('inactive')
+				return false
+
+			title = $createInput.val()
+
+			if '' === title
+				$createInput.focus()
+				return false
+
+			$button.addClass('inactive')
+
+			data = get_base_data()
+			data <<<
+				subaction: 'create_post'
+				from: jQuery('#post_ID').val()
+				post_title: title
+
+			jQuery.post ajaxurl, data, (response) ->
+				$connections.show()
+					.find('tbody').append(response)
+
+				$createInput.val('')
+
+				$button.removeClass('inactive')
+
+			return false
+
+		$createInput.keypress (ev) ->
+			if 13 === ev.keyCode
+				$createButton.click()
+
+				return false
+
