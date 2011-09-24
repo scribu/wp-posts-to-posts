@@ -123,7 +123,7 @@ tr:hover td.p2p-col-order {
 	background: url("images/sort.png") no-repeat scroll 50% 50% transparent;
 }
 
-.p2p-search .waiting {
+.p2p-search .p2p-spinner {
 	margin-left: -20px;
 	opacity: 0.8;
 	vertical-align: -0.3em;
@@ -167,5 +167,28 @@ tr:hover td.p2p-col-order {
 	padding-top: 3px;
 	padding-bottom: 3px;
 	margin-right: 5px;
+}
+
+/* RTL support */
+
+body.rtl .p2p-navigation div {
+	float: right;
+}
+
+body.rtl .p2p-search .p2p-spinner {
+	margin-left: 0;
+	margin-right: -20px;
+}
+
+body.rtl .p2p-tab-search input,
+body.rtl .p2p-tab-create-post {
+	padding-left: 22px;
+	padding-right: 0;
+}
+
+body.rtl .p2p-col-create a:hover,
+body.rtl .p2p-col-delete a:hover {
+	border-left: 1px solid #ddd;
+	border-right: 0;
 }
 

@@ -27,7 +27,7 @@ $('.p2p-box').each(function() {
 	var
 		$metabox = $(this),
 		$connections = $metabox.find('.p2p-connections'),
-		$spinner = $('<img>', {'src': P2PAdmin.spinner});
+		$spinner = $('<img>', {'src': P2PAdmin.spinner, 'class': 'p2p-spinner'});
 
 	function get_base_data() {
 		return {
