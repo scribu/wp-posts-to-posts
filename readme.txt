@@ -48,6 +48,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * add widget
 * allow 'from' and 'to' to be arrays again
 * fix bug with each_connected()
+* improve RTL support
 
 = 0.9 =
 * introduce dropdown connection fields
