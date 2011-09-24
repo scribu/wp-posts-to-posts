@@ -1,25 +1,25 @@
-# Placeholder support for IE
-if !jQuery('<input placeholder="1" />')[0].placeholder
-	setVal = ->
-		$this = jQuery(this)
-		if !$this.val()
-			$this.val($this.attr('placeholder'))
-			$this.addClass('p2p-placeholder')
-		void
-
-	clearVal = ->
-		$this = jQuery(this)
-		if $this.hasClass('p2p-placeholder')
-			$this.val('')
-			$this.removeClass('p2p-placeholder')
-		void
-
-	jQuery('.p2p-search input[placeholder]')
-		.each setVal
-		.focus clearVal
-		.blur setVal
-
 jQuery ->
+
+	# Placeholder support for IE
+	if not jQuery('<input placeholder="1" />')[0].placeholder
+		setVal = ->
+			$this = jQuery(this)
+			if not $this.val()
+				$this.val($this.attr('placeholder'))
+				$this.addClass('p2p-placeholder')
+			void
+
+		clearVal = ->
+			$this = jQuery(this)
+			if $this.hasClass('p2p-placeholder')
+				$this.val('')
+				$this.removeClass('p2p-placeholder')
+			void
+
+		jQuery('.p2p-search input[placeholder]')
+			.each setVal
+			.focus clearVal
+			.blur setVal
 
 	jQuery('.p2p-box').each ->
 		$metabox = jQuery(this)
