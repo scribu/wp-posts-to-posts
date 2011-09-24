@@ -25,13 +25,14 @@ jQuery ->
 		$connections = $metabox.find('.p2p-connections')
 		$spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
 
-		get_base_data = ->
-			return {
+		ajax_request = (data, callback, method = 'post') ->
+			data <<<
 				action: 'p2p_box'
 				nonce: P2PAdmin.nonce
 				box_id: $metabox.attr('data-box_id')
 				post_type: jQuery('#post_type').val()
-			}
+
+			jQuery[method] ajaxurl, data, callback
 
 		# Make sortable
 		if $connections.find('th.p2p-col-order').length
@@ -51,14 +52,13 @@ jQuery ->
 			$self = jQuery(this)
 			$td = $self.closest('td')
 
-			data = get_base_data()
-			data <<<
+			data =
 				subaction: 'clear_connections'
 				post_id: jQuery('#post_ID').val()
 
 			$td.html( $spinner.show() )
 
-			jQuery.post ajaxurl, data, (response) ->
+			ajax_request data, (response) ->
 				$connections.hide()
 					.find('tbody').html('')
 
@@ -71,14 +71,13 @@ jQuery ->
 			$self = jQuery(this)
 			$td = $self.closest('td')
 
-			data = get_base_data()
-			data <<<
+			data =
 				subaction: 'disconnect'
 				p2p_id: $self.attr('data-p2p_id')
 
 			$td.html $spinner.show()
 
-			jQuery.post ajaxurl, data, (response) ->
+			ajax_request data, (response) ->
 				$td.closest('tr').remove()
 
 				if !$connections.find('tbody tr').length
@@ -91,15 +90,14 @@ jQuery ->
 			$self = jQuery(this)
 			$td = $self.closest('td')
 
-			data = get_base_data()
-			data <<<
+			data =
 				subaction: 'connect'
 				from: jQuery('#post_ID').val()
 				to: $self.attr('data-post_id')
 
 			$td.html $spinner.show()
 
-			jQuery.post ajaxurl, data, (response) ->
+			ajax_request data, (response) ->
 				$connections.show()
 					.find('tbody').append(response)
 
@@ -139,7 +137,7 @@ jQuery ->
 
 				@tab.delegate('.p2p-prev, .p2p-next', 'click', this.~change_page)
 
-				@data = get_base_data() <<<
+				@data =
 					subaction: 'search'
 					post_id: jQuery('#post_ID').val()
 					s: ''
@@ -175,7 +173,8 @@ jQuery ->
 						@current_page
 
 				$spinner.appendTo( @tab.find('.p2p-navigation') )
-				jQuery.getJSON(ajaxurl, @data, this.~update_rows)
+
+				ajax_request @data, this.~update_rows, 'getJSON'
 
 			update_rows: (response) ->
 				$spinner.remove()
@@ -183,9 +182,9 @@ jQuery ->
 				@tab.find('.p2p-results, .p2p-navigation, .p2p-notice').remove()
 
 				if not response.rows
-					@tab.append( jQuery('<div class="p2p-notice">').html(response.msg) )
+					@tab.append jQuery('<div class="p2p-notice">').html(response.msg)
 				else
-					@tab.append(response.rows)
+					@tab.append response.rows
 
 					@init_pagination_data()
 
@@ -235,13 +234,12 @@ jQuery ->
 
 			$button.addClass('inactive')
 
-			data = get_base_data()
-			data <<<
+			data =
 				subaction: 'create_post'
 				from: jQuery('#post_ID').val()
 				post_title: title
 
-			jQuery.post ajaxurl, data, (response) ->
+			ajax_request data, (response) ->
 				$connections.show()
 					.find('tbody').append(response)
 
