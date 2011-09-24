@@ -99,7 +99,6 @@ th.p2p-col-delete a {
 	height: 16px;
 	margin-top: 1px;
 	opacity: 0.5;
-	text-indent: -9999px;
 	width: 16px;
 }
 
@@ -150,6 +149,7 @@ tr:hover td.p2p-col-order {
 
 .p2p-navigation {
 	clear: both;
+	display: table;
 	overflow: hidden;
 }
 
@@ -161,7 +161,7 @@ tr:hover td.p2p-col-order {
 	cursor: default;
 }
 
-.p2p-navigation > * {
+.p2p-navigation div {
 	float: left;
 	line-height: 13px;
 	padding-top: 3px;

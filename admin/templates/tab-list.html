@@ -1,7 +1,7 @@
 <table class="p2p-results">
 	<tbody>
 		{{#rows}}
-			{{>box-row}}
+			{{>table-row}}
 		{{/rows}}
 	</tbody>
 </table>
@@ -9,7 +9,11 @@
 {{#navigation}}
 <div class="p2p-navigation">
 	<div class="p2p-prev button {{prev-inactive}}" title="{{prev-label}}">&lsaquo;</div>
-	<div><span class="p2p-current">{{current-page}}</span> {{of-label}} <span class="p2p-total">{{total-pages}}</span></div>
+	<div>
+		<span class="p2p-current">{{current-page}}</span>
+		{{of-label}}
+		<span class="p2p-total">{{total-pages}}</span>
+	</div>
 	<div class="p2p-next button {{next-inactive}}" title="{{next-label}}">&rsaquo;</div>
 </div>
 {{/navigation}}

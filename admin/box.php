@@ -129,7 +129,7 @@ class P2P_Box {
 
 		// List tab
 		$data['tabs'][] = array(
-			'tab-id' => 'recent',
+			'tab-id' => 'list',
 			'tab-title' => __( 'View All', P2P_TEXTDOMAIN ),
 			'tab-content' => $this->post_rows( $post->ID )
 		);
@@ -160,7 +160,7 @@ class P2P_Box {
 			);
 		}
 
-		return _p2p_mustache_render( 'box-row.html', $data );
+		return _p2p_mustache_render( 'table-row.html', $data );
 	}
 
 	protected function post_rows( $current_post_id, $page = 1, $search = '' ) {
@@ -219,7 +219,7 @@ class P2P_Box {
 			);
 		}
 
-		return _p2p_mustache_render( 'tab-recent.html', $data, array( 'box-row' ) );
+		return _p2p_mustache_render( 'tab-list.html', $data, array( 'table-row' ) );
 	}
 
 

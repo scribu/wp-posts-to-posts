@@ -209,7 +209,7 @@ $('.p2p-box').each(function() {
 	});
 
 	var searchTab = new PostsTab('.p2p-tab-search');
-	var recentTab = new PostsTab('.p2p-tab-recent');
+	var listTab = new PostsTab('.p2p-tab-list');
 
 	// Search posts
 	var delayed, $searchInput = $metabox.find('.p2p-tab-search :text');
