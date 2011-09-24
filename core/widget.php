@@ -12,7 +12,7 @@ class P2P_Widget extends scbWidget {
 
 	function __construct() {
 		parent::__construct( 'p2p', __( 'Posts 2 Posts', P2P_TEXTDOMAIN ), array(
-			'description' => __( 'Display a list of connected posts', P2P_TEXTDOMAIN )
+			'description' => __( 'A list of posts connected to the current post', P2P_TEXTDOMAIN )
 		) );
 	}
 
@@ -26,6 +26,7 @@ class P2P_Widget extends scbWidget {
 			'type' => 'select',
 			'name' => 'ctype',
 			'values' => $ctypes,
+			'desc' => __( 'Connection type:', P2P_TEXTDOMAIN )
 		), $instance );
 	}
 
