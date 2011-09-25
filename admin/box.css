@@ -33,6 +33,7 @@
 	border-spacing: 0;
 	border-style: solid;
 	border-width: 1px;
+	width: 100%;
 }
 
 .p2p-search + .p2p-results,
@@ -73,10 +74,6 @@ th.p2p-col-delete a {
 
 .p2p-results tr:first-child td {
 	border-top: 0;
-}
-
-.p2p-connections {
-	width: 100%;
 }
 
 .p2p-connections th {
