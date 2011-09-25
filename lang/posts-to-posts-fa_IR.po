@@ -1,0 +1,142 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
+"POT-Creation-Date: 2011-09-24 13:12:56+00:00\n"
+"PO-Revision-Date: 2011-09-25 19:00+0330\n"
+"Last-Translator: geminorum <contact@geminorum.ir>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Textdomain-Support: yes\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#@ posts-to-posts
+#: scb/AdminPage.php:163
+msgid "Settings <strong>saved</strong>."
+msgstr "تنظیمات <strong>ذخیره</strong> شد."
+
+#@ posts-to-posts
+#: scb/AdminPage.php:176
+#: scb/AdminPage.php:187
+msgid "Save Changes"
+msgstr "ذخیره تغییرات"
+
+#@ posts-to-posts
+#: scb/AdminPage.php:348
+msgid "Settings"
+msgstr "تنظیمات"
+
+#@ posts-to-posts
+#: admin/fields.php:13
+msgid "Create connection"
+msgstr "برقراری ارتباط"
+
+#@ posts-to-posts
+#: admin/fields.php:25
+msgid "Delete all connections"
+msgstr "پاک‌کردن همه ارتباط‌ها"
+
+#@ posts-to-posts
+#: admin/fields.php:34
+msgid "Delete connection"
+msgstr "پاک‌کردن ارتباط"
+
+#@ posts-to-posts
+#: admin/box.php:59
+msgid "Are you sure you want to delete all connections?"
+msgstr "از پاک‌کردن همه ارتباط‌ها اطمینان دارید؟"
+
+#@ posts-to-posts
+#: admin/box.php:69
+#, php-format
+msgid "Connected %s"
+msgstr "%sی مرتبط"
+
+#@ posts-to-posts
+#: admin/box.php:116
+msgid "Create connections:"
+msgstr "برقراری ارتباط:"
+
+#@ posts-to-posts
+#: admin/box.php:125
+msgid "Search"
+msgstr "جست‌وجو"
+
+#@ posts-to-posts
+#: admin/box.php:133
+msgid "View All"
+msgstr "نمایش همه"
+
+#@ posts-to-posts
+#: admin/box.php:216
+msgid "previous"
+msgstr "قبلی"
+
+#@ posts-to-posts
+#: admin/box.php:217
+msgid "next"
+msgstr "بعدی"
+
+#@ posts-to-posts
+#: admin/box.php:218
+msgid "of"
+msgstr "از"
+
+#@ posts-to-posts
+#. translators: plugin header field 'Name'
+#: core/widget.php:14
+#: posts-to-posts.php:0
+msgid "Posts 2 Posts"
+msgstr "نوشته‌ها به نوشته‌ها"
+
+#@ posts-to-posts
+#: core/widget.php:15
+msgid "A list of posts connected to the current post"
+msgstr "فهرستی از همه نوشته‌های مرتبط با این نوشته"
+
+#@ posts-to-posts
+#: core/widget.php:29
+msgid "Connection type:"
+msgstr "نوع ارتباط:"
+
+#@ posts-to-posts
+#: core/widget.php:53
+#, php-format
+msgid "Related %s"
+msgstr "%sی وابسته"
+
+#@ posts-to-posts
+#. translators: plugin header field 'PluginURI'
+#: posts-to-posts.php:0
+msgid "http://scribu.net/wordpress/posts-to-posts"
+msgstr ""
+
+#@ posts-to-posts
+#. translators: plugin header field 'Description'
+#: posts-to-posts.php:0
+msgid "Create many-to-many relationships between all types of posts."
+msgstr "ارتباط‌های تو در تو بین انواع نوشته‌ها برقرار کنید."
+
+#@ posts-to-posts
+#. translators: plugin header field 'Author'
+#: posts-to-posts.php:0
+msgid "scribu"
+msgstr ""
+
+#@ posts-to-posts
+#. translators: plugin header field 'AuthorURI'
+#: posts-to-posts.php:0
+msgid "http://scribu.net/"
+msgstr ""
+
+#@ posts-to-posts
+#. translators: plugin header field 'Version'
+#: posts-to-posts.php:0
+msgid "0.9.1-beta"
+msgstr ""
+
