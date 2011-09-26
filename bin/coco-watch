@@ -1,0 +1,3 @@
+#!/bin/bash
+
+coco --watch --compile admin
