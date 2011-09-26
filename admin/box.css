@@ -126,8 +126,7 @@ tr:hover td.p2p-col-order {
 	vertical-align: -0.3em;
 }
 
-.p2p-tab-search input,
-.p2p-tab-create-post {
+.p2p-tab-search input {
 	background-color: transparent;
 	padding-right: 22px;
 	margin: 0;
@@ -150,7 +149,8 @@ tr:hover td.p2p-col-order {
 	overflow: hidden;
 }
 
-.p2p-navigation .button.inactive, .p2p-navigation .button.inactive:hover {
+.p2p-navigation .button.inactive,
+.p2p-navigation .button.inactive:hover {
 	border-color: #bbb;
 	color: #aaa;
 	background: #f6f6f6;
@@ -166,6 +166,10 @@ tr:hover td.p2p-col-order {
 	margin-right: 5px;
 }
 
+.p2p-navigation .p2p-spinner {
+	margin-top: 3px;
+}
+
 /* RTL support */
 
 body.rtl .p2p-navigation div {
@@ -177,8 +181,7 @@ body.rtl .p2p-search .p2p-spinner {
 	margin-right: -20px;
 }
 
-body.rtl .p2p-tab-search input,
-body.rtl .p2p-tab-create-post {
+body.rtl .p2p-tab-search input {
 	padding-left: 22px;
 	padding-right: 0;
 }
@@ -187,5 +190,10 @@ body.rtl .p2p-col-create a:hover,
 body.rtl .p2p-col-delete a:hover {
 	border-left: 1px solid #ddd;
 	border-right: 0;
+}
+
+body.rtl .p2p-navigation div {
+	margin-right: 0;
+	margin-left: 5px;
 }
 
