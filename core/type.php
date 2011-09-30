@@ -62,6 +62,21 @@ class P2P_Connection_Type {
 		return false;
 	}
 
+	public function get_title( $direction ) {
+		$title = $this->args['title'];
+
+		if ( is_array( $title ) ) {
+			$key = ( 'to' == $direction ) ? 'to' : 'from';
+
+			if ( isset( $title[ $key ] ) )
+				$title = $title[ $key ];
+			else
+				$title = '';
+		}
+
+		return $title;
+	}
+
 	/**
 	 * Get connection direction.
 	 *
@@ -95,30 +110,6 @@ class P2P_Connection_Type {
 
 	public function get_other_post_type( $direction ) {
 		return 'from' == $direction ? $this->to : $this->from;
-	}
-
-	public function can_create_post( $direction ) {
-		$ptype = $this->get_other_post_type( $direction );
-
-		if ( count( $ptype ) > 1 )
-			return false;
-
-		return current_user_can( get_post_type_object( $ptype[0] )->cap->edit_posts );
-	}
-
-	public function get_title( $direction ) {
-		$title = $this->args['title'];
-
-		if ( is_array( $title ) ) {
-			$key = ( 'to' == $direction ) ? 'to' : 'from';
-
-			if ( isset( $title[ $key ] ) )
-				$title = $title[ $key ];
-			else
-				$title = '';
-		}
-
-		return $title;
 	}
 
 	private function get_base_args( $direction, $extra_qv ) {
@@ -247,6 +238,15 @@ class P2P_Connection_Type {
 
 			array_push( $posts[ $outer_post_id ]->$prop_name, $inner_post );
 		}
+	}
+
+	public function can_create_post( $direction ) {
+		$ptype = $this->get_other_post_type( $direction );
+
+		if ( count( $ptype ) > 1 )
+			return false;
+
+		return current_user_can( get_post_type_object( $ptype[0] )->cap->edit_posts );
 	}
 
 	public function connect( $from, $to, $_direction = false ) {
