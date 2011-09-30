@@ -6,25 +6,12 @@ class P2P_Connection_Type {
 
 	protected $args;
 
-	protected function __construct( $args ) {
-		$this->args = $args;
-	}
-
-	public function __get( $key ) {
-		return $this->args[$key];
-	}
-
-	public function get_instance( $hash ) {
-		if ( isset( self::$instances[ $hash ] ) )
-			return self::$instances[ $hash ];
-
-		return false;
-	}
-
 	public function make_instance( $args ) {
 		$args = wp_parse_args( $args, array(
 			'from' => '',
 			'to' => '',
+			'from_query_vars' => array(),
+			'to_query_vars' => array(),
 			'data' => array(),
 			'reciprocal' => null,
 			'sortable' => false,
@@ -33,23 +20,13 @@ class P2P_Connection_Type {
 		) );
 
 		foreach ( array( 'from', 'to' ) as $key ) {
-			$args[ $key ] = array_values( array_filter( (array) $args[ $key ], 'post_type_exists' ) );
-			if ( empty( $args[ $key ] ) ) {
-				trigger_error( "'$key' arg doesn't contain any valid post types", E_USER_WARNING );
-				return false;
+			if ( isset( $args[ $key ] ) ) {
+				$args[ "{$key}_query_vars" ]['post_type'] = (array) $args[ $key ];
+				unset( $args[ $key ] );
 			}
-			sort( $args[ $key ] );
 		}
 
-		$common = array_intersect( $args['from'], $args['to'] );
-		if ( !empty( $common ) && count( $args['from'] ) + count( $args['to'] ) > 2 ) {
-			$args['reciprocal'] = false;
-		}
-
-		if ( is_null( $args['reciprocal'] ) )
-			$args['reciprocal'] = ( $args['from'] == $args['to'] );
-
-		$hash = md5( serialize( wp_array_slice_assoc( $args, array( 'from', 'to', 'data' ) ) ) );
+		$hash = md5( serialize( wp_array_slice_assoc( $args, array( 'from_query_vars', 'to_query_vars', 'data' ) ) ) );
 
 		if ( isset( self::$instances[ $hash ] ) ) {
 			trigger_error( 'Connection type is already defined.', E_USER_NOTICE );
@@ -57,6 +34,32 @@ class P2P_Connection_Type {
 		}
 
 		return self::$instances[ $hash ] = new P2P_Connection_Type( $args );
+	}
+
+	protected function __construct( $args ) {
+		$this->args = $args;
+
+		$common = array_intersect( $this->from, $this->to );
+
+		if ( !empty( $common ) && count( $this->from ) + count( $this->to ) > 2 )
+			$this->args['reciprocal'] = false;
+
+		if ( is_null( $args['reciprocal'] ) )
+			$this->args['reciprocal'] = ( $this->from == $this->to );
+	}
+
+	public function __get( $key ) {
+		if ( in_array( $key, array( 'from', 'to' ) ) )
+			return $this->args[ "{$key}_query_vars" ]['post_type'];
+
+		return $this->args[$key];
+	}
+
+	public function get_instance( $hash ) {
+		if ( isset( self::$instances[ $hash ] ) )
+			return self::$instances[ $hash ];
+
+		return false;
 	}
 
 	/**

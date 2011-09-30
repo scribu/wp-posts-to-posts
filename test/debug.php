@@ -13,6 +13,33 @@ class P2P_Debug {
 	}
 
 	function _init() {
+		self::contacts_and_tickets();
+		self::actors_and_movies();
+	}
+
+	function contacts_and_tickets() {
+		register_post_type( 'contact', array( 'label' => 'Contacts', 'public' => true ) );
+		register_post_type( 'ticket', array( 'label' => 'Tickets', 'public' => true ) );
+
+		$types = array(
+			'bug' => 'Bug',
+			'feature' => 'Feature'
+		);
+
+		foreach ( $types as $type => $title ) {
+			p2p_register_connection_type( array(
+				'from' => 'contact',
+				'to' => 'ticket',
+				'to_query_vars' => array(
+					'meta_key' => 'type',
+					'meta_value' => $type
+				),
+				'title' => array( 'from' => $title ),
+			) );
+		}
+	}
+
+	function actors_and_movies() {
 		register_post_type('actor', array(
 			'public' => true,
 			'labels' => array(
