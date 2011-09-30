@@ -21,9 +21,12 @@ class P2P_Connection_Type {
 
 		foreach ( array( 'from', 'to' ) as $key ) {
 			if ( isset( $args[ $key ] ) ) {
-				$args[ "{$key}_query_vars" ]['post_type'] = (array) $args[ $key ];
+				$args["{$key}_query_vars"]['post_type'] = (array) $args[ $key ];
 				unset( $args[ $key ] );
 			}
+
+			if ( empty( $args["{$key}_query_vars"]['post_type'] ) )
+				$args["{$key}_query_vars"]['post_type'] = array( 'post' );
 		}
 
 		$hash = md5( serialize( wp_array_slice_assoc( $args, array( 'from_query_vars', 'to_query_vars', 'data' ) ) ) );
