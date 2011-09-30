@@ -8,7 +8,6 @@ class P2P_Connection_Type {
 
 	protected function __construct( $args ) {
 		$this->args = $args;
-
 	}
 
 	public function __get( $key ) {
@@ -49,20 +48,6 @@ class P2P_Connection_Type {
 				E_USER_WARNING );
 			return false;
 		}
-
-		$error = false;
-
-		foreach ( array( 'from', 'to' ) as $key ) {
-			foreach ( $args[$key] as $ptype ) {
-				if ( !post_type_exists( $ptype ) ) {
-					trigger_error( "The '$ptype' post type does not exist.", E_USER_WARNING );
-					$error = true;
-				}
-			}
-		}
-
-		if ( $error )
-			return false;
 
 		$hash = md5( serialize( wp_array_slice_assoc( $args, array( 'from', 'to', 'data' ) ) ) );
 
