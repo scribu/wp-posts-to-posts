@@ -252,7 +252,7 @@ class P2P_Box {
 		if ( !$from || !$to )
 			die(-1);
 
-		$p2p_id = $this->data->connect( $from, $to );
+		$p2p_id = $this->data->connect( $from, $to, $this->direction );
 
 		die( $this->connection_row( $p2p_id, $to ) );
 	}

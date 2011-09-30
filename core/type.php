@@ -246,7 +246,7 @@ class P2P_Connection_Type {
 		}
 	}
 
-	public function connect( $from, $to ) {
+	public function connect( $from, $to, $_direction = false ) {
 		$post_from = get_post( $from );
 		$post_to = get_post( $to );
 
@@ -254,9 +254,11 @@ class P2P_Connection_Type {
 			return false;
 		}
 
+		$direction = $_direction ? $_direction : $this->get_direction( $from );
+
 		$args = array( $from, $to );
 
-		if ( $post_from->post_type == $this->to )
+		if ( 'to' == $direction )
 			$args = array_reverse( $args );
 
 		$p2p_id = false;
