@@ -26,7 +26,7 @@ class P2P_Connection_Type {
 			'from' => '',
 			'to' => '',
 			'data' => array(),
-			'reciprocal' => false,
+			'reciprocal' => null,
 			'sortable' => false,
 			'prevent_duplicates' => true,
 			'title' => '',
@@ -49,6 +49,9 @@ class P2P_Connection_Type {
 			return false;
 		}
 
+		if ( is_null( $args['reciprocal'] ) )
+			$args['reciprocal'] = ( $args['from'] == $args['to'] );
+
 		$hash = md5( serialize( wp_array_slice_assoc( $args, array( 'from', 'to', 'data' ) ) ) );
 
 		if ( isset( self::$instances[ $hash ] ) ) {
@@ -63,11 +66,10 @@ class P2P_Connection_Type {
 	 * Get connection direction.
 	 *
 	 * @param int|string $arg A post id or a post type.
-	 * @param bool $respect_reciprocal Whether to take the 'reciprocal' arg into consideration.
 	 *
 	 * @return bool|string False on failure, 'any', 'to' or 'from' on success.
 	 */
-	public function get_direction( $arg, $respect_reciprocal = false ) {
+	public function get_direction( $arg ) {
 		if ( $post_id = (int) $arg ) {
 			$post = get_post( $post_id );
 			if ( !$post )
@@ -78,16 +80,13 @@ class P2P_Connection_Type {
 		}
 
 		if ( $post_type == $this->to[0] && $this->from[0] == $post_type )
-			$direction = 'any';
+			$direction = $this->reciprocal ? 'any' : 'from';
 		elseif ( in_array( $post_type, $this->to ) )
-			$direction = 'to';
+			$direction = $this->reciprocal ? 'to' : false;
 		elseif ( in_array( $post_type, $this->from ) )
 			$direction = 'from';
 		else
-			return false;
-
-		if ( $respect_reciprocal && !$this->reciprocal && 'to' == $direction )
-			return false;
+			$direction = false;
 
 		return $direction;
 	}
