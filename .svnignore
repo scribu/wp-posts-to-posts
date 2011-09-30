@@ -2,5 +2,7 @@ admin/box.co
 
 bin
 
+*.swo
+
 mustache/examples
 mustache/test

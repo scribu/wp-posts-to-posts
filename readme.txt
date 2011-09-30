@@ -44,6 +44,10 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 0.9.2 =
+* fix incorrect storage when creating a connection from the other end
+* respect 'reciprocal' => false when 'from' == 'to'
+
 = 0.9.1 =
 * fix bug with each_connected()
 * add widget
