@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Posts-to-posts\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
-"POT-Creation-Date: 2011-07-22 13:03:03+00:00\n"
+"POT-Creation-Date: 2011-09-24 13:12:56+00:00\n"
 "PO-Revision-Date: \n"
 "Last-Translator: foralien <nordworldofann@gmail.com>\n"
 "Language-Team: foalien\n"
@@ -10,60 +10,79 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: scb/AdminPage.php:161
+#: scb/AdminPage.php:163
 msgid "Settings <strong>saved</strong>."
 msgstr "Настройки <strong>сохранены</strong>."
 
-#: scb/AdminPage.php:174
-#: scb/AdminPage.php:185
+#: scb/AdminPage.php:176
+#: scb/AdminPage.php:187
 msgid "Save Changes"
 msgstr "Сохранить изменения"
 
-#: scb/AdminPage.php:367
+#: scb/AdminPage.php:348
 msgid "Settings"
 msgstr "Настройки"
 
-#: ui/box.php:14
+#: admin/fields.php:13
+msgid "Create connection"
+msgstr "Создать взаимосвязь"
+
+#: admin/fields.php:25
+msgid "Delete all connections"
+msgstr "Удалить все взаимосвязи"
+
+#: admin/fields.php:34
+msgid "Delete connection"
+msgstr "Удалить взаимосвязь"
+
+#: admin/box.php:59
 msgid "Are you sure you want to delete all connections?"
 msgstr "Вы уверены, что хотите удалить все взаимосвязи?"
 
-#: ui/box.php:33
-msgid "Create connections:"
-msgstr "Создать связи:"
+#: admin/box.php:69
+msgid "Connected %s"
+msgstr "Связанные %s"
 
-#: ui/box.php:64
+#: admin/box.php:116
+msgid "Create connections:"
+msgstr "Создать взаимосвязи:"
+
+#: admin/box.php:125
 msgid "Search"
 msgstr "Поиск"
 
-#: ui/box.php:72
-msgid "Recent"
-msgstr "Недавние"
+#: admin/box.php:133
+msgid "View All"
+msgstr "Все"
 
-#: ui/box.php:148
-msgid "Previous"
-msgstr "Пред."
+#: admin/box.php:216
+msgid "previous"
+msgstr "пред."
 
-#: ui/box.php:149
-msgid "Next"
-msgstr "След."
+#: admin/box.php:217
+msgid "next"
+msgstr "след."
 
-#: ui/box.php:150
+#: admin/box.php:218
 msgid "of"
 msgstr "из"
 
-#: ui/box.php:182
-msgid "Create connection"
-msgstr "Создать отношение"
+#: core/widget.php:14
+msgid "Posts 2 Posts"
+msgstr "Posts 2 Posts"
 
-#: ui/box.php:191
-msgid "Delete connection"
-msgstr "Удалить отношение"
+#: core/widget.php:15
+msgid "A list of posts connected to the current post"
+msgstr "Список всех записей, связанных с текущей"
 
-#: ui/box.php:199
-msgid "Delete all connections"
-msgstr "Удалить все связи"
+#: core/widget.php:29
+msgid "Connection type:"
+msgstr "Тип взаимосвязи:"
 
-#: ui.php:33
-msgid "Connected %s"
+#: core/widget.php:53
+msgid "Related %s"
 msgstr "Связанные %s"
+
+#~ msgid "Recent"
+#~ msgstr "Недавние"
 
