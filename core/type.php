@@ -113,8 +113,9 @@ class P2P_Connection_Type {
 	}
 
 	private function get_base_args( $direction, $extra_qv ) {
-		return array_merge( $extra_qv, array(
-			'post_type' => $this->get_other_post_type( $direction ),
+		$base_qv = ( 'from' == $direction ) ? $this->to_query_vars : $this->from_query_vars;
+
+		return array_merge( $extra_qv, $base_qv, array(
 			'suppress_filters' => false,
 			'ignore_sticky_posts' => true
 		) );
