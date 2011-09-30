@@ -43,10 +43,7 @@ class P2P_Connection_Type {
 
 		$common = array_intersect( $args['from'], $args['to'] );
 		if ( !empty( $common ) && count( $args['from'] ) + count( $args['to'] ) > 2 ) {
-			trigger_error(
-				"Some post types appear both in 'to' and 'from' arguments: " . implode( ' ', $common ),
-				E_USER_WARNING );
-			return false;
+			$args['reciprocal'] = false;
 		}
 
 		if ( is_null( $args['reciprocal'] ) )
@@ -79,14 +76,16 @@ class P2P_Connection_Type {
 			$post_type = $arg;
 		}
 
-		if ( $post_type == $this->to[0] && $this->from[0] == $post_type )
-			$direction = $this->reciprocal ? 'any' : 'from';
-		elseif ( in_array( $post_type, $this->to ) )
-			$direction = $this->reciprocal ? 'to' : false;
-		elseif ( in_array( $post_type, $this->from ) )
-			$direction = 'from';
-		else
+		if ( in_array( $post_type, $this->from ) ) {
+			if ( $this->reciprocal && in_array( $post_type, $this->to ) )
+				$direction = 'any';
+			else
+				$direction = 'from';
+		} elseif ( in_array( $post_type, $this->to ) && $this->reciprocal ) {
+			$direction = 'to';
+		} else {
 			$direction = false;
+		}
 
 		return $direction;
 	}
