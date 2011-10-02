@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.2
 Tested up to: 3.3
-Stable tag: 0.9.1
+Stable tag: 0.9.2
 
 Create connections between posts
 
@@ -47,6 +47,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 = 0.9.2 =
 * fix incorrect storage when creating a connection from the other end
 * respect 'reciprocal' => false when 'from' == 'to'
+* pass pagination numbers through number_format_i18n()
 
 = 0.9.1 =
 * fix bug with each_connected()
