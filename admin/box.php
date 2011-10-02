@@ -207,8 +207,11 @@ class P2P_Box {
 
 		if ( $candidate->total_pages > 1 ) {
 			$data['navigation'] = array(
-				'current-page' => $candidate->current_page,
-				'total-pages' => $candidate->total_pages,
+				'current-page' => number_format_i18n( $candidate->current_page ),
+				'total-pages' => number_format_i18n( $candidate->total_pages ),
+
+				'current-page-raw' => $candidate->current_page,
+				'total-pages-raw' => $candidate->total_pages,
 
 				'prev-inactive' => ( 1 == $candidate->current_page ) ? 'inactive' : '',
 				'next-inactive' => ( $candidate->total_pages == $candidate->current_page ) ? 'inactive' : '',

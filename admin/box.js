@@ -134,8 +134,8 @@
           };
         }
         prototype.init_pagination_data = function(){
-          this.current_page = this.tab.find('.p2p-current').text() || 1;
-          return this.total_pages = this.tab.find('.p2p-total').text() || 1;
+          this.current_page = this.tab.find('.p2p-current').data('num') || 1;
+          return this.total_pages = this.tab.find('.p2p-total').data('num') || 1;
         };
         prototype.change_page = function(ev){
           var $navButton, new_page;
