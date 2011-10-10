@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]; then
+	echo 'usage: ./bin/test /path/to/wp-tests/'
+	exit
+fi
+
+wp_tests_dir=$1
+p2p_dir=$(pwd)
+
+cd $wp_tests_dir
+
+phpunit --no-globals-backup $p2p_dir/test/unit.php
