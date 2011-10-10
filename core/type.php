@@ -159,36 +159,6 @@ class P2P_Connection_Type {
 	}
 
 	/**
-	 * Get a list of posts that could be connected to a given post.
-	 *
-	 * @param int $post_id A post id.
-	 * @param array $extra_qv Additional query variables to use.
-	 *
-	 * @return bool|object False on failure; A WP_Query instance on success.
-	 */
-	public function get_connectable( $post_id, $extra_qv, $_direction = false ) {
-		$direction = $_direction ? $_direction : $this->get_direction( $post_id );
-		if ( !$direction )
-			return false;
-
-		$args = $this->get_base_args( $direction, $extra_qv );
-
-		if ( $this->prevent_duplicates ) {
-			$connected = $this->get_connected( $post_id, array( 'fields' => 'ids' ), $direction );
-
-			if ( !isset( $args['post__not_in'] ) ) {
-				$args['post__not_in'] = array();
-			}
-
-			_p2p_append( $args['post__not_in'], $connected->posts );
-		}
-
-		$args = apply_filters( 'p2p_connectable_args', $args, $this );
-
-		return new WP_Query( $args );
-	}
-
-	/**
 	 * Optimized inner query, after the outer query was executed.
 	 *
 	 * Populates each of the outer querie's $post objects with a 'connected' property, containing a list of connected posts
@@ -246,15 +216,45 @@ class P2P_Connection_Type {
 		}
 	}
 
-	public function can_create_post( $direction ) {
-		$ptype = $this->get_other_post_type( $direction );
 
-		if ( count( $ptype ) > 1 )
+	/**
+	 * Get a list of posts that could be connected to a given post.
+	 *
+	 * @param int $post_id A post id.
+	 * @param array $extra_qv Additional query variables to use.
+	 *
+	 * @return bool|object False on failure; A WP_Query instance on success.
+	 */
+	public function get_connectable( $post_id, $extra_qv, $_direction = false ) {
+		$direction = $_direction ? $_direction : $this->get_direction( $post_id );
+		if ( !$direction )
 			return false;
 
-		return current_user_can( get_post_type_object( $ptype[0] )->cap->edit_posts );
+		$args = $this->get_base_args( $direction, $extra_qv );
+
+		if ( $this->prevent_duplicates ) {
+			$connected = $this->get_connected( $post_id, array( 'fields' => 'ids' ), $direction );
+
+			if ( !isset( $args['post__not_in'] ) ) {
+				$args['post__not_in'] = array();
+			}
+
+			_p2p_append( $args['post__not_in'], $connected->posts );
+		}
+
+		$args = apply_filters( 'p2p_connectable_args', $args, $this );
+
+		return new WP_Query( $args );
 	}
 
+	/**
+	 * Connect two posts.
+	 *
+	 * @param int $from
+	 * @param int $to
+	 *
+	 * @return int p2p_id
+	 */
 	public function connect( $from, $to, $_direction = false ) {
 		$post_from = get_post( $from );
 		$post_to = get_post( $to );
@@ -286,13 +286,34 @@ class P2P_Connection_Type {
 		return $p2p_id;
 	}
 
+	/**
+	 * Disconnect two posts.
+	 *
+	 * @param int The first end of the connection.
+	 * @param mixed Post id or direction.
+	 */
 	public function disconnect( $post_id, $_direction = false ) {
 		$direction = $_direction ? $_direction : $this->get_direction( $post_id );
-		P2P_Storage::disconnect( $post_id, $direction, $this->data );
+		return P2P_Storage::disconnect( $post_id, $direction, $this->data );
 	}
 
+	/**
+	 * Delete a connection.
+	 *
+	 * @param int p2p_id
+	 */
 	public function delete_connection( $p2p_id ) {
 		return P2P_Storage::delete( $p2p_id );
+	}
+
+
+	public function can_create_post( $direction ) {
+		$ptype = $this->get_other_post_type( $direction );
+
+		if ( count( $ptype ) > 1 )
+			return false;
+
+		return current_user_can( get_post_type_object( $ptype[0] )->cap->edit_posts );
 	}
 }
 
