@@ -86,7 +86,6 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_connection_types() {
-		// Normal connections
 		$normal = p2p_register_connection_type( 'actor', 'movie' );
 
 		$this->assertInstanceOf( 'P2P_Connection_Type', $normal );
@@ -95,38 +94,35 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( 'to', $normal->get_direction( 'movie' ) );
 		$this->assertFalse( $normal->get_direction( 'post' ) );
 
-		// Recursive connections
-		$recursive = p2p_register_connection_type( 'actor', 'actor' );
-
-		$this->assertInstanceOf( 'P2P_Connection_Type', $recursive );
-
-		$this->assertEquals( 'any', $recursive->get_direction( 'actor' ) );
-		$this->assertFalse( $recursive->get_direction( 'post' ) );
-
 		// 'from' array
-		$multiple = p2p_register_connection_type( array( 'actor', 'movie' ), 'studio' );
+		$ctype = p2p_register_connection_type( array( 'actor', 'movie' ), 'studio' );
+		$this->assertInstanceOf( 'P2P_Connection_Type', $ctype );
 
-		$this->assertInstanceOf( 'P2P_Connection_Type', $multiple );
+		$this->assertEquals( 'from', $ctype->get_direction( 'actor' ) );
+		$this->assertEquals( 'from', $ctype->get_direction( 'movie' ) );
+		$this->assertEquals( 'to', $ctype->get_direction( 'studio' ) );
 
-		$this->assertEquals( 'to', $multiple->get_direction( 'studio' ) );
-		$this->assertEquals( 'from', $multiple->get_direction( 'actor' ) );
-		$this->assertEquals( 'from', $multiple->get_direction( 'movie' ) );
-		$this->assertFalse( $multiple->get_direction( 'post' ) );
+		$this->assertFalse( $ctype->get_direction( 'post' ) );
 
 		// 'to' array
-		$ctype = p2p_register_connection_type( 'actor', array( 'movie', 'studio', 'foo' ) );
+		$ctype = p2p_register_connection_type( 'actor', array( 'movie', 'studio' ) );
 		$this->assertInstanceOf( 'P2P_Connection_Type', $ctype );
+
+		$this->assertEquals( 'from', $ctype->get_direction( 'actor' ) );
+		$this->assertEquals( 'to', $ctype->get_direction( 'movie' ) );
+		$this->assertEquals( 'to', $ctype->get_direction( 'studio' ) );
+
+		$this->assertFalse( $ctype->get_direction( 'post' ) );
 	}
 
-/*
-	function test_invalid_connection_types() {
-		$ctype = @p2p_register_connection_type( 'foo', 'actor' );
-		$this->assertFalse( $ctype );
+	function test_reflexive_connections() {
+		$reflexive = p2p_register_connection_type( 'actor', 'actor' );
 
-		$ctype = @p2p_register_connection_type( 'actor', 'foo' );
-		$this->assertFalse( $ctype );
+		$this->assertInstanceOf( 'P2P_Connection_Type', $reflexive );
+
+		$this->assertEquals( 'any', $reflexive->get_direction( 'actor' ) );
+		$this->assertFalse( $reflexive->get_direction( 'post' ) );
 	}
-*/
 
 	function test_prevent_duplicates() {
 		$ctype = @p2p_register_connection_type( 'actor', 'movie' );
