@@ -267,19 +267,19 @@ class P2P_Connection_Type {
 
 		$args = array( $from, $to );
 
-		if ( 'to' == $direction )
-			$args = array_reverse( $args );
-
 		$p2p_id = false;
 
 		if ( $this->prevent_duplicates ) {
-			$connected = $this->get_connected( $args[0], array( 'fields' => 'ids', 'post__in' => array( $args[1] ) ), $direction );
+			$connected = $this->get_connected( $args[0], array( 'post__in' => array( $args[1] ) ), $direction );
 
 			if ( !empty( $connected->posts ) )
-				$p2p_id = $p2p_ids[0];
+				$p2p_id = $connected->posts[0]->p2p_id;
 		}
 
 		if ( !$p2p_id ) {
+			if ( 'to' == $direction )
+				$args = array_reverse( $args );
+
 			$p2p_id = P2P_Storage::connect( $args[0], $args[1], $this->data );
 		}
 
