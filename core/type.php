@@ -174,11 +174,13 @@ class P2P_Connection_Type {
 		$args = $this->get_base_args( $direction, $extra_qv );
 
 		if ( $this->prevent_duplicates ) {
+			$connected = $this->get_connected( $post_id, array( 'fields' => 'ids' ), $direction );
+
 			if ( !isset( $args['post__not_in'] ) ) {
 				$args['post__not_in'] = array();
 			}
 
-			_p2p_append( $args['post__not_in'], P2P_Storage::get( $post_id, $direction, $this->data ) );
+			_p2p_append( $args['post__not_in'], $connected->posts );
 		}
 
 		$args = apply_filters( 'p2p_connectable_args', $args, $this );
@@ -271,9 +273,9 @@ class P2P_Connection_Type {
 		$p2p_id = false;
 
 		if ( $this->prevent_duplicates ) {
-			$p2p_ids = P2P_Storage::get( $args[0], $args[1], $this->data );
+			$connected = $this->get_connected( $args[0], array( 'fields' => 'ids', 'post__in' => array( $args[1] ) ), $direction );
 
-			if ( !empty( $p2p_ids ) )
+			if ( !empty( $connected->posts ) )
 				$p2p_id = $p2p_ids[0];
 		}
 
