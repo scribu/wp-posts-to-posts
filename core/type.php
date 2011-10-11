@@ -247,11 +247,20 @@ class P2P_Connection_Type {
 		return new WP_Query( $args );
 	}
 
+	private function get_p2p_id( $from, $to, $direction ) {
+		$connected = $this->get_connected( $from, array( 'post__in' => array( $to ) ), $direction );
+
+		if ( !empty( $connected->posts ) )
+			return $connected->posts[0]->p2p_id;
+
+		return false;
+	}
+
 	/**
 	 * Connect two posts.
 	 *
-	 * @param int $from
-	 * @param int $to
+	 * @param int The first end of the connection.
+	 * @param int The second end of the connection.
 	 *
 	 * @return int p2p_id
 	 */
@@ -265,18 +274,15 @@ class P2P_Connection_Type {
 
 		$direction = $_direction ? $_direction : $this->get_direction( $from );
 
-		$args = array( $from, $to );
-
 		$p2p_id = false;
 
 		if ( $this->prevent_duplicates ) {
-			$connected = $this->get_connected( $args[0], array( 'post__in' => array( $args[1] ) ), $direction );
-
-			if ( !empty( $connected->posts ) )
-				$p2p_id = $connected->posts[0]->p2p_id;
+			$p2p_id = $this->get_p2p_id( $from, $to, $direction );
 		}
 
 		if ( !$p2p_id ) {
+			$args = array( $from, $to );
+
 			if ( 'to' == $direction )
 				$args = array_reverse( $args );
 
@@ -290,11 +296,32 @@ class P2P_Connection_Type {
 	 * Disconnect two posts.
 	 *
 	 * @param int The first end of the connection.
-	 * @param mixed Post id or direction.
+	 * @param int The second end of the connection.
 	 */
-	public function disconnect( $post_id, $_direction = false ) {
+	public function disconnect( $from, $to, $_direction = false ) {
 		$direction = $_direction ? $_direction : $this->get_direction( $post_id );
-		return P2P_Storage::disconnect( $post_id, $direction, $this->data );
+		if ( !$direction )
+			return false;
+
+		$direction = $_direction ? $_direction : $this->get_direction( $from );
+
+		$p2p_id = $this->get_p2p_id( $from, $to, $direction );
+
+		P2P_Storage::delete( $p2p_id );
+	}
+
+	/**
+	 * Delete all connections for a certain post.
+	 *
+	 * @param int The post id.
+	 */
+	public function disconnect_all( $from, $_direction ) {
+		$direction = $_direction ? $_direction : $this->get_direction( $from );
+
+		$connected = $this->get_connected( $from, array(), $direction );
+
+		foreach ( wp_list_pluck( $connected->posts, 'p2p_id' ) as $p2p_id )
+			P2P_Storage::delete( $p2p_id );
 	}
 
 	/**

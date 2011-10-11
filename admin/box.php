@@ -267,7 +267,7 @@ class P2P_Box {
 	}
 
 	public function ajax_clear_connections() {
-		$this->data->disconnect( $_POST['post_id'], $this->direction );
+		$this->data->disconnect_all( $_POST['post_id'], $this->direction );
 
 		die(1);
 	}
