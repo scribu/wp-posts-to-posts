@@ -124,12 +124,23 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertFalse( $reflexive->get_direction( 'post' ) );
 	}
 
-	function test_prevent_duplicates() {
+	function test_ctype_api() {
+		$actor_id = $this->actor_ids[0];
+		$movie_id = $this->movie_ids[0];
+
 		$ctype = @p2p_register_connection_type( 'actor', 'movie' );
 
-		$p2p_id_1 = $ctype->connect( $this->actor_ids[0], $this->movie_ids[0] );
-		$p2p_id_2 = $ctype->connect( $this->actor_ids[0], $this->movie_ids[0] );
+		// create connection
+		$p2p_id_1 = $ctype->connect( $actor_id, $movie_id );
+		$this->assertInternalType( 'int', $p2p_id_1 );
+
+		// 'prevent_duplicates'
+		$p2p_id_2 = $ctype->connect( $actor_id, $movie_id );
 		$this->assertEquals( $p2p_id_1, $p2p_id_2 );
+
+		// delete connection
+		$ctype->disconnect( $actor_id, $movie_id );
+		$this->assertFalse( $ctype->get_p2p_id( $actor_id, $movie_id ) );
 	}
 }
 

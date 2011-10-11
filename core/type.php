@@ -247,8 +247,8 @@ class P2P_Connection_Type {
 		return new WP_Query( $args );
 	}
 
-	private function get_p2p_id( $from, $to, $direction ) {
-		$connected = $this->get_connected( $from, array( 'post__in' => array( $to ) ), $direction );
+	public function get_p2p_id( $from, $to, $_direction = false ) {
+		$connected = $this->get_connected( $from, array( 'post__in' => array( $to ) ), $_direction );
 
 		if ( !empty( $connected->posts ) )
 			return $connected->posts[0]->p2p_id;
@@ -299,15 +299,11 @@ class P2P_Connection_Type {
 	 * @param int The second end of the connection.
 	 */
 	public function disconnect( $from, $to, $_direction = false ) {
-		$direction = $_direction ? $_direction : $this->get_direction( $post_id );
+		$direction = $_direction ? $_direction : $this->get_direction( $from );
 		if ( !$direction )
 			return false;
 
-		$direction = $_direction ? $_direction : $this->get_direction( $from );
-
-		$p2p_id = $this->get_p2p_id( $from, $to, $direction );
-
-		P2P_Storage::delete( $p2p_id );
+		P2P_Storage::delete( $this->get_p2p_id( $from, $to, $direction ) );
 	}
 
 	/**
