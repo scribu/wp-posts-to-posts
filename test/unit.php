@@ -85,9 +85,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( array_intersect_assoc( $r, $raw ), $r );
 	}
 
-	function test_connection_types() {
+	function test_direction() {
 		$normal = p2p_register_connection_type( 'actor', 'movie' );
-
 		$this->assertInstanceOf( 'P2P_Connection_Type', $normal );
 
 		$this->assertEquals( 'from', $normal->get_direction( 'actor' ) );
@@ -113,15 +112,20 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( 'to', $ctype->get_direction( 'studio' ) );
 
 		$this->assertFalse( $ctype->get_direction( 'post' ) );
-	}
 
-	function test_reflexive_connections() {
+		// reflexive
 		$reflexive = p2p_register_connection_type( 'actor', 'actor' );
-
 		$this->assertInstanceOf( 'P2P_Connection_Type', $reflexive );
 
 		$this->assertEquals( 'any', $reflexive->get_direction( 'actor' ) );
+
 		$this->assertFalse( $reflexive->get_direction( 'post' ) );
+
+		// reflexive, but not reciprocal
+		$reflexive = p2p_register_connection_type( array( 'from' => 'movie', 'to' => 'movie', 'reciprocal' => false ) );
+		$this->assertInstanceOf( 'P2P_Connection_Type', $reflexive );
+
+		$this->assertEquals( 'from', $reflexive->get_direction( 'movie' ) );
 	}
 
 	function test_ctype_api() {

@@ -98,7 +98,7 @@ class P2P_Connection_Type {
 		}
 
 		if ( in_array( $post_type, $this->from ) ) {
-			if ( in_array( $post_type, $this->to ) )
+			if ( $this->reciprocal && in_array( $post_type, $this->to ) )
 				$direction = 'any';
 			else
 				$direction = 'from';
