@@ -237,5 +237,13 @@ class P2P_Connection_Type {
 	public function delete_connection( $p2p_id ) {
 		return P2P_Storage::delete( $p2p_id );
 	}
+
+	public function get_p2p_id( $from, $to ) {
+		$directed = $this->find_direction( $from );
+		if ( !$directed )
+			return false;
+
+		return $directed->get_p2p_id( $from, $to );
+	}
 }
 
