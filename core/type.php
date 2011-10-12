@@ -65,21 +65,6 @@ class P2P_Connection_Type {
 		return false;
 	}
 
-	public function get_title( $direction ) {
-		$title = $this->args['title'];
-
-		if ( is_array( $title ) ) {
-			$key = ( 'to' == $direction ) ? 'to' : 'from';
-
-			if ( isset( $title[ $key ] ) )
-				$title = $title[ $key ];
-			else
-				$title = '';
-		}
-
-		return $title;
-	}
-
 	/**
 	 * Get connection direction.
 	 *
@@ -87,7 +72,7 @@ class P2P_Connection_Type {
 	 *
 	 * @return bool|string False on failure, 'any', 'to' or 'from' on success.
 	 */
-	public function get_direction( $arg ) {
+	public function find_direction( $arg ) {
 		if ( $post_id = (int) $arg ) {
 			$post = get_post( $post_id );
 			if ( !$post )
@@ -105,57 +90,10 @@ class P2P_Connection_Type {
 		} elseif ( in_array( $post_type, $this->to ) ) {
 			$direction = 'to';
 		} else {
-			$direction = false;
-		}
-
-		return $direction;
-	}
-
-	public function get_other_post_type( $direction ) {
-		return 'from' == $direction ? $this->to : $this->from;
-	}
-
-	private function get_base_args( $direction, $extra_qv ) {
-		$base_qv = ( 'from' == $direction ) ? $this->to_query_vars : $this->from_query_vars;
-
-		return array_merge( $extra_qv, $base_qv, array(
-			'suppress_filters' => false,
-			'ignore_sticky_posts' => true
-		) );
-	}
-
-	/**
-	 * Get a list of posts that are connected to a given post.
-	 *
-	 * @param int $post_id A post id.
-	 * @param array $extra_qv Additional query variables to use.
-	 *
-	 * @return bool|object False on failure; A WP_Query instance on success.
-	 */
-	public function get_connected( $post_id, $extra_qv = array(), $_direction = false ) {
-		$direction = $_direction ? $_direction : $this->get_direction( $post_id );
-		if ( !$direction )
 			return false;
-
-		$args = $this->get_base_args( $direction, $extra_qv );
-
-		_p2p_append( $args, array(
-			'connected' => $post_id,
-			'connected_direction' => $direction,
-			'connected_meta' => $this->data,
-		) );
-
-		if ( $this->sortable && 'from' == $direction ) {
-			_p2p_append( $args, array(
-				'connected_orderby' => $this->sortable,
-				'connected_order' => 'ASC',
-				'connected_order_num' => true,
-			) );
 		}
 
-		$args = apply_filters( 'p2p_connected_args', $args, $this );
-
-		return new WP_Query( $args );
+		return new P2P_Directed_Connection_Type( $this, $direction );
 	}
 
 	/**
@@ -174,9 +112,9 @@ class P2P_Connection_Type {
 		if ( empty( $post_type ) )
 			$post_type = 'post';
 
-		$direction = $this->get_direction( $post_type );
-		if ( !$direction )
-			return;
+		$directed = $this->find_direction( $post_type );
+		if ( !$directed )
+			return false;
 
 		$prop_name = 'connected';
 
@@ -195,7 +133,7 @@ class P2P_Connection_Type {
 		}
 		$extra_qv['nopaging'] = true;
 
-		$q = $this->get_connected( array_keys( $posts ), $extra_qv, $direction );
+		$q = $directed->get_connected( array_keys( $posts ), $extra_qv );
 
 		foreach ( $q->posts as $inner_post ) {
 			if ( $inner_post->ID == $inner_post->p2p_from )
@@ -216,6 +154,21 @@ class P2P_Connection_Type {
 		}
 	}
 
+	/**
+	 * Get a list of posts that are connected to a given post.
+	 *
+	 * @param int $post_id A post id.
+	 * @param array $extra_qv Additional query variables to use.
+	 *
+	 * @return bool|object False on failure; A WP_Query instance on success.
+	 */
+	public function get_connected( $post_id, $extra_qv = array() ) {
+		$directed = $this->find_direction( $post_id );
+		if ( !$directed )
+			return false;
+
+		return $directed->get_connected( $post_id, $extra_qv );
+	}
 
 	/**
 	 * Get a list of posts that could be connected to a given post.
@@ -225,35 +178,12 @@ class P2P_Connection_Type {
 	 *
 	 * @return bool|object False on failure; A WP_Query instance on success.
 	 */
-	public function get_connectable( $post_id, $extra_qv, $_direction = false ) {
-		$direction = $_direction ? $_direction : $this->get_direction( $post_id );
-		if ( !$direction )
+	public function get_connectable( $post_id, $extra_qv = array() ) {
+		$directed = $this->find_direction( $post_id );
+		if ( !$directed )
 			return false;
 
-		$args = $this->get_base_args( $direction, $extra_qv );
-
-		if ( $this->prevent_duplicates ) {
-			$connected = $this->get_connected( $post_id, array( 'fields' => 'ids' ), $direction );
-
-			if ( !isset( $args['post__not_in'] ) ) {
-				$args['post__not_in'] = array();
-			}
-
-			_p2p_append( $args['post__not_in'], $connected->posts );
-		}
-
-		$args = apply_filters( 'p2p_connectable_args', $args, $this );
-
-		return new WP_Query( $args );
-	}
-
-	public function get_p2p_id( $from, $to, $_direction = false ) {
-		$connected = $this->get_connected( $from, array( 'post__in' => array( $to ) ), $_direction );
-
-		if ( !empty( $connected->posts ) )
-			return $connected->posts[0]->p2p_id;
-
-		return false;
+		return $directed->get_connectable( $post_id, $extra_qv );
 	}
 
 	/**
@@ -264,32 +194,12 @@ class P2P_Connection_Type {
 	 *
 	 * @return int p2p_id
 	 */
-	public function connect( $from, $to, $_direction = false ) {
-		$post_from = get_post( $from );
-		$post_to = get_post( $to );
-
-		if ( !$post_from || !$post_to ) {
+	public function connect( $from, $to ) {
+		$directed = $this->find_direction( $from );
+		if ( !$directed )
 			return false;
-		}
 
-		$direction = $_direction ? $_direction : $this->get_direction( $from );
-
-		$p2p_id = false;
-
-		if ( $this->prevent_duplicates ) {
-			$p2p_id = $this->get_p2p_id( $from, $to, $direction );
-		}
-
-		if ( !$p2p_id ) {
-			$args = array( $from, $to );
-
-			if ( 'to' == $direction )
-				$args = array_reverse( $args );
-
-			$p2p_id = P2P_Storage::connect( $args[0], $args[1], $this->data );
-		}
-
-		return $p2p_id;
+		return $directed->connect( $from, $to );
 	}
 
 	/**
@@ -298,12 +208,12 @@ class P2P_Connection_Type {
 	 * @param int The first end of the connection.
 	 * @param int The second end of the connection.
 	 */
-	public function disconnect( $from, $to, $_direction = false ) {
-		$direction = $_direction ? $_direction : $this->get_direction( $from );
-		if ( !$direction )
+	public function disconnect( $from, $to ) {
+		$directed = $this->find_direction( $from );
+		if ( !$directed )
 			return false;
 
-		P2P_Storage::delete( $this->get_p2p_id( $from, $to, $direction ) );
+		return $directed->disconnect( $from, $to );
 	}
 
 	/**
@@ -311,13 +221,12 @@ class P2P_Connection_Type {
 	 *
 	 * @param int The post id.
 	 */
-	public function disconnect_all( $from, $_direction ) {
-		$direction = $_direction ? $_direction : $this->get_direction( $from );
+	public function disconnect_all( $from ) {
+		$directed = $this->find_direction( $from );
+		if ( !$directed )
+			return false;
 
-		$connected = $this->get_connected( $from, array(), $direction );
-
-		foreach ( wp_list_pluck( $connected->posts, 'p2p_id' ) as $p2p_id )
-			P2P_Storage::delete( $p2p_id );
+		return $directed->disconnect_all( $from );
 	}
 
 	/**
@@ -327,16 +236,6 @@ class P2P_Connection_Type {
 	 */
 	public function delete_connection( $p2p_id ) {
 		return P2P_Storage::delete( $p2p_id );
-	}
-
-
-	public function can_create_post( $direction ) {
-		$ptype = $this->get_other_post_type( $direction );
-
-		if ( count( $ptype ) > 1 )
-			return false;
-
-		return current_user_can( get_post_type_object( $ptype[0] )->cap->edit_posts );
 	}
 }
 

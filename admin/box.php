@@ -12,7 +12,6 @@ class P2P_Box {
 	private $data;
 
 	private $current_ptype;
-	private $direction;
 
 	public $ptype;
 
@@ -24,15 +23,13 @@ class P2P_Box {
 		'post_status' => 'any',
 	);
 
-	function __construct( $box_id, $data, $current_ptype, $direction ) {
+	function __construct( $box_id, $data, $current_ptype ) {
 		$this->box_id = $box_id;
 		$this->data = $data;
 
-		$this->direction = $direction;
-
 		$this->current_ptype = $current_ptype;
 
-		$other_ptype = $this->data->get_other_post_type( $direction );
+		$other_ptype = $this->data->get_other_post_type();
 		$this->ptype = get_post_type_object( $other_ptype[0] );
 
 		if ( !class_exists( 'Mustache' ) )
@@ -47,7 +44,7 @@ class P2P_Box {
 			$this->columns[ $key ] = new P2P_Field_Generic( $data );
 		}
 
-		if ( $this->data->sortable && 'from' == $direction ) {
+		if ( $this->data->is_sortable() ) {
 			$this->columns['order'] = new P2P_Field_Order( $this->data->sortable );
 		}
 
@@ -63,7 +60,7 @@ class P2P_Box {
 	}
 
 	public function register() {
-		$title = $this->data->get_title( $this->direction );
+		$title = $this->data->get_title();
 
 		if ( empty( $title ) ) {
 			$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), $this->ptype->labels->name );
@@ -85,7 +82,7 @@ class P2P_Box {
 		$qv = self::$extra_qv;
 		$qv['nopaging'] = true;
 
-		$connected_posts = $this->data->get_connected( $post->ID, $qv, $this->direction )->posts;
+		$connected_posts = $this->data->get_connected( $post->ID, $qv )->posts;
 
 		if ( empty( $connected_posts ) )
 			$data['hide-connections'] = 'style="display:none"';
@@ -135,7 +132,7 @@ class P2P_Box {
 		);
 
 		// Create post tab
-		if ( $this->data->can_create_post( $this->direction ) ) {
+		if ( $this->data->can_create_post() ) {
 			$tab_content = _p2p_mustache_render( 'tab-create-post.html', array(
 				'title' => $this->ptype->labels->add_new_item
 			) );
@@ -174,7 +171,7 @@ class P2P_Box {
 			$args['s'] = $search;
 		}
 
-		$query = $this->data->get_connectable( $current_post_id, $args, $this->direction );
+		$query = $this->data->get_connectable( $current_post_id, $args );
 
 		if ( empty( $query->posts ) )
 			return false;
@@ -255,19 +252,19 @@ class P2P_Box {
 		if ( !$from || !$to )
 			die(-1);
 
-		$p2p_id = $this->data->connect( $from, $to, $this->direction );
+		$p2p_id = $this->data->lose_direction()->connect( $from, $to );
 
 		die( $this->connection_row( $p2p_id, $to ) );
 	}
 
 	public function ajax_disconnect() {
-		$this->data->delete_connection( $_POST['p2p_id'] );
+		P2P_Storage::delete( $_POST['p2p_id'] );
 
 		die(1);
 	}
 
 	public function ajax_clear_connections() {
-		$this->data->disconnect_all( $_POST['post_id'], $this->direction );
+		$this->data->lose_direction()->disconnect_all( $_POST['post_id'] );
 
 		die(1);
 	}
