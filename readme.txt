@@ -44,6 +44,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 0.9.3 =
+* add '{from|to}_query_vars' to p2p_register_connection_type()
+
 = 0.9.2 =
 * fix incorrect storage when creating a connection from the other end
 * respect 'reciprocal' => false when 'from' == 'to'
