@@ -1,8 +1,7 @@
 admin/box.co
 
 bin
-
-*.swo
+test
 
 mustache/examples
 mustache/test
