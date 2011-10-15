@@ -35,28 +35,9 @@ class P2P_Box {
 		if ( !class_exists( 'Mustache' ) )
 			require dirname(__FILE__) . '/../mustache/Mustache.php';
 
-		$this->columns = array(
-			'delete' => new P2P_Field_Delete,
-			'title' => new P2P_Field_Title( $this->ptype->labels->singular_name ),
-		);
-
-		foreach ( $this->data->fields as $key => $data ) {
-			$this->columns[ $key ] = new P2P_Field_Generic( $data );
-		}
-
-		if ( $this->data->is_sortable() ) {
-			$this->columns['order'] = new P2P_Field_Order( $this->data->sortable );
-		}
-
-		wp_enqueue_style( 'p2p-admin', plugins_url( 'box.css', __FILE__ ), array(), P2P_PLUGIN_VERSION );
-		wp_enqueue_script( 'p2p-admin', plugins_url( 'box.js', __FILE__ ), array( 'jquery' ), P2P_PLUGIN_VERSION, true );
-		wp_localize_script( 'p2p-admin', 'P2PAdmin', array(
-			'nonce' => wp_create_nonce( P2P_BOX_NONCE ),
-			'spinner' => admin_url( 'images/wpspin_light.gif' ),
-			'deleteConfirmMessage' => __( 'Are you sure you want to delete all connections?', P2P_TEXTDOMAIN ),
-		) );
-
 		add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
+
+		$this->init_columns();
 	}
 
 	public function register() {
@@ -74,31 +55,41 @@ class P2P_Box {
 			$this->data->context,
 			'default'
 		);
+
+		$this->init_scripts();
+	}
+
+	protected function init_scripts() {
+		wp_enqueue_style( 'p2p-admin', plugins_url( 'box.css', __FILE__ ), array(), P2P_PLUGIN_VERSION );
+
+		wp_enqueue_script( 'p2p-admin', plugins_url( 'box.js', __FILE__ ), array( 'jquery' ), P2P_PLUGIN_VERSION, true );
+		wp_localize_script( 'p2p-admin', 'P2PAdmin', array(
+			'nonce' => wp_create_nonce( P2P_BOX_NONCE ),
+			'spinner' => admin_url( 'images/wpspin_light.gif' ),
+			'deleteConfirmMessage' => __( 'Are you sure you want to delete all connections?', P2P_TEXTDOMAIN ),
+		) );
+	}
+
+	protected function init_columns() {
+		$this->columns = array(
+			'delete' => new P2P_Field_Delete,
+			'title' => new P2P_Field_Title( $this->ptype->labels->singular_name ),
+		);
+
+		foreach ( $this->data->fields as $key => $data ) {
+			$this->columns[ $key ] = new P2P_Field_Generic( $data );
+		}
+
+		if ( $this->data->is_sortable() ) {
+			$this->columns['order'] = new P2P_Field_Order( $this->data->sortable );
+		}
 	}
 
 	function render( $post ) {
-		$data = array();
-
-		$qv = self::$extra_qv;
-		$qv['nopaging'] = true;
-
-		$connected_posts = $this->data->get_connected( $post->ID, $qv )->posts;
-
-		if ( empty( $connected_posts ) )
-			$data['hide-connections'] = 'style="display:none"';
-
-		$tbody = '';
-		foreach ( $connected_posts as $connected ) {
-			$tbody .= $this->connection_row( $connected->p2p_id, $connected->ID );
-		}
-		$data['tbody'] = $tbody;
-
-		foreach ( $this->columns as $key => $field ) {
-			$data['thead'][] = array(
-				'column' => $key,
-				'title' => $field->get_title()
-			);
-		}
+		$data = array(
+			'connections' => $this->render_connections_table( $post ),
+			'create-connections' => $this->render_create_connections( $post )
+		);
 
 		$data_attr = array(
 			'box_id' => $this->box_id,
@@ -108,9 +99,16 @@ class P2P_Box {
 		$data_attr_str = array();
 		foreach ( $data_attr as $key => $value )
 			$data_attr_str[] = "data-$key='" . $value . "'";
+
 		$data['attributes'] = implode( ' ', $data_attr_str );
 
-		$data['create-label'] = __( 'Create connections:', P2P_TEXTDOMAIN );
+		echo _p2p_mustache_render( 'box.html', $data );
+	}
+
+	function render_create_connections( $post ) {
+		$data = array(
+			'create-label' => __( 'Create connections:', P2P_TEXTDOMAIN )
+		);
 
 		// Search tab
 		$tab_content = _p2p_mustache_render( 'tab-search.html', array(
@@ -144,7 +142,34 @@ class P2P_Box {
 			);
 		}
 
-		echo _p2p_mustache_render( 'box.html', $data );
+		return _p2p_mustache_render( 'create-connections.html', $data );
+	}
+
+	protected function render_connections_table( $post ) {
+		$data = array();
+
+		$qv = self::$extra_qv;
+		$qv['nopaging'] = true;
+
+		$connected_posts = $this->data->get_connected( $post->ID, $qv )->posts;
+
+		if ( empty( $connected_posts ) )
+			$data['hide-connections'] = 'style="display:none"';
+
+		$tbody = '';
+		foreach ( $connected_posts as $connected ) {
+			$tbody .= $this->connection_row( $connected->p2p_id, $connected->ID );
+		}
+		$data['tbody'] = $tbody;
+
+		foreach ( $this->columns as $key => $field ) {
+			$data['thead'][] = array(
+				'column' => $key,
+				'title' => $field->get_title()
+			);
+		}
+
+		return _p2p_mustache_render( 'table.html', $data );
 	}
 
 	protected function connection_row( $p2p_id, $post_id ) {
