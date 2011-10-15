@@ -14,8 +14,9 @@ class P2P_Connection_Type {
 			'to_query_vars' => array(),
 			'data' => array(),
 			'reciprocal' => null,
-			'sortable' => false,
+			'cardinality' => 'many-to-many',
 			'prevent_duplicates' => true,
+			'sortable' => false,
 			'title' => '',
 		) );
 

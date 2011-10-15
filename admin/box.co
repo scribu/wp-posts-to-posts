@@ -27,6 +27,7 @@ jQuery ->
 
 		$spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
 
+
 		ajax_request = (data, callback, method = 'post') ->
 			data <<<
 				action: 'p2p_box'
@@ -40,6 +41,15 @@ jQuery ->
 				$td.html $spinner.show()
 
 				ajax_request data, callback
+
+
+		append_connection = (html) ->
+			$connections.show()
+				.find('tbody').append(html)
+
+			if 'one' == $metabox.data('cardinality')
+				$metabox.find('.p2p-create-connections').hide()
+
 
 		clear_connections = (ev) ->
 			if not confirm(P2PAdmin.deleteConfirmMessage)
@@ -58,6 +68,8 @@ jQuery ->
 
 				$td.html($self)
 
+				$metabox.find('.p2p-create-connections').show()
+
 			return false
 
 		delete_connection = (ev) ->
@@ -74,6 +86,8 @@ jQuery ->
 				if not $connections.find('tbody tr').length
 					$connections.hide()
 
+				$metabox.find('.p2p-create-connections').show()
+
 			return false
 
 		create_connection = (ev) ->
@@ -86,8 +100,7 @@ jQuery ->
 				to: $self.data('post_id')
 
 			row_ajax_request $td, data, (response) ~>
-				$connections.show()
-					.find('tbody').append(response)
+				append_connection(response)
 
 				if $metabox.data('prevent_duplicates')
 					$table = $td.closest('table')
@@ -247,8 +260,7 @@ jQuery ->
 				post_title: title
 
 			ajax_request data, (response) ->
-				$connections.show()
-					.find('tbody').append(response)
+				append_connection(response)
 
 				$createInput.val('')
 

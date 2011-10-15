@@ -21,7 +21,7 @@
       jQuery('.p2p-search input[placeholder]').each(setVal).focus(clearVal).blur(setVal);
     }
     return jQuery('.p2p-box').each(function(){
-      var $metabox, $connections, $spinner, ajax_request, row_ajax_request, clear_connections, delete_connection, create_connection, switch_to_tab, PostsTab, searchTab, listTab, $searchInput, $createButton, $createInput;
+      var $metabox, $connections, $spinner, ajax_request, row_ajax_request, append_connection, clear_connections, delete_connection, create_connection, switch_to_tab, PostsTab, searchTab, listTab, $searchInput, $createButton, $createInput;
       $metabox = jQuery(this);
       $connections = $metabox.find('.p2p-connections');
       $spinner = jQuery('<img>', {
@@ -40,6 +40,12 @@
         $td.html($spinner.show());
         return ajax_request(data, callback);
       };
+      append_connection = function(html){
+        $connections.show().find('tbody').append(html);
+        if ('one' == $metabox.data('cardinality')) {
+          return $metabox.find('.p2p-create-connections').hide();
+        }
+      };
       clear_connections = function(ev){
         var $self, $td, data, _this = this;
         if (!confirm(P2PAdmin.deleteConfirmMessage)) {
@@ -53,7 +59,8 @@
         };
         row_ajax_request($td, data, function(response){
           $connections.hide().find('tbody').html('');
-          return $td.html($self);
+          $td.html($self);
+          return $metabox.find('.p2p-create-connections').show();
         });
         return false;
       };
@@ -68,8 +75,9 @@
         row_ajax_request($td, data, function(response){
           $td.closest('tr').remove();
           if (!$connections.find('tbody tr').length) {
-            return $connections.hide();
+            $connections.hide();
           }
+          return $metabox.find('.p2p-create-connections').show();
         });
         return false;
       };
@@ -84,7 +92,7 @@
         };
         row_ajax_request($td, data, function(response){
           var $table;
-          $connections.show().find('tbody').append(response);
+          append_connection(response);
           if ($metabox.data('prevent_duplicates')) {
             $table = $td.closest('table');
             if (1 == $table.find('tbody tr').length) {
@@ -214,7 +222,7 @@
           post_title: title
         };
         ajax_request(data, function(response){
-          $connections.show().find('tbody').append(response);
+          append_connection(response);
           $createInput.val('');
           return $button.removeClass('inactive');
         });
