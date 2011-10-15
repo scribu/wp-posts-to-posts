@@ -2,12 +2,11 @@
 
 class P2P_Connection_Type {
 
-	static $instances = array();
+	private static $instances = array();
 
-	protected $args;
-
-	public function make_instance( $args ) {
+	public function register( $args ) {
 		$args = wp_parse_args( $args, array(
+			'id' => false,
 			'from' => '',
 			'to' => '',
 			'from_query_vars' => array(),
@@ -30,15 +29,31 @@ class P2P_Connection_Type {
 				$args["{$key}_query_vars"]['post_type'] = array( 'post' );
 		}
 
-		$hash = md5( serialize( wp_array_slice_assoc( $args, array( 'from_query_vars', 'to_query_vars', 'data' ) ) ) );
+		$id = $args['id'];
 
-		if ( isset( self::$instances[ $hash ] ) ) {
-			trigger_error( 'Connection type is already defined.', E_USER_NOTICE );
-			return self::$instances[ $hash ];
+		if ( !$id ) {
+			$id = md5( serialize( wp_array_slice_assoc( $args, array( 'from_query_vars', 'to_query_vars', 'data' ) ) ) );
 		}
 
-		return self::$instances[ $hash ] = new P2P_Connection_Type( $args );
+		if ( isset( self::$instances[ $id ] ) ) {
+			trigger_error( 'Connection type is already defined.', E_USER_NOTICE );
+		}
+
+		return self::$instances[ $id ] = new P2P_Connection_Type( $args );
 	}
+
+	public function get( $hash = false ) {
+		if ( !$hash )
+			return self::$instances;
+
+		if ( isset( self::$instances[ $hash ] ) )
+			return self::$instances[ $hash ];
+
+		return false;
+	}
+
+
+	protected $args;
 
 	protected function __construct( $args ) {
 		$this->args = $args;
@@ -57,13 +72,6 @@ class P2P_Connection_Type {
 			return $this->args[ "{$key}_query_vars" ]['post_type'];
 
 		return $this->args[$key];
-	}
-
-	public function get_instance( $hash ) {
-		if ( isset( self::$instances[ $hash ] ) )
-			return self::$instances[ $hash ];
-
-		return false;
 	}
 
 	/**

@@ -25,7 +25,18 @@ function p2p_register_connection_type( $args ) {
 		'context' => 'side',
 	) );
 
-	return P2P_Connection_Type::make_instance( $args );
+	return P2P_Connection_Type::register( $args );
+}
+
+/**
+ * Get a connection type
+ *
+ * @param string $id Connection type id
+ *
+ * @return bool|object False if connection type not found, P2P_Connection_Type instance on success.
+ */
+function p2p_type( $id ) {
+	return P2P_Connection_Type::get( $id );
 }
 
 /**
