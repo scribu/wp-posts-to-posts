@@ -6,6 +6,7 @@ class P2P_Directed_Connection_Type {
 	protected $direction;
 
 	protected $cardinality;
+	protected $other_cardinality;
 
 	function __construct( $ctype, $direction ) {
 		$this->ctype = $ctype;
@@ -21,6 +22,7 @@ class P2P_Directed_Connection_Type {
 			$parts = array_reverse( $parts );
 
 		$this->cardinality = ( 'one' == $parts[2] ) ? 'one' : 'many';
+		$this->other_cardinality = ( 'one' == $parts[0] ) ? 'one' : 'many';
 	}
 
 	function __get( $key ) {
@@ -81,11 +83,12 @@ class P2P_Directed_Connection_Type {
 	public function get_connected( $post_id, $extra_qv = array() ) {
 		$args = $this->get_base_args( $extra_qv );
 
-		_p2p_append( $args, array(
-			'connected' => $post_id,
-			'connected_direction' => $this->direction,
-			'connected_meta' => $this->data,
-		) );
+		$args['connected_query'] = array(
+			'posts' => $post_id,
+			'direction' => $this->direction
+		);
+
+		$args['connected_meta'] = $this->data;
 
 		if ( $this->is_sortable() ) {
 			_p2p_append( $args, array(
@@ -103,13 +106,13 @@ class P2P_Directed_Connection_Type {
 	public function get_connectable( $post_id, $extra_qv = array() ) {
 		$args = $this->get_base_args( $extra_qv );
 
-		if ( $this->prevent_duplicates ) {
+		if ( 'one' == $this->other_cardinality ) {
+			$connected = $this->get_connected( 'any', array( 'fields' => 'ids' ) )->posts;
+		} else if ( $this->prevent_duplicates ) {
 			$connected = $this->get_connected( $post_id, array( 'fields' => 'ids' ) )->posts;
+		}
 
-			if ( !isset( $args['post__not_in'] ) ) {
-				$args['post__not_in'] = array();
-			}
-
+		if ( !empty( $connected ) ) {
 			_p2p_append( $args['post__not_in'], $connected );
 		}
 

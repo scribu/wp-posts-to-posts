@@ -13,6 +13,7 @@ class P2P_Query {
 
 	function parse_legacy_qv( $wp_query ) {
 		$qv_map = array(
+			'connected' => 'any',
 			'connected_to' => 'to',
 			'connected_from' => 'from',
 		);
@@ -20,9 +21,10 @@ class P2P_Query {
 		foreach ( $qv_map as $key => $direction ) {
 			$search = $wp_query->get( $key );
 			if ( !empty( $search ) ) {
-				trigger_error( "'$key' query var is deprecated. Use 'connected' + 'connected_direction' instead.", E_USER_NOTICE );
-				$wp_query->set( 'connected', $search );
-				$wp_query->set( 'connected_direction', $direction );
+				$wp_query->set( 'connected_query', array(
+					'posts' => $search,
+					'direction' => $direction,
+				) );
 
 				$wp_query->set( $key, false );
 			}
@@ -32,13 +34,18 @@ class P2P_Query {
 	function posts_clauses( $clauses, $wp_query ) {
 		global $wpdb;
 
-		$search = $wp_query->get( 'connected' );
-		if ( empty( $search ) )
+		$connected_query = $wp_query->get( 'connected_query' );
+		if ( !is_array( $connected_query ) ) {
 			return $clauses;
+		}
 
-		$direction = $wp_query->get( 'connected_direction' );
-		if ( empty( $direction ) )
-			$direction = 'any';
+		$defaults = array(
+			'posts' => 'any',
+			'direction' => 'any',
+			'operator' => 'in'
+		);
+
+		$connected_query = array_merge( $defaults, $connected_query );
 
 		$wp_query->_p2p_cache = true;
 
@@ -46,37 +53,36 @@ class P2P_Query {
 
 		$clauses['join'] .= " INNER JOIN $wpdb->p2p";
 
-		if ( 'any' == $search ) {
+		if ( 'any' == $connected_query['posts'] ) {
 			$search = false;
 		} else {
-			$search = implode( ',', array_map( 'absint', (array) $search ) );
+			$search = implode( ',', array_map( 'absint', (array) $connected_query['posts'] ) );
 		}
 
-		switch ( $direction ) {
-			case 'from':
-				$clauses['where'] .= " AND $wpdb->posts.ID = $wpdb->p2p.p2p_to";
-				if ( $search ) {
-					$clauses['where'] .= " AND $wpdb->p2p.p2p_from IN ($search)";
-				}
-				break;
+		$direction = $connected_query['direction'];
+		if ( !in_array( $direction, array( 'from', 'to', 'any' ) ) )
+			$direction = 'any';
 
-			case 'to':
-				$clauses['where'] .= " AND $wpdb->posts.ID = $wpdb->p2p.p2p_from";
-				if ( $search ) {
-					$clauses['where'] .= " AND $wpdb->p2p.p2p_to IN ($search)";
-				}
-				break;
+		if ( 'any' == $direction ) {
+			if ( $search ) {
+				$clauses['where'] .= " AND (
+					($wpdb->posts.ID = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from IN ($search)) OR
+					($wpdb->posts.ID = $wpdb->p2p.p2p_from AND $wpdb->p2p.p2p_to IN ($search))
+				)";
+			} else {
+				$clauses['where'] .= " AND ($wpdb->posts.ID = $wpdb->p2p.p2p_to OR $wpdb->posts.ID = $wpdb->p2p.p2p_from)";
+			}
+		} else {
+			$fields = array( 'p2p_from', 'p2p_to' );
+			if ( 'from' == $direction )
+				$fields = array_reverse( $fields );
 
-			case 'any':
-				if ( $search ) {
-					$clauses['where'] .= " AND (
-						($wpdb->posts.ID = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from IN ($search)) OR
-						($wpdb->posts.ID = $wpdb->p2p.p2p_from AND $wpdb->p2p.p2p_to IN ($search))
-					)";
-				} else {
-					$clauses['where'] .= " AND ($wpdb->posts.ID = $wpdb->p2p.p2p_to OR $wpdb->posts.ID = $wpdb->p2p.p2p_from)";
-				}
-				break;
+			list( $from, $to ) = $fields;
+
+			$clauses['where'] .= " AND $wpdb->posts.ID = $wpdb->p2p.$from";
+			if ( $search ) {
+				$clauses['where'] .= " AND $wpdb->p2p.$to IN ($search)";
+			}
 		}
 
 		$connected_meta = $wp_query->get( 'connected_meta' );
