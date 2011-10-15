@@ -9,7 +9,6 @@ class P2P_Debug {
 			return;
 
 		add_action('init', array(__CLASS__, '_init'));
-		add_action('load-index.php', array(__CLASS__, 'test'));
 	}
 
 	function _init() {
@@ -64,6 +63,7 @@ class P2P_Debug {
 			)
 		) );
 
+
 		p2p_register_connection_type( array(
 			'from' => 'actor',
 			'to' => 'movie',
@@ -101,10 +101,6 @@ class P2P_Debug {
 		self::$ctype = p2p_register_connection_type( array( 'actor', 'post' ), array( 'page', 'movie' ), true );
 	}
 
-	function test() {
-		self::test_each_connected();
-	}
-
 	function test_ordering() {
 		$query = new WP_Query( array(
 			'connected' => $actor_ids[0],
@@ -120,14 +116,6 @@ class P2P_Debug {
 		) );
 
 		self::walk( $posts );
-	}
-
-	function test_each_connected() {
-		$query = new WP_Query( array( 'post_status' => 'publish' ) );
-
-		self::$ctype->each_connected( $query );
-
-		self::walk( $query->posts );
 	}
 
 	private function walk( $posts, $level = 0 ) {
