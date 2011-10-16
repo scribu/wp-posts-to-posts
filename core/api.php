@@ -2,7 +2,7 @@
 
 /**
  * Register a connection between two post types.
- * This creates the appropriate meta box in the admin edit screen
+ * This creates the appropriate meta box in the admin edit screen.
  *
  * @param array $args See https://github.com/scribu/wp-posts-to-posts/wiki/p2p_register_connection_type()
  * @return bool|object False on failure, P2P_Connection_Type instance on success.
@@ -29,7 +29,7 @@ function p2p_register_connection_type( $args ) {
 }
 
 /**
- * Get a connection type
+ * Get a connection type.
  *
  * @param string $id Connection type id
  *
@@ -85,7 +85,7 @@ function p2p_get_connected( $post_id, $direction = 'any', $data = array() ) {
 }
 
 /**
- * See if a certain post is connected to another one
+ * See if a certain post is connected to another one.
  *
  * @param int $from The first end of the connection
  * @param int $to The second end of the connection
@@ -100,7 +100,7 @@ function p2p_is_connected( $from, $to, $data = array() ) {
 }
 
 /**
- * Delete one or more connections
+ * Delete one or more connections.
  *
  * @param int|array $p2p_id Connection ids
  *
@@ -108,6 +108,25 @@ function p2p_is_connected( $from, $to, $data = array() ) {
  */
 function p2p_delete_connection( $p2p_id ) {
 	return P2P_Storage::delete( $p2p_id );
+}
+
+/**
+ * Split some posts based on a certain connection field.
+ *
+ * @param object|array A WP_Query instance, or a list of post objects
+ * @param string $key p2pmeta key
+ */
+function p2p_post_buckets( $posts, $key ) {
+	if ( is_object( $posts ) )
+		$posts = $posts->posts;
+
+	$buckets = array();
+
+	foreach ( $posts as $post ) {
+		$buckets[ p2p_get_meta( $post->p2p_id, $key, true ) ][] = $post;
+	}
+
+	return $buckets;
 }
 
 /**

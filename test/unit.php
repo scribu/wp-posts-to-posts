@@ -11,6 +11,12 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		foreach ( array( 'actor', 'movie', 'studio' ) as $ptype )
 			register_post_type( $ptype );
+
+		@p2p_register_connection_type( array(
+			'id' => 'normal',
+			'from' => 'actor',
+			'to' => 'movie'
+		) );
 	}
 
 	private function generate_posts( $type, $count = 20 ) {
@@ -88,7 +94,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_direction() {
-		$normal = p2p_register_connection_type( 'actor', 'movie' );
+		$normal = p2p_type( 'normal' );
 		$this->assertInstanceOf( 'P2P_Connection_Type', $normal );
 
 		$this->assertEquals( 'from', $normal->find_direction( 'actor' )->direction );
@@ -131,7 +137,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_each_connected() {
-		$ctype = @p2p_register_connection_type( 'actor', 'movie' );
+		$ctype = p2p_type( 'normal' );
 
 		$actor_ids = $this->generate_posts( 'actor', 3 );
 		$movie_id = $this->generate_post( 'movie' );
@@ -173,7 +179,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$actor_id = $this->generate_post( 'actor' );
 		$movie_id = $this->generate_post( 'movie' );
 
-		$ctype = @p2p_register_connection_type( 'actor', 'movie' );
+		$ctype = p2p_type( 'normal' );
 
 		// create connection
 		$p2p_id_1 = $ctype->connect( $actor_id, $movie_id );
@@ -186,6 +192,21 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		// delete connection
 		$ctype->disconnect( $actor_id, $movie_id );
 		$this->assertFalse( $ctype->get_p2p_id( $actor_id, $movie_id ) );
+	}
+
+	function test_buckets() {
+		$ctype = p2p_type( 'normal' );
+
+		$actor_id = $this->generate_post( 'actor' );
+		$movie_id = $this->generate_post( 'movie' );
+
+		$green_p2pid = P2P_Storage::connect( $actor_id, $movie_id, array( 'color' => 'green' ) );
+		$orange_p2pid = P2P_Storage::connect( $actor_id, $movie_id, array( 'color' => 'orange' ) );
+
+		$buckets = p2p_post_buckets( p2p_type( 'normal' )->get_connected( $actor_id ), 'color' );
+
+		$this->assertEquals( $green_p2pid, $buckets['green'][0]->p2p_id );
+		$this->assertEquals( $orange_p2pid, $buckets['orange'][0]->p2p_id );
 	}
 }
 
