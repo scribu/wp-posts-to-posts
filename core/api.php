@@ -86,7 +86,7 @@ function p2p_delete_connection( $p2p_id ) {
  * @param object|array A WP_Query instance, or a list of post objects
  * @param string $key p2pmeta key
  */
-function p2p_post_buckets( $posts, $key ) {
+function p2p_split_posts( $posts, $key ) {
 	if ( is_object( $posts ) )
 		$posts = $posts->posts;
 

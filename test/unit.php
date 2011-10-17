@@ -155,7 +155,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$green_p2pid = P2P_Storage::connect( $actor_id, $movie_id, array( 'color' => 'green' ) );
 		$orange_p2pid = P2P_Storage::connect( $actor_id, $movie_id, array( 'color' => 'orange' ) );
 
-		$buckets = p2p_post_buckets( p2p_type( 'normal' )->get_connected( $actor_id ), 'color' );
+		$buckets = p2p_split_posts( p2p_type( 'normal' )->get_connected( $actor_id ), 'color' );
 
 		$this->assertEquals( $green_p2pid, $buckets['green'][0]->p2p_id );
 		$this->assertEquals( $orange_p2pid, $buckets['orange'][0]->p2p_id );

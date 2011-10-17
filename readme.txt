@@ -48,6 +48,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * add '{from|to}_query_vars' args to p2p_register_connection_type()
 * add 'cardinality' arg to p2p_register_connection_type()
 * add 'id' arg and p2p_type() function
+* introduce p2p_split_posts()
 
 = 0.9.2 =
 * fix incorrect storage when creating a connection from the other end
