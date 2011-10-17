@@ -70,36 +70,6 @@ function p2p_disconnect( $from, $to, $data = array() ) {
 }
 
 /**
- * Get a list of connected posts.
- *
- * Low-level function. Use new WP_Query( array( 'connected' => $post_id ) ) instead.
- *
- * @param int $post_id One end of the connection
- * @param string $direction The direction of the connection. Can be 'to', 'from' or 'any'
- * @param array $data additional data about the connection to filter against
- *
- * @return array( p2p_id => post_id )
- */
-function p2p_get_connected( $post_id, $direction = 'any', $data = array() ) {
-	return P2P_Storage::get( $post_id, $direction, $data );
-}
-
-/**
- * See if a certain post is connected to another one.
- *
- * @param int $from The first end of the connection
- * @param int $to The second end of the connection
- * @param array $data additional data about the connection to filter against
- *
- * @return bool True if the connection exists, false otherwise
- */
-function p2p_is_connected( $from, $to, $data = array() ) {
-	$ids = p2p_get_connected( $from, $to, $data );
-
-	return !empty( $ids );
-}
-
-/**
  * Delete one or more connections.
  *
  * @param int|array $p2p_id Connection ids

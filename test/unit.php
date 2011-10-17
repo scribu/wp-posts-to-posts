@@ -38,61 +38,6 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		return $posts[0];
 	}
 
-	function test_basic_api() {
-		global $wpdb;
-
-		$actor_ids = $this->generate_posts( 'actor', 15 );
-		$movie_ids = $this->generate_posts( 'movie', 15 );
-
-		$expected = array_slice( $movie_ids, 0, 3 );
-		sort($expected);
-
-		p2p_connect( array_slice( $actor_ids, 0, 5 ), $expected );
-		p2p_connect( $movie_ids[0], $actor_ids[10] );
-
-		$result = array_values( p2p_get_connected( $actor_ids[0], 'from' ) );
-		sort( $result );
-
-		$this->assertEquals( $result, $expected );
-
-		$result = array_values( p2p_get_connected( $movie_ids[0], 'any' ) );
-		sort( $result );
-		$expected = array( $actor_ids[0], $actor_ids[10] );
-		sort( $expected );
-		$this->assertEquals( $expected, $result );
-
-		$this->assertTrue( p2p_is_connected( $actor_ids[0], $movie_ids[0] ) );
-		$this->assertFalse( p2p_is_connected( $actor_ids[0], $movie_ids[10] ) );
-
-		// 'actor' => 'actor'
-		$posts = get_posts( array(
-			'connected' => $actor_ids[0],
-			'post_type' => 'actor',
-			'post_status' => 'any',
-			'suppress_filters' => false,
-			'fields' => 'ids',
-		) );
-		$this->assertEmpty( $posts );
-
-		// compare p2p_get_connected() to 'connected' => 123
-		p2p_connect( $actor_ids[2], $actor_ids[10] );
-		p2p_connect( $actor_ids[10], $actor_ids[2] );
-
-		$raw = p2p_get_connected($actor_ids[2], 'any');
-
-		$posts = get_posts( array(
-			'connected' => $actor_ids[2],
-			'post_type' => 'actor',
-			'post_status' => 'any',
-			'suppress_filters' => false,
-			'cache_results' => false,
-		) );
-
-		$r = scb_list_fold( $posts, 'p2p_id', 'ID' );
-
-		$this->assertEquals( array_intersect_assoc( $r, $raw ), $r );
-	}
-
 	function test_direction() {
 		$normal = p2p_type( 'normal' );
 		$this->assertInstanceOf( 'P2P_Connection_Type', $normal );
