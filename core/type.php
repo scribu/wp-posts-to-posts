@@ -29,7 +29,7 @@ class P2P_Connection_Type {
 				$args["{$key}_query_vars"]['post_type'] = array( 'post' );
 		}
 
-		$id = $args['id'];
+		$id =& $args['id'];
 
 		if ( !$id ) {
 			$id = md5( serialize( wp_array_slice_assoc( $args, array( 'from_query_vars', 'to_query_vars', 'data' ) ) ) );

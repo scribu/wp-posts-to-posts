@@ -6,19 +6,6 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 	var $plugin_slug = 'p2p/posts-to-posts';
 
-	function setUp() {
-		parent::setUp();
-
-		foreach ( array( 'actor', 'movie', 'studio' ) as $ptype )
-			register_post_type( $ptype );
-
-		@p2p_register_connection_type( array(
-			'id' => 'normal',
-			'from' => 'actor',
-			'to' => 'movie'
-		) );
-	}
-
 	private function generate_posts( $type, $count = 20 ) {
 		$ids = array();
 
@@ -38,9 +25,29 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		return $posts[0];
 	}
 
+	function setUp() {
+		parent::setUp();
+
+		foreach ( array( 'actor', 'movie', 'studio' ) as $ptype )
+			register_post_type( $ptype );
+
+		@p2p_register_connection_type( array(
+			'id' => 'normal',
+			'from' => 'actor',
+			'to' => 'movie'
+		) );
+	}
+
+	function test_ids() {
+		$this->assertInstanceOf( 'P2P_Connection_Type', p2p_type( 'normal' ) );
+
+		// make sure a unique id is generated when none is given
+		$ctype = p2p_register_connection_type( 'studio', 'movie' );
+		$this->assertTrue( strlen( $ctype->id ) > 0 );
+	}
+
 	function test_direction() {
 		$normal = p2p_type( 'normal' );
-		$this->assertInstanceOf( 'P2P_Connection_Type', $normal );
 
 		$this->assertEquals( 'from', $normal->find_direction( 'actor' )->direction );
 		$this->assertEquals( 'to', $normal->find_direction( 'movie' )->direction );
