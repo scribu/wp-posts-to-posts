@@ -7,9 +7,13 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	var $plugin_slug = 'p2p/posts-to-posts';
 
 	private function generate_posts( $type, $count = 20 ) {
+		global $wpdb;
+
+		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->posts WHERE post_status = 'publish'" );
+
 		$ids = array();
 
-		for ( $i=0; $i < $count; $i++ ) {
+		for ( $i = $total; $i < $total + $count; $i++ ) {
 			$ids[] = wp_insert_post(array(
 				'post_type' => $type,
 				'post_title' => "Post $i",
