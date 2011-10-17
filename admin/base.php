@@ -14,8 +14,8 @@ class P2P_Box_Factory {
 	 * Add all the metaboxes.
 	 */
 	static function add_meta_boxes( $from ) {
-		foreach ( P2P_Connection_Type::get() as $box_id => $args ) {
-			$box = self::make_box( $box_id, $from );
+		foreach ( P2P_Connection_Type::get() as $ctype_id => $args ) {
+			$box = self::make_box( $ctype_id, $from );
 			if ( !$box )
 				continue;
 
@@ -55,7 +55,7 @@ class P2P_Box_Factory {
 	function wp_ajax_p2p_box() {
 		check_ajax_referer( P2P_BOX_NONCE, 'nonce' );
 
-		$box = self::make_box( $_REQUEST['box_id'], $_REQUEST['post_type'] );
+		$box = self::make_box( $_REQUEST['ctype_id'], $_REQUEST['post_type'] );
 		if ( !$box )
 			die(0);
 
@@ -67,8 +67,8 @@ class P2P_Box_Factory {
 		$box->$method();
 	}
 
-	private static function make_box( $box_id, $post_type ) {
-		$ctype = p2p_type( $box_id );
+	private static function make_box( $ctype_id, $post_type ) {
+		$ctype = p2p_type( $ctype_id );
 
 		if ( !$ctype )
 			return false;
@@ -83,7 +83,7 @@ class P2P_Box_Factory {
 		if ( !$ctype->reciprocal && 'to' == $directed->direction )
 			return false;
 
-		return new P2P_Box( $box_id, $directed, $post_type );
+		return new P2P_Box( $directed, $post_type );
 	}
 }
 

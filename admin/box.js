@@ -32,7 +32,7 @@
         method == null && (method = 'post');
         data.action = 'p2p_box';
         data.nonce = P2PAdmin.nonce;
-        data.box_id = $metabox.data('box_id');
+        data.ctype_id = $metabox.data('ctype_id');
         data.post_type = jQuery('#post_type').val();
         return jQuery[method](ajaxurl, data, callback);
       };

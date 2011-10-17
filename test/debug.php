@@ -2,8 +2,6 @@
 
 class P2P_Debug {
 
-	private static $ctype;
-
 	function init() {
 		if ( !function_exists('p2p_register_connection_type') )
 			return;
@@ -65,6 +63,7 @@ class P2P_Debug {
 
 
 		p2p_register_connection_type( array(
+			'id' => 'actor_movie',
 			'from' => 'actor',
 			'to' => 'movie',
 			'fields' => array(
@@ -99,7 +98,7 @@ class P2P_Debug {
 			'data' => array( 'type' => 'friends' )
 		) );
 
-		self::$ctype = p2p_register_connection_type( array( 'actor', 'post' ), array( 'page', 'movie' ), true );
+		p2p_register_connection_type( array( 'actor', 'post' ), array( 'page', 'movie' ), true );
 	}
 
 	function test_ordering() {

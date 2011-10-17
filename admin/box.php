@@ -7,8 +7,6 @@ interface P2P_Field {
 
 
 class P2P_Box {
-	private $box_id;
-
 	private $data;
 
 	private $current_ptype;
@@ -23,8 +21,7 @@ class P2P_Box {
 		'post_status' => 'any',
 	);
 
-	function __construct( $box_id, $data, $current_ptype ) {
-		$this->box_id = $box_id;
+	function __construct( $data, $current_ptype ) {
 		$this->data = $data;
 
 		$this->current_ptype = $current_ptype;
@@ -48,7 +45,7 @@ class P2P_Box {
 		}
 
 		add_meta_box(
-			'p2p-connections-' . $this->box_id,
+			'p2p-connections-' . $this->data->id,
 			$title,
 			array( $this, 'render' ),
 			$this->current_ptype,
@@ -97,7 +94,7 @@ class P2P_Box {
 		);
 
 		$data_attr = array(
-			'box_id' => $this->box_id,
+			'ctype_id' => $this->data->id,
 			'prevent_duplicates' => $this->data->prevent_duplicates,
 			'cardinality' => $this->data->cardinality,
 		);

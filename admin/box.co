@@ -32,7 +32,7 @@ jQuery ->
 			data <<<
 				action: 'p2p_box'
 				nonce: P2PAdmin.nonce
-				box_id: $metabox.data('box_id')
+				ctype_id: $metabox.data('ctype_id')
 				post_type: jQuery('#post_type').val()
 
 			jQuery[method] ajaxurl, data, callback
