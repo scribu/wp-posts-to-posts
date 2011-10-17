@@ -42,7 +42,19 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		) );
 	}
 
-	function test_ids() {
+	function test_storage() {
+		$post_id = $this->generate_post( 'post' );
+		$actor_id = $this->generate_post( 'actor' );
+
+		p2p_connect( $post_id, $actor_id );
+		p2p_connect( $actor_id, $post_id, array( 'foo', 'bar' ) );
+
+		wp_delete_post( $post_id, true );
+
+		$this->assertEmpty( P2P_Storage::get( $post_id, 'any' ) );
+	}
+
+	function test_ctype_ids() {
 		$this->assertInstanceOf( 'P2P_Connection_Type', p2p_type( 'normal' ) );
 
 		// make sure a unique id is generated when none is given

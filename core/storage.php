@@ -31,12 +31,7 @@ class P2P_Storage {
 			update_option( 'p2p_storage', self::$version );
 		}
 
-		add_action( 'delete_post', array( __CLASS__, 'delete_post' ) );
-	}
-
-	function delete_post( $post_id ) {
-		self::disconnect( $post_id, 'from' );
-		self::disconnect( $post_id, 'to' );
+		add_action( 'deleted_post', array( __CLASS__, 'disconnect' ) );
 	}
 
 	/**
@@ -142,7 +137,7 @@ class P2P_Storage {
 	 *
 	 * @return int Number of connections deleted
 	 */
-	function disconnect( $from, $to, $data = array() ) {
+	function disconnect( $from, $to = 'any', $data = array() ) {
 		$connections = self::get( $from, $to, $data );
 
 		// We're interested in the p2p_ids
