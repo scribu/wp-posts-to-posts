@@ -7,7 +7,7 @@ interface P2P_Field {
 
 
 class P2P_Box {
-	private $data;
+	private $ctype;
 
 	private $current_ptype;
 
@@ -21,12 +21,12 @@ class P2P_Box {
 		'post_status' => 'any',
 	);
 
-	function __construct( $data, $current_ptype ) {
-		$this->data = $data;
+	function __construct( $ctype, $current_ptype ) {
+		$this->ctype = $ctype;
 
 		$this->current_ptype = $current_ptype;
 
-		$other_ptype = $this->data->get_other_post_type();
+		$other_ptype = $this->ctype->get_other_post_type();
 		$this->ptype = get_post_type_object( $other_ptype[0] );
 
 		if ( !class_exists( 'Mustache' ) )
@@ -38,18 +38,18 @@ class P2P_Box {
 	}
 
 	public function register() {
-		$title = $this->data->get_title();
+		$title = $this->ctype->get_title();
 
 		if ( empty( $title ) ) {
 			$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), $this->ptype->labels->name );
 		}
 
 		add_meta_box(
-			'p2p-connections-' . $this->data->id,
+			'p2p-connections-' . $this->ctype->id,
 			$title,
 			array( $this, 'render' ),
 			$this->current_ptype,
-			$this->data->context,
+			$this->ctype->context,
 			'default'
 		);
 
@@ -73,12 +73,12 @@ class P2P_Box {
 			'title' => new P2P_Field_Title( $this->ptype->labels->singular_name ),
 		);
 
-		foreach ( $this->data->fields as $key => $data ) {
+		foreach ( $this->ctype->fields as $key => $data ) {
 			$this->columns[ $key ] = new P2P_Field_Generic( $data );
 		}
 
-		if ( $this->data->is_sortable() ) {
-			$this->columns['order'] = new P2P_Field_Order( $this->data->sortable );
+		if ( $this->ctype->is_sortable() ) {
+			$this->columns['order'] = new P2P_Field_Order( $this->ctype->sortable );
 		}
 	}
 
@@ -86,7 +86,7 @@ class P2P_Box {
 		$qv = self::$extra_qv;
 		$qv['nopaging'] = true;
 
-		$this->connected_posts = $this->data->get_connected( $post->ID, $qv )->posts;
+		$this->connected_posts = $this->ctype->get_connected( $post->ID, $qv )->posts;
 
 		$data = array(
 			'connections' => $this->render_connections_table( $post ),
@@ -94,9 +94,9 @@ class P2P_Box {
 		);
 
 		$data_attr = array(
-			'ctype_id' => $this->data->id,
-			'prevent_duplicates' => $this->data->prevent_duplicates,
-			'cardinality' => $this->data->cardinality,
+			'ctype_id' => $this->ctype->id,
+			'prevent_duplicates' => $this->ctype->prevent_duplicates,
+			'cardinality' => $this->ctype->cardinality,
 		);
 
 		$data_attr_str = array();
@@ -135,7 +135,7 @@ class P2P_Box {
 			'create-label' => __( 'Create connections:', P2P_TEXTDOMAIN )
 		);
 
-		if ( 'one' == $this->data->cardinality && !empty( $this->connected_posts ) )
+		if ( 'one' == $this->ctype->cardinality && !empty( $this->connected_posts ) )
 			$data['hide'] = 'style="display:none"';
 
 		// Search tab
@@ -158,7 +158,7 @@ class P2P_Box {
 		);
 
 		// Create post tab
-		if ( $this->data->can_create_post() ) {
+		if ( $this->ctype->can_create_post() ) {
 			$tab_content = _p2p_mustache_render( 'tab-create-post.html', array(
 				'title' => $this->ptype->labels->add_new_item
 			) );
@@ -197,7 +197,7 @@ class P2P_Box {
 			$args['s'] = $search;
 		}
 
-		$query = $this->data->get_connectable( $current_post_id, $args );
+		$query = $this->ctype->get_connectable( $current_post_id, $args );
 
 		if ( empty( $query->posts ) )
 			return false;
@@ -262,7 +262,7 @@ class P2P_Box {
 			'post_type' => $this->ptype->name
 		);
 
-		$args = apply_filters( 'p2p_new_post_args', $args, $this->data );
+		$args = apply_filters( 'p2p_new_post_args', $args, $this->ctype );
 
 		return wp_insert_post( $args );
 	}
@@ -278,7 +278,7 @@ class P2P_Box {
 		if ( !$from || !$to )
 			die(-1);
 
-		$p2p_id = $this->data->lose_direction()->connect( $from, $to );
+		$p2p_id = $this->ctype->lose_direction()->connect( $from, $to );
 
 		if ( $p2p_id )
 			echo $this->connection_row( $p2p_id, $to );
@@ -293,7 +293,7 @@ class P2P_Box {
 	}
 
 	public function ajax_clear_connections() {
-		$this->data->lose_direction()->disconnect_all( $_POST['post_id'] );
+		$this->ctype->lose_direction()->disconnect_all( $_POST['post_id'] );
 
 		die(1);
 	}
