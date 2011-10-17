@@ -252,19 +252,18 @@ class P2P_Box {
 	// Ajax handlers
 
 	public function ajax_create_post() {
-		$this->safe_connect( $this->create_post( $_POST['post_title'] ) );
-	}
+		if ( !$this->can_create_post() )
+			die( -1 );
 
-	private function create_post( $title ) {
 		$args = array(
-			'post_title' => $title,
+			'post_title' => $_POST['post_title'],
 			'post_author' => get_current_user_id(),
 			'post_type' => $this->ptype->name
 		);
 
 		$args = apply_filters( 'p2p_new_post_args', $args, $this->ctype );
 
-		return wp_insert_post( $args );
+		$this->safe_connect( wp_insert_post( $args ) );
 	}
 
 	public function ajax_connect() {
@@ -318,7 +317,7 @@ class P2P_Box {
 		if ( count( $ptype ) > 1 )
 			return false;
 
-		return current_user_can( get_post_type_object( $ptype[0] )->cap->edit_posts );
+		return current_user_can( $this->ptype->cap->edit_posts );
 	}
 
 	function _search_by_title( $sql, $wp_query ) {
