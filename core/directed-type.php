@@ -58,15 +58,6 @@ class P2P_Directed_Connection_Type {
 		return 'from' == $this->direction ? $this->to : $this->from;
 	}
 
-	public function can_create_post() {
-		$ptype = $this->get_other_post_type();
-
-		if ( count( $ptype ) > 1 )
-			return false;
-
-		return current_user_can( get_post_type_object( $ptype[0] )->cap->edit_posts );
-	}
-
 	public function is_sortable() {
 		return $this->sortable && 'from' == $this->direction;
 	}

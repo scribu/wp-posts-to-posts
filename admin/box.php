@@ -158,7 +158,7 @@ class P2P_Box {
 		);
 
 		// Create post tab
-		if ( $this->ctype->can_create_post() ) {
+		if ( $this->can_create_post() ) {
 			$tab_content = _p2p_mustache_render( 'tab-create-post.html', array(
 				'title' => $this->ptype->labels->add_new_item
 			) );
@@ -310,6 +310,15 @@ class P2P_Box {
 		}
 
 		die( json_encode( $results ) );
+	}
+
+	protected function can_create_post() {
+		$ptype = $this->ctype->get_other_post_type();
+
+		if ( count( $ptype ) > 1 )
+			return false;
+
+		return current_user_can( get_post_type_object( $ptype[0] )->cap->edit_posts );
 	}
 
 	function _search_by_title( $sql, $wp_query ) {
