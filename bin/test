@@ -1,11 +1,12 @@
 #!/bin/bash
 
-if [ $# -ne 1 ]; then
+wp_tests_dir=${1-$WP_TESTS_DIR}
+
+if [[ '' = $wp_tests_dir ]]; then
 	echo 'usage: ./bin/test /path/to/wp-tests/'
 	exit
 fi
 
-wp_tests_dir=$1
 p2p_dir=$(pwd)
 
 cd $wp_tests_dir
