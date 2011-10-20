@@ -1,0 +1,11 @@
+#!/bin/bash
+
+docblox
+
+cd ../p2p-pages
+
+sed -i 's/DocBlox Documentation/Posts 2 Posts Documentation/g' index.html
+
+git add -A
+git commit -m "regenerate"
+git push

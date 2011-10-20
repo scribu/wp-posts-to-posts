@@ -2,10 +2,10 @@
 <docblox>
 	<parser>
 		<default-package-name>Core</default-package-name>
-		<target>doc</target>
+		<target>../p2p-pages</target>
 	</parser>
 	<transformer>
-		<target>doc</target>
+		<target>../p2p-pages</target>
 	</transformer>
 	<files>
 		<directory>core</directory>
