@@ -190,6 +190,9 @@ function p2p_delete_meta($p2p_id, $meta_key, $meta_value = '') {
 	return delete_metadata('p2p', $p2p_id, $meta_key, $meta_value);
 }
 
+/**
+ * @internal
+ */
 function _p2p_meta_sql_helper( $data ) {
 	global $wpdb;
 

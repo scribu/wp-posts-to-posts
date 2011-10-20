@@ -1,11 +1,16 @@
 <?php
 
+/**
+ * @package Administration
+ */
 interface P2P_Field {
 	function get_title();
 	function render( $key, $p2p_id, $post_id );
 }
 
-
+/**
+ * @package Administration
+ */
 class P2P_Box {
 	private $ctype;
 
@@ -333,6 +338,9 @@ class P2P_Box {
 
 // Helpers
 
+/**
+ * @internal
+ */
 function _p2p_mustache_render( $file, $data, $partials = array() ) {
 	$partial_data = array();
 	foreach ( $partials as $partial ) {
@@ -344,6 +352,9 @@ function _p2p_mustache_render( $file, $data, $partials = array() ) {
 	return $m->render( _p2p_load_template( $file ), $data, $partial_data );
 }
 
+/**
+ * @internal
+ */
 function _p2p_load_template( $file ) {
 	return file_get_contents( dirname(__FILE__) . '/templates/' . $file );
 }

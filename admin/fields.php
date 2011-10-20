@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @package Administration
+ */
 class P2P_Field_Create implements P2P_Field {
 
 	function get_title() {
@@ -17,7 +20,9 @@ class P2P_Field_Create implements P2P_Field {
 	}
 }
 
-
+/**
+ * @package Administration
+ */
 class P2P_Field_Delete implements P2P_Field {
 
 	function get_title() {
@@ -38,7 +43,9 @@ class P2P_Field_Delete implements P2P_Field {
 	}
 }
 
-
+/**
+ * @package Administration
+ */
 class P2P_Field_Order implements P2P_Field {
 
 	protected $sort_key;
@@ -60,7 +67,9 @@ class P2P_Field_Order implements P2P_Field {
 	}
 }
 
-
+/**
+ * @package Administration
+ */
 class P2P_Field_Title implements P2P_Field {
 
 	protected $title;
@@ -93,7 +102,9 @@ class P2P_Field_Title implements P2P_Field {
 	}
 }
 
-
+/**
+ * @package Administration
+ */
 class P2P_Field_Generic implements P2P_Field {
 
 	protected $data;
