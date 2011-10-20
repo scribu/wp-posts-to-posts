@@ -8,4 +8,4 @@ sed -i 's/DocBlox Documentation/Posts 2 Posts Documentation/g' index.html
 
 git add -A
 git commit -m "regenerate"
-git push
+git push origin gh-pages
