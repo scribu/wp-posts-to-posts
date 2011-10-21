@@ -2,7 +2,7 @@
 /*
 Plugin Name: Posts 2 Posts
 Description: Create many-to-many relationships between all types of posts.
-Version: 0.9.5-alpha
+Version: 0.9.5
 Author: scribu
 Author URI: http://scribu.net/
 Plugin URI: http://scribu.net/wordpress/posts-to-posts
@@ -26,7 +26,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-define( 'P2P_PLUGIN_VERSION', '0.9.2' );
+define( 'P2P_PLUGIN_VERSION', '0.9.5' );
 
 define( 'P2P_TEXTDOMAIN', 'posts-to-posts' );
 

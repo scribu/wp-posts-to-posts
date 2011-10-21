@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.2
 Tested up to: 3.3
-Stable tag: 0.9.2
+Stable tag: 0.9.5
 
 Create connections between posts
 
@@ -44,12 +44,13 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
-= [next release] =
+= 0.9.5 =
 * add '{from|to}_query_vars' args to p2p_register_connection_type()
 * add 'cardinality' arg to p2p_register_connection_type()
 * add 'id' arg and p2p_type() function
 * introduce p2p_split_posts()
 * remove p2p_connect(), p2p_disconnect() and p2p_get_connected()
+* [more info](http://scribu.net/wordpress/posts-to-posts/p2p-0-9-5.html)
 
 = 0.9.2 =
 * fix incorrect storage when creating a connection from the other end
