@@ -29,9 +29,9 @@
  *
  * - 'title' - string The box's title. Default: 'Connected {$post_type}s'
  *
- * - 'reciprocal' - bool Whether to show the box on both sides of the connection. Default: false.
+ * - 'indeterminate_direction' - string When the direction can't be decided, use this instead. Can be 'from', 'to' or 'any'. Default: 'any'.
  *
- * - 'show_ui' - bool Whether to show the admin connections box. Default: true.
+ * - 'show_ui' - bool|string Whether to show the admin connections box. Can be 'from', 'to', 'any' or false. Default: 'from'.
  *
  * - 'context' - string Where should the box show up by default. Possible values: 'advanced' or 'side'
  *
@@ -43,22 +43,37 @@
  */
 function p2p_register_connection_type( $args ) {
 	if ( !did_action('init') ) {
-		trigger_error( "Connection types should not be registered before the 'init' hook.", E_USER_NOTICE );
+		trigger_error( "Connection types should not be registered before the 'init' hook." );
 	}
 
 	$argv = func_get_args();
 
 	if ( count( $argv ) > 1 ) {
 		$args = array();
-		@list( $args['from'], $args['to'], $args['reciprocal'] ) = $argv;
+		foreach ( array( 'from', 'to', 'reciproca' ) as $i => $key ) {
+			if ( isset( $argv[ $i ] ) )
+				$args[ $key ] = $argv[ $i ];
+		}
 	}
 
 	$args = wp_parse_args( $args, array(
-		'show_ui' => true,
+		'show_ui' => 'from',
 		'fields' => array(),
 		'context' => 'side',
 		'can_create_post' => true
 	) );
+
+	if ( isset( $args['reciprocal'] ) ) {
+		trigger_error( "The 'reciprocal' arg for p2p_register_connection_type() is deprecated. Use 'indeterminate_direction' or 'show_ui' instead." );
+
+		if ( true === $args['reciprocal'] ) {
+			$args['show_ui'] = 'any';
+		} elseif ( false === $args['reciprocal'] ) {
+			$args['indeterminate_direction'] = 'from';
+		}
+
+		unset( $args['reciprocal'] );
+	}
 
 	return P2P_Connection_Type::register( $args );
 }

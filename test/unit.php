@@ -98,7 +98,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertFalse( $reflexive->find_direction( 'post' ) );
 
 		// reflexive, but not reciprocal
-		$reflexive = p2p_register_connection_type( array( 'from' => 'movie', 'to' => 'movie', 'reciprocal' => false ) );
+		$reflexive = p2p_register_connection_type( array( 'from' => 'movie', 'to' => 'movie', 'indeterminate_direction' => 'from' ) );
 		$this->assertInstanceOf( 'P2P_Connection_Type', $reflexive );
 
 		$this->assertEquals( 'from', $reflexive->find_direction( 'movie' )->direction );

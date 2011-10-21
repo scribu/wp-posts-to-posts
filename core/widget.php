@@ -72,14 +72,16 @@ class P2P_Widget extends scbWidget {
 			$$key = implode( ', ', array_map( array( __CLASS__, 'post_type_label' ), $ctype->$key ) );
 		}
 
-		if ( $ctype->reciprocal || $ctype->to == $ctype->from )
+		$directed = $ctype->find_direction( $ctype->from[0] );
+
+		if ( 'any' == $directed->direction )
 			$arrow = '&harr;';
 		else
 			$arrow = '&rarr;';
 
 		$label = "$from $arrow $to";
 
-		$title = $ctype->find_direction( $ctype->from[0] )->get_title();
+		$title = $directed->get_title();
 
 		if ( $title )
 			$label .= " ($title)";

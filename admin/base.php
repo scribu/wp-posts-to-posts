@@ -83,7 +83,7 @@ class P2P_Box_Factory {
 		if ( !$directed )
 			return false;
 
-		if ( !$ctype->reciprocal && 'to' == $directed->direction )
+		if ( !( $ctype->show_ui == 'any' || $ctype->show_ui == $directed->direction ) )
 			return false;
 
 		return new P2P_Box( $directed, $post_type );

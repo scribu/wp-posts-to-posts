@@ -12,7 +12,7 @@ class P2P_Connection_Type {
 			'from_query_vars' => array(),
 			'to_query_vars' => array(),
 			'data' => array(),
-			'reciprocal' => null,
+			'indeterminate_direction' => 'any',
 			'cardinality' => 'many-to-many',
 			'prevent_duplicates' => true,
 			'sortable' => false,
@@ -57,14 +57,6 @@ class P2P_Connection_Type {
 
 	protected function __construct( $args ) {
 		$this->args = $args;
-
-		$common = array_intersect( $this->from, $this->to );
-
-		if ( !empty( $common ) && count( $this->from ) + count( $this->to ) > 2 )
-			$this->args['reciprocal'] = false;
-
-		if ( is_null( $args['reciprocal'] ) )
-			$this->args['reciprocal'] = ( $this->from == $this->to );
 	}
 
 	public function __get( $key ) {
@@ -91,11 +83,10 @@ class P2P_Connection_Type {
 			$post_type = $arg;
 		}
 
-		if ( in_array( $post_type, $this->from ) ) {
-			if ( $this->reciprocal && in_array( $post_type, $this->to ) )
-				$direction = 'any';
-			else
-				$direction = 'from';
+		if ( in_array( $post_type, $this->from ) && in_array( $post_type, $this->to ) ) {
+			$direction = $this->indeterminate_direction;
+		} elseif ( in_array( $post_type, $this->from ) ) {
+			$direction = 'from';
 		} elseif ( in_array( $post_type, $this->to ) ) {
 			$direction = 'to';
 		} else {
