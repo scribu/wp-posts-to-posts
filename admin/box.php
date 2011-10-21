@@ -317,6 +317,9 @@ class P2P_Box {
 	}
 
 	protected function can_create_post() {
+		if ( !$this->ctype->can_create_post )
+			return false;
+
 		$ptype = $this->ctype->get_other_post_type();
 
 		if ( count( $ptype ) > 1 )

@@ -87,7 +87,8 @@ class P2P_Debug {
 			'reciprocal' => true,
 			'title' => array( 'from' => 'Doubles', 'to' => 'Main Actor' ),
 			'data' => array( 'type' => 'doubles' ),
-			'sortable' => 'order'
+			'sortable' => 'order',
+			'can_create_post' => false
 		) );
 
 		p2p_register_connection_type( array(

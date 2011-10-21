@@ -11,15 +11,21 @@
  *
  * - 'from' - string|array The first end of the connection.
  *
+ * - 'from_query_vars' - array Additional query vars to pass to WP_Query. Default: none.
+ *
  * - 'to' - string|array The second end of the connection.
  *
- * - 'fields' - array( key => Title ) Metadata fields editable by the user (optional).
+ * - 'to_query_vars' - array Additional query vars to pass to WP_Query. Default: none.
  *
- * - 'data' - array( key => value ) Metadata fields not editable by the user (optional).
+ * - 'fields' - array( key => Title ) Metadata fields editable by the user. Default: none.
  *
- * - 'sortable' - string A custom field key used to add a special column that allows manual connection ordering. Default: false.
+ * - 'data' - array( key => value ) Metadata fields not editable by the user. Dfault: none.
+ *
+ * - 'cardinality' - string How many connection can each post have: 'one-to-many', 'many-to-one' or 'many-to-many'. Default: 'many-to-many'
  *
  * - 'prevent_duplicates' - bool Whether to disallow duplicate connections between the same two posts. Default: true.
+ *
+ * - 'sortable' - string A custom field key used to add a special column that allows manual connection ordering. Default: false.
  *
  * - 'title' - string The box's title. Default: 'Connected {$post_type}s'
  *
@@ -28,6 +34,8 @@
  * - 'show_ui' - bool Whether to show the admin connections box. Default: true.
  *
  * - 'context' - string Where should the box show up by default. Possible values: 'advanced' or 'side'
+ *
+ * - 'can_create_post' - bool Whether to allow post creation via the connection box. Default: true.
  *
  * @param array $args
  *
@@ -49,6 +57,7 @@ function p2p_register_connection_type( $args ) {
 		'show_ui' => true,
 		'fields' => array(),
 		'context' => 'side',
+		'can_create_post' => true
 	) );
 
 	return P2P_Connection_Type::register( $args );
