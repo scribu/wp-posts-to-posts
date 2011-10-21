@@ -46,8 +46,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$post_id = $this->generate_post( 'post' );
 		$actor_id = $this->generate_post( 'actor' );
 
-		p2p_connect( $post_id, $actor_id );
-		p2p_connect( $actor_id, $post_id, array( 'foo', 'bar' ) );
+		p2p_type( 'normal' )->connect( $post_id, $actor_id );
+		p2p_type( 'normal' )->connect( $actor_id, $post_id, array( 'foo', 'bar' ) );
 
 		wp_delete_post( $post_id, true );
 
