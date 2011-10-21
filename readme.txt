@@ -49,6 +49,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * add 'cardinality' arg to p2p_register_connection_type()
 * add 'id' arg and p2p_type() function
 * introduce p2p_split_posts()
+* remove p2p_connect(), p2p_disconnect() and p2p_get_connected()
 
 = 0.9.2 =
 * fix incorrect storage when creating a connection from the other end
