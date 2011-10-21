@@ -44,6 +44,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= [next] =
+* add 'can_create_post' arg to p2p_register_connection_type()
+
 = 0.9.5 =
 * add '{from|to}_query_vars' args to p2p_register_connection_type()
 * add 'cardinality' arg to p2p_register_connection_type()
