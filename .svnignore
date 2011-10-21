@@ -2,6 +2,7 @@ admin/box.co
 
 bin
 test
+docblox.dist.xml
 
 mustache/examples
 mustache/test
