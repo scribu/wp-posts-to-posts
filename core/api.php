@@ -66,36 +66,6 @@ function p2p_type( $id ) {
 }
 
 /**
- * Connect a post to one or more other posts.
- *
- * @param int|array $from The first end of the connection
- * @param int|array $to The second end of the connection
- * @param array $data additional data about the connection
- */
-function p2p_connect( $from, $to, $data = array() ) {
-	foreach ( (array) $from as $from ) {
-		foreach ( (array) $to as $to ) {
-			P2P_Storage::connect( $from, $to, $data );
-		}
-	}
-}
-
-/**
- * Disconnect a post from one or more other posts.
- *
- * @param int|array $from The first end of the connection
- * @param int|array|string $to The second end of the connection
- * @param array $data additional data about the connection to filter against
- */
-function p2p_disconnect( $from, $to, $data = array() ) {
-	foreach ( (array) $from as $from ) {
-		foreach ( (array) $to as $to ) {
-			P2P_Storage::disconnect( $from, $to, $data );
-		}
-	}
-}
-
-/**
  * Delete one or more connections.
  *
  * @param int|array $p2p_id Connection ids
