@@ -1,10 +1,8 @@
 #!/bin/bash
 
-docblox
+docblox --title 'Posts 2 Posts Reference'
 
 cd ../p2p-pages
-
-sed -i 's/DocBlox Documentation/Posts 2 Posts Reference/g' index.html
 
 git add -A
 git commit -m "regenerate"
