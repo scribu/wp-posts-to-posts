@@ -116,7 +116,7 @@ class P2P_Directed_Connection_Type {
 		$connected = $this->get_connected( $from, array( 'post__in' => array( $to ) ) );
 
 		if ( !empty( $connected->posts ) )
-			return $connected->posts[0]->p2p_id;
+			return (int) $connected->posts[0]->p2p_id;
 
 		return false;
 	}
