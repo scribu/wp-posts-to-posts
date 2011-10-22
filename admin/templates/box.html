@@ -1,4 +1,10 @@
 <div class="p2p-box" {{attributes}}>
 	{{{connections}}}
-	{{{create-connections}}}
+
+	{{#create-connections}}
+	<div class="p2p-create-connections" {{{hide}}}>
+		<p><strong>{{label}}</strong></p>
+		{{>tabs}}
+	</div>
+	{{/create-connections}}
 </div>

@@ -116,7 +116,7 @@ class P2P_Box {
 
 		$data['attributes'] = implode( ' ', $data_attr_str );
 
-		echo _p2p_mustache_render( 'box.html', $data );
+		echo _p2p_mustache_render( 'box.html', $data, array( 'tabs' ) );
 	}
 
 	protected function render_connections_table( $post ) {
@@ -143,7 +143,7 @@ class P2P_Box {
 
 	protected function render_create_connections( $post ) {
 		$data = array(
-			'create-label' => __( 'Create connections:', P2P_TEXTDOMAIN )
+			'label' => __( 'Create connections:', P2P_TEXTDOMAIN )
 		);
 
 		if ( $this->ctype->accepts_single_connection() && !empty( $this->connected_posts ) )
@@ -181,7 +181,7 @@ class P2P_Box {
 			);
 		}
 
-		return _p2p_mustache_render( 'create-connections.html', $data );
+		return $data;
 	}
 
 	protected function connection_row( $p2p_id, $post_id ) {
