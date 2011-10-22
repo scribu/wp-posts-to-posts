@@ -107,7 +107,7 @@ class P2P_Box {
 		$data_attr = array(
 			'ctype_id' => $this->ctype->id,
 			'prevent_duplicates' => $this->ctype->prevent_duplicates,
-			'cardinality' => $this->ctype->cardinality,
+			'cardinality' => $this->ctype->accepts_single_connection() ? 'one' : 'many',
 		);
 
 		$data_attr_str = array();
@@ -146,7 +146,7 @@ class P2P_Box {
 			'create-label' => __( 'Create connections:', P2P_TEXTDOMAIN )
 		);
 
-		if ( 'one' == $this->ctype->cardinality && !empty( $this->connected_posts ) )
+		if ( $this->ctype->accepts_single_connection() && !empty( $this->connected_posts ) )
 			$data['hide'] = 'style="display:none"';
 
 		// Search tab

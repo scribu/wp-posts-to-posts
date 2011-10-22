@@ -37,7 +37,7 @@ function _p2p_init() {
 
 	load_plugin_textdomain( P2P_TEXTDOMAIN, '', basename( $base ) . '/lang' );
 
-	foreach ( array( 'storage', 'query', 'directed-type', 'type', 'api', 'widget' ) as $file )
+	foreach ( array( 'storage', 'query', 'type', 'directed-type', 'indeterminate-type', 'api', 'widget' ) as $file )
 		require_once "$base/core/$file.php";
 
 	P2P_Widget::init( __FILE__ );

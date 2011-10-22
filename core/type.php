@@ -54,9 +54,15 @@ class P2P_Connection_Type {
 
 
 	protected $args;
+	protected $indeterminate;
 
 	protected function __construct( $args ) {
 		$this->args = $args;
+
+		$common = array_intersect( $this->from, $this->to );
+
+		if ( !empty( $common ) )
+			$this->indeterminate = true;
 	}
 
 	public function __get( $key ) {
@@ -83,14 +89,19 @@ class P2P_Connection_Type {
 			$post_type = $arg;
 		}
 
-		if ( in_array( $post_type, $this->from ) && in_array( $post_type, $this->to ) ) {
-			$direction = $this->indeterminate_direction;
-		} elseif ( in_array( $post_type, $this->from ) ) {
+		if ( in_array( $post_type, $this->from ) ) {
 			$direction = 'from';
 		} elseif ( in_array( $post_type, $this->to ) ) {
 			$direction = 'to';
 		} else {
+			$direction = false;
+		}
+
+		if ( !$direction )
 			return false;
+
+		if ( $this->indeterminate ) {
+			return new P2P_Indeterminate_Connection_Type( $this, $this->indeterminate_direction );
 		}
 
 		return new P2P_Directed_Connection_Type( $this, $direction );

@@ -29,14 +29,15 @@ class P2P_Directed_Connection_Type {
 		if ( 'direction' == $key )
 			return $this->direction;
 
-		if ( 'cardinality' == $key )
-			return $this->cardinality;
-
 		return $this->ctype->$key;
 	}
 
 	public function lose_direction() {
 		return $this->ctype;
+	}
+
+	public function accepts_single_connection() {
+		return 'one' == $this->cardinality;
 	}
 
 	public function get_title() {

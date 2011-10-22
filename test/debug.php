@@ -84,6 +84,7 @@ class P2P_Debug {
 		p2p_register_connection_type( array(
 			'from' => 'actor',
 			'to' => 'actor',
+			'cardinality' => 'one-to-many',
 			'show_ui' => 'any',
 			'title' => array( 'from' => 'Doubles', 'to' => 'Main Actor' ),
 			'data' => array( 'type' => 'doubles' ),
