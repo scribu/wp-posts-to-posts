@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docblox --title 'Posts 2 Posts Reference'
+docblox --title 'Posts 2 Posts Reference' --sourcecode
 
 cd ../p2p-pages
 
