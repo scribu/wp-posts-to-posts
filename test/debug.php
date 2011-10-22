@@ -74,7 +74,7 @@ class P2P_Debug {
 			'sortable' => 'order',
 			'prevent_duplicates' => false,
 			'context' => 'advanced',
-			'reciprocal' => true,
+			'show_ui' => 'any',
 			'title' => array(
 				'from' => 'Played In',
 				'to' => 'Cast'
@@ -84,7 +84,7 @@ class P2P_Debug {
 		p2p_register_connection_type( array(
 			'from' => 'actor',
 			'to' => 'actor',
-			'reciprocal' => true,
+			'show_ui' => 'any',
 			'title' => array( 'from' => 'Doubles', 'to' => 'Main Actor' ),
 			'data' => array( 'type' => 'doubles' ),
 			'sortable' => 'order',
@@ -94,7 +94,7 @@ class P2P_Debug {
 		p2p_register_connection_type( array(
 			'from' => array( 'foo', 'actor' ),
 			'to' => 'actor',
-			'reciprocal' => true,
+			'show_ui' => 'any',
 			'title' => 'Friends with',
 			'data' => array( 'type' => 'friends' )
 		) );
