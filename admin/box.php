@@ -32,8 +32,7 @@ class P2P_Box {
 		$this->current_ptype = $current_ptype;
 		$this->ptype = $this->get_first_valid_ptype( $this->ctype->get_other_post_type() );
 
-		if ( !class_exists( 'Mustache' ) )
-			require dirname(__FILE__) . '/../mustache/Mustache.php';
+		P2P_Mustache::init();
 
 		add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
 
@@ -116,7 +115,7 @@ class P2P_Box {
 
 		$data['attributes'] = implode( ' ', $data_attr_str );
 
-		echo _p2p_mustache_render( 'box.html', $data, array( 'tabs' ) );
+		echo P2P_Mustache::render( 'box', $data );
 	}
 
 	protected function render_connections_table( $post ) {
@@ -138,7 +137,7 @@ class P2P_Box {
 			);
 		}
 
-		return _p2p_mustache_render( 'table.html', $data );
+		return P2P_Mustache::render( 'table', $data );
 	}
 
 	protected function render_create_connections( $post ) {
@@ -150,7 +149,7 @@ class P2P_Box {
 			$data['hide'] = 'style="display:none"';
 
 		// Search tab
-		$tab_content = _p2p_mustache_render( 'tab-search.html', array(
+		$tab_content = P2P_Mustache::render( 'tab-search', array(
 			'placeholder' => $this->ptype->labels->search_items,
 		) );
 
@@ -170,7 +169,7 @@ class P2P_Box {
 
 		// Create post tab
 		if ( $this->can_create_post() ) {
-			$tab_content = _p2p_mustache_render( 'tab-create-post.html', array(
+			$tab_content = P2P_Mustache::render( 'tab-create-post', array(
 				'title' => $this->ptype->labels->add_new_item
 			) );
 
@@ -194,7 +193,7 @@ class P2P_Box {
 			);
 		}
 
-		return _p2p_mustache_render( 'table-row.html', $data );
+		return P2P_Mustache::render( 'table-row', $data );
 	}
 
 	protected function post_rows( $current_post_id, $page = 1, $search = '' ) {
@@ -256,7 +255,7 @@ class P2P_Box {
 			);
 		}
 
-		return _p2p_mustache_render( 'tab-list.html', $data, array( 'table-row' ) );
+		return P2P_Mustache::render( 'tab-list', $data );
 	}
 
 
@@ -344,27 +343,31 @@ class P2P_Box {
 	}
 }
 
-
-// Helpers
-
 /**
  * @internal
  */
-function _p2p_mustache_render( $file, $data, $partials = array() ) {
-	$partial_data = array();
-	foreach ( $partials as $partial ) {
-		$partial_data[$partial] = _p2p_load_template( $partial . '.html' );
+abstract class P2P_Mustache {
+
+	private static $loader;
+	private static $mustache;
+
+	public static function init() {
+		if ( self::$mustache )
+			return;
+
+		if ( !class_exists( 'Mustache' ) )
+			require dirname(__FILE__) . '/../mustache/Mustache.php';
+
+		if ( !class_exists( 'MustacheLoader' ) )
+			require dirname(__FILE__) . '/../mustache/MustacheLoader.php';
+
+		self::$loader = new MustacheLoader( dirname(__FILE__) . '/templates', 'html' );
+
+		self::$mustache = new Mustache( null, null, self::$loader );
 	}
 
-	$m = new Mustache;
-
-	return $m->render( _p2p_load_template( $file ), $data, $partial_data );
-}
-
-/**
- * @internal
- */
-function _p2p_load_template( $file ) {
-	return file_get_contents( dirname(__FILE__) . '/templates/' . $file );
+	public static function render( $template, $data ) {
+		return self::$mustache->render( self::$loader[$template], $data );
+	}
 }
 

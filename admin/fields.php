@@ -16,7 +16,7 @@ class P2P_Field_Create implements P2P_Field {
 			'title' => __( 'Create connection', P2P_TEXTDOMAIN )
 		);
 
-		return _p2p_mustache_render( 'column-create.html', $data );
+		return P2P_Mustache::render( 'column-create', $data );
 	}
 }
 
@@ -30,7 +30,7 @@ class P2P_Field_Delete implements P2P_Field {
 			'title' => __( 'Delete all connections', P2P_TEXTDOMAIN )
 		);
 
-		return _p2p_mustache_render( 'column-delete-all.html', $data );
+		return P2P_Mustache::render( 'column-delete-all', $data );
 	}
 
 	function render( $key, $p2p_id, $post_id ) {
@@ -39,7 +39,7 @@ class P2P_Field_Delete implements P2P_Field {
 			'title' => __( 'Delete connection', P2P_TEXTDOMAIN )
 		);
 
-		return _p2p_mustache_render( 'column-delete.html', $data );
+		return P2P_Mustache::render( 'column-delete', $data );
 	}
 }
 
@@ -98,7 +98,7 @@ class P2P_Field_Title implements P2P_Field {
 			}
 		}
 
-		return _p2p_mustache_render( 'column-title.html', $data );
+		return P2P_Mustache::render( 'column-title', $data );
 	}
 }
 
