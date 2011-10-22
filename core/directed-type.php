@@ -26,10 +26,11 @@ class P2P_Directed_Connection_Type {
 	}
 
 	function __get( $key ) {
-		if ( 'direction' == $key )
-			return $this->direction;
-
 		return $this->ctype->$key;
+	}
+
+	public function get_direction() {
+		return $this->direction;
 	}
 
 	public function lose_direction() {

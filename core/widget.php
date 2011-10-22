@@ -74,7 +74,7 @@ class P2P_Widget extends scbWidget {
 
 		$directed = $ctype->find_direction( $ctype->from[0] );
 
-		if ( 'any' == $directed->direction )
+		if ( 'any' == $directed->get_direction() )
 			$arrow = '&harr;';
 		else
 			$arrow = '&rarr;';
