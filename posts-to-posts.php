@@ -37,17 +37,21 @@ function _p2p_init() {
 
 	load_plugin_textdomain( P2P_TEXTDOMAIN, '', basename( $base ) . '/lang' );
 
-	foreach ( array( 'storage', 'query', 'type', 'directed-type', 'indeterminate-type', 'api', 'widget' ) as $file )
-		require_once "$base/core/$file.php";
+	_p2p_load_files( "$base/core", array( 'storage', 'query', 'type', 'directed-type', 'indeterminate-type', 'api', 'widget' ) );
 
 	P2P_Widget::init( __FILE__ );
 
 	if ( is_admin() ) {
-		foreach ( array( 'utils', 'base', 'box', 'fields' ) as $file )
-			require_once "$base/admin/$file.php";
+		_p2p_load_files( "$base/admin", array( 'utils', 'base', 'box', 'fields' ) );
 	}
 }
 scb_init( '_p2p_init' );
+
+
+function _p2p_load_files( $dir, $files ) {
+	foreach ( $files as $file )
+		require_once "$dir/$file.php";
+}
 
 function _p2p_append( &$arr, $values ) {
 	if ( !is_array( $arr ) )
