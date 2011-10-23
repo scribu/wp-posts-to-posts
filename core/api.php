@@ -50,7 +50,7 @@ function p2p_register_connection_type( $args ) {
 
 	if ( count( $argv ) > 1 ) {
 		$args = array();
-		foreach ( array( 'from', 'to', 'reciproca' ) as $i => $key ) {
+		foreach ( array( 'from', 'to', 'reciprocal' ) as $i => $key ) {
 			if ( isset( $argv[ $i ] ) )
 				$args[ $key ] = $argv[ $i ];
 		}
@@ -64,8 +64,10 @@ function p2p_register_connection_type( $args ) {
 	);
 
 	foreach ( $metabox_args as $key => &$value ) {
-		if ( isset( $args[$key] ) )
+		if ( isset( $args[$key] ) ) {
 			$value = $args[$key];
+			unset( $args[$key] );
+		}
 	}
 	unset( $value );
 
