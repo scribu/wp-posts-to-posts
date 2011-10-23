@@ -85,7 +85,6 @@ class P2P_Debug {
 			'from' => 'actor',
 			'to' => 'actor',
 			'cardinality' => 'one-to-many',
-			'show_ui' => 'any',
 			'title' => array( 'from' => 'Doubles', 'to' => 'Main Actor' ),
 			'data' => array( 'type' => 'doubles' ),
 			'sortable' => 'order',

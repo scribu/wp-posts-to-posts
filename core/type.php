@@ -128,6 +128,9 @@ class P2P_Connection_Type {
 	 * @return object P2P_Directed_Connection_Type instance
 	 */
 	public function set_direction( $direction ) {
+		if ( !in_array( $direction, array( 'from', 'to', 'any' ) ) )
+			return false;
+
 		return new P2P_Directed_Connection_Type( $this, $direction );
 	}
 

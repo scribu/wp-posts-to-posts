@@ -33,7 +33,8 @@ jQuery ->
 				action: 'p2p_box'
 				nonce: P2PAdmin.nonce
 				ctype_id: $metabox.data('ctype_id')
-				post_type: jQuery('#post_type').val()
+				direction: $metabox.data('direction')
+				from: jQuery('#post_ID').val()
 
 			jQuery[method] ajaxurl, data, callback
 
@@ -96,7 +97,6 @@ jQuery ->
 
 			data =
 				subaction: 'connect'
-				from: jQuery('#post_ID').val()
 				to: $self.data('post_id')
 
 			row_ajax_request $td, data, (response) ~>
@@ -256,7 +256,6 @@ jQuery ->
 
 			data =
 				subaction: 'create_post'
-				from: jQuery('#post_ID').val()
 				post_title: title
 
 			ajax_request data, (response) ->

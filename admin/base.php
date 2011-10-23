@@ -18,7 +18,11 @@ class P2P_Box_Factory {
 	 */
 	static function add_meta_boxes( $post_type ) {
 		foreach ( P2P_Connection_Type::get() as $ctype_id => $ctype ) {
-			$box = self::make_box( $ctype_id, $post_type );
+			$directed = $ctype->find_direction( $post_type );
+			if ( !$directed )
+				continue;
+
+			$box = new P2P_Box( $ctype->_metabox_args, $directed, $post_type );
 			if ( !$box )
 				continue;
 
@@ -67,9 +71,19 @@ class P2P_Box_Factory {
 	function wp_ajax_p2p_box() {
 		check_ajax_referer( P2P_BOX_NONCE, 'nonce' );
 
-		$box = self::make_box( $_REQUEST['ctype_id'], $_REQUEST['post_type'] );
-		if ( !$box )
+		$ctype = p2p_type( $_REQUEST['ctype_id'] );
+		if ( !$ctype || !isset( $ctype->_metabox_args ) )
 			die(0);
+
+		$post_type = get_post_type( $_REQUEST['from'] );
+		if ( !$post_type )
+			die(0);
+
+		$directed = $ctype->set_direction( $_REQUEST['direction'] );
+		if ( !$directed )
+			die(0);
+
+		$box = new P2P_Box( $ctype->_metabox_args, $directed, $post_type );
 
 		if ( !current_user_can( $box->ptype->cap->edit_posts ) )
 			die(-1);
@@ -77,22 +91,6 @@ class P2P_Box_Factory {
 		$method = 'ajax_' . $_REQUEST['subaction'];
 
 		$box->$method();
-	}
-
-	private static function make_box( $ctype_id, $post_type ) {
-		$ctype = p2p_type( $ctype_id );
-
-		if ( !$ctype )
-			return false;
-
-		if ( !isset( $ctype->_metabox_args ) )
-			return false;
-
-		$directed = $ctype->find_direction( $post_type );
-		if ( !$directed )
-			return false;
-
-		return new P2P_Box( $ctype->_metabox_args, $directed, $post_type );
 	}
 }
 

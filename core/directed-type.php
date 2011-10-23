@@ -53,7 +53,7 @@ class P2P_Directed_Connection_Type {
 		$title = $this->title[ ( 'to' == $this->direction ) ? 'to' : 'from' ];
 
 		if ( $for_reference && $this->title['from'] == $this->title['to'] )
-			$title .= __( ' (from)', P2P_TEXTDOMAIN );
+			$title .= __( ' (to)', P2P_TEXTDOMAIN );
 
 		return $title;
 	}

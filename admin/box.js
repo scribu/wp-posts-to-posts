@@ -33,7 +33,8 @@
         data.action = 'p2p_box';
         data.nonce = P2PAdmin.nonce;
         data.ctype_id = $metabox.data('ctype_id');
-        data.post_type = jQuery('#post_type').val();
+        data.direction = $metabox.data('direction');
+        data.from = jQuery('#post_ID').val();
         return jQuery[method](ajaxurl, data, callback);
       };
       row_ajax_request = function($td, data, callback){
@@ -87,7 +88,6 @@
         $td = $self.closest('td');
         data = {
           subaction: 'connect',
-          from: jQuery('#post_ID').val(),
           to: $self.data('post_id')
         };
         row_ajax_request($td, data, function(response){
@@ -218,7 +218,6 @@
         $button.addClass('inactive');
         data = {
           subaction: 'create_post',
-          from: jQuery('#post_ID').val(),
           post_title: title
         };
         ajax_request(data, function(response){

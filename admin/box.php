@@ -116,6 +116,7 @@ class P2P_Box {
 			'ctype_id' => $this->ctype->id,
 			'prevent_duplicates' => $this->ctype->prevent_duplicates,
 			'cardinality' => $this->ctype->accepts_single_connection() ? 'one' : 'many',
+			'direction' => $this->ctype->get_direction()
 		);
 
 		$data_attr_str = array();
@@ -292,7 +293,7 @@ class P2P_Box {
 		if ( !$from || !$to )
 			die(-1);
 
-		$p2p_id = $this->ctype->lose_direction()->connect( $from, $to );
+		$p2p_id = $this->ctype->connect( $from, $to );
 
 		if ( $p2p_id )
 			echo $this->connection_row( $p2p_id, $to, true );
@@ -307,7 +308,7 @@ class P2P_Box {
 	}
 
 	public function ajax_clear_connections() {
-		$this->ctype->lose_direction()->disconnect_all( $_POST['post_id'] );
+		$this->ctype->disconnect_all( $_POST['post_id'] );
 
 		die(1);
 	}
