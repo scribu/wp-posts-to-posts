@@ -79,7 +79,7 @@ class P2P_Connection_Type {
 	}
 
 	public function __get( $key ) {
-		if ( in_array( $key, array( 'from', 'to' ) ) )
+		if ( 'from' == $key || 'to' == $key )
 			return $this->args[ "{$key}_query_vars" ]['post_type'];
 
 		if ( 'indeterminate' == $key )
