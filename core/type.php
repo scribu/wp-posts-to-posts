@@ -69,6 +69,9 @@ class P2P_Connection_Type {
 		if ( in_array( $key, array( 'from', 'to' ) ) )
 			return $this->args[ "{$key}_query_vars" ]['post_type'];
 
+		if ( 'indeterminate' == $key )
+			return $this->indeterminate;
+
 		return $this->args[$key];
 	}
 
@@ -77,11 +80,11 @@ class P2P_Connection_Type {
 	}
 
 	/**
-	 * Get connection direction.
+	 * Attempt to guess direction based on a post id or post type.
 	 *
 	 * @param int|string $arg A post id or a post type.
 	 *
-	 * @return bool|string False on failure, 'any', 'to' or 'from' on success.
+	 * @return bool|object False on failure, P2P_Directed_Connection_Type instance on success.
 	 */
 	public function find_direction( $arg ) {
 		if ( $post_id = (int) $arg ) {
@@ -104,8 +107,19 @@ class P2P_Connection_Type {
 		if ( !$direction )
 			return false;
 
+		return $this->set_direction( $direction );
+	}
+
+	/**
+	 * Set the direction.
+	 *
+	 * @param string $direction Can be 'from', 'to' or 'any'.
+	 *
+	 * @return object P2P_Directed_Connection_Type instance
+	 */
+	public function set_direction( $direction ) {
 		if ( $this->indeterminate ) {
-			return new P2P_Indeterminate_Connection_Type( $this, $this->indeterminate_direction );
+			return new P2P_Indeterminate_Connection_Type( $this, $direction );
 		}
 
 		return new P2P_Directed_Connection_Type( $this, $direction );

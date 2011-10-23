@@ -37,6 +37,10 @@ class P2P_Directed_Connection_Type {
 		return $this->direction;
 	}
 
+	public function set_direction( $direction ) {
+		return $this->ctype->set_direction( $direction );
+	}
+
 	public function lose_direction() {
 		return $this->ctype;
 	}
