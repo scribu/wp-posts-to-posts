@@ -72,6 +72,10 @@ class P2P_Connection_Type {
 		return $this->args[$key];
 	}
 
+	function __isset( $key ) {
+		return isset( $this->args[$key] );
+	}
+
 	/**
 	 * Get connection direction.
 	 *

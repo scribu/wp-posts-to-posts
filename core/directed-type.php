@@ -29,6 +29,10 @@ class P2P_Directed_Connection_Type {
 		return $this->ctype->$key;
 	}
 
+	function __isset( $key ) {
+		return isset( $this->ctype->$key );
+	}
+
 	public function get_direction() {
 		return $this->direction;
 	}

@@ -56,13 +56,6 @@ function p2p_register_connection_type( $args ) {
 		}
 	}
 
-	$args = wp_parse_args( $args, array(
-		'show_ui' => 'from',
-		'fields' => array(),
-		'context' => 'side',
-		'can_create_post' => true
-	) );
-
 	if ( isset( $args['reciprocal'] ) ) {
 		trigger_error( "The 'reciprocal' arg for p2p_register_connection_type() is deprecated. Use 'indeterminate_direction' or 'show_ui' instead." );
 
@@ -74,6 +67,22 @@ function p2p_register_connection_type( $args ) {
 
 		unset( $args['reciprocal'] );
 	}
+
+	$metabox_args = array(
+		'show_ui' => 'from',
+		'fields' => array(),
+		'context' => 'side',
+		'can_create_post' => true
+	);
+
+	foreach ( $metabox_args as $key => &$value ) {
+		if ( isset( $args[$key] ) )
+			$value = $args[$key];
+	}
+	unset( $value );
+
+	if ( $metabox_args['show_ui'] )
+		$args['_metabox_args'] = (object) $metabox_args;
 
 	return P2P_Connection_Type::register( $args );
 }

@@ -14,6 +14,8 @@ interface P2P_Field {
 class P2P_Box {
 	private $ctype;
 
+	private $args;
+
 	private $current_ptype;
 
 	public $ptype;
@@ -26,7 +28,9 @@ class P2P_Box {
 		'post_status' => 'any',
 	);
 
-	function __construct( $ctype, $current_ptype ) {
+	function __construct( $args, $ctype, $current_ptype ) {
+		$this->args = $args;
+
 		$this->ctype = $ctype;
 
 		$this->current_ptype = $current_ptype;
@@ -57,7 +61,7 @@ class P2P_Box {
 			$title,
 			array( $this, 'render' ),
 			$this->current_ptype,
-			$this->ctype->context,
+			$this->args->context,
 			'default'
 		);
 
@@ -81,7 +85,7 @@ class P2P_Box {
 			'title' => new P2P_Field_Title( $this->ptype->labels->singular_name ),
 		);
 
-		foreach ( $this->ctype->fields as $key => $data ) {
+		foreach ( $this->args->fields as $key => $data ) {
 			$this->columns[ $key ] = new P2P_Field_Generic( $data );
 		}
 
@@ -318,7 +322,7 @@ class P2P_Box {
 	}
 
 	protected function can_create_post() {
-		if ( !$this->ctype->can_create_post )
+		if ( !$this->args->can_create_post )
 			return false;
 
 		$ptype = $this->ctype->get_other_post_type();

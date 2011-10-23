@@ -76,17 +76,19 @@ class P2P_Box_Factory {
 		if ( !$ctype )
 			return false;
 
-		if ( !$ctype->show_ui )
-			return false;
-
 		$directed = $ctype->find_direction( $post_type );
 		if ( !$directed )
 			return false;
 
-		if ( !( $ctype->show_ui == 'any' || $ctype->show_ui == $directed->get_direction() ) )
+		if ( !isset( $ctype->_metabox_args ) )
 			return false;
 
-		return new P2P_Box( $directed, $post_type );
+		$metabox_args = $ctype->_metabox_args;
+
+		if ( !( $metabox_args->show_ui == 'any' || $metabox_args->show_ui == $directed->get_direction() ) )
+			return false;
+
+		return new P2P_Box( $metabox_args, $directed, $post_type );
 	}
 }
 
