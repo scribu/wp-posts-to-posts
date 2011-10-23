@@ -2,8 +2,10 @@
 
 docblox --title 'Posts 2 Posts Reference' --sourcecode
 
-cd ../p2p-pages
+if [ $# -gt 0 ]; then
+	cd ../p2p-pages
 
-git add -A
-git commit -m "regenerate"
-git push origin gh-pages
+	git add -A
+	git commit -m "regenerate"
+	git push origin gh-pages
+fi
