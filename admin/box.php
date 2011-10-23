@@ -101,10 +101,15 @@ class P2P_Box {
 		$this->connected_posts = $this->ctype->get_connected( $post->ID, $qv )->posts;
 
 		$data = array(
+			'attributes' => $this->render_data_attributes(),
 			'connections' => $this->render_connections_table( $post ),
-			'create-connections' => $this->render_create_connections( $post )
+			'create-connections' => $this->render_create_connections( $post ),
 		);
 
+		echo P2P_Mustache::render( 'box', $data );
+	}
+
+	protected function render_data_attributes() {
 		$data_attr = array(
 			'ctype_id' => $this->ctype->id,
 			'prevent_duplicates' => $this->ctype->prevent_duplicates,
@@ -115,9 +120,7 @@ class P2P_Box {
 		foreach ( $data_attr as $key => $value )
 			$data_attr_str[] = "data-$key='" . $value . "'";
 
-		$data['attributes'] = implode( ' ', $data_attr_str );
-
-		echo P2P_Mustache::render( 'box', $data );
+		return implode( ' ', $data_attr_str );
 	}
 
 	protected function render_connections_table( $post ) {
