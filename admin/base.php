@@ -22,19 +22,31 @@ class P2P_Box_Factory {
 			if ( !$directed )
 				continue;
 
-			$box = new P2P_Box( $ctype->_metabox_args, $directed, $post_type );
-			if ( !$box )
+			if ( !isset( $ctype->_metabox_args ) )
 				continue;
 
-			$box->register();
+			$metabox_args = $ctype->_metabox_args;
 
 			if ( $ctype->indeterminate && !$ctype->reciprocal ) {
-				$metabox_args = $ctype->_metabox_args;
-
 				if ( 'any' == $metabox_args->show_ui ) {
-					$other_box = new P2P_Box( $metabox_args, $ctype->set_direction( 'to' ), $post_type );
-					$other_box->register( true );
+					$dir = array( 'from', 'to' );
+					$two_boxes = true;
+				} else {
+					$dir = array( $metabox_args->show_ui );
+					$two_boxes = false;
 				}
+
+				foreach ( $dir as $direction ) {
+					$directed = $ctype->set_direction( $direction );
+					if ( !$directed )
+						continue;
+
+					$box = new P2P_Box( $metabox_args, $directed, $post_type );
+					$box->register( $two_boxes );
+				}
+			} elseif ( 'any' == $metabox_args->show_ui || $directed->get_direction() == $metabox_args->show_ui ) {
+				$box = new P2P_Box( $metabox_args, $directed, $post_type );
+				$box->register();
 			}
 		}
 	}

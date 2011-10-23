@@ -32,6 +32,7 @@ class P2P_Debug {
 					'meta_value' => $type
 				),
 				'title' => array( 'from' => $title ),
+				'show_ui' => 'from'
 			) );
 		}
 	}
