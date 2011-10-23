@@ -43,7 +43,7 @@ function _p2p_init() {
 	P2P_Widget::init( __FILE__ );
 
 	if ( is_admin() ) {
-		foreach ( array( 'base', 'box', 'fields' ) as $file )
+		foreach ( array( 'utils', 'base', 'box', 'fields' ) as $file )
 			require_once "$base/admin/$file.php";
 	}
 }

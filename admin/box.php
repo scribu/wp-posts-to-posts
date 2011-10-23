@@ -32,8 +32,6 @@ class P2P_Box {
 		$this->current_ptype = $current_ptype;
 		$this->ptype = $this->get_first_valid_ptype( $this->ctype->get_other_post_type() );
 
-		P2P_Mustache::init();
-
 		add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
 
 		$this->init_columns();
@@ -338,34 +336,6 @@ class P2P_Box {
 		}
 
 		return $sql;
-	}
-}
-
-/**
- * @internal
- */
-abstract class P2P_Mustache {
-
-	private static $loader;
-	private static $mustache;
-
-	public static function init() {
-		if ( self::$mustache )
-			return;
-
-		if ( !class_exists( 'Mustache' ) )
-			require dirname(__FILE__) . '/../mustache/Mustache.php';
-
-		if ( !class_exists( 'MustacheLoader' ) )
-			require dirname(__FILE__) . '/../mustache/MustacheLoader.php';
-
-		self::$loader = new MustacheLoader( dirname(__FILE__) . '/templates', 'html' );
-
-		self::$mustache = new Mustache( null, null, self::$loader );
-	}
-
-	public static function render( $template, $data ) {
-		return self::$mustache->render( self::$loader[$template], $data );
 	}
 }
 
