@@ -70,11 +70,22 @@ class P2P_Connection_Type {
 	protected function expand_title() {
 		$title = $this->args['title'];
 
-		if ( !is_array( $title ) ) {
+		if ( !$title )
+			$title = array();
+
+		if ( $title && !is_array( $title ) ) {
 			$this->args['title'] = array(
 				'from' => $title,
 				'to' => $title,
 			);
+		} else {
+			foreach ( array( 'from', 'to' ) as $key ) {
+				if ( empty( $this->args['title'][$key] ) ) {
+					$other_key = ( 'from' == $key ) ? 'to' : 'from';
+					$ptypes = $this->$other_key;
+					$this->args['title'][$key] = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), get_post_type_object( $ptypes[0] )->labels->name );
+				}
+			}
 		}
 	}
 

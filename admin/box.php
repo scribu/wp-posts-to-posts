@@ -52,10 +52,6 @@ class P2P_Box {
 	public function register( $two_boxes = false ) {
 		$title = $this->ctype->get_title( $two_boxes );
 
-		if ( empty( $title ) ) {
-			$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), $this->ptype->labels->name );
-		}
-
 		add_meta_box(
 			'p2p-' . $this->ctype->get_direction() . '-' . $this->ctype->id,
 			$title,
