@@ -128,10 +128,6 @@ class P2P_Connection_Type {
 	 * @return object P2P_Directed_Connection_Type instance
 	 */
 	public function set_direction( $direction ) {
-		if ( $this->indeterminate ) {
-			return new P2P_Indeterminate_Connection_Type( $this, $direction );
-		}
-
 		return new P2P_Directed_Connection_Type( $this, $direction );
 	}
 
@@ -146,6 +142,9 @@ class P2P_Connection_Type {
 		$direction = $this->can_have_connections( $arg );
 		if ( !$direction )
 			return false;
+
+		if ( $this->indeterminate )
+			$direction = $this->indeterminate_direction;
 
 		return $this->set_direction( $direction );
 	}

@@ -95,7 +95,7 @@ class P2P_Debug {
 		p2p_register_connection_type( array(
 			'from' => array( 'foo', 'actor' ),
 			'to' => 'actor',
-			'show_ui' => 'any',
+			'indeterminate_direction' => 'any',
 			'title' => 'Friends with',
 			'data' => array( 'type' => 'friends' )
 		) );
