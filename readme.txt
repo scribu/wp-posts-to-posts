@@ -46,6 +46,8 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 = [next] =
 * add 'can_create_post' arg to p2p_register_connection_type()
+* two-box mode for `'reciprocal' => false`
+* more options for 'show_ui'
 
 = 0.9.5 =
 * add '{from|to}_query_vars' args to p2p_register_connection_type()
