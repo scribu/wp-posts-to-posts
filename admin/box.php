@@ -184,9 +184,13 @@ class P2P_Box {
 	}
 
 	protected function connection_row( $p2p_id, $post_id, $render = false ) {
+		return $this->table_row( $this->columns, $p2p_id, $post_id, $render );
+	}
+
+	protected function table_row( $columns, $p2p_id, $post_id, $render = false ) {
 		$data = array();
 
-		foreach ( $this->columns as $key => $field ) {
+		foreach ( $columns as $key => $field ) {
 			$data['columns'][] = array(
 				'column' => $key,
 				'content' => $field->render( $key, $p2p_id, $post_id )
@@ -229,16 +233,7 @@ class P2P_Box {
 		);
 
 		foreach ( $candidate->posts as $post ) {
-			$row = array();
-
-			foreach ( $columns as $key => $field ) {
-				$row['columns'][] = array(
-					'column' => $key,
-					'content' => $field->render( $key, 0, $post->ID )
-				);
-			}
-
-			$data['rows'][] = $row;
+			$data['rows'][] = $this->table_row( $columns, 0, $post->ID );
 		}
 
 		if ( $candidate->total_pages > 1 ) {
