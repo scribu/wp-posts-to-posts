@@ -24,7 +24,7 @@ class P2P_Box_Factory {
 
 			$box->register();
 
-			if ( $ctype->indeterminate ) {
+			if ( $ctype->indeterminate && !$ctype->reciprocal ) {
 				$metabox_args = $ctype->_metabox_args;
 
 				if ( 'any' == $metabox_args->show_ui ) {
@@ -88,14 +88,11 @@ class P2P_Box_Factory {
 		if ( !isset( $ctype->_metabox_args ) )
 			return false;
 
-		$direction = $ctype->can_have_connections( $post_type );
-		if ( !$direction )
+		$directed = $ctype->find_direction( $post_type );
+		if ( !$directed )
 			return false;
 
-		if ( $ctype->indeterminate )
-			$direction = 'from';
-
-		return new P2P_Box( $ctype->_metabox_args, $ctype->set_direction( $direction ), $post_type );
+		return new P2P_Box( $ctype->_metabox_args, $directed, $post_type );
 	}
 }
 

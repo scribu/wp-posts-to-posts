@@ -12,7 +12,7 @@ class P2P_Connection_Type {
 			'from_query_vars' => array(),
 			'to_query_vars' => array(),
 			'data' => array(),
-			'indeterminate_direction' => 'any',
+			'reciprocal' => false,
 			'cardinality' => 'many-to-many',
 			'prevent_duplicates' => true,
 			'sortable' => false,
@@ -144,7 +144,7 @@ class P2P_Connection_Type {
 			return false;
 
 		if ( $this->indeterminate )
-			$direction = $this->indeterminate_direction;
+			$direction = $this->reciprocal ? 'any' : 'from';
 
 		return $this->set_direction( $direction );
 	}

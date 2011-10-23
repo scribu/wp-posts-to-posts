@@ -27,11 +27,11 @@
  *
  * - 'sortable' - string A custom field key used to add a special column that allows manual connection ordering. Default: false.
  *
- * - 'title' - string The box's title. Default: 'Connected {$post_type}s'
+ * - 'title' - string|array The box's title. Default: 'Connected {$post_type}s'
  *
- * - 'indeterminate_direction' - string When the direction can't be decided, use this instead. Can be 'from', 'to' or 'any'. Default: 'any'.
+ * - 'reciprocal' - bool For indeterminate connections: True means all connections are displayed in a single box. False means 'from' connections are shown in one box and 'to' connections are shown in another box. Default: false.
  *
- * - 'show_ui' - bool|string Whether to show the admin connections box. Can be 'from', 'to', 'any' or false. Default: 'from'.
+ * - 'show_ui' - bool|string Whether to show the admin connections box. Can be 'from', 'to', 'any' or false. Default: 'any'.
  *
  * - 'context' - string Where should the box show up by default. Possible values: 'advanced' or 'side'
  *
@@ -56,20 +56,8 @@ function p2p_register_connection_type( $args ) {
 		}
 	}
 
-	if ( isset( $args['reciprocal'] ) ) {
-		trigger_error( "The 'reciprocal' arg for p2p_register_connection_type() is deprecated. Use 'indeterminate_direction' or 'show_ui' instead." );
-
-		if ( true === $args['reciprocal'] ) {
-			$args['show_ui'] = 'any';
-		} elseif ( false === $args['reciprocal'] ) {
-			$args['indeterminate_direction'] = 'from';
-		}
-
-		unset( $args['reciprocal'] );
-	}
-
 	$metabox_args = array(
-		'show_ui' => 'from',
+		'show_ui' => 'any',
 		'fields' => array(),
 		'context' => 'side',
 		'can_create_post' => true
