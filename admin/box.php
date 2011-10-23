@@ -49,12 +49,14 @@ class P2P_Box {
 		return $ptype;
 	}
 
-	public function register( $prefix = 'p2p-connections-' ) {
-		$title = $this->ctype->get_title();
+	public function register( $for_reference = false ) {
+		$title = $this->ctype->get_title( $for_reference );
 
 		if ( empty( $title ) ) {
 			$title = sprintf( __( 'Connected %s', P2P_TEXTDOMAIN ), $this->ptype->labels->name );
 		}
+
+		$prefix = $for_reference ? 'p2p-other-connections-' : 'p2p-connections-';
 
 		add_meta_box(
 			$prefix . $this->ctype->id,

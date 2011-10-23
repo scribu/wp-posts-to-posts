@@ -29,7 +29,7 @@ class P2P_Box_Factory {
 
 				if ( 'any' == $metabox_args->show_ui ) {
 					$other_box = new P2P_Box( $metabox_args, $ctype->set_direction( 'to' ), $post_type );
-					$other_box->register( 'p2p-other-connections-' );
+					$other_box->register( true );
 				}
 			}
 		}

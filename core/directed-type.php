@@ -49,17 +49,11 @@ class P2P_Directed_Connection_Type {
 		return 'one' == $this->cardinality;
 	}
 
-	public function get_title() {
-		$title = $this->title;
+	public function get_title( $for_reference = false ) {
+		$title = $this->title[ ( 'to' == $this->direction ) ? 'to' : 'from' ];
 
-		if ( is_array( $title ) ) {
-			$key = ( 'to' == $this->direction ) ? 'to' : 'from';
-
-			if ( isset( $title[ $key ] ) )
-				$title = $title[ $key ];
-			else
-				$title = '';
-		}
+		if ( $for_reference && $this->title['from'] == $this->title['to'] )
+			$title .= __( ' (from)', P2P_TEXTDOMAIN );
 
 		return $title;
 	}

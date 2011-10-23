@@ -63,6 +63,19 @@ class P2P_Connection_Type {
 
 		if ( !empty( $common ) )
 			$this->indeterminate = true;
+
+		$this->expand_title();
+	}
+
+	protected function expand_title() {
+		$title = $this->args['title'];
+
+		if ( !is_array( $title ) ) {
+			$this->args['title'] = array(
+				'from' => $title,
+				'to' => $title,
+			);
+		}
 	}
 
 	public function __get( $key ) {
