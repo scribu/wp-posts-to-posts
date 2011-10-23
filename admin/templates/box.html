@@ -1,10 +1,36 @@
 <div class="p2p-box" {{attributes}}>
-	{{{connections}}}
+	{{#connections}}
+	<table class="p2p-connections" {{{hide}}}>
+		<thead>
+			<tr>
+				{{#thead}}
+				<th class="p2p-col-{{column}}">{{{title}}}</th>
+				{{/thead}}
+			</tr>
+		</thead>
+
+		<tbody>
+			{{#tbody}}
+			{{>table-row}}
+			{{/tbody}}
+		</tbody>
+	</table>
+	{{/connections}}
 
 	{{#create-connections}}
 	<div class="p2p-create-connections" {{{hide}}}>
 		<p><strong>{{label}}</strong></p>
-		{{>tabs}}
+		<ul class="wp-tab-bar clearfix">
+			{{#tabs}}
+			<li {{#is-active}}class="wp-tab-active"{{/is-active}} data-ref=".p2p-tab-{{tab-id}}"><a href="#">{{tab-title}}</a></li>
+			{{/tabs}}
+		</ul>
+
+		{{#tabs}}
+		<div class="p2p-tab-{{tab-id}} tabs-panel">
+			{{{tab-content}}}
+		</div>
+		{{/tabs}}
 	</div>
 	{{/create-connections}}
 </div>

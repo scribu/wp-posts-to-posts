@@ -124,9 +124,9 @@ class P2P_Box {
 		if ( empty( $this->connected_posts ) )
 			$data['hide'] = 'style="display:none"';
 
-		$tbody = '';
+		$tbody = array();
 		foreach ( $this->connected_posts as $connected ) {
-			$tbody .= $this->connection_row( $connected->p2p_id, $connected->ID );
+			$tbody[] = $this->connection_row( $connected->p2p_id, $connected->ID );
 		}
 		$data['tbody'] = $tbody;
 
@@ -137,7 +137,7 @@ class P2P_Box {
 			);
 		}
 
-		return P2P_Mustache::render( 'table', $data );
+		return $data;
 	}
 
 	protected function render_create_connections( $post ) {
@@ -183,7 +183,7 @@ class P2P_Box {
 		return $data;
 	}
 
-	protected function connection_row( $p2p_id, $post_id ) {
+	protected function connection_row( $p2p_id, $post_id, $render = false ) {
 		$data = array();
 
 		foreach ( $this->columns as $key => $field ) {
@@ -192,6 +192,9 @@ class P2P_Box {
 				'content' => $field->render( $key, $p2p_id, $post_id )
 			);
 		}
+
+		if ( !$render )
+			return $data;
 
 		return P2P_Mustache::render( 'table-row', $data );
 	}
@@ -290,7 +293,7 @@ class P2P_Box {
 		$p2p_id = $this->ctype->lose_direction()->connect( $from, $to );
 
 		if ( $p2p_id )
-			echo $this->connection_row( $p2p_id, $to );
+			echo $this->connection_row( $p2p_id, $to, true );
 
 		die;
 	}
