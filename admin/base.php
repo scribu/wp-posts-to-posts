@@ -16,13 +16,22 @@ class P2P_Box_Factory {
 	/**
 	 * Add all the metaboxes.
 	 */
-	static function add_meta_boxes( $from ) {
-		foreach ( P2P_Connection_Type::get() as $ctype_id => $args ) {
-			$box = self::make_box( $ctype_id, $from );
+	static function add_meta_boxes( $post_type ) {
+		foreach ( P2P_Connection_Type::get() as $ctype_id => $ctype ) {
+			$box = self::make_box( $ctype_id, $post_type );
 			if ( !$box )
 				continue;
 
 			$box->register();
+
+			if ( $ctype->indeterminate ) {
+				$metabox_args = $ctype->_metabox_args;
+
+				if ( 'any' == $metabox_args->show_ui ) {
+					$other_box = new P2P_Box( $metabox_args, $ctype->set_direction( 'to' ), $post_type );
+					$other_box->register( 'p2p-other-connections-' );
+				}
+			}
 		}
 	}
 
@@ -76,19 +85,17 @@ class P2P_Box_Factory {
 		if ( !$ctype )
 			return false;
 
-		$directed = $ctype->find_direction( $post_type );
-		if ( !$directed )
-			return false;
-
 		if ( !isset( $ctype->_metabox_args ) )
 			return false;
 
-		$metabox_args = $ctype->_metabox_args;
-
-		if ( !( $metabox_args->show_ui == 'any' || $metabox_args->show_ui == $directed->get_direction() ) )
+		$direction = $ctype->can_have_connections( $post_type );
+		if ( !$direction )
 			return false;
 
-		return new P2P_Box( $metabox_args, $directed, $post_type );
+		if ( $ctype->indeterminate )
+			$direction = 'from';
+
+		return new P2P_Box( $ctype->_metabox_args, $ctype->set_direction( $direction ), $post_type );
 	}
 }
 

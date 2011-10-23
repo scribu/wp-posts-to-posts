@@ -49,7 +49,7 @@ class P2P_Box {
 		return $ptype;
 	}
 
-	public function register() {
+	public function register( $prefix = 'p2p-connections-' ) {
 		$title = $this->ctype->get_title();
 
 		if ( empty( $title ) ) {
@@ -57,7 +57,7 @@ class P2P_Box {
 		}
 
 		add_meta_box(
-			'p2p-connections-' . $this->ctype->id,
+			$prefix . $this->ctype->id,
 			$title,
 			array( $this, 'render' ),
 			$this->current_ptype,

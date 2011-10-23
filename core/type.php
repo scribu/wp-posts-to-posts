@@ -80,13 +80,13 @@ class P2P_Connection_Type {
 	}
 
 	/**
-	 * Attempt to guess direction based on a post id or post type.
+	 * Check if a certain post or post type could have connections of this type.
 	 *
 	 * @param int|string $arg A post id or a post type.
 	 *
-	 * @return bool|object False on failure, P2P_Directed_Connection_Type instance on success.
+	 * @return bool|string False on failure, direction on success.
 	 */
-	public function find_direction( $arg ) {
+	public function can_have_connections( $arg ) {
 		if ( $post_id = (int) $arg ) {
 			$post = get_post( $post_id );
 			if ( !$post )
@@ -104,10 +104,7 @@ class P2P_Connection_Type {
 			$direction = false;
 		}
 
-		if ( !$direction )
-			return false;
-
-		return $this->set_direction( $direction );
+		return $direction;
 	}
 
 	/**
@@ -123,6 +120,21 @@ class P2P_Connection_Type {
 		}
 
 		return new P2P_Directed_Connection_Type( $this, $direction );
+	}
+
+	/**
+	 * Attempt to guess direction based on a post id or post type.
+	 *
+	 * @param int|string $arg A post id or a post type.
+	 *
+	 * @return bool|object False on failure, P2P_Directed_Connection_Type instance on success.
+	 */
+	public function find_direction( $arg ) {
+		$direction = $this->can_have_connections( $arg );
+		if ( !$direction )
+			return false;
+
+		return $this->set_direction( $direction );
 	}
 
 	/**
