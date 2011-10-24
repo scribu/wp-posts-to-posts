@@ -34,7 +34,7 @@ class P2P_Widget extends scbWidget {
 		if ( !is_singular() )
 			return;
 
-		$ctype = P2P_Connection_Type::get_instance( $instance['ctype'] );
+		$ctype = p2p_type( $instance['ctype'] );
 		if ( !$ctype )
 			return;
 
