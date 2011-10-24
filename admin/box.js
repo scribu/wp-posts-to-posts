@@ -55,8 +55,7 @@
         $self = jQuery(ev.target);
         $td = $self.closest('td');
         data = {
-          subaction: 'clear_connections',
-          post_id: jQuery('#post_ID').val()
+          subaction: 'clear_connections'
         };
         row_ajax_request($td, data, function(response){
           $connections.hide().find('tbody').html('');
@@ -137,7 +136,6 @@
           this.tab.delegate('.p2p-prev, .p2p-next', 'click', __bind(this, this.change_page));
           this.data = {
             subaction: 'search',
-            post_id: jQuery('#post_ID').val(),
             s: ''
           };
         }

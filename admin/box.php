@@ -302,13 +302,13 @@ class P2P_Box {
 	}
 
 	public function ajax_clear_connections() {
-		$this->ctype->disconnect_all( $_POST['post_id'] );
+		$this->ctype->disconnect_all( $_POST['from'] );
 
 		die(1);
 	}
 
 	public function ajax_search() {
-		$rows = $this->post_rows( $_GET['post_id'], $_GET['paged'], $_GET['s'] );
+		$rows = $this->post_rows( $_GET['from'], $_GET['paged'], $_GET['s'] );
 
 		if ( $rows ) {
 			$results = compact( 'rows' );

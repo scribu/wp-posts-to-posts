@@ -61,7 +61,6 @@ jQuery ->
 
 			data =
 				subaction: 'clear_connections'
-				post_id: jQuery('#post_ID').val()
 
 			row_ajax_request $td, data, (response) ~>
 				$connections.hide()
@@ -159,7 +158,6 @@ jQuery ->
 
 				@data =
 					subaction: 'search'
-					post_id: jQuery('#post_ID').val()
 					s: ''
 
 			init_pagination_data: ->
