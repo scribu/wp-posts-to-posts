@@ -325,6 +325,11 @@ class P2P_Box {
 		if ( !$this->args->can_create_post )
 			return false;
 
+		$base_qv = ( 'from' == $this->ctype->get_direction() ) ? $this->ctype->to_query_vars : $this->ctype->from_query_vars;
+
+		if ( count( $base_qv ) > 1 )
+			return false;
+
 		$ptype = $this->ctype->get_other_post_type();
 
 		if ( count( $ptype ) > 1 )
