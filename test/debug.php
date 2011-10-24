@@ -71,7 +71,6 @@ class P2P_Debug {
 				'role' => 'Role',
 				'role_type' => array( 'title' => 'Role Type', 'values' => array( 'lead', 'secondary', 'episodic' ) ),
 			),
-			'cardinality' => 'one-to-many',
 			'sortable' => 'order',
 			'prevent_duplicates' => false,
 			'context' => 'advanced',
