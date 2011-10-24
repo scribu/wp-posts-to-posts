@@ -42,8 +42,8 @@ class P2P_Connection_Type {
 		return self::$instances[ $id ] = new P2P_Connection_Type( $args );
 	}
 
-	public function get( $hash = false ) {
-		if ( !$hash )
+	public function get( $hash = null ) {
+		if ( 0 == func_num_args() )
 			return self::$instances;
 
 		if ( isset( self::$instances[ $hash ] ) )
