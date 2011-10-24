@@ -106,12 +106,18 @@ class P2P_Connection_Type {
 	/**
 	 * Check if a certain post or post type could have connections of this type.
 	 *
-	 * @param int|string $arg A post id or a post type.
+	 * @param mixed $arg A post type, a post id or object or an array of post ids or objects.
 	 *
 	 * @return bool|string False on failure, direction on success.
 	 */
 	public function can_have_connections( $arg ) {
-		if ( $post_id = (int) $arg ) {
+		if ( is_array( $arg ) ) {
+			$arg = reset( $arg );
+		}
+
+		if ( is_object( $arg ) ) {
+			$post_type = $arg->post_type;
+		} elseif ( $post_id = (int) $arg ) {
 			$post = get_post( $post_id );
 			if ( !$post )
 				return false;
