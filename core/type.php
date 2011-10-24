@@ -167,10 +167,11 @@ class P2P_Connection_Type {
 	 * Attempt to guess direction based on a post id or post type.
 	 *
 	 * @param int|string $arg A post id or a post type.
+	 * @param bool Whether to return an instance of P2P_Directed_Connection_Type or just the direction
 	 *
-	 * @return bool|object False on failure, P2P_Directed_Connection_Type instance on success.
+	 * @return bool|object|string False on failure, P2P_Directed_Connection_Type instance or direction on success.
 	 */
-	public function find_direction( $arg ) {
+	public function find_direction( $arg, $instantiate = true ) {
 		$post_type = $this->find_post_type( $arg );
 		if ( !$post_type )
 			return false;
@@ -182,7 +183,10 @@ class P2P_Connection_Type {
 		if ( $this->indeterminate )
 			$direction = $this->reciprocal ? 'any' : 'from';
 
-		return $this->set_direction( $direction );
+		if ( $instantiate )
+			return $this->set_direction( $direction );
+
+		return $direction;
 	}
 
 	/**
