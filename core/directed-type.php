@@ -66,8 +66,12 @@ class P2P_Directed_Connection_Type {
 		return $title;
 	}
 
+	public function get_current_post_type() {
+		return 'to' == $this->direction ? $this->to : $this->from;
+	}
+
 	public function get_other_post_type() {
-		return 'from' == $this->direction ? $this->to : $this->from;
+		return 'to' == $this->direction ? $this->from : $this->to;
 	}
 
 	public function is_sortable() {

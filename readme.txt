@@ -45,6 +45,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 == Changelog ==
 
 = [next] =
+* widget can now list related posts
 * add P2P_Connection_Type::get_related() method
 * add 'can_create_post' arg to p2p_register_connection_type()
 * two-box mode for `'reciprocal' => false`

@@ -4,6 +4,7 @@ class P2P_Widget extends scbWidget {
 
 	protected $defaults = array(
 		'ctype' => false,
+		'listing' => 'connected'
 	);
 
 	static function init( $file ) {
@@ -22,31 +23,56 @@ class P2P_Widget extends scbWidget {
 
 		$ctypes = array_map( array( __CLASS__, 'ctype_label' ), P2P_Connection_Type::get() );
 
-		echo $this->input( array(
+		echo html( 'p', $this->input( array(
 			'type' => 'select',
 			'name' => 'ctype',
 			'values' => $ctypes,
 			'desc' => __( 'Connection type:', P2P_TEXTDOMAIN )
-		), $instance );
+		), $instance ) );
+
+		echo html( 'p',
+			__( 'Connection listing:', P2P_TEXTDOMAIN ),
+			'<br>',
+			$this->input( array(
+				'type' => 'radio',
+				'name' => 'listing',
+				'values' => array(
+					'connected' => __( 'connected', P2P_TEXTDOMAIN ),
+					'related' => __( 'related', P2P_TEXTDOMAIN )
+				),
+			), $instance )
+		);
 	}
 
 	function widget( $args, $instance ) {
 		if ( !is_singular() )
 			return;
 
+		$instance = array_merge( $this->defaults, $instance );
+
+		$post_id = get_queried_object_id();
+
 		$ctype = p2p_type( $instance['ctype'] );
 		if ( !$ctype )
 			return;
 
-		$directed = $ctype->find_direction( get_queried_object_id() );
+		$directed = $ctype->find_direction( $post_id );
 		if ( !$directed )
 			return;
 
-		$connected = $directed->get_connected( get_queried_object_id() );
+		if ( 'related' == $instance['listing'] ) {
+			$connected = $ctype->get_related( $post_id );
+			$title = sprintf(
+				__( 'Related %s', P2P_TEXTDOMAIN ),
+				_p2p_get_ptype_label( $directed->get_current_post_type() )
+			);
+		} else {
+			$connected = $directed->get_connected( $post_id );
+			$title = $directed->get_title();
+		}
+
 		if ( !$connected->have_posts() )
 			return;
-
-		$title = $directed->get_title();
 
 		$title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
 
