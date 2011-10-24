@@ -48,11 +48,6 @@ class P2P_Widget extends scbWidget {
 
 		$title = $directed->get_title();
 
-		if ( empty( $title ) ) {
-			$ptype = get_post_type_object( $directed->get_other_post_type() );
-			$title = sprintf( __( 'Related %s', P2P_TEXTDOMAIN ), $ptype->label );
-		}
-
 		$title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
 
 		extract( $args );
