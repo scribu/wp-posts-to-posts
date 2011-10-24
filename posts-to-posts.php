@@ -26,7 +26,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-define( 'P2P_PLUGIN_VERSION', '0.9.5' );
+define( 'P2P_PLUGIN_VERSION', '0.9.6-alpha' );
 
 define( 'P2P_TEXTDOMAIN', 'posts-to-posts' );
 
