@@ -260,6 +260,31 @@ class P2P_Connection_Type {
 	}
 
 	/**
+	 * Get a list of posts connected to other posts connected to a post.
+	 *
+	 * @param int|array $post_id A post id or array of post ids
+	 * @param array $extra_qv Additional query variables to use.
+	 *
+	 * @return bool|object False on failure; A WP_Query instance on success.
+	 */
+	function get_related( $post_id, $extra_qv = array() ) {
+		$post_id = (array) $post_id;
+
+		$connected = $this->get_connected( $post_id, $extra_qv );
+		if ( !$connected )
+			return false;
+
+		if ( !$connected->have_posts() )
+			return $connected;
+
+		$connected_ids = wp_list_pluck( $connected->posts, 'ID' );
+
+		return $this->get_connected( $connected_ids, array(
+			'post__not_in' => $post_id,
+		) );
+	}
+
+	/**
 	 * Get a list of posts that could be connected to a given post.
 	 *
 	 * @param int $post_id A post id.
