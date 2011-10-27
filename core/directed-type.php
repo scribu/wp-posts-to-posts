@@ -127,7 +127,9 @@ class P2P_Directed_Connection_Type {
 		}
 
 		if ( !empty( $connected ) ) {
-			_p2p_append( $args['post__not_in'], $connected );
+			$args = array_merge_recursive( $args, array(
+				'post__not_in' => $connected
+			) );
 		}
 
 		$args = apply_filters( 'p2p_connectable_args', $args, $this );
