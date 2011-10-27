@@ -130,16 +130,29 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertFalse( $ctype->get_p2p_id( $actor_id, $movie_id ) );
 	}
 
-	// users should be able to specify a different order and/or connected meta
 	function test_extra_qv() {
-		$directed = p2p_type( 'normal' )->set_direction( 'from' );
+		$ctype = p2p_register_connection_type( array(
+			'from' => 'post',
+			'to' => 'page',
+			'data' => array(
+				'type' => 'strong'
+			),
+			'sortable',
+		) );
 
+		$directed = $ctype->set_direction( 'to' );
+
+		// users should be able to filter connections via additional connected meta
+		$query = $directed->get_connected( 1, array(
+			'connected_meta' => array( 'foo' => 'bar' )
+		) );
+
+		$this->assertEquals( $query->get( 'connected_meta' ), array_merge( $ctype->data, array( 'foo' => 'bar' ) ) );
+
+		// users should be able to specify a different order
 		$extra_qv = array(
 			'connected_orderby' => 'foo',
 			'connected_order' => 'desc',
-			'connected_meta' => array(
-				'foo' => 'bar'
-			)
 		);
 
 		$query = $directed->get_connected( 1, $extra_qv );
