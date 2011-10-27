@@ -89,19 +89,22 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$this->assertFalse( $ctype->find_direction( 'post' ) );
 
-		// reflexive
-		$reflexive = p2p_register_connection_type( 'actor', 'actor' );
-		$this->assertInstanceOf( 'P2P_Connection_Type', $reflexive );
+		// indeterminate
+		$indeterminate = p2p_register_connection_type( 'actor', 'actor' );
+		$this->assertInstanceOf( 'P2P_Connection_Type', $indeterminate );
 
-		$this->assertEquals( 'any', $reflexive->find_direction( 'actor' )->get_direction() );
+		$this->assertFalse( $indeterminate->find_direction( 'post' ) );
+		$this->assertEquals( 'from', $indeterminate->find_direction( 'actor' )->get_direction() );
 
-		$this->assertFalse( $reflexive->find_direction( 'post' ) );
+		// reciprocal
+		$reciprocal = p2p_register_connection_type( array(
+			'from' => 'movie',
+			'to' => 'movie',
+			'reciprocal' => true
+		) );
+		$this->assertInstanceOf( 'P2P_Connection_Type', $reciprocal );
 
-		// reflexive, but not reciprocal
-		$reflexive = p2p_register_connection_type( array( 'from' => 'movie', 'to' => 'movie', 'indeterminate_direction' => 'from' ) );
-		$this->assertInstanceOf( 'P2P_Connection_Type', $reflexive );
-
-		$this->assertEquals( 'from', $reflexive->find_direction( 'movie' )->get_direction() );
+		$this->assertEquals( 'any', $reciprocal->find_direction( 'movie' )->get_direction() );
 	}
 
 	function test_each_connected() {
@@ -162,7 +165,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertFalse( $ctype->get_p2p_id( $actor_id, $movie_id ) );
 	}
 
-	function test_buckets() {
+	function test_split_posts() {
 		$ctype = p2p_type( 'normal' );
 
 		$actor_id = $this->generate_post( 'actor' );
