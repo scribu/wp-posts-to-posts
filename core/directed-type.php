@@ -88,19 +88,17 @@ class P2P_Directed_Connection_Type {
 	}
 
 	public function get_connected( $post_id, $extra_qv = array() ) {
-		$args = array();
-
 		if ( $this->is_sortable() ) {
-			$args = array(
+			$order_args = array(
 				'connected_orderby' => $this->sortable,
 				'connected_order' => 'ASC',
 				'connected_order_num' => true,
 			);
+		} else {
+			$order_args = array();
 		}
 
-		_p2p_append( $args, $extra_qv );
-
-		_p2p_append( $args, $this->get_base_qv() );
+		$args = array_merge( $order_args, $extra_qv, $this->get_base_qv() );
 
 		// don't completely overwrite 'connected_meta', but ensure that $this->data is added
 		$args = array_merge_recursive( $args, array(
