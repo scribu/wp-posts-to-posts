@@ -1,6 +1,6 @@
 <?php
 
-class P2P_Storage {
+abstract class P2P_Storage {
 
 	private static $version = 3;
 
