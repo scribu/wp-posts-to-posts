@@ -1,6 +1,9 @@
 <?php
 
-abstract class P2P_Storage {
+class P2P_Storage {
+
+	// Use P2P_Connection_Type
+	private function __construct() {}
 
 	private static $version = 3;
 
