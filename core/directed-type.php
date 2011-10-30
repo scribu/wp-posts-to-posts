@@ -74,8 +74,15 @@ class P2P_Directed_Connection_Type {
 		return 'to' == $this->direction ? $this->from : $this->to;
 	}
 
-	public function is_sortable() {
-		return $this->sortable && 'from' == $this->direction;
+	public function get_sortby_field() {
+		if ( !$this->sortable || 'any' == $this->direction )
+			return false;
+
+		if ( 'any' == $this->sortable || $this->direction == $this->sortable )
+			return '_order_' . $this->direction;
+
+		if ( 'from' == $this->direction )
+			return $this->sortable;
 	}
 
 	private function get_base_qv() {
@@ -88,9 +95,9 @@ class P2P_Directed_Connection_Type {
 	}
 
 	public function get_connected( $post_id, $extra_qv = array() ) {
-		if ( $this->is_sortable() ) {
+		if ( $sortby = $this->get_sortby_field() ) {
 			$order_args = array(
-				'connected_orderby' => $this->sortable,
+				'connected_orderby' => $sortby,
 				'connected_order' => 'ASC',
 				'connected_order_num' => true,
 			);

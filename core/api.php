@@ -25,7 +25,7 @@
  *
  * - 'prevent_duplicates' - bool Whether to disallow duplicate connections between the same two posts. Default: true.
  *
- * - 'sortable' - string A custom field key used to add a special column that allows manual connection ordering. Default: false.
+ * - 'sortable' - bool|string Whether to allow connections to be ordered via drag-and-drop. Can be 'from', 'to', 'any' or false. Default: false.
  *
  * - 'title' - string|array The box's title. Default: 'Connected {$post_type}s'
  *
