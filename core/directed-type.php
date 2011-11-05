@@ -117,7 +117,7 @@ class P2P_Directed_Connection_Type {
 			'direction' => $this->direction
 		);
 
-		$args = apply_filters( 'p2p_connected_args', $args, $this );
+		$args = apply_filters( 'p2p_connected_args', $args, $this, $post_id );
 
 		return new WP_Query( $args );
 	}
@@ -137,7 +137,7 @@ class P2P_Directed_Connection_Type {
 			) );
 		}
 
-		$args = apply_filters( 'p2p_connectable_args', $args, $this );
+		$args = apply_filters( 'p2p_connectable_args', $args, $this, $post_id );
 
 		return new WP_Query( $args );
 	}
