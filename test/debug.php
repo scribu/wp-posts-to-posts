@@ -102,23 +102,6 @@ class P2P_Debug {
 		p2p_register_connection_type( array( 'actor', 'post' ), array( 'page', 'movie' ), true );
 	}
 
-	function test_ordering() {
-		$query = new WP_Query( array(
-			'connected' => $actor_ids[0],
-			'post_type' => 'movie',
-			'post_status' => 'any',
-			'nopaging' => true,
-
-			'connected_meta' => array( 'foo' => 'bar' ),
-
-			'connected_orderby' => 'role',
-			'connected_order_num' => true,
-			'connected_order' => 'asc'
-		) );
-
-		self::walk( $posts );
-	}
-
 	private function walk( $posts, $level = 0 ) {
 		if ( !isset( $_GET['p2p_debug'] ) )
 			return;
