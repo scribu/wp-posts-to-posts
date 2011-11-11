@@ -126,15 +126,17 @@ class P2P_Field_Generic implements P2P_Field {
 			array( 'p2p_meta', $p2p_id )
 		);
 
-		$args = array(
-			'type' => 'text',
-			'name' => $key
-		);
+		$args = array( 'name' => $key );
 
-		if ( isset( $this->data['values'] ) ) {
-			$args['type'] = 'select';
+		if ( isset( $this->data['values'] ) )
 			$args['value'] = $this->data['values'];
-		}
+
+		if ( isset( $this->data['type'] ) )
+			$args['type'] = $this->data['type'];
+		elseif ( isset( $args['value'] ) && is_array( $args['value'] ) )
+			$args['type'] = 'select';
+		else
+			$args['type'] = 'text';
 
 		return $form->input( $args );
 	}
