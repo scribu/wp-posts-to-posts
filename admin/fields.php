@@ -84,7 +84,7 @@ class P2P_Field_Title implements P2P_Field {
 
 	function render( $key, $p2p_id, $post_id ) {
 		$data = array(
-			'title-attr' => get_post_type_object( get_post_type( $post_id ) )->labels->edit_item,
+			'title-attr' => get_permalink( $post_id ),
 			'title' => get_post_field( 'post_title', $post_id ),
 			'url' => get_edit_post_link( $post_id ),
 		);
