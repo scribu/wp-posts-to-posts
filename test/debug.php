@@ -69,7 +69,17 @@ class P2P_Debug {
 			'to' => 'movie',
 			'fields' => array(
 				'role' => 'Role',
-				'role_type' => array( 'title' => 'Role Type', 'values' => array( 'lead', 'secondary', 'episodic' ) ),
+				'role_type' => array(
+					'title' => 'Role Type',
+					'values' => array( 'lead', 'secondary', 'episodic' )
+				),
+				'display' => array(
+					'title' => 'Display strength',
+					'type' => 'checkbox',
+					'values' => array(
+						true => 'yes'
+					)
+				),
 			),
 			'sortable' => 'any',
 			'prevent_duplicates' => false,
