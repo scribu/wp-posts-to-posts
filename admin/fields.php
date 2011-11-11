@@ -109,10 +109,8 @@ class P2P_Field_Generic implements P2P_Field {
 
 	protected $data;
 
-	function __construct( $data ) {
-		if ( !is_array( $data ) )
-			$data = array( 'title' => $data );
-
+	function __construct( $data, $ctype_id ) {
+		$this->ctype_id = $ctype_id;
 		$this->data = $data;
 	}
 
@@ -121,22 +119,20 @@ class P2P_Field_Generic implements P2P_Field {
 	}
 
 	function render( $key, $p2p_id, $post_id ) {
-		$form = new scbForm(
-			array( $key => p2p_get_meta( $p2p_id, $key, true ) ),
-			array( 'p2p_meta', $p2p_id )
+		$args = array(
+			'name' => $key,
+			'type' => $this->data['type']
 		);
-
-		$args = array( 'name' => $key );
 
 		if ( isset( $this->data['values'] ) )
 			$args['value'] = $this->data['values'];
 
-		if ( isset( $this->data['type'] ) )
-			$args['type'] = $this->data['type'];
-		elseif ( isset( $args['value'] ) && is_array( $args['value'] ) )
-			$args['type'] = 'select';
-		else
-			$args['type'] = 'text';
+		$single_value = ( 'checkbox' != $args['type'] );
+
+		$form = new scbForm(
+			array( $key => p2p_get_meta( $p2p_id, $key, $single_value ) ),
+			array( 'p2p_meta', $this->ctype_id, $p2p_id )
+		);
 
 		return $form->input( $args );
 	}

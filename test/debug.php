@@ -73,11 +73,15 @@ class P2P_Debug {
 					'title' => 'Role Type',
 					'values' => array( 'lead', 'secondary', 'episodic' )
 				),
-				'display' => array(
-					'title' => 'Display strength',
+				'single_checkbox' => array(
+					'title' => 'Ya?',
+					'type' => 'checkbox',
+				),
+				'color' => array(
+					'title' => 'Color',
 					'type' => 'checkbox',
 					'values' => array(
-						true => 'yes'
+						'white', 'red', 'green', 'blue'
 					)
 				),
 			),

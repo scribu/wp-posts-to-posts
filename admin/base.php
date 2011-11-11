@@ -60,9 +60,30 @@ class P2P_Box_Factory {
 
 		// Custom fields
 		if ( isset( $_POST['p2p_meta'] ) ) {
-			foreach ( $_POST['p2p_meta'] as $p2p_id => $data ) {
-				foreach ( $data as $key => $value ) {
-					p2p_update_meta( $p2p_id, $key, $value );
+			foreach ( $_POST['p2p_meta'] as $ctype_id => $data ) {
+				$ctype = p2p_type( $ctype_id );
+				if ( !$ctype )
+					continue;
+
+				foreach ( $data as $p2p_id => $data ) {
+					foreach ( $ctype->_metabox_args->fields as $key => $field_args ) {
+						if ( 'checkbox' == $field_args['type'] ) {
+							if ( isset( $data[$key] ) )
+								$new_values = $data[$key];
+							else
+								$new_values = array();
+
+							$old_values = p2p_get_meta( $p2p_id, $key );
+
+							foreach ( array_diff( $new_values, $old_values ) as $value )
+								p2p_add_meta( $p2p_id, $key, $value );
+
+							foreach ( array_diff( $old_values, $new_values ) as $value )
+								p2p_delete_meta( $p2p_id, $key, $value );
+						} else {
+							p2p_update_meta( $p2p_id, $key, $data[$key] );
+						}
+					}
 				}
 			}
 		}

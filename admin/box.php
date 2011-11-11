@@ -82,7 +82,7 @@ class P2P_Box {
 		);
 
 		foreach ( $this->args->fields as $key => $data ) {
-			$this->columns[ $key ] = new P2P_Field_Generic( $data );
+			$this->columns[ $key ] = new P2P_Field_Generic( $data, $this->ctype->id );
 		}
 
 		if ( $sortby = $this->ctype->get_sortby_field() ) {

@@ -71,10 +71,33 @@ function p2p_register_connection_type( $args ) {
 	}
 	unset( $value );
 
-	if ( $metabox_args['show_ui'] )
+	if ( is_admin() && $metabox_args['show_ui'] ) {
+		foreach ( $metabox_args['fields'] as &$field_args ) {
+			if ( !is_array( $field_args ) )
+				$field_args = array( 'title' => $field_args );
+
+			$field_args['type'] = _p2p_get_field_type( $field_args );
+
+			if ( 'checkbox' == $field_args['type'] && !isset( $field_args['values'] ) )
+				$field_args['values'] = array( true => ' ' );
+		}
 		$args['_metabox_args'] = (object) $metabox_args;
+	}
 
 	return P2P_Connection_Type::register( $args );
+}
+
+/**
+ * @internal
+ */
+function _p2p_get_field_type( $args ) {
+	if ( isset( $args['type'] ) )
+		return $args['type'];
+
+	if ( isset( $args['values'] ) && is_array( $args['values'] ) )
+		return 'select';
+
+	return 'text';
 }
 
 /**
