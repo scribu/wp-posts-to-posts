@@ -74,17 +74,6 @@ class P2P_Directed_Connection_Type {
 		return 'to' == $this->direction ? $this->from : $this->to;
 	}
 
-	public function get_sortby_field() {
-		if ( !$this->sortable || 'any' == $this->direction )
-			return false;
-
-		if ( 'any' == $this->sortable || $this->direction == $this->sortable )
-			return '_order_' . $this->direction;
-
-		if ( 'from' == $this->direction )
-			return $this->sortable;
-	}
-
 	private function get_base_qv() {
 		$base_qv = ( 'from' == $this->direction ) ? $this->to_query_vars : $this->from_query_vars;
 
@@ -95,17 +84,7 @@ class P2P_Directed_Connection_Type {
 	}
 
 	public function get_connected( $post_id, $extra_qv = array() ) {
-		if ( $sortby = $this->get_sortby_field() ) {
-			$order_args = array(
-				'connected_orderby' => $sortby,
-				'connected_order' => 'ASC',
-				'connected_order_num' => true,
-			);
-		} else {
-			$order_args = array();
-		}
-
-		$args = array_merge( $order_args, $extra_qv, $this->get_base_qv() );
+		$args = array_merge( $extra_qv, $this->get_base_qv() );
 
 		// don't completely overwrite 'connected_meta', but ensure that $this->data is added
 		$args = array_merge_recursive( $args, array(
@@ -127,7 +106,7 @@ class P2P_Directed_Connection_Type {
 
 		if ( 'one' == $this->other_cardinality ) {
 			$connected = $this->get_connected( 'any', array( 'fields' => 'ids' ) )->posts;
-		} else if ( $this->prevent_duplicates ) {
+		} elseif ( $this->prevent_duplicates ) {
 			$connected = $this->get_connected( $post_id, array( 'fields' => 'ids' ) )->posts;
 		}
 

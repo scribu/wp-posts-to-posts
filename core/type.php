@@ -162,7 +162,12 @@ class P2P_Connection_Type {
 		if ( !in_array( $direction, array( 'from', 'to', 'any' ) ) )
 			return false;
 
-		return new P2P_Directed_Connection_Type( $this, $direction );
+		if ( $this->sortable && 'any' != $direction )
+			$class = 'P2P_Ordered_Connection_Type';
+		else
+			$class = 'P2P_Directed_Connection_Type';
+
+		return new $class( $this, $direction );
 	}
 
 	/**
