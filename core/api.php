@@ -135,7 +135,8 @@ function p2p_split_posts( $posts, $key ) {
 	$buckets = array();
 
 	foreach ( $posts as $post ) {
-		$buckets[ p2p_get_meta( $post->p2p_id, $key, true ) ][] = $post;
+		$value = p2p_get_meta( $post->p2p_id, $key, true );
+		$buckets[ $value ][] = $post;
 	}
 
 	return $buckets;
