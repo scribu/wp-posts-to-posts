@@ -105,15 +105,19 @@ class P2P_Directed_Connection_Type {
 		$args = array_merge( $this->get_base_qv(), $extra_qv );
 
 		if ( 'one' == $this->other_cardinality ) {
-			$connected = $this->get_connected( 'any', array( 'fields' => 'ids' ) )->posts;
+			$to_check = 'any';
 		} elseif ( $this->prevent_duplicates ) {
-			$connected = $this->get_connected( $post_id, array( 'fields' => 'ids' ) )->posts;
+			$to_check = $post_id;
 		}
 
-		if ( !empty( $connected ) ) {
-			$args = array_merge_recursive( $args, array(
-				'post__not_in' => $connected
-			) );
+		if ( isset( $to_check ) ) {
+			$connected = $this->get_connected( $to_check, array( 'fields' => 'ids' ) )->posts;
+
+			if ( !empty( $connected ) ) {
+				$args = array_merge_recursive( $args, array(
+					'post__not_in' => $connected
+				) );
+			}
 		}
 
 		$args = apply_filters( 'p2p_connectable_args', $args, $this, $post_id );
