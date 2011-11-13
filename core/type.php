@@ -162,12 +162,23 @@ class P2P_Connection_Type {
 		if ( !in_array( $direction, array( 'from', 'to', 'any' ) ) )
 			return false;
 
-		if ( $this->sortable && 'any' != $direction )
-			$class = 'P2P_Ordered_Connection_Type';
-		else
-			$class = 'P2P_Directed_Connection_Type';
+		if ( $orderby_key = $this->get_orderby_key( $direction ) )
+			return new P2P_Ordered_Connection_Type( $this, $direction, $orderby_key );
 
-		return new $class( $this, $direction );
+		return new P2P_Directed_Connection_Type( $this, $direction );
+	}
+
+	protected function get_orderby_key( $direction ) {
+		if ( !$this->sortable || 'any' == $direction )
+			return false;
+
+		if ( 'any' == $this->sortable || $direction == $this->sortable )
+			return '_order_' . $direction;
+
+		if ( 'from' == $direction )
+			return $this->sortable;
+
+		return false;
 	}
 
 	/**

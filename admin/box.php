@@ -85,8 +85,8 @@ class P2P_Box {
 			$this->columns[ $key ] = new P2P_Field_Generic( $data, $this->ctype->id );
 		}
 
-		if ( method_exists( $this->ctype, 'get_orderby_field' ) ) {
-			$this->columns['order'] = new P2P_Field_Order( $this->ctype->get_orderby_field() );
+		if ( method_exists( $this->ctype, 'get_orderby_key' ) ) {
+			$this->columns['order'] = new P2P_Field_Order( $this->ctype->get_orderby_key() );
 		}
 	}
 
