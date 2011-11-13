@@ -17,7 +17,7 @@ class P2P_Box_Factory {
 	 * Add all the metaboxes.
 	 */
 	static function add_meta_boxes( $post_type ) {
-		foreach ( P2P_Connection_Type::get() as $ctype_id => $ctype ) {
+		foreach ( P2P_Connection_Type::get_all_instances() as $ctype_id => $ctype ) {
 			$directed = $ctype->find_direction( $post_type );
 			if ( !$directed )
 				continue;

@@ -42,10 +42,11 @@ class P2P_Connection_Type {
 		return self::$instances[ $id ] = new P2P_Connection_Type( $args );
 	}
 
-	public function get( $hash = null ) {
-		if ( 0 == func_num_args() )
-			return self::$instances;
+	public function get_all_instances() {
+		return self::$instances;
+	}
 
+	public function get_instance( $hash ) {
 		if ( isset( self::$instances[ $hash ] ) )
 			return self::$instances[ $hash ];
 

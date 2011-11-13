@@ -21,7 +21,7 @@ class P2P_Widget extends scbWidget {
 		if ( empty( $instance ) )
 			$instance = $this->defaults;
 
-		$ctypes = array_map( array( __CLASS__, 'ctype_label' ), P2P_Connection_Type::get() );
+		$ctypes = array_map( array( __CLASS__, 'ctype_label' ), P2P_Connection_Type::get_all_instances() );
 
 		echo html( 'p', $this->input( array(
 			'type' => 'select',

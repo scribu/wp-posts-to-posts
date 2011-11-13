@@ -108,7 +108,7 @@ function _p2p_get_field_type( $args ) {
  * @return bool|object False if connection type not found, P2P_Connection_Type instance on success.
  */
 function p2p_type( $id ) {
-	return P2P_Connection_Type::get( $id );
+	return P2P_Connection_Type::get_instance( $id );
 }
 
 /**
