@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.2
 Tested up to: 3.3
-Stable tag: 0.9.5
+Stable tag: 1.0
 
 Create connections between posts
 
@@ -45,12 +45,16 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
-= [next] =
+= 1.0 =
 * widget can now list related posts
 * add P2P_Connection_Type::get_related() method
 * add 'can_create_post' arg to p2p_register_connection_type()
 * two-box mode for `'reciprocal' => false`
 * more options for 'show_ui'
+* allow checkboxes, radio buttons and textareas as connection fields
+* allow drag & drop ordering in both directions
+* added get_previous(), get_next() and get_adjacent() methods to P2P_Connection_Type
+* [more info](http://scribu.net/wordpress/posts-to-posts/p2p-1-0.html)
 
 = 0.9.5 =
 * add '{from|to}_query_vars' args to p2p_register_connection_type()
