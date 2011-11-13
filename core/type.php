@@ -101,8 +101,16 @@ class P2P_Connection_Type {
 		return $this->args[$key];
 	}
 
-	function __isset( $key ) {
+	public function __isset( $key ) {
 		return isset( $this->args[$key] );
+	}
+
+	public function __call( $method, $args ) {
+		$directed = $this->find_direction( $args[0] );
+		if ( !$directed )
+			return false;
+
+		return call_user_func_array( array( $directed, $method ), $args );
 	}
 
 	/**
@@ -168,7 +176,7 @@ class P2P_Connection_Type {
 		return new P2P_Directed_Connection_Type( $this, $direction );
 	}
 
-	protected function get_orderby_key( $direction ) {
+	private function get_orderby_key( $direction ) {
 		if ( !$this->sortable || 'any' == $direction )
 			return false;
 
@@ -266,22 +274,6 @@ class P2P_Connection_Type {
 	}
 
 	/**
-	 * Get a list of posts that are connected to a given post.
-	 *
-	 * @param int|array $post_id A post id or an array of post ids.
-	 * @param array $extra_qv Additional query variables to use.
-	 *
-	 * @return bool|object False on failure; A WP_Query instance on success.
-	 */
-	public function get_connected( $post_id, $extra_qv = array() ) {
-		$directed = $this->find_direction( $post_id );
-		if ( !$directed )
-			return false;
-
-		return $directed->get_connected( $post_id, $extra_qv );
-	}
-
-	/**
 	 * Get a list of posts connected to other posts connected to a post.
 	 *
 	 * @param int|array $post_id A post id or array of post ids
@@ -307,79 +299,12 @@ class P2P_Connection_Type {
 	}
 
 	/**
-	 * Get a list of posts that could be connected to a given post.
-	 *
-	 * @param int $post_id A post id.
-	 * @param array $extra_qv Additional query variables to use.
-	 *
-	 * @return bool|object False on failure; A WP_Query instance on success.
-	 */
-	public function get_connectable( $post_id, $extra_qv = array() ) {
-		$directed = $this->find_direction( $post_id );
-		if ( !$directed )
-			return false;
-
-		return $directed->get_connectable( $post_id, $extra_qv );
-	}
-
-	/**
-	 * Connect two posts.
-	 *
-	 * @param int The first end of the connection.
-	 * @param int The second end of the connection.
-	 *
-	 * @return int p2p_id
-	 */
-	public function connect( $from, $to ) {
-		$directed = $this->find_direction( $from );
-		if ( !$directed )
-			return false;
-
-		return $directed->connect( $from, $to );
-	}
-
-	/**
-	 * Disconnect two posts.
-	 *
-	 * @param int The first end of the connection.
-	 * @param int The second end of the connection.
-	 */
-	public function disconnect( $from, $to ) {
-		$directed = $this->find_direction( $from );
-		if ( !$directed )
-			return false;
-
-		return $directed->disconnect( $from, $to );
-	}
-
-	/**
-	 * Delete all connections for a certain post.
-	 *
-	 * @param int The post id.
-	 */
-	public function disconnect_all( $from ) {
-		$directed = $this->find_direction( $from );
-		if ( !$directed )
-			return false;
-
-		return $directed->disconnect_all( $from );
-	}
-
-	/**
 	 * Delete a connection.
 	 *
 	 * @param int p2p_id
 	 */
 	public function delete_connection( $p2p_id ) {
 		return P2P_Storage::delete( $p2p_id );
-	}
-
-	public function get_p2p_id( $from, $to ) {
-		$directed = $this->find_direction( $from );
-		if ( !$directed )
-			return false;
-
-		return $directed->get_p2p_id( $from, $to );
 	}
 }
 

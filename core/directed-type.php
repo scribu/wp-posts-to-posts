@@ -83,6 +83,14 @@ class P2P_Directed_Connection_Type {
 		) );
 	}
 
+	/**
+	 * Get a list of posts that are connected to a given post.
+	 *
+	 * @param int|array $post_id A post id or an array of post ids.
+	 * @param array $extra_qv Additional query variables to use.
+	 *
+	 * @return bool|object False on failure; A WP_Query instance on success.
+	 */
 	public function get_connected( $post_id, $extra_qv = array() ) {
 		$args = array_merge( $extra_qv, $this->get_base_qv() );
 
@@ -101,6 +109,14 @@ class P2P_Directed_Connection_Type {
 		return new WP_Query( $args );
 	}
 
+	/**
+	 * Get a list of posts that could be connected to a given post.
+	 *
+	 * @param int $post_id A post id.
+	 * @param array $extra_qv Additional query variables to use.
+	 *
+	 * @return bool|object False on failure; A WP_Query instance on success.
+	 */
 	public function get_connectable( $post_id, $extra_qv = array() ) {
 		$args = array_merge( $this->get_base_qv(), $extra_qv );
 
@@ -134,6 +150,14 @@ class P2P_Directed_Connection_Type {
 		return false;
 	}
 
+	/**
+	 * Connect two posts.
+	 *
+	 * @param int The first end of the connection.
+	 * @param int The second end of the connection.
+	 *
+	 * @return int p2p_id
+	 */
 	public function connect( $from, $to ) {
 		if ( !get_post( $from ) || !get_post( $to ) )
 			return false;
@@ -162,10 +186,21 @@ class P2P_Directed_Connection_Type {
 		return $p2p_id;
 	}
 
+	/**
+	 * Disconnect two posts.
+	 *
+	 * @param int The first end of the connection.
+	 * @param int The second end of the connection.
+	 */
 	public function disconnect( $from, $to ) {
 		return P2P_Storage::delete( $this->get_p2p_id( $from, $to ) );
 	}
 
+	/**
+	 * Delete all connections for a certain post.
+	 *
+	 * @param int The post id.
+	 */
 	public function disconnect_all( $from ) {
 		$connected = $this->get_connected( $from );
 
