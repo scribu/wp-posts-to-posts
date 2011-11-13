@@ -64,31 +64,7 @@ class P2P_Connection_Type {
 		if ( !empty( $common ) )
 			$this->indeterminate = true;
 
-		$this->expand_title();
-	}
-
-	protected function expand_title() {
-		$title = $this->args['title'];
-
-		if ( !$title )
-			$title = array();
-
-		if ( $title && !is_array( $title ) ) {
-			$this->args['title'] = array(
-				'from' => $title,
-				'to' => $title,
-			);
-		} else {
-			foreach ( array( 'from', 'to' ) as $key ) {
-				if ( empty( $this->args['title'][$key] ) ) {
-					$other_key = ( 'from' == $key ) ? 'to' : 'from';
-					$this->args['title'][$key] = sprintf(
-						__( 'Connected %s', P2P_TEXTDOMAIN ),
-						P2P_Util::get_ptype_label( $this->$other_key )
-					);
-				}
-			}
-		}
+		$this->args['title'] = P2P_Util::expand_title( $this->args['title'], $this->from, $this->to );
 	}
 
 	public function __get( $key ) {
