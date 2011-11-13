@@ -84,7 +84,7 @@ class P2P_Connection_Type {
 					$other_key = ( 'from' == $key ) ? 'to' : 'from';
 					$this->args['title'][$key] = sprintf(
 						__( 'Connected %s', P2P_TEXTDOMAIN ),
-						_p2p_get_ptype_label( $this->$other_key )
+						P2P_Util::get_ptype_label( $this->$other_key )
 					);
 				}
 			}
@@ -222,7 +222,7 @@ class P2P_Connection_Type {
 	 *
 	 * @return bool|object False on failure; A WP_Query instance on success.
 	 */
-	function get_related( $post_id, $extra_qv = array() ) {
+	public function get_related( $post_id, $extra_qv = array() ) {
 		$post_id = (array) $post_id;
 
 		$connected = $this->get_connected( $post_id, $extra_qv );

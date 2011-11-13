@@ -57,7 +57,3 @@ function _p2p_load_files( $dir, $files ) {
 		require_once "$dir/$file.php";
 }
 
-function _p2p_get_ptype_label( $ptypes ) {
-	return get_post_type_object( $ptypes[0] )->labels->name;
-}
-

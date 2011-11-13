@@ -75,5 +75,9 @@ abstract class P2P_Util {
 
 		return false;
 	}
+
+	static function get_ptype_label( $ptypes ) {
+		return get_post_type_object( $ptypes[0] )->labels->name;
+	}
 }
 
