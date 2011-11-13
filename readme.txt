@@ -13,8 +13,9 @@ This plugin allows you to create many-to-many relationships between posts of any
 
 A few example use cases:
 
-* 'review' posts connected to 'product' posts
+* post series
 * manually curated lists of related posts
+* 'actor' posts connected to 'movie' posts
 
 etc.
 
