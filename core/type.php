@@ -170,21 +170,27 @@ class P2P_Connection_Type {
 		if ( !in_array( $direction, array( 'from', 'to', 'any' ) ) )
 			return false;
 
-		if ( $orderby_key = $this->get_orderby_key( $direction ) )
+		if ( $orderby_key = $this->get_orderby_key( $this->sortable, $direction ) )
 			return new P2P_Ordered_Connection_Type( $this, $direction, $orderby_key );
 
 		return new P2P_Directed_Connection_Type( $this, $direction );
 	}
 
-	private function get_orderby_key( $direction ) {
-		if ( !$this->sortable || 'any' == $direction )
+	/**
+	 * @param string The direction in which ordering is allowed
+	 * @param string The current direction
+	 *
+	 * @return bool|string False on failure, the connection field key otherwise
+	 */
+	private static function get_orderby_key( $ordering_direction, $connection_direction ) {
+		if ( !$ordering_direction || 'any' == $connection_direction )
 			return false;
 
-		if ( 'any' == $this->sortable || $direction == $this->sortable )
-			return '_order_' . $direction;
+		if ( 'any' == $ordering_direction || $connection_direction == $ordering_direction )
+			return '_order_' . $connection_direction;
 
-		if ( 'from' == $direction )
-			return $this->sortable;
+		if ( 'from' == $connection_direction )
+			return $ordering_direction;
 
 		return false;
 	}
