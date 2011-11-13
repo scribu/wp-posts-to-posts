@@ -18,37 +18,38 @@ class P2P_Box_Factory {
 	 */
 	static function add_meta_boxes( $post_type ) {
 		foreach ( P2P_Connection_Type::get_all_instances() as $ctype_id => $ctype ) {
-			$directed = $ctype->find_direction( $post_type );
-			if ( !$directed )
-				continue;
-
 			if ( !isset( $ctype->_metabox_args ) )
 				continue;
 
 			$metabox_args = $ctype->_metabox_args;
 
-			if ( $ctype->indeterminate && !$ctype->reciprocal ) {
-				if ( 'any' == $metabox_args->show_ui ) {
-					$dir = array( 'from', 'to' );
-					$two_boxes = true;
-				} else {
-					$dir = array( $metabox_args->show_ui );
-					$two_boxes = false;
-				}
+			$dir = self::get_visible_directions( $post_type, $ctype, $metabox_args->show_ui );
 
-				foreach ( $dir as $direction ) {
-					$directed = $ctype->set_direction( $direction );
-					if ( !$directed )
-						continue;
+			$two_boxes = count( $dir ) > 1;
 
-					$box = new P2P_Box( $metabox_args, $directed, $post_type );
-					$box->register( $two_boxes );
-				}
-			} elseif ( 'any' == $metabox_args->show_ui || $directed->get_direction() == $metabox_args->show_ui ) {
-				$box = new P2P_Box( $metabox_args, $directed, $post_type );
-				$box->register();
+			foreach ( $dir as $direction ) {
+				$box = new P2P_Box( $metabox_args, $ctype->set_direction( $direction ), $post_type );
+				$box->register( $two_boxes );
 			}
 		}
+	}
+
+	private static function get_visible_directions( $post_type, $ctype, $show_ui ) {
+		$direction = $ctype->find_direction( $post_type, false );
+		if ( !$direction )
+			return array();
+
+		if ( $ctype->indeterminate && !$ctype->reciprocal ) {
+			if ( 'any' == $show_ui )
+				return array( 'from', 'to' );
+			else
+				return array( $show_ui );
+		}
+
+		if ( 'any' == $show_ui || $direction == $show_ui )
+			return array( $show_ui );
+
+		return array();
 	}
 
 	/**
