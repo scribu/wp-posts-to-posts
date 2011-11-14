@@ -38,9 +38,10 @@ class P2P_Debug {
 
 		p2p_register_connection_type(array(
 			'id' => 'posts_to_contact',
-			'from' => 'post',
+			'from' => 'contact',
 			'to' => 'contact',
-			'reciprocal' => true
+			'title' => 'Registry',
+			'show_ui' => 'any'
 		));
 
 		p2p_register_connection_type(array(
