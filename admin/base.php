@@ -28,8 +28,20 @@ class P2P_Box_Factory {
 			$two_boxes = count( $dir ) > 1;
 
 			foreach ( $dir as $direction ) {
-				$box = new P2P_Box( $metabox_args, $ctype->set_direction( $direction ), $post_type );
-				$box->register( $two_boxes );
+				$directed = $ctype->set_direction( $direction );
+
+				$box = new P2P_Box( $metabox_args, $directed );
+
+				add_meta_box(
+					"p2p-{$direction}-{$ctype->id}",
+					$directed->get_title( $two_boxes ),
+					array( $box, 'render' ),
+					$post_type,
+					$metabox_args->context,
+					'default'
+				);
+
+				$box->init_scripts();
 			}
 		}
 	}
