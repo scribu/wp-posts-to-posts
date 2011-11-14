@@ -16,7 +16,7 @@ class P2P_Box {
 
 	private $args;
 
-	public $ptype;
+	private $ptype;
 
 	private $columns;
 
@@ -307,6 +307,10 @@ class P2P_Box {
 		if ( count( $this->ctype->get_other_post_type() ) > 1 )
 			return false;
 
+		return $this->check_capability();
+	}
+
+	public function check_capability() {
 		return current_user_can( $this->ptype->cap->edit_posts );
 	}
 

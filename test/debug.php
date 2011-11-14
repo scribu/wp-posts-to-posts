@@ -16,7 +16,11 @@ class P2P_Debug {
 
 	function contacts_and_tickets() {
 		register_post_type( 'contact', array( 'label' => 'Contacts', 'public' => true ) );
-		register_post_type( 'ticket', array( 'label' => 'Tickets', 'public' => true ) );
+		register_post_type( 'ticket', array(
+			'label' => 'Tickets',
+			'public' => true,
+			'capability_type' => 'ticket'
+		) );
 
 		$types = array(
 			'bug' => 'Bug',

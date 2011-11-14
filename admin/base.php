@@ -36,6 +36,9 @@ class P2P_Box_Factory {
 
 				$box = new P2P_Box( $metabox_args, $directed );
 
+				if ( !$box->check_capability() )
+					continue;
+
 				add_meta_box(
 					"p2p-{$direction}-{$ctype->id}",
 					$title[$key],
@@ -135,7 +138,7 @@ class P2P_Box_Factory {
 
 		$box = new P2P_Box( $ctype->_metabox_args, $directed, $post_type );
 
-		if ( !current_user_can( $box->ptype->cap->edit_posts ) )
+		if ( !$box->check_capability() )
 			die(-1);
 
 		$method = 'ajax_' . $_REQUEST['subaction'];
