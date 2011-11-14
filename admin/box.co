@@ -28,7 +28,7 @@ jQuery ->
 		$spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
 
 
-		ajax_request = (data, callback, method = 'post') ->
+		ajax_request = (data, callback, type = 'POST') ->
 			data <<<
 				action: 'p2p_box'
 				nonce: P2PAdmin.nonce
@@ -36,7 +36,12 @@ jQuery ->
 				direction: $metabox.data('direction')
 				from: jQuery('#post_ID').val()
 
-			jQuery[method] ajaxurl, data, callback
+			jQuery.ajax(
+				type: type
+				url: ajaxurl
+				data: data
+				success: callback
+			)
 
 		row_ajax_request = ($td, data, callback) ->
 				$td.html $spinner.show()
@@ -192,10 +197,16 @@ jQuery ->
 
 				$spinner.appendTo( @tab.find('.p2p-navigation') )
 
-				ajax_request @data, this.~update_rows, 'getJSON'
+				ajax_request @data, this.~update_rows, 'GET'
 
 			update_rows: (response) ->
 				$spinner.remove()
+
+				try
+					response = jQuery.parseJSON response
+				catch
+					console?.error 'Malformed response', response
+					return
 
 				@tab.find('.p2p-results, .p2p-navigation, .p2p-notice').remove()
 

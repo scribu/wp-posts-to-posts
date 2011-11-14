@@ -28,14 +28,19 @@
         'src': P2PAdmin.spinner,
         'class': 'p2p-spinner'
       });
-      ajax_request = function(data, callback, method){
-        method == null && (method = 'post');
+      ajax_request = function(data, callback, type){
+        type == null && (type = 'POST');
         data.action = 'p2p_box';
         data.nonce = P2PAdmin.nonce;
         data.ctype_id = $metabox.data('ctype_id');
         data.direction = $metabox.data('direction');
         data.from = jQuery('#post_ID').val();
-        return jQuery[method](ajaxurl, data, callback);
+        return jQuery.ajax({
+          type: type,
+          url: ajaxurl,
+          data: data,
+          success: callback
+        });
       };
       row_ajax_request = function($td, data, callback){
         $td.html($spinner.show());
@@ -163,10 +168,18 @@
             ? new_page > this.total_pages ? this.current_page : new_page
             : this.current_page;
           $spinner.appendTo(this.tab.find('.p2p-navigation'));
-          return ajax_request(this.data, __bind(this, this.update_rows), 'getJSON');
+          return ajax_request(this.data, __bind(this, this.update_rows), 'GET');
         };
         prototype.update_rows = function(response){
           $spinner.remove();
+          try {
+            response = jQuery.parseJSON(response);
+          } catch (e) {
+            if (typeof console != 'undefined' && console !== null) {
+              console.error('Malformed response', response);
+            }
+            return;
+          }
           this.tab.find('.p2p-results, .p2p-navigation, .p2p-notice').remove();
           if (!response.rows) {
             return this.tab.append(jQuery('<div class="p2p-notice">').html(response.msg));
