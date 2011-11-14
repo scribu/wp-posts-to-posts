@@ -35,6 +35,27 @@ class P2P_Debug {
 				'show_ui' => 'from'
 			) );
 		}
+
+		p2p_register_connection_type(array(
+			'id' => 'posts_to_contact',
+			'from' => 'post',
+			'to' => 'contact',
+			'reciprocal' => true
+		));
+
+		p2p_register_connection_type(array(
+			'id' => 'ticket_to_contact',
+			'from' => 'ticket',
+			'to' => 'contact',
+			'reciprocal' => true
+		));
+
+		p2p_register_connection_type(array(
+			'id' => 'ticket_to_post',
+			'from' => 'ticket',
+			'to' => 'post',
+			'reciprocal' => true
+		));
 	}
 
 	function actors_and_movies() {
