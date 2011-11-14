@@ -31,19 +31,11 @@ class P2P_Box {
 
 		$this->ctype = $ctype;
 
-		$this->ptype = $this->get_first_valid_ptype( $this->ctype->get_other_post_type() );
+		$this->ptype = P2P_Util::get_first_valid_ptype( $this->ctype->get_other_post_type() );
 
 		add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
 
 		$this->init_columns();
-	}
-
-	private function get_first_valid_ptype( $post_types ) {
-		do {
-			$ptype = get_post_type_object( array_shift( $post_types ) );
-		} while ( !$ptype && !empty( $post_types ) );
-
-		return $ptype;
 	}
 
 	public function init_scripts() {
@@ -312,9 +304,7 @@ class P2P_Box {
 		if ( count( $base_qv ) > 1 )
 			return false;
 
-		$ptype = $this->ctype->get_other_post_type();
-
-		if ( count( $ptype ) > 1 )
+		if ( count( $this->ctype->get_other_post_type() ) > 1 )
 			return false;
 
 		return current_user_can( $this->ptype->cap->edit_posts );
