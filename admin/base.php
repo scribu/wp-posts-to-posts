@@ -22,16 +22,23 @@ class P2P_Box_Factory {
 
 			$dir = self::get_visible_directions( $post_type, $ctype, $metabox_args->show_ui );
 
-			$two_boxes = count( $dir ) > 1;
+			$title = $ctype->title;
+
+			if ( count( $dir ) > 1 && $title['from'] == $title['to'] ) {
+				$title['from'] .= __( ' (from)', P2P_TEXTDOMAIN );
+				$title['to']   .= __( ' (to)', P2P_TEXTDOMAIN );
+			}
 
 			foreach ( $dir as $direction ) {
+				$key = ( 'to' == $direction ) ? 'to' : 'from';
+
 				$directed = $ctype->set_direction( $direction );
 
 				$box = new P2P_Box( $metabox_args, $directed );
 
 				add_meta_box(
 					"p2p-{$direction}-{$ctype->id}",
-					$directed->get_title( $two_boxes ),
+					$title[$key],
 					array( $box, 'render' ),
 					$post_type,
 					$metabox_args->context,
