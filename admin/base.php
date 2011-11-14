@@ -47,7 +47,7 @@ class P2P_Box_Factory {
 		}
 
 		if ( 'any' == $show_ui || $direction == $show_ui )
-			return array( $show_ui );
+			return array( $direction );
 
 		return array();
 	}
