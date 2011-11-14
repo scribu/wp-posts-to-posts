@@ -7,15 +7,12 @@ define( 'P2P_BOX_NONCE', 'p2p-box' );
  */
 class P2P_Box_Factory {
 
-	function init() {
+	static function init() {
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
 		add_action( 'save_post', array( __CLASS__, 'save_post' ), 10, 2 );
 		add_action( 'wp_ajax_p2p_box', array( __CLASS__, 'wp_ajax_p2p_box' ) );
 	}
 
-	/**
-	 * Add all the metaboxes.
-	 */
 	static function add_meta_boxes( $post_type ) {
 		foreach ( P2P_Connection_Type::get_all_instances() as $ctype_id => $ctype ) {
 			if ( !isset( $ctype->_metabox_args ) )
@@ -67,7 +64,7 @@ class P2P_Box_Factory {
 	/**
 	 * Collect metadata from all boxes.
 	 */
-	function save_post( $post_id, $post ) {
+	static function save_post( $post_id, $post ) {
 		if ( 'revision' == $post->post_type || defined( 'DOING_AJAX' ) )
 			return;
 
@@ -114,7 +111,7 @@ class P2P_Box_Factory {
 	/**
 	 * Controller for all box ajax requests.
 	 */
-	function wp_ajax_p2p_box() {
+	static function wp_ajax_p2p_box() {
 		check_ajax_referer( P2P_BOX_NONCE, 'nonce' );
 
 		$ctype = p2p_type( $_REQUEST['ctype_id'] );
