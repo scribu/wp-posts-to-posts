@@ -6,6 +6,10 @@
 	margin-bottom: 8px;
 }
 
+.p2p-connections a {
+	text-decoration: none;
+}
+
 /* Tabs */
 
 .p2p-box .tabs-panel {
@@ -50,8 +54,7 @@
 .p2p-connections th,
 .p2p-connections td,
 .p2p-results td {
-	padding-left: 6px;
-	padding-right: 6px;
+	padding: 3px 6px;
 }
 
 th.p2p-col-delete,
@@ -66,10 +69,6 @@ td.p2p-col-create {
 .p2p-col-create img {
 	padding: 5px 6px;
 	vertical-align: middle;
-}
-
-th.p2p-col-delete a {
-	padding-bottom: 8px;
 }
 
 .p2p-results tr:first-child td {
@@ -94,7 +93,6 @@ th.p2p-col-delete a {
 .p2p-col-delete a {
 	display: block;
 	height: 16px;
-	margin-top: 1px;
 	opacity: 0.5;
 	width: 16px;
 }
@@ -113,6 +111,10 @@ th.p2p-col-delete a {
 
 .p2p-col-delete a {
 	background: url("images/delete.png") no-repeat scroll 50% 50% transparent;
+}
+
+td.p2p-col-order {
+	width: 13px;
 }
 
 tr:hover td.p2p-col-order {
