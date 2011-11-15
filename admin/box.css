@@ -93,16 +93,28 @@ td.p2p-col-create {
 .p2p-col-delete a {
 	display: block;
 	height: 16px;
-	opacity: 0.5;
 	width: 16px;
 }
 
-.p2p-col-create a:hover,
-.p2p-col-delete a:hover {
+.p2p-col-create,
+.p2p-col-delete {
+	border-right: 1px solid transparent;
+}
+
+.p2p-col-create:hover,
+.p2p-col-delete:hover {
 	background-color: #f5f5f5;
-	border-right: 1px solid #ddd;
+	border-right-color: #ddd;
+}
+
+.p2p-col-create a,
+.p2p-col-delete a {
+	opacity: 0.5;
+}
+
+.p2p-col-create:hover a,
+.p2p-col-delete:hover a {
 	opacity: 1;
-	width: 15px;
 }
 
 .p2p-col-create a {
