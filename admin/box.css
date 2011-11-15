@@ -50,8 +50,7 @@
 .p2p-connections th,
 .p2p-connections td,
 .p2p-results td {
-	padding-left: 6px;
-	padding-right: 6px;
+	padding:6px;
 }
 
 th.p2p-col-delete,
