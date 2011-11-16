@@ -184,6 +184,7 @@ tr:hover td.p2p-col-order {
 	margin-top: 3px;
 }
 
+
 /* RTL support */
 
 body.rtl .p2p-navigation div {
@@ -200,10 +201,15 @@ body.rtl .p2p-tab-search input {
 	padding-right: 0;
 }
 
-body.rtl .p2p-col-create a:hover,
-body.rtl .p2p-col-delete a:hover {
-	border-left: 1px solid #ddd;
+body.rtl .p2p-col-create,
+body.rtl .p2p-col-delete {
+	border-left: 1px solid transparent;
 	border-right: 0;
+}
+
+body.rtl .p2p-col-create:hover,
+body.rtl .p2p-col-delete:hover {
+	border-left-color: #ddd;
 }
 
 body.rtl .p2p-navigation div {
