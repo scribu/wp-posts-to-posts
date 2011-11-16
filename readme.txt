@@ -45,6 +45,11 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 1.0.1 =
+* don't show metabox at all if user doesn't have the required capability
+* fix checkbox handling when there are no other input fields
+* improve metabox styling
+
 = 1.0 =
 * widget can now list related posts
 * add P2P_Connection_Type::get_related() method
