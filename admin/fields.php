@@ -109,8 +109,7 @@ class P2P_Field_Generic implements P2P_Field {
 
 	protected $data;
 
-	function __construct( $data, $ctype_id ) {
-		$this->ctype_id = $ctype_id;
+	function __construct( $data ) {
 		$this->data = $data;
 	}
 
@@ -131,7 +130,7 @@ class P2P_Field_Generic implements P2P_Field {
 
 		$form = new scbForm(
 			array( $key => p2p_get_meta( $p2p_id, $key, $single_value ) ),
-			array( 'p2p_meta', $this->ctype_id, $p2p_id )
+			array( 'p2p_meta', $p2p_id )
 		);
 
 		return $form->input( $args );

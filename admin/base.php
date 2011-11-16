@@ -79,13 +79,17 @@ class P2P_Box_Factory {
 			return;
 
 		// Custom fields
-		if ( isset( $_POST['p2p_meta'] ) ) {
-			foreach ( $_POST['p2p_meta'] as $ctype_id => $data ) {
+		if ( isset( $_POST['p2p_ctypes'] ) ) {
+
+			foreach ( $_POST['p2p_ctypes'] as $ctype_id ) {
 				$ctype = p2p_type( $ctype_id );
 				if ( !$ctype )
 					continue;
 
-				foreach ( $data as $p2p_id => $data ) {
+				foreach ( $ctype->get_connected( $post_id )->posts as $post ) {
+					$p2p_id = $post->p2p_id;
+					$data = scbForms::get_value( array( 'p2p_meta', $p2p_id ), $_POST, array() );
+
 					foreach ( $ctype->_metabox_args->fields as $key => $field_args ) {
 						if ( 'checkbox' == $field_args['type'] ) {
 							if ( isset( $data[$key] ) )

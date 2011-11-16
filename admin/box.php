@@ -56,7 +56,7 @@ class P2P_Box {
 		);
 
 		foreach ( $this->args->fields as $key => $data ) {
-			$this->columns[ $key ] = new P2P_Field_Generic( $data, $this->ctype->id );
+			$this->columns[ $key ] = new P2P_Field_Generic( $data );
 		}
 
 		if ( method_exists( $this->ctype, 'get_orderby_key' ) ) {
@@ -71,6 +71,7 @@ class P2P_Box {
 		$this->connected_posts = $this->ctype->get_connected( $post->ID, $qv )->posts;
 
 		$data = array(
+			'ctype-id' => $this->ctype->id,
 			'attributes' => $this->render_data_attributes(),
 			'connections' => $this->render_connections_table( $post ),
 			'create-connections' => $this->render_create_connections( $post ),
