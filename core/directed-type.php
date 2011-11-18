@@ -78,9 +78,13 @@ class P2P_Directed_Connection_Type {
 	 * @param int|array $post_id A post id or an array of post ids.
 	 * @param array $extra_qv Additional query variables to use.
 	 *
-	 * @return bool|object False on failure; A WP_Query instance on success.
+	 * @return A WP_Query instance on success.
 	 */
 	public function get_connected( $post_id, $extra_qv = array() ) {
+		return new WP_Query( $this->get_connected_args( $post_id, $extra_qv ) );
+	}
+
+	public function get_connected_args( $post_id, $extra_qv = array() ) {
 		$args = array_merge( $extra_qv, $this->get_base_qv() );
 
 		// don't completely overwrite 'connected_meta', but ensure that $this->data is added
@@ -93,9 +97,7 @@ class P2P_Directed_Connection_Type {
 			'direction' => $this->direction
 		);
 
-		$args = apply_filters( 'p2p_connected_args', $args, $this, $post_id );
-
-		return new WP_Query( $args );
+		return apply_filters( 'p2p_connected_args', $args, $this, $post_id );
 	}
 
 	/**
