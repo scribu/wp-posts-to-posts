@@ -18,11 +18,17 @@ class P2P_URL_Query {
 		if ( !isset( $request['connected_type'] ) || !isset( $request['connected'] ) )
 			return $request;
 
+		$connected_arg = _p2p_pluck( $request, 'connected' );
+
 		$ctype = p2p_type( _p2p_pluck( $request, 'connected_type' ) );
 		if ( !$ctype )
-			return $request;
+			return array( 'year' => 2525 );
 
-		return $ctype->get_connected_args( _p2p_pluck( $request, 'connected' ), $request );
+		$directed = $ctype->find_direction( $connected_arg );
+		if ( !$directed )
+			return array( 'year' => 2525 );
+
+		return $directed->get_connected_args( $connected_arg, $request );
 	}
 }
 
