@@ -46,7 +46,7 @@ function _p2p_init() {
 	P2P_Widget::init( __FILE__ );
 
 	if ( is_admin() ) {
-		_p2p_load_files( "$base/admin", array( 'utils', 'base', 'box', 'fields' ) );
+		_p2p_load_files( "$base/admin", array( 'utils', 'box-factory', 'box', 'fields' ) );
 	}
 }
 scb_init( '_p2p_init' );
