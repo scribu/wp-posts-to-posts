@@ -31,9 +31,7 @@
  *
  * - 'reciprocal' - bool For indeterminate connections: True means all connections are displayed in a single box. False means 'from' connections are shown in one box and 'to' connections are shown in another box. Default: false.
  *
- * - 'show_ui' - bool|string Whether to show the admin connections box. Can be 'from', 'to', 'any' or false. Default: 'any'.
- *
- * - 'context' - string Where should the box show up by default. Possible values: 'advanced' or 'side'
+ * - 'admin_box' - bool|string|array Whether and where to show the admin connections box.
  *
  * - 'can_create_post' - bool Whether to allow post creation via the connection box. Default: true.
  *
