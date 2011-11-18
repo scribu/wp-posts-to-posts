@@ -114,7 +114,8 @@ class P2P_Debug {
 			'sortable' => 'any',
 			'prevent_duplicates' => false,
 			'context' => 'advanced',
-			'show_ui' => 'any',
+			'admin_box' => 'any',
+			'admin_column' => 'any',
 			'title' => array(
 				'from' => 'Played In',
 				'to' => 'Cast'

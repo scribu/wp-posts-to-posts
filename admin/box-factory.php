@@ -9,21 +9,21 @@ class P2P_Box_Factory {
 
 	private static $box_args = array();
 
-	static function register( $ctype_id, $metabox_args ) {
+	static function register( $ctype_id, $box_args ) {
 		if ( isset( self::$box_args[$ctype_id] ) )
 			return false;
 
-		$metabox_args = (object) wp_parse_args( $metabox_args, array(
+		$box_args = (object) wp_parse_args( $box_args, array(
 			'show' => 'any',
 			'context' => 'side',
 			'fields' => array(),
 			'can_create_post' => true
 		) );
 
-		if ( !$metabox_args->show )
+		if ( !$box_args->show )
 			return false;
 
-		foreach ( $metabox_args->fields as &$field_args ) {
+		foreach ( $box_args->fields as &$field_args ) {
 			if ( !is_array( $field_args ) )
 				$field_args = array( 'title' => $field_args );
 
@@ -33,7 +33,7 @@ class P2P_Box_Factory {
 				$field_args['values'] = array( true => ' ' );
 		}
 
-		self::$box_args[$ctype_id] = $metabox_args;
+		self::$box_args[$ctype_id] = $box_args;
 
 		return true;
 	}
@@ -45,10 +45,10 @@ class P2P_Box_Factory {
 	}
 
 	static function add_meta_boxes( $post_type ) {
-		foreach ( self::$box_args as $ctype_id => $metabox_args ) {
+		foreach ( self::$box_args as $ctype_id => $box_args ) {
 			$ctype = p2p_type( $ctype_id );
 
-			$dir = self::get_visible_directions( $post_type, $ctype, $metabox_args->show );
+			$dir = self::get_visible_directions( $post_type, $ctype, $box_args->show );
 
 			$title = $ctype->title;
 
@@ -62,7 +62,7 @@ class P2P_Box_Factory {
 
 				$directed = $ctype->set_direction( $direction );
 
-				$box = new P2P_Box( $metabox_args, $directed );
+				$box = new P2P_Box( $box_args, $directed );
 
 				if ( !$box->check_capability() )
 					continue;
@@ -72,7 +72,7 @@ class P2P_Box_Factory {
 					$title[$key],
 					array( $box, 'render' ),
 					$post_type,
-					$metabox_args->context,
+					$box_args->context,
 					'default'
 				);
 

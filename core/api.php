@@ -64,6 +64,7 @@ function p2p_register_connection_type( $args ) {
 	}
 	// Back-compat end
 
+	// Box args
 	if ( isset( $args['admin_box'] ) ) {
 		$metabox_args = _p2p_pluck( $args, 'admin_box' );
 		if ( !is_array( $metabox_args ) )
@@ -78,10 +79,18 @@ function p2p_register_connection_type( $args ) {
 		}
 	}
 
+	// Column args
+	if ( isset( $args['admin_column'] ) ) {
+		$column_args = _p2p_pluck( $args, 'admin_column' );
+	} else {
+		$column_args = false;
+	}
+
 	$ctype = P2P_Connection_Type::register( $args );
 
-	if ( is_admin() && !empty( $metabox_args ) ) {
+	if ( is_admin() ) {
 		P2P_Box_Factory::register( $ctype->id, $metabox_args );
+		P2P_Column_Factory::register( $ctype->id, $column_args );
 	}
 
 	return $ctype;
