@@ -6,9 +6,9 @@
 class P2P_Query {
 
 	function init() {
-		add_action( 'parse_query', array( 'P2P_Query', 'parse_legacy_qv' ) );
-		add_filter( 'posts_clauses', array( 'P2P_Query', 'posts_clauses' ), 10, 2 );
-		add_filter( 'the_posts', array( 'P2P_Query', 'the_posts' ), 11, 2 );
+		add_action( 'parse_query', array( __CLASS__, 'parse_legacy_qv' ) );
+		add_filter( 'posts_clauses', array( __CLASS__, 'posts_clauses' ), 10, 2 );
+		add_filter( 'the_posts', array( __CLASS__, 'cache_p2p_meta' ), 11, 2 );
 	}
 
 	function parse_legacy_qv( $wp_query ) {
@@ -118,7 +118,7 @@ class P2P_Query {
 	/**
 	 * Pre-populates the p2p meta cache to decrease the number of queries.
 	 */
-	function the_posts( $the_posts, $wp_query ) {
+	function cache_p2p_meta( $the_posts, $wp_query ) {
 		if ( empty( $the_posts ) )
 			return $the_posts;
 
