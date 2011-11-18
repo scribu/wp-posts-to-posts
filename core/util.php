@@ -115,3 +115,9 @@ abstract class P2P_Util {
 	}
 }
 
+function _p2p_pluck( &$arr, $key ) {
+	$value = $arr[ $key ];
+	unset( $arr[ $key ] );
+	return $value;
+}
+

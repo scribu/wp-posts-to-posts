@@ -7,6 +7,37 @@ define( 'P2P_BOX_NONCE', 'p2p-box' );
  */
 class P2P_Box_Factory {
 
+	private static $box_args = array();
+
+	static function register( $ctype_id, $metabox_args ) {
+		if ( isset( self::$box_args[$ctype_id] ) )
+			return false;
+
+		$metabox_args = (object) wp_parse_args( $metabox_args, array(
+			'show' => 'any',
+			'context' => 'side',
+			'fields' => array(),
+			'can_create_post' => true
+		) );
+
+		if ( !$metabox_args->show )
+			return false;
+
+		foreach ( $metabox_args->fields as &$field_args ) {
+			if ( !is_array( $field_args ) )
+				$field_args = array( 'title' => $field_args );
+
+			$field_args['type'] = _p2p_get_field_type( $field_args );
+
+			if ( 'checkbox' == $field_args['type'] && !isset( $field_args['values'] ) )
+				$field_args['values'] = array( true => ' ' );
+		}
+
+		self::$box_args[$ctype_id] = $metabox_args;
+
+		return true;
+	}
+
 	static function init() {
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
 		add_action( 'save_post', array( __CLASS__, 'save_post' ), 10, 2 );
@@ -14,13 +45,10 @@ class P2P_Box_Factory {
 	}
 
 	static function add_meta_boxes( $post_type ) {
-		foreach ( P2P_Connection_Type::get_all_instances() as $ctype_id => $ctype ) {
-			if ( !isset( $ctype->_metabox_args ) )
-				continue;
+		foreach ( self::$box_args as $ctype_id => $metabox_args ) {
+			$ctype = p2p_type( $ctype_id );
 
-			$metabox_args = $ctype->_metabox_args;
-
-			$dir = self::get_visible_directions( $post_type, $ctype, $metabox_args->show_ui );
+			$dir = self::get_visible_directions( $post_type, $ctype, $metabox_args->show );
 
 			$title = $ctype->title;
 
@@ -89,7 +117,7 @@ class P2P_Box_Factory {
 					$p2p_id = $post->p2p_id;
 					$data = scbForms::get_value( array( 'p2p_meta', $p2p_id ), $_POST, array() );
 
-					foreach ( $ctype->_metabox_args->fields as $key => $field_args ) {
+					foreach ( self::$box_args[$ctype_id]->fields as $key => $field_args ) {
 						if ( 'checkbox' == $field_args['type'] ) {
 							$new_values = scbForms::get_value( $key, $data, array() );
 
@@ -125,7 +153,7 @@ class P2P_Box_Factory {
 		check_ajax_referer( P2P_BOX_NONCE, 'nonce' );
 
 		$ctype = p2p_type( $_REQUEST['ctype_id'] );
-		if ( !$ctype || !isset( $ctype->_metabox_args ) )
+		if ( !$ctype || !isset( self::$box_args[$ctype->id] ) )
 			die(0);
 
 		$post_type = get_post_type( $_REQUEST['from'] );
@@ -136,7 +164,7 @@ class P2P_Box_Factory {
 		if ( !$directed )
 			die(0);
 
-		$box = new P2P_Box( $ctype->_metabox_args, $directed, $post_type );
+		$box = new P2P_Box( self::$box_args[$ctype->id], $directed, $post_type );
 
 		if ( !$box->check_capability() )
 			die(-1);
