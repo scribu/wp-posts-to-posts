@@ -107,8 +107,8 @@ class P2P_Box_Factory {
 			return;
 
 		// Custom fields
-		if ( isset( $_POST['p2p_ctypes'] ) ) {
-			foreach ( $_POST['p2p_ctypes'] as $ctype_id ) {
+		if ( isset( $_POST['p2p_types'] ) ) {
+			foreach ( $_POST['p2p_types'] as $ctype_id ) {
 				$ctype = p2p_type( $ctype_id );
 				if ( !$ctype )
 					continue;
