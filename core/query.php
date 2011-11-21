@@ -6,12 +6,15 @@
 class P2P_Query {
 
 	function init() {
-		add_action( 'parse_query', array( __CLASS__, 'parse_legacy_qv' ) );
+		add_action( 'parse_query', array( __CLASS__, 'parse_query' ) );
 		add_filter( 'posts_clauses', array( __CLASS__, 'posts_clauses' ), 10, 2 );
 		add_filter( 'the_posts', array( __CLASS__, 'cache_p2p_meta' ), 11, 2 );
 	}
 
-	function parse_legacy_qv( $wp_query ) {
+	function parse_query( $wp_query ) {
+		$q =& $wp_query->query_vars;
+
+		// Handle shortcut args
 		$qv_map = array(
 			'connected' => 'any',
 			'connected_to' => 'to',
@@ -19,14 +22,36 @@ class P2P_Query {
 		);
 
 		foreach ( $qv_map as $key => $direction ) {
-			$search = $wp_query->get( $key );
-			if ( !empty( $search ) ) {
-				$wp_query->set( 'connected_posts', $search );
-				$wp_query->set( 'connected_direction', $direction );
-
-				$wp_query->set( $key, false );
+			if ( !empty( $q[ $key ] ) ) {
+				$q['connected_posts'] = _p2p_pluck( $q, $key );
+				$q['connected_direction'] = $direction;
 			}
 		}
+
+		// Handle connected_type arg
+		if ( !isset( $q['connected_posts'] ) || !isset( $q['connected_type'] ) )
+			return;
+
+		$connected_arg = _p2p_pluck( $q, 'connected_posts' );
+
+		$ctype = p2p_type( _p2p_pluck( $q, 'connected_type' ) );
+
+		if ( !$ctype )
+			return self::trigger_empty( $q );
+
+		if ( isset( $q['connected_direction'] ) )
+			$directed = $ctype->set_direction( _p2p_pluck( $q, 'connected_direction' ) );
+		else
+			$directed = $ctype->find_direction( $connected_arg );
+
+		if ( !$directed )
+			return self::trigger_empty( $q );
+
+		$q = $directed->get_connected_args( $connected_arg, $q );
+	}
+
+	private static function trigger_empty( &$q ) {
+		$q = array( 'year' => 2525 );
 	}
 
 	function posts_clauses( $clauses, $wp_query ) {
