@@ -116,6 +116,39 @@ abstract class P2P_Util {
 	}
 }
 
+/**
+ * By-pass sanitize_post() and caching
+ *
+ * @internal
+ */
+class _P2P_Connections {
+
+	private static $captured;
+
+	static function get( $args ) {
+		$q = new WP_Query;
+		$q->_p2p_all = true;
+
+		add_filter( 'the_posts', array( __CLASS__, 'capture' ), 10, 2 );
+		$q->query( $args );
+		remove_filter( 'the_posts', array( __CLASS__, 'capture' ), 10, 2 );
+
+		return self::$captured;
+	}
+
+	static function capture( $posts, $wp_query ) {
+		if ( !$wp_query->_p2p_all )
+			return $posts;
+
+		self::$captured = $posts;
+
+		return array();
+	}
+}
+
+/**
+ * @internal
+ */
 function _p2p_pluck( &$arr, $key ) {
 	$value = $arr[ $key ];
 	unset( $arr[ $key ] );

@@ -35,35 +35,35 @@ class P2P_Query {
 		if ( ! $wp_query->get( 'connected_posts' ) )
 			return $clauses;
 
+		// 'the_posts' filter will not be called when 'fields' => 'ids'
 		$wp_query->_p2p_cache = true;
 
-		$connected_query = array();
-
-		$defaults = array(
-			'posts' => 'any',
-			'direction' => 'any',
-		);
-
-		foreach ( $defaults as $key => $default_value ) {
-			$value = $wp_query->get( 'connected_' . $key );
-
-			if ( !$value )
-				$value = $default_value;
-
-			$connected_query[ $key ] = $value;
+		switch ( $wp_query->get( 'fields' ) ) {
+		case 'p2p':
+			$clauses['fields'] = "$wpdb->p2p.*";
+			break;
+		case 'p2p_id':
+			$clauses['fields'] = "$wpdb->p2p.p2p_id";
+			$wp_query->set( 'fields', 'ids' );
+			break;
+		case 'ids':
+			break;
+		default:
+			$clauses['fields'] .= ", $wpdb->p2p.*";
 		}
-
-		$clauses['fields'] .= ", $wpdb->p2p.*";
 
 		$clauses['join'] .= " INNER JOIN $wpdb->p2p";
 
-		if ( 'any' == $connected_query['posts'] ) {
+		// Handle main query
+		$connected_posts = $wp_query->get( 'connected_posts' );
+
+		if ( 'any' == $connected_posts ) {
 			$search = false;
 		} else {
-			$search = implode( ',', array_map( 'absint', (array) $connected_query['posts'] ) );
+			$search = implode( ',', array_map( 'absint', (array) $connected_posts ) );
 		}
 
-		$direction = $connected_query['direction'];
+		$direction = $wp_query->get( 'connected_direction' );
 		if ( !in_array( $direction, array( 'from', 'to', 'any' ) ) )
 			$direction = 'any';
 
