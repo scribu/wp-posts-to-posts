@@ -71,15 +71,16 @@ abstract class P2P_Util {
 	 *
 	 * @return bool|string False on failure, the connection field key otherwise
 	 */
-	static function get_orderby_key( $ordering_direction, $connection_direction ) {
-		if ( !$ordering_direction || 'any' == $connection_direction )
+	static function get_orderby_key( $order_dir, $connection_dir ) {
+		if ( !$order_dir || 'any' == $connection_dir )
 			return false;
 
-		if ( 'any' == $ordering_direction || $connection_direction == $ordering_direction )
-			return '_order_' . $connection_direction;
+		if ( 'any' == $order_dir || $connection_dir == $order_dir )
+			return '_order_' . $connection_dir;
 
-		if ( 'from' == $connection_direction )
-			return $ordering_direction;
+		// Back-compat
+		if ( 'from' == $connection_dir )
+			return $order_dir;
 
 		return false;
 	}
