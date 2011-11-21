@@ -6,7 +6,7 @@ class P2P_Connection_Type {
 
 	public function register( $args ) {
 		$args = wp_parse_args( $args, array(
-			'id' => false,
+			'type' => false,
 			'from' => '',
 			'to' => '',
 			'from_query_vars' => array(),
@@ -29,7 +29,7 @@ class P2P_Connection_Type {
 				$args["{$key}_query_vars"]['post_type'] = array( 'post' );
 		}
 
-		$id =& $args['id'];
+		$id = $args['type'];
 
 		if ( !$id ) {
 			$id = md5( serialize( wp_array_slice_assoc( $args, array( 'from_query_vars', 'to_query_vars', 'data' ) ) ) );
@@ -38,6 +38,8 @@ class P2P_Connection_Type {
 		if ( isset( self::$instances[ $id ] ) ) {
 			trigger_error( 'Connection type is already defined.', E_USER_NOTICE );
 		}
+
+		$args['id'] = $id;
 
 		return self::$instances[ $id ] = new P2P_Connection_Type( $args );
 	}

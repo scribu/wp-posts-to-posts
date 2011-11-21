@@ -5,16 +5,18 @@ class P2P_Storage {
 	// Use P2P_Connection_Type
 	private function __construct() {}
 
-	private static $version = 3;
+	private static $version = 4;
 
 	function init() {
 		$table = new scbTable( 'p2p', false, "
 			p2p_id bigint(20) unsigned NOT NULL auto_increment,
 			p2p_from bigint(20) unsigned NOT NULL,
 			p2p_to bigint(20) unsigned NOT NULL,
+			p2p_type varchar(40) NOT NULL default '',
 			PRIMARY KEY  (p2p_id),
 			KEY p2p_from (p2p_from),
-			KEY p2p_to (p2p_to)
+			KEY p2p_to (p2p_to),
+			KEY p2p_type (p2p_type)
 		" );
 
 		$table2 = new scbTable( 'p2pmeta', false, "
@@ -27,7 +29,7 @@ class P2P_Storage {
 			KEY meta_key (meta_key)
 		" );
 
-		if ( is_admin() && self::$version != get_option( 'p2p_storage' ) ) {
+		if ( is_admin() && get_option( 'p2p_storage' ) < self::$version ) {
 			$table->install();
 			$table2->install();
 

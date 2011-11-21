@@ -7,7 +7,7 @@
  *
  * Takes the following parameters, as an associative array:
  *
- * - 'id' - string A unique identifier for this connection type (optional).
+ * - 'type' - string A unique identifier for this connection type (optional).
  *
  * - 'from' - string|array The first end of the connection.
  *
@@ -18,8 +18,6 @@
  * - 'to_query_vars' - array Additional query vars to pass to WP_Query. Default: none.
  *
  * - 'fields' - array( key => Title ) Metadata fields editable by the user. Default: none.
- *
- * - 'data' - array( key => value ) Metadata fields not editable by the user. Dfault: none.
  *
  * - 'cardinality' - string How many connection can each post have: 'one-to-many', 'many-to-one' or 'many-to-many'. Default: 'many-to-many'
  *
@@ -53,6 +51,10 @@ function p2p_register_connection_type( $args ) {
 			if ( isset( $argv[ $i ] ) )
 				$args[ $key ] = $argv[ $i ];
 		}
+	}
+
+	if ( isset( $args['id'] ) ) {
+		$args['type'] = _p2p_pluck( $args, 'id' );
 	}
 
 	if ( isset( $args['show_ui'] ) ) {
