@@ -21,10 +21,8 @@ class P2P_Query {
 		foreach ( $qv_map as $key => $direction ) {
 			$search = $wp_query->get( $key );
 			if ( !empty( $search ) ) {
-				$wp_query->set( 'connected_query', array(
-					'posts' => $search,
-					'direction' => $direction,
-				) );
+				$wp_query->set( 'connected_posts', $search );
+				$wp_query->set( 'connected_direction', $direction );
 
 				$wp_query->set( $key, false );
 			}
@@ -34,20 +32,26 @@ class P2P_Query {
 	function posts_clauses( $clauses, $wp_query ) {
 		global $wpdb;
 
-		$connected_query = $wp_query->get( 'connected_query' );
-		if ( !is_array( $connected_query ) ) {
+		if ( ! $wp_query->get( 'connected_posts' ) )
 			return $clauses;
-		}
+
+		$wp_query->_p2p_cache = true;
+
+		$connected_query = array();
 
 		$defaults = array(
 			'posts' => 'any',
 			'direction' => 'any',
-			'operator' => 'in'
 		);
 
-		$connected_query = array_merge( $defaults, $connected_query );
+		foreach ( $defaults as $key => $default_value ) {
+			$value = $wp_query->get( 'connected_' . $key );
 
-		$wp_query->_p2p_cache = true;
+			if ( !$value )
+				$value = $default_value;
+
+			$connected_query[ $key ] = $value;
+		}
 
 		$clauses['fields'] .= ", $wpdb->p2p.*";
 
@@ -85,6 +89,7 @@ class P2P_Query {
 			}
 		}
 
+		// Handle custom fields
 		$connected_meta = $wp_query->get( 'connected_meta' );
 		if ( !empty( $connected_meta ) ) {
 			$meta_clauses = _p2p_meta_sql_helper( $connected_meta );

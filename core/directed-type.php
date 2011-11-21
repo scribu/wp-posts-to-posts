@@ -89,13 +89,10 @@ class P2P_Directed_Connection_Type {
 
 		// don't completely overwrite 'connected_meta', but ensure that $this->data is added
 		$args = array_merge_recursive( $args, array(
+			'connected_posts' => $post_id,
+			'connected_direction' => $this->direction,
 			'connected_meta' => $this->data
 		) );
-
-		$args['connected_query'] = array(
-			'posts' => $post_id,
-			'direction' => $this->direction
-		);
 
 		return apply_filters( 'p2p_connected_args', $args, $this, $post_id );
 	}
