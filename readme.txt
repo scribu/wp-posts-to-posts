@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.2
 Tested up to: 3.3
-Stable tag: 1.0
+Stable tag: 1.0.1
 
 Create connections between posts
 
@@ -49,6 +49,8 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * don't show metabox at all if user doesn't have the required capability
 * fix checkbox handling when there are no other input fields
 * improve metabox styling
+* rename 'show_ui' to 'admin_box'
+* add 'admin_column' parameter
 
 = 1.0 =
 * widget can now list related posts
