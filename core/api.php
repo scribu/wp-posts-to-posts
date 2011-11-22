@@ -91,8 +91,8 @@ function p2p_register_connection_type( $args ) {
 	$ctype = P2P_Connection_Type::register( $args );
 
 	if ( is_admin() ) {
-		P2P_Box_Factory::register( $ctype->id, $metabox_args );
-		P2P_Column_Factory::register( $ctype->id, $column_args );
+		P2P_Box_Factory::register( $ctype->type, $metabox_args );
+		P2P_Column_Factory::register( $ctype->type, $column_args );
 	}
 
 	return $ctype;

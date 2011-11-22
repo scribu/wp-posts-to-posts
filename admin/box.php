@@ -71,7 +71,7 @@ class P2P_Box {
 		$this->connected_posts = $this->ctype->get_connected( $post->ID, $qv )->posts;
 
 		$data = array(
-			'ctype-id' => $this->ctype->id,
+			'p2p-type' => $this->ctype->type,
 			'attributes' => $this->render_data_attributes(),
 			'connections' => $this->render_connections_table( $post ),
 			'create-connections' => $this->render_create_connections( $post ),
@@ -82,7 +82,7 @@ class P2P_Box {
 
 	protected function render_data_attributes() {
 		$data_attr = array(
-			'ctype_id' => $this->ctype->id,
+			'ctype_id' => $this->ctype->type,
 			'prevent_duplicates' => $this->ctype->prevent_duplicates,
 			'cardinality' => $this->ctype->accepts_single_connection() ? 'one' : 'many',
 			'direction' => $this->ctype->get_direction()

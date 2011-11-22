@@ -29,19 +29,17 @@ class P2P_Connection_Type {
 				$args["{$key}_query_vars"]['post_type'] = array( 'post' );
 		}
 
-		$id = $args['type'];
+		$p2p_type =& $args['type'];
 
-		if ( !$id ) {
-			$id = md5( serialize( wp_array_slice_assoc( $args, array( 'from_query_vars', 'to_query_vars', 'data' ) ) ) );
+		if ( !$p2p_type ) {
+			$p2p_type = md5( serialize( wp_array_slice_assoc( $args, array( 'from_query_vars', 'to_query_vars', 'data' ) ) ) );
 		}
 
-		if ( isset( self::$instances[ $id ] ) ) {
+		if ( isset( self::$instances[ $p2p_type ] ) ) {
 			trigger_error( 'Connection type is already defined.', E_USER_NOTICE );
 		}
 
-		$args['id'] = $id;
-
-		return self::$instances[ $id ] = new P2P_Connection_Type( $args );
+		return self::$instances[ $p2p_type ] = new P2P_Connection_Type( $args );
 	}
 
 	public function get_all_instances() {
