@@ -42,6 +42,8 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 1. Basic connection metabox
 2. Advanced connection metabox
+3. Admin column
+4. Widget
 
 == Changelog ==
 
