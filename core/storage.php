@@ -2,13 +2,29 @@
 
 class P2P_Storage {
 
+	static $version = 4;
+
 	// Use P2P_Connection_Type
 	private function __construct() {}
 
-	private static $version = 4;
-
 	function init() {
-		$table = new scbTable( 'p2p', false, "
+		scb_register_table( 'p2p' );
+		scb_register_table( 'p2pmeta' );
+
+		add_action( 'admin_notices', array( __CLASS__, 'install' ) );
+		add_action( 'deleted_post', array( __CLASS__, 'disconnect' ) );
+	}
+
+	function install() {
+		if ( !current_user_can( 'manage_options' ) )
+			return;
+
+		$current_ver = get_option( 'p2p_storage' );
+
+		if ( $current_ver == self::$version )
+			return;
+
+		scb_install_table( 'p2p', "
 			p2p_id bigint(20) unsigned NOT NULL auto_increment,
 			p2p_from bigint(20) unsigned NOT NULL,
 			p2p_to bigint(20) unsigned NOT NULL,
@@ -19,7 +35,7 @@ class P2P_Storage {
 			KEY p2p_type (p2p_type)
 		" );
 
-		$table2 = new scbTable( 'p2pmeta', false, "
+		scb_install_table( 'p2pmeta', "
 			meta_id bigint(20) unsigned NOT NULL auto_increment,
 			p2p_id bigint(20) unsigned NOT NULL default '0',
 			meta_key varchar(255) default NULL,
@@ -29,14 +45,14 @@ class P2P_Storage {
 			KEY meta_key (meta_key)
 		" );
 
-		if ( is_admin() && get_option( 'p2p_storage' ) < self::$version ) {
-			$table->install();
-			$table2->install();
-
-			update_option( 'p2p_storage', self::$version );
+		if ( $current_ver ) {
+			echo scb_admin_notice( sprintf(
+				__( 'You need to run the <a href="%s">migration script</a> before using Posts 2 Posts again.', P2P_TEXTDOMAIN ),
+				admin_url( 'tools.php?page=p2p-tools&migrate' )
+			) );
+		} else {
+			update_option( 'p2p_storage', P2P_Storage::$version );
 		}
-
-		add_action( 'deleted_post', array( __CLASS__, 'disconnect' ) );
 	}
 
 	/**
