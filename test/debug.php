@@ -7,6 +7,7 @@ class P2P_Debug {
 			return;
 
 		add_action('init', array(__CLASS__, '_init'));
+		//add_action('admin_notices', array(__CLASS__, 'setup_example'));
 	}
 
 	function _init() {
@@ -74,7 +75,6 @@ class P2P_Debug {
 				'not_found' => 'No actors found.'
 			),
 			'has_archive' => 'actors',
-			'taxonomies' => array( 'category' )
 		));
 
 		register_post_type('movie', array(
@@ -139,8 +139,36 @@ class P2P_Debug {
 			'title' => 'Friends with',
 			'data' => array( 'type' => 'friends' )
 		) );
+	}
 
-		p2p_register_connection_type( array( 'actor', 'post' ), array( 'page', 'movie' ), true );
+	function setup_example() {
+		$ctype = p2p_type( 'actor_movie' );
+
+		$data = array(
+			'Nicholas Cage' => array( 'Lord Of War', 'Adaptation' ),
+			'Jude Law' => array( 'Sherlock Holmes' ),
+			'Brad Pitt' => array( '7 Years In Tibet' ),
+			'Natalie Portam' => array( 'Black Swan' ),
+			'Charlize Theron' => array()
+		);
+
+		foreach ( $data as $actor_name => $movies ) {
+			$actor_id = self::make_post( 'actor',  $actor_name );
+
+			foreach ( $movies as $movie_title ) {
+				$movie_id = self::make_post( 'movie', $movie_title );
+
+				$ctype->connect( $actor_id, $movie_id );
+			}
+		}
+	}
+
+	private function make_post( $type, $title ) {
+		return wp_insert_post( array(
+			'post_type' => $type,
+			'post_title' => $title,
+			'post_status' => 'publish'
+		) );
 	}
 
 	private function walk( $posts, $level = 0 ) {
