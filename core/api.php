@@ -99,34 +99,21 @@ function p2p_register_connection_type( $args ) {
 }
 
 /**
- * @internal
- */
-function _p2p_get_field_type( $args ) {
-	if ( isset( $args['type'] ) )
-		return $args['type'];
-
-	if ( isset( $args['values'] ) && is_array( $args['values'] ) )
-		return 'select';
-
-	return 'text';
-}
-
-/**
  * Get a connection type.
  *
- * @param string $id Connection type id
+ * @param string $p2p_type
  *
  * @return bool|object False if connection type not found, P2P_Connection_Type instance on success.
  */
-function p2p_type( $id ) {
-	return P2P_Connection_Type::get_instance( $id );
+function p2p_type( $p2p_type ) {
+	return P2P_Connection_Type::get_instance( $p2p_type );
 }
 
 /**
  * Retrieve connections.
  *
- * @param string $p2p_type
- * @param int $p2p_id The connection id
+ * @param string $p2p_type A valid connection type.
+ * @param int $p2p_id The connection id.
  *
  * @return bool|array False on failure, list of connection objects on success.
  */
@@ -160,7 +147,7 @@ function p2p_get_connections( $p2p_type, $args ) {
 /**
  * Retrieve a single connection.
  *
- * @param int $p2p_id The connection id
+ * @param int $p2p_id The connection id.
  *
  * @return object
  */
@@ -171,13 +158,14 @@ function p2p_get_connection( $p2p_id ) {
 }
 
 /**
- * Connect two posts
+ * Create a connection.
  *
- * @param int $from post id
- * @param int $to post id
- * @param array $data additional data about the connection
+ * @param int $p2p_type A valid connection type.
+ * @param int $from
+ * @param int $to
+ * @param array $data additional data about the connection.
  *
- * @return int|bool connection id or False on failure
+ * @return bool|int False on failure, p2p_id on success.
  */
 function p2p_create_connection( $p2p_type, $p2p_from, $p2p_to, $data = array() ) {
 	global $wpdb;

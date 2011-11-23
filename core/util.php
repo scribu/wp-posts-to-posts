@@ -175,3 +175,16 @@ function _p2p_pluck( &$arr, $key ) {
 	return $value;
 }
 
+/**
+ * @internal
+ */
+function _p2p_get_field_type( $args ) {
+	if ( isset( $args['type'] ) )
+		return $args['type'];
+
+	if ( isset( $args['values'] ) && is_array( $args['values'] ) )
+		return 'select';
+
+	return 'text';
+}
+
