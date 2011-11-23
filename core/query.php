@@ -60,7 +60,6 @@ class P2P_Query {
 		if ( ! $wp_query->get( 'connected_posts' ) )
 			return $clauses;
 
-		// 'the_posts' filter will not be called when 'fields' => 'ids'
 		$wp_query->_p2p_cache = true;
 
 		$clauses['fields'] .= ", $wpdb->p2p.*";
@@ -68,6 +67,9 @@ class P2P_Query {
 		$clauses['join'] .= " INNER JOIN $wpdb->p2p";
 
 		// Handle main query
+		if ( $p2p_type = $wp_query->get( 'p2p_type' ) )
+			$clauses['where'] .= $wpdb->prepare( " AND $wpdb->p2p.p2p_type = %s", $p2p_type );
+
 		$connected_posts = $wp_query->get( 'connected_posts' );
 
 		if ( 'any' == $connected_posts ) {

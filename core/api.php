@@ -179,7 +179,7 @@ function p2p_create_connection( $p2p_type, $p2p_from, $p2p_to, $data = array() )
 	if ( !$p2p_from || !$p2p_to )
 		return false;
 
-	$wpdb->insert( $wpdb->p2p, compact( 'p2p_type', 'p2p_from', 'p2p_to' ), '%d' );
+	$wpdb->insert( $wpdb->p2p, compact( 'p2p_type', 'p2p_from', 'p2p_to' ) );
 
 	$p2p_id = $wpdb->insert_id;
 
