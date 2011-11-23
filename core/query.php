@@ -63,19 +63,7 @@ class P2P_Query {
 		// 'the_posts' filter will not be called when 'fields' => 'ids'
 		$wp_query->_p2p_cache = true;
 
-		switch ( $wp_query->get( 'fields' ) ) {
-		case 'p2p':
-			$clauses['fields'] = "$wpdb->p2p.*";
-			break;
-		case 'p2p_id':
-			$clauses['fields'] = "$wpdb->p2p.p2p_id";
-			$wp_query->set( 'fields', 'ids' );
-			break;
-		case 'ids':
-			break;
-		default:
-			$clauses['fields'] .= ", $wpdb->p2p.*";
-		}
+		$clauses['fields'] .= ", $wpdb->p2p.*";
 
 		$clauses['join'] .= " INNER JOIN $wpdb->p2p";
 
