@@ -47,8 +47,8 @@ class P2P_Storage {
 
 		if ( $current_ver ) {
 			echo scb_admin_notice( sprintf(
-				__( 'You need to run the <a href="%s">migration script</a> before using Posts 2 Posts again.', P2P_TEXTDOMAIN ),
-				admin_url( 'tools.php?page=p2p-tools&migrate' )
+				__( 'You need to run the <a href="%s">upgrade script</a> before using Posts 2 Posts again.', P2P_TEXTDOMAIN ),
+				admin_url( 'tools.php?page=p2p-tools&upgrade' )
 			) );
 		} else {
 			update_option( 'p2p_storage', P2P_Storage::$version );

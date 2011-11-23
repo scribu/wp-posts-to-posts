@@ -11,7 +11,7 @@ class P2P_Tools extends scbAdminPage {
 	}
 
 	function page_head() {
-		if ( isset( $_GET['migrate'] ) )
+		if ( isset( $_GET['upgrade'] ) )
 			$this->migrate();
 	}
 
