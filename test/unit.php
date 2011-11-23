@@ -51,7 +51,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		wp_delete_post( $post_id, true );
 
-		$this->assertEmpty( P2P_Storage::get( $post_id, 'any' ) );
+		$this->assertEmpty( p2p_get_connections( 'normal', array( 'fields' => 'p2p_id' ) ) );
 	}
 
 	function test_ctype_ids() {

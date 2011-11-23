@@ -4,6 +4,12 @@ class P2P_Connection_Type {
 
 	private static $instances = array();
 
+	// TODO: get_object_type( $direction ) method?
+	public $object = array(
+		'from' => 'post',
+		'to' => 'post',
+	);
+
 	public function register( $args ) {
 		$args = wp_parse_args( $args, array(
 			'type' => false,
@@ -276,15 +282,6 @@ class P2P_Connection_Type {
 			return false;
 
 		return $adjacent[0];
-	}
-
-	/**
-	 * Delete a connection.
-	 *
-	 * @param int p2p_id
-	 */
-	public function delete_connection( $p2p_id ) {
-		return P2P_Storage::delete( $p2p_id );
 	}
 }
 

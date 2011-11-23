@@ -123,6 +123,85 @@ function p2p_type( $id ) {
 }
 
 /**
+ * Retrieve connections.
+ *
+ * @param string $p2p_type
+ * @param int $p2p_id The connection id
+ *
+ * @return bool|array False on failure, list of connection objects on success.
+ */
+function p2p_get_connections( $p2p_type, $args ) {
+	global $wpdb;
+
+	if ( !p2p_type( $p2p_type ) )
+		return false;
+
+	extract( wp_parse_args( $args, array(
+		'from' => 'any',
+		'to' => 'any',
+		'fields' => 'all'
+	) ), EXTR_SKIP );
+
+	$where = $wpdb->prepare( 'WHERE p2p_type = %s', $p2p_type );
+
+	foreach ( array( 'from', 'to' ) as $key ) {
+		if ( 'any' == $$key )
+			continue;
+
+		$where .= $wpdb->prepare( " AND $key = %d", $$key );
+	}
+
+	if ( 'p2p_id' == $fields )
+		return $wpdb->get_col( "SELECT p2p_id FROM $wpdb->p2p $where" );
+
+	return $wpdb->get_results( "SELECT * FROM $wpdb->p2p $where" );
+}
+
+/**
+ * Retrieve a single connection.
+ *
+ * @param int $p2p_id The connection id
+ *
+ * @return object
+ */
+function p2p_get_connection( $p2p_id ) {
+	global $wpdb;
+
+	return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->p2p WHERE p2p_id = %d", $p2p_id ) );
+}
+
+/**
+ * Connect two posts
+ *
+ * @param int $from post id
+ * @param int $to post id
+ * @param array $data additional data about the connection
+ *
+ * @return int|bool connection id or False on failure
+ */
+function p2p_create_connection( $p2p_type, $p2p_from, $p2p_to, $data = array() ) {
+	global $wpdb;
+
+	if ( !p2p_type( $p2p_type ) )
+		return false;
+
+	$p2p_from = absint( $p2p_from );
+	$p2p_to = absint( $p2p_to );
+
+	if ( !$p2p_from || !$p2p_to )
+		return false;
+
+	$wpdb->insert( $wpdb->p2p, compact( 'p2p_type', 'p2p_from', 'p2p_to' ), '%d' );
+
+	$p2p_id = $wpdb->insert_id;
+
+	foreach ( $data as $key => $value )
+		p2p_add_meta( $p2p_id, $key, $value );
+
+	return $p2p_id;
+}
+
+/**
  * Delete one or more connections.
  *
  * @param int|array $p2p_id Connection ids
@@ -130,7 +209,46 @@ function p2p_type( $id ) {
  * @return int Number of connections deleted
  */
 function p2p_delete_connection( $p2p_id ) {
-	return P2P_Storage::delete( $p2p_id );
+	return p2p_delete_connections( (array) $p2p_id );
+}
+
+/**
+ * Delete connections.
+ *
+ * @param int|array $p2p_id Connection ids
+ *
+ * @return int Number of connections deleted
+ */
+function p2p_delete_connections( $p2p_id ) {
+	global $wpdb;
+
+	if ( empty( $p2p_id ) )
+		return 0;
+
+	$p2p_ids = array_map( 'absint', $p2p_id );
+
+	$where = "WHERE p2p_id IN (" . implode( ',', $p2p_ids ) . ")";
+
+	$count = $wpdb->query( "DELETE FROM $wpdb->p2p $where" );
+	$wpdb->query( "DELETE FROM $wpdb->p2pmeta $where" );
+
+	return $count;
+}
+
+function p2p_get_meta( $p2p_id, $key, $single = false ) {
+	return get_metadata( 'p2p', $p2p_id, $key, $single );
+}
+
+function p2p_update_meta( $p2p_id, $meta_key, $meta_value, $prev_value = '' ) {
+	return update_metadata( 'p2p', $p2p_id, $meta_key, $meta_value, $prev_value );
+}
+
+function p2p_add_meta( $p2p_id, $meta_key, $meta_value, $unique = false ) {
+	return add_metadata( 'p2p', $p2p_id, $meta_key, $meta_value, $unique );
+}
+
+function p2p_delete_meta( $p2p_id, $meta_key, $meta_value = '' ) {
+	return delete_metadata( 'p2p', $p2p_id, $meta_key, $meta_value );
 }
 
 /**

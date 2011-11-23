@@ -149,6 +149,26 @@ class _P2P_Connections {
 /**
  * @internal
  */
+function _p2p_meta_sql_helper( $data ) {
+	global $wpdb;
+
+	if ( isset( $data[0] ) ) {
+		$meta_query = $data;
+	}
+	else {
+		$meta_query = array();
+
+		foreach ( $data as $key => $value ) {
+			$meta_query[] = compact( 'key', 'value' );
+		}
+	}
+
+	return get_meta_sql( $meta_query, 'p2p', $wpdb->p2p, 'p2p_id' );
+}
+
+/**
+ * @internal
+ */
 function _p2p_pluck( &$arr, $key ) {
 	$value = $arr[ $key ];
 	unset( $arr[ $key ] );

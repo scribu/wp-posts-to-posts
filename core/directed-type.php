@@ -179,7 +179,7 @@ class P2P_Directed_Connection_Type {
 			if ( 'to' == $this->direction )
 				$args = array_reverse( $args );
 
-			$p2p_id = P2P_Storage::connect( $args[0], $args[1], $this->data );
+			$p2p_id = p2p_create_connection( $this->type, $args[0], $args[1], $this->data );
 		}
 
 		return $p2p_id;
@@ -192,7 +192,7 @@ class P2P_Directed_Connection_Type {
 	 * @param int The second end of the connection.
 	 */
 	public function disconnect( $from, $to ) {
-		return P2P_Storage::delete( $this->get_p2p_id( $from, $to ) );
+		return p2p_delete_connection( $this->get_p2p_id( $from, $to ) );
 	}
 
 	/**
@@ -204,7 +204,7 @@ class P2P_Directed_Connection_Type {
 		$connected = $this->get_connected( $from );
 
 		foreach ( $connected->posts as $post )
-			P2P_Storage::delete( $post->p2p_id );
+			p2p_delete_connection( $post->p2p_id );
 	}
 }
 
