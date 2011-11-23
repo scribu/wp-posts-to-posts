@@ -240,26 +240,6 @@ function p2p_delete_meta( $p2p_id, $meta_key, $meta_value = '' ) {
 }
 
 /**
- * Split some posts based on a certain connection field.
- *
- * @param object|array A WP_Query instance, or a list of post objects
- * @param string $key p2pmeta key
- */
-function p2p_split_posts( $posts, $key ) {
-	if ( is_object( $posts ) )
-		$posts = $posts->posts;
-
-	$buckets = array();
-
-	foreach ( $posts as $post ) {
-		$value = p2p_get_meta( $post->p2p_id, $key, true );
-		$buckets[ $value ][] = $post;
-	}
-
-	return $buckets;
-}
-
-/**
  * List some posts.
  *
  * @param object|array A WP_Query instance, or a list of post objects
