@@ -68,7 +68,7 @@ class P2P_Box_Factory {
 					continue;
 
 				add_meta_box(
-					"p2p-{$direction}-{$ctype->type}",
+					"p2p-{$direction}-{$ctype->name}",
 					$title[$key],
 					array( $box, 'render' ),
 					$post_type,
@@ -153,7 +153,7 @@ class P2P_Box_Factory {
 		check_ajax_referer( P2P_BOX_NONCE, 'nonce' );
 
 		$ctype = p2p_type( $_REQUEST['ctype_id'] );
-		if ( !$ctype || !isset( self::$box_args[$ctype->type] ) )
+		if ( !$ctype || !isset( self::$box_args[$ctype->name] ) )
 			die(0);
 
 		$post_type = get_post_type( $_REQUEST['from'] );
@@ -164,7 +164,7 @@ class P2P_Box_Factory {
 		if ( !$directed )
 			die(0);
 
-		$box = new P2P_Box( self::$box_args[$ctype->type], $directed, $post_type );
+		$box = new P2P_Box( self::$box_args[$ctype->name], $directed, $post_type );
 
 		if ( !$box->check_capability() )
 			die(-1);

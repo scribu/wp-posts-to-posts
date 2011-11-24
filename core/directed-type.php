@@ -90,7 +90,7 @@ class P2P_Directed_Connection_Type {
 
 		// don't completely overwrite 'connected_meta', but ensure that $this->data is added
 		$args = array_merge_recursive( $args, array(
-			'p2p_type' => $this->type,
+			'p2p_type' => $this->name,
 			'connected_posts' => $post_id,
 			'connected_direction' => $this->direction,
 			'connected_meta' => $this->data
@@ -170,7 +170,7 @@ class P2P_Directed_Connection_Type {
 			if ( 'to' == $this->direction )
 				$args = array_reverse( $args );
 
-			$p2p_id = p2p_create_connection( $this->type, $args[0], $args[1], $this->data );
+			$p2p_id = p2p_create_connection( $this->name, $args[0], $args[1], $this->data );
 		}
 
 		return $p2p_id;

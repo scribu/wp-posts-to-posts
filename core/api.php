@@ -7,7 +7,7 @@
  *
  * Takes the following parameters, as an associative array:
  *
- * - 'type' - string A unique identifier for this connection type (optional).
+ * - 'name' - string A unique identifier for this connection type.
  *
  * - 'from' - string|array The first end of the connection.
  *
@@ -54,7 +54,7 @@ function p2p_register_connection_type( $args ) {
 	}
 
 	if ( isset( $args['id'] ) ) {
-		$args['type'] = _p2p_pluck( $args, 'id' );
+		$args['name'] = _p2p_pluck( $args, 'id' );
 	}
 
 	if ( isset( $args['show_ui'] ) ) {
@@ -91,8 +91,8 @@ function p2p_register_connection_type( $args ) {
 	$ctype = P2P_Connection_Type_Factory::register( $args );
 
 	if ( is_admin() ) {
-		P2P_Box_Factory::register( $ctype->type, $metabox_args );
-		P2P_Column_Factory::register( $ctype->type, $column_args );
+		P2P_Box_Factory::register( $ctype->name, $metabox_args );
+		P2P_Column_Factory::register( $ctype->name, $column_args );
 	}
 
 	return $ctype;

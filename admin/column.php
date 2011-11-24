@@ -27,7 +27,7 @@ class P2P_Column {
 		foreach ( $this->connected[ $post_id ] as $post ) {
 			$args = array(
 				'post_type' => get_post_type( $post_id ),
-				'connected_type' => $this->ctype->type,
+				'connected_type' => $this->ctype->name,
 				'connected_posts' => $post->ID,
 			);
 

@@ -59,7 +59,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		// make sure a unique id is generated when none is given
 		$ctype = p2p_register_connection_type( 'studio', 'movie' );
-		$this->assertTrue( strlen( $ctype->type ) > 0 );
+		$this->assertTrue( strlen( $ctype->name ) > 0 );
 	}
 
 	function test_direction() {

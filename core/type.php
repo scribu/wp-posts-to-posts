@@ -71,7 +71,7 @@ class P2P_Connection_type extends Generic_Connection_Type {
 			$this->query_vars[$key] = $qv;
 		}
 
-		$p2p_type =& $args['type'];
+		$p2p_type =& $args['name'];
 
 		if ( !$p2p_type ) {
 			$p2p_type = md5( serialize( array(

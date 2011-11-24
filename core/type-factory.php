@@ -6,11 +6,11 @@ class P2P_Connection_Type_Factory {
 	public static function register( $args ) {
 		$ctype = new P2P_Connection_Type( $args );
 
-		if ( isset( self::$instances[ $ctype->type ] ) ) {
+		if ( isset( self::$instances[ $ctype->name ] ) ) {
 			trigger_error( 'Connection type is already defined.', E_USER_NOTICE );
 		}
 
-		self::$instances[ $ctype->type ] = $ctype;
+		self::$instances[ $ctype->name ] = $ctype;
 
 		return $ctype;
 	}
