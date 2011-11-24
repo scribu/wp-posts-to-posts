@@ -1,7 +1,6 @@
 <?php
 
-class P2P_Connection_Type {
-
+class Generic_Connection_Type {
 	private static $instances = array();
 
 	public static function register( $args ) {
@@ -27,18 +26,9 @@ class P2P_Connection_Type {
 		return false;
 	}
 
-
-	// TODO: get_object_type( $direction ) method?
-	public $object = array(
-		'from' => 'post',
-		'to' => 'post',
-	);
-
-	public $query_vars = array();
+	public $object = array();
 
 	public $cardinality = array();
-
-	protected $indeterminate;
 
 	protected $args;
 
@@ -47,14 +37,50 @@ class P2P_Connection_Type {
 			'type' => false,
 			'from' => '',
 			'to' => '',
-			'from_query_vars' => array(),
-			'to_query_vars' => array(),
 			'data' => array(),
-			'reciprocal' => false,
 			'cardinality' => 'many-to-many',
 			'prevent_duplicates' => true,
 			'sortable' => false,
 			'title' => '',
+			'reciprocal' => false,
+		) );
+
+		list( $this->cardinality['from'], $_, $this->cardinality['to'] ) = explode( '-', _p2p_pluck( $args, 'cardinality' ) );
+
+		foreach ( $this->cardinality as $key => &$value ) {
+			if ( 'one' != $value )
+				$value = 'many';
+		}
+
+		$this->args = $args;
+	}
+
+	public function __get( $key ) {
+		return $this->args[$key];
+	}
+
+	public function __isset( $key ) {
+		return isset( $this->args[$key] );
+	}
+}
+
+
+class P2P_Connection_type extends Generic_Connection_Type {
+
+	public $object = array(
+		'from' => 'post',
+		'to' => 'post',
+	);
+
+	public $query_vars = array();
+
+	protected $indeterminate;
+
+	protected function __construct( $args ) {
+		$args = wp_parse_args( $args, array(
+			'from_query_vars' => array(),
+			'to_query_vars' => array(),
+			'data' => array()
 		) );
 
 		foreach ( array( 'from', 'to' ) as $key ) {
@@ -80,7 +106,7 @@ class P2P_Connection_Type {
 			) ) );
 		}
 
-		$this->args = $args;
+		parent::__construct( $args );
 
 		$common = array_intersect( $this->from, $this->to );
 
@@ -88,14 +114,6 @@ class P2P_Connection_Type {
 			$this->indeterminate = true;
 
 		$this->args['title'] = P2P_Util::expand_title( $this->args['title'], $this->from, $this->to );
-
-		// set cardinality
-		list( $this->cardinality['from'], $_, $this->cardinality['to'] ) = explode( '-', _p2p_pluck( $args, 'cardinality' ) );
-
-		foreach ( $this->cardinality as $key => &$value ) {
-			if ( 'one' != $value )
-				$value = 'many';
-		}
 	}
 
 	public function __get( $key ) {
@@ -106,10 +124,6 @@ class P2P_Connection_Type {
 			return $this->indeterminate;
 
 		return $this->args[$key];
-	}
-
-	public function __isset( $key ) {
-		return isset( $this->args[$key] );
 	}
 
 	public function __call( $method, $args ) {
