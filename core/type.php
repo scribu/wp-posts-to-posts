@@ -4,14 +4,6 @@ class P2P_Connection_Type {
 
 	private static $instances = array();
 
-	// TODO: get_object_type( $direction ) method?
-	public $object = array(
-		'from' => 'post',
-		'to' => 'post',
-	);
-
-	public $query_vars = array();
-
 	public static function register( $args ) {
 		$ctype = new P2P_Connection_Type( $args );
 
@@ -36,8 +28,19 @@ class P2P_Connection_Type {
 	}
 
 
-	protected $args;
+	// TODO: get_object_type( $direction ) method?
+	public $object = array(
+		'from' => 'post',
+		'to' => 'post',
+	);
+
+	public $query_vars = array();
+
+	public $cardinality = array();
+
 	protected $indeterminate;
+
+	protected $args;
 
 	protected function __construct( $args ) {
 		$args = wp_parse_args( $args, array(
@@ -85,6 +88,14 @@ class P2P_Connection_Type {
 			$this->indeterminate = true;
 
 		$this->args['title'] = P2P_Util::expand_title( $this->args['title'], $this->from, $this->to );
+
+		// set cardinality
+		list( $this->cardinality['from'], $_, $this->cardinality['to'] ) = explode( '-', _p2p_pluck( $args, 'cardinality' ) );
+
+		foreach ( $this->cardinality as $key => &$value ) {
+			if ( 'one' != $value )
+				$value = 'many';
+		}
 	}
 
 	public function __get( $key ) {

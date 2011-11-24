@@ -5,24 +5,9 @@ class P2P_Directed_Connection_Type {
 	protected $ctype;
 	protected $direction;
 
-	protected $cardinality;
-	protected $other_cardinality;
-
 	function __construct( $ctype, $direction ) {
 		$this->ctype = $ctype;
 		$this->direction = $direction;
-
-		$this->set_cardinality();
-	}
-
-	protected function set_cardinality() {
-		$parts = explode( '-', $this->ctype->cardinality );
-
-		if ( 'to' == $this->direction )
-			$parts = array_reverse( $parts );
-
-		$this->cardinality = ( 'one' == $parts[2] ) ? 'one' : 'many';
-		$this->other_cardinality = ( 'one' == $parts[0] ) ? 'one' : 'many';
 	}
 
 	function __get( $key ) {
@@ -46,7 +31,7 @@ class P2P_Directed_Connection_Type {
 	}
 
 	public function accepts_single_connection() {
-		return 'one' == $this->cardinality;
+		return 'one' == $this->get_opposite( 'cardinality' );
 	}
 
 	public function get_title() {
@@ -63,21 +48,29 @@ class P2P_Directed_Connection_Type {
 		return 'to' == $this->direction ? $this->from : $this->to;
 	}
 
+	public function get_opposite( $key ) {
+		$direction = ( 'to' == $this->direction ) ? 'from' : 'to';
+
+		$arg = $this->ctype->$key;
+
+		return $arg[$direction];
+	}
+
+	public function get_current( $key ) {
+		$direction = ( 'to' == $this->direction ) ? 'to' : 'from';
+
+		$arg = $this->ctype->$key;
+
+		return $arg[$direction];
+	}
+
 	private function get_base_qv() {
-		$base_qv = $this->get_arg( 'query_vars' );
+		$base_qv = $this->get_opposite( 'query_vars' );
 
 		return array_merge( $base_qv, array(
 			'suppress_filters' => false,
 			'ignore_sticky_posts' => true,
 		) );
-	}
-
-	public function get_arg( $key ) {
-		$direction = ( 'from' == $this->direction ) ? 'to' : 'from';
-
-		$arg = $this->ctype->$key;
-
-		return $arg[$direction];
 	}
 
 	/**
@@ -117,7 +110,7 @@ class P2P_Directed_Connection_Type {
 	public function get_connectable( $post_id, $extra_qv = array() ) {
 		$args = array_merge( $this->get_base_qv(), $extra_qv );
 
-		if ( 'one' == $this->other_cardinality ) {
+		if ( 'one' == $this->get_current( 'cardinality' ) ) {
 			$to_check = 'any';
 		} elseif ( $this->prevent_duplicates ) {
 			$to_check = $post_id;
