@@ -16,11 +16,16 @@ class P2P_Debug {
 	}
 
 	function contacts_and_tickets() {
-		register_post_type( 'contact', array( 'label' => 'Contacts', 'public' => true ) );
+		register_post_type( 'contact', array(
+			'label' => 'Contacts',
+			'public' => true,
+			'supports' => array( 'title' )
+		) );
+
 		register_post_type( 'ticket', array(
 			'label' => 'Tickets',
 			'public' => true,
-			'capability_type' => 'ticket'
+			'supports' => array( 'title' )
 		) );
 
 		$types = array(
@@ -75,6 +80,7 @@ class P2P_Debug {
 				'not_found' => 'No actors found.'
 			),
 			'has_archive' => 'actors',
+			'supports' => array( 'title' )
 		));
 
 		register_post_type('movie', array(
@@ -85,7 +91,8 @@ class P2P_Debug {
 				'search_items' => 'Search movies',
 				'new_item' => 'New Movie',
 				'not_found' => 'No movies found.',
-			)
+			),
+			'supports' => array( 'title' )
 		) );
 
 
