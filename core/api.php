@@ -88,7 +88,7 @@ function p2p_register_connection_type( $args ) {
 		$column_args = false;
 	}
 
-	$ctype = P2P_Connection_Type::register( $args );
+	$ctype = P2P_Connection_Type_Factory::register( $args );
 
 	if ( is_admin() ) {
 		P2P_Box_Factory::register( $ctype->type, $metabox_args );
@@ -106,7 +106,7 @@ function p2p_register_connection_type( $args ) {
  * @return bool|object False if connection type not found, P2P_Connection_Type instance on success.
  */
 function p2p_type( $p2p_type ) {
-	return P2P_Connection_Type::get_instance( $p2p_type );
+	return P2P_Connection_Type_Factory::get_instance( $p2p_type );
 }
 
 /**
