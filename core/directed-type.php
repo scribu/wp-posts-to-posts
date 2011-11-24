@@ -30,32 +30,38 @@ class P2P_Directed_Connection_Type {
 		return $this->ctype;
 	}
 
-	public function accepts_single_connection() {
-		return 'one' == $this->get_opposite( 'cardinality' );
-	}
-
-	public function get_current_post_type() {
-		return 'to' == $this->direction ? $this->to : $this->from;
-	}
-
-	public function get_other_post_type() {
-		return 'to' == $this->direction ? $this->from : $this->to;
-	}
-
 	public function get_opposite( $key ) {
 		$direction = ( 'to' == $this->direction ) ? 'from' : 'to';
 
-		$arg = $this->ctype->$key;
-
-		return $arg[$direction];
+		return $this->get_arg( $key, $direction );
 	}
 
 	public function get_current( $key ) {
 		$direction = ( 'to' == $this->direction ) ? 'to' : 'from';
 
+		return $this->get_arg( $key, $direction );
+	}
+
+	private function get_arg( $key, $direction ) {
 		$arg = $this->ctype->$key;
 
 		return $arg[$direction];
+	}
+
+	public function accepts_single_connection() {
+		return 'one' == $this->get_opposite( 'cardinality' );
+	}
+
+	public function get_current_post_type() {
+		$qv = $this->get_current( 'query_vars' );
+
+		return $qv['post_type'];
+	}
+
+	public function get_other_post_type() {
+		$qv = $this->get_opposite( 'query_vars' );
+
+		return $qv['post_type'];
 	}
 
 	private function get_base_qv() {
