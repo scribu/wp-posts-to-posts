@@ -68,7 +68,7 @@ class P2P_Widget extends scbWidget {
 			);
 		} else {
 			$connected = $directed->get_connected( $post_id );
-			$title = $directed->get_title();
+			$title = $directed->get_current( 'title' );
 		}
 
 		if ( !$connected->have_posts() )
@@ -100,7 +100,7 @@ class P2P_Widget extends scbWidget {
 
 		$label = "$from $arrow $to";
 
-		$title = $ctype->set_direction( 'from' )->get_title();
+		$title = $ctype->title[ 'from' ];
 
 		if ( $title )
 			$label .= " ($title)";

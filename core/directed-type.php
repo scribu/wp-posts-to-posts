@@ -34,12 +34,6 @@ class P2P_Directed_Connection_Type {
 		return 'one' == $this->get_opposite( 'cardinality' );
 	}
 
-	public function get_title() {
-		$key = ( 'to' == $this->direction ) ? 'to' : 'from';
-
-		return $this->title[ $key ];
-	}
-
 	public function get_current_post_type() {
 		return 'to' == $this->direction ? $this->to : $this->from;
 	}

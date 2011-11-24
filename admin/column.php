@@ -15,7 +15,7 @@ class P2P_Column {
 	}
 
 	function add_column( $columns ) {
-		$columns['connected'] = $this->ctype->get_title();
+		$columns['connected'] = $this->ctype->get_current( 'title' );
 
 		return $columns;
 	}
