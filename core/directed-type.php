@@ -64,12 +64,20 @@ class P2P_Directed_Connection_Type {
 	}
 
 	private function get_base_qv() {
-		$base_qv = ( 'from' == $this->direction ) ? $this->to_query_vars : $this->from_query_vars;
+		$base_qv = $this->get_arg( 'query_vars' );
 
 		return array_merge( $base_qv, array(
 			'suppress_filters' => false,
 			'ignore_sticky_posts' => true,
 		) );
+	}
+
+	public function get_arg( $key ) {
+		$direction = ( 'from' == $this->direction ) ? 'to' : 'from';
+
+		$arg = $this->ctype->$key;
+
+		return $arg[$direction];
 	}
 
 	/**

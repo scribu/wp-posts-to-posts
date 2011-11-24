@@ -10,7 +10,36 @@ class P2P_Connection_Type {
 		'to' => 'post',
 	);
 
-	public function register( $args ) {
+	public $query_vars = array();
+
+	public static function register( $args ) {
+		$ctype = new P2P_Connection_Type( $args );
+
+		if ( isset( self::$instances[ $ctype->type ] ) ) {
+			trigger_error( 'Connection type is already defined.', E_USER_NOTICE );
+		}
+
+		self::$instances[ $ctype->type ] = $ctype;
+
+		return $ctype;
+	}
+
+	public static function get_all_instances() {
+		return self::$instances;
+	}
+
+	public static function get_instance( $hash ) {
+		if ( isset( self::$instances[ $hash ] ) )
+			return self::$instances[ $hash ];
+
+		return false;
+	}
+
+
+	protected $args;
+	protected $indeterminate;
+
+	protected function __construct( $args ) {
 		$args = wp_parse_args( $args, array(
 			'type' => false,
 			'from' => '',
@@ -26,44 +55,28 @@ class P2P_Connection_Type {
 		) );
 
 		foreach ( array( 'from', 'to' ) as $key ) {
+			$qv = _p2p_pluck( $args, "{$key}_query_vars" );
+
 			if ( isset( $args[ $key ] ) ) {
-				$args["{$key}_query_vars"]['post_type'] = (array) $args[ $key ];
-				unset( $args[ $key ] );
+				$qv['post_type'] = (array) _p2p_pluck( $args, $key );
 			}
 
-			if ( empty( $args["{$key}_query_vars"]['post_type'] ) )
-				$args["{$key}_query_vars"]['post_type'] = array( 'post' );
+			if ( empty( $qv['post_type'] ) )
+				$qv['post_type'] = array( 'post' );
+
+			$this->query_vars[$key] = $qv;
 		}
 
 		$p2p_type =& $args['type'];
 
 		if ( !$p2p_type ) {
-			$p2p_type = md5( serialize( wp_array_slice_assoc( $args, array( 'from_query_vars', 'to_query_vars', 'data' ) ) ) );
+			$p2p_type = md5( serialize( array(
+				$this->query_vars['from'],
+				$this->query_vars['to'],
+				$args['data']
+			) ) );
 		}
 
-		if ( isset( self::$instances[ $p2p_type ] ) ) {
-			trigger_error( 'Connection type is already defined.', E_USER_NOTICE );
-		}
-
-		return self::$instances[ $p2p_type ] = new P2P_Connection_Type( $args );
-	}
-
-	public function get_all_instances() {
-		return self::$instances;
-	}
-
-	public function get_instance( $hash ) {
-		if ( isset( self::$instances[ $hash ] ) )
-			return self::$instances[ $hash ];
-
-		return false;
-	}
-
-
-	protected $args;
-	protected $indeterminate;
-
-	protected function __construct( $args ) {
 		$this->args = $args;
 
 		$common = array_intersect( $this->from, $this->to );
@@ -76,7 +89,7 @@ class P2P_Connection_Type {
 
 	public function __get( $key ) {
 		if ( 'from' == $key || 'to' == $key )
-			return $this->args[ "{$key}_query_vars" ]['post_type'];
+			return $this->query_vars[ $key ]['post_type'];
 
 		if ( 'indeterminate' == $key )
 			return $this->indeterminate;
