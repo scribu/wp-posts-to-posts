@@ -32,6 +32,10 @@ class P2P_Tools extends scbAdminPage {
 			}
 		}
 
+		$subquery = "SELECT ID FROM $wpdb->posts";
+
+		$wpdb->query( "DELETE FROM $wpdb->p2p WHERE p2p_from NOT IN ($subquery) OR p2p_to NOT IN ($subquery)" );
+
 		update_option( 'p2p_storage', P2P_Storage::$version );
 
 		$this->admin_msg( sprintf( __( 'Migrated %d connections.', P2P_TEXTDOMAIN ), $n ) );
