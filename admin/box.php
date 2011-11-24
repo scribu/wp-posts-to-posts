@@ -82,7 +82,6 @@ class P2P_Box {
 
 	protected function render_data_attributes() {
 		$data_attr = array(
-			'ctype_id' => $this->ctype->name,
 			'prevent_duplicates' => $this->ctype->prevent_duplicates,
 			'cardinality' => $this->ctype->accepts_single_connection() ? 'one' : 'many',
 			'direction' => $this->ctype->get_direction()
