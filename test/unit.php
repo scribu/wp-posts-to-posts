@@ -54,7 +54,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEmpty( p2p_get_connections( 'normal', array( 'fields' => 'p2p_id' ) ) );
 	}
 
-	function test_ctype_ids() {
+	function test_p2p_types() {
 		$this->assertInstanceOf( 'P2P_Connection_Type', p2p_type( 'normal' ) );
 
 		// make sure a unique id is generated when none is given

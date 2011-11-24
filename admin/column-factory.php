@@ -4,14 +4,14 @@ class P2P_Column_Factory {
 
 	private static $column_args = array();
 
-	static function register( $ctype_id, $column_args ) {
-		if ( isset( self::$column_args[$ctype_id] ) )
+	static function register( $p2p_type, $column_args ) {
+		if ( isset( self::$column_args[$p2p_type] ) )
 			return false;
 
 		if ( !$column_args )
 			return false;
 
-		self::$column_args[$ctype_id] = $column_args;
+		self::$column_args[$p2p_type] = $column_args;
 
 		return true;
 	}
@@ -24,8 +24,8 @@ class P2P_Column_Factory {
 
 		$post_type = $screen->post_type;
 
-		foreach ( self::$column_args as $ctype_id => $column_args ) {
-			$ctype = p2p_type( $ctype_id );
+		foreach ( self::$column_args as $p2p_type => $column_args ) {
+			$ctype = p2p_type( $p2p_type );
 
 			$directed = $ctype->find_direction( $post_type );
 			if ( !$directed )
