@@ -24,11 +24,11 @@ class P2P_Tools extends scbAdminPage {
 		$n = 0;
 
 		foreach ( P2P_Connection_Type::get_all_instances() as $p2p_type => $ctype ) {
-			// TODO: this will only work until p2p_type is queried for
-			$connections = $ctype->set_direction( 'any' )->get_connected( 'any', array( 'fields' => 'p2p_id' ) );
+			$args = $ctype->set_direction( 'any' )->get_connected_args( 'any', array( 'cache_results' => false ) );
+			unset( $args['p2p_type'] );
 
-			foreach ( $connections as $p2p_id ) {
-				$n += $wpdb->update( $wpdb->p2p, compact( 'p2p_type' ), compact( 'p2p_id' ) );
+			foreach ( get_posts( $args ) as $post ) {
+				$n += $wpdb->update( $wpdb->p2p, compact( 'p2p_type' ), array( 'p2p_id' => $post->p2p_id ) );
 			}
 		}
 
