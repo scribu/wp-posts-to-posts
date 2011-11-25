@@ -93,14 +93,20 @@ class Generic_Connection_Type {
 		return new P2P_Directed_Connection_Type( $this, $direction );
 	}
 
-	public function find_direction( $arg, $instantiate = true ) {
+	public function find_direction( $post_type, $instantiate = true ) {
 		foreach ( array( 'from', 'to' ) as $direction ) {
-			if ( 'post' == $this->side[ $direction ]->object ) {
-				if ( $instantiate )
-					return $this->set_direction( $direction );
+			$side = $this->side[ $direction ];
 
-				return $direction;
-			}
+			if ( 'post' != $side->object )
+				continue;
+
+			if ( !in_array( $post_type, $side->post_type ) )
+				continue;
+
+			if ( $instantiate )
+				return $this->set_direction( $direction );
+
+			return $direction;
 		}
 
 		return false;
