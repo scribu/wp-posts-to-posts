@@ -299,9 +299,9 @@ class P2P_Box {
 		if ( !$this->args->can_create_post )
 			return false;
 
-		$base_qv = $this->ctype->get_opposite( 'query_vars' );
+		$base_qv = $this->ctype->get_opposite( 'side' )->query_vars;
 
-		if ( count( $base_qv ) > 1 )
+		if ( !empty( $base_qv ) )
 			return false;
 
 		if ( count( $this->ctype->get_other_post_type() ) > 1 )
