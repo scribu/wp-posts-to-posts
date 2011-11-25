@@ -301,15 +301,16 @@ class P2P_Box {
 
 		$side = $this->ctype->get_opposite( 'side' );
 
-		$base_qv = $side->query_vars;
-
-		if ( !empty( $base_qv ) )
+		if ( 'post' != $side->object )
 			return false;
 
 		if ( count( $side->post_type ) > 1 )
 			return false;
 
-		return $side->check_capability();
+		if ( !empty( $side->query_vars ) )
+			return false;
+
+		return true;
 	}
 
 	public function check_capability() {
