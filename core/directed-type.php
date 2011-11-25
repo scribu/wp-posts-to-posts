@@ -61,13 +61,7 @@ class P2P_Directed_Connection_Type {
 	}
 
 	private function get_base_qv() {
-		$side = $this->get_opposite( 'side' );
-
-		return array_merge( $side->query_vars, array(
-			'post_type' => $side->post_type,
-			'suppress_filters' => false,
-			'ignore_sticky_posts' => true,
-		) );
+		return $this->get_opposite( 'side' )->get_base_qv();
 	}
 
 	/**

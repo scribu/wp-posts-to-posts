@@ -29,7 +29,9 @@ class P2P_Connection_Type_Factory {
 			else
 				$side['query_vars'] = array();
 
-			$sides[ $direction ] = (object) $side;
+			$class = 'P2P_Side_' . ucfirst( $side['object'] );
+
+			$sides[ $direction ] = new $class( $side );
 		}
 
 		if ( !$args['name'] ) {
