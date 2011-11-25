@@ -183,10 +183,14 @@ class P2P_Directed_Connection_Type {
 	 * @param int The post id.
 	 */
 	public function disconnect_all( $from ) {
-		$connected = $this->get_connected( $from );
+		if ( 'any' == $this->direction )
+			$direction = array( 'from', 'to' );
+		else
+			$direction = array( $this->direction );
 
-		foreach ( $connected->posts as $post )
-			p2p_delete_connection( $post->p2p_id );
+		foreach ( $direction as $dir ) {
+			p2p_delete_connections( $this->name, array( $dir => $from ) );
+		}
 	}
 }
 
