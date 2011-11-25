@@ -93,13 +93,7 @@ class P2P_Directed_Connection_Type {
 	public function get_connectable( $post_id, $extra_qv = array() ) {
 		$args = array_merge( $this->get_base_qv(), $extra_qv );
 
-		if ( 'one' == $this->get_current( 'cardinality' ) ) {
-			$to_check = 'any';
-		} elseif ( $this->prevent_duplicates ) {
-			$to_check = $post_id;
-		}
-
-		if ( isset( $to_check ) ) {
+		if ( $to_check = $this->cardinality_check( $post_id ) ) {
 			$connected = $this->get_connected( $to_check, array( 'fields' => 'ids' ) )->posts;
 
 			if ( !empty( $connected ) ) {
@@ -112,6 +106,16 @@ class P2P_Directed_Connection_Type {
 		$args = apply_filters( 'p2p_connectable_args', $args, $this, $post_id );
 
 		return new WP_Query( $args );
+	}
+
+	protected function cardinality_check( $post_id ) {
+		if ( 'one' == $this->get_current( 'cardinality' ) ) {
+			return 'any';
+		} elseif ( $this->prevent_duplicates ) {
+			return $post_id;
+		} else {
+			return false;
+		}
 	}
 
 	public function get_p2p_id( $from, $to ) {
