@@ -58,7 +58,7 @@ class P2P_Storage {
 	function deleted_post( $post_id ) {
 		foreach ( P2P_Connection_Type_Factory::get_all_instances() as $p2p_type => $ctype ) {
 			foreach ( array( 'from', 'to' ) as $direction ) {
-				if ( 'post' == $ctype->object[ $direction ] ) {
+				if ( 'post' == $ctype->side[ $direction ]->object ) {
 					p2p_delete_connections( $p2p_type, array(
 						$direction => $post_id,
 					) );

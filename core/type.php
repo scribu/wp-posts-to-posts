@@ -1,33 +1,30 @@
 <?php
 
 class Generic_Connection_Type {
-	public $object = array();
+	public $side;
 
-	public $cardinality = array();
+	public $cardinality;
 
 	protected $args;
 
-	public function __construct( $args ) {
-		$args = wp_parse_args( $args, array(
-			'type' => false,
-			'from' => '',
-			'to' => '',
-			'data' => array(),
-			'cardinality' => 'many-to-many',
-			'prevent_duplicates' => true,
-			'sortable' => false,
-			'title' => '',
-			'reciprocal' => false,
-		) );
+	public function __construct( $sides, $args ) {
+		$this->side = $sides;
 
-		list( $this->cardinality['from'], $_, $this->cardinality['to'] ) = explode( '-', _p2p_pluck( $args, 'cardinality' ) );
+		$this->args = $args;
+
+		$this->set_cardinality();
+	}
+
+	protected function set_cardinality() {
+		$parts = explode( '-', _p2p_pluck( $this->args, 'cardinality' ) );
+
+		$this->cardinality['from'] = $parts[0];
+		$this->cardinality['to'] = $parts[2];
 
 		foreach ( $this->cardinality as $key => &$value ) {
 			if ( 'one' != $value )
 				$value = 'many';
 		}
-
-		$this->args = $args;
 	}
 
 	public function __get( $key ) {
@@ -42,46 +39,10 @@ class Generic_Connection_Type {
 
 class P2P_Connection_type extends Generic_Connection_Type {
 
-	public $object = array(
-		'from' => 'post',
-		'to' => 'post',
-	);
-
-	public $query_vars = array();
-
 	protected $indeterminate;
 
-	public function __construct( $args ) {
-		$args = wp_parse_args( $args, array(
-			'from_query_vars' => array(),
-			'to_query_vars' => array(),
-			'data' => array()
-		) );
-
-		foreach ( array( 'from', 'to' ) as $key ) {
-			$qv = _p2p_pluck( $args, "{$key}_query_vars" );
-
-			if ( isset( $args[ $key ] ) ) {
-				$qv['post_type'] = (array) _p2p_pluck( $args, $key );
-			}
-
-			if ( empty( $qv['post_type'] ) )
-				$qv['post_type'] = array( 'post' );
-
-			$this->query_vars[$key] = $qv;
-		}
-
-		$p2p_type =& $args['name'];
-
-		if ( !$p2p_type ) {
-			$p2p_type = md5( serialize( array(
-				$this->query_vars['from'],
-				$this->query_vars['to'],
-				$args['data']
-			) ) );
-		}
-
-		parent::__construct( $args );
+	public function __construct( $sides, $args ) {
+		parent::__construct( $sides, $args );
 
 		$common = array_intersect( $this->from, $this->to );
 
@@ -93,7 +54,7 @@ class P2P_Connection_type extends Generic_Connection_Type {
 
 	public function __get( $key ) {
 		if ( 'from' == $key || 'to' == $key )
-			return $this->query_vars[ $key ]['post_type'];
+			return $this->side[ $key ]->post_type;
 
 		if ( 'indeterminate' == $key )
 			return $this->indeterminate;

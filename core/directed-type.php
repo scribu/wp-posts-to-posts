@@ -53,21 +53,18 @@ class P2P_Directed_Connection_Type {
 	}
 
 	public function get_current_post_type() {
-		$qv = $this->get_current( 'query_vars' );
-
-		return $qv['post_type'];
+		return $this->get_current( 'side' )->post_type;
 	}
 
 	public function get_other_post_type() {
-		$qv = $this->get_opposite( 'query_vars' );
-
-		return $qv['post_type'];
+		return $this->get_opposite( 'side' )->post_type;
 	}
 
 	private function get_base_qv() {
-		$base_qv = $this->get_opposite( 'query_vars' );
+		$side = $this->get_opposite( 'side' );
 
-		return array_merge( $base_qv, array(
+		return array_merge( $side->query_vars, array(
+			'post_type' => $side->post_type,
 			'suppress_filters' => false,
 			'ignore_sticky_posts' => true,
 		) );
