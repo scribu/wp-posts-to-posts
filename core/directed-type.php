@@ -52,10 +52,6 @@ class P2P_Directed_Connection_Type {
 		return 'one' == $this->get_opposite( 'cardinality' );
 	}
 
-	private function get_base_qv() {
-		return $this->get_opposite( 'side' )->get_base_qv();
-	}
-
 	/**
 	 * Get a list of posts that are connected to a given post.
 	 *
@@ -69,7 +65,7 @@ class P2P_Directed_Connection_Type {
 	}
 
 	public function get_connected_args( $post_id, $extra_qv = array() ) {
-		$args = array_merge( $extra_qv, $this->get_base_qv() );
+		$args = array_merge( $extra_qv, $this->get_opposite( 'side' )->get_base_qv() );
 
 		// don't completely overwrite 'connected_meta', but ensure that $this->data is added
 		$args = array_merge_recursive( $args, array(
@@ -91,7 +87,7 @@ class P2P_Directed_Connection_Type {
 	 * @return bool|object False on failure; A WP_Query instance on success.
 	 */
 	public function get_connectable( $post_id, $extra_qv = array() ) {
-		$args = array_merge( $this->get_base_qv(), $extra_qv );
+		$args = array_merge( $extra_qv, $this->get_opposite( 'side' )->get_base_qv() );
 
 		if ( $to_check = $this->cardinality_check( $post_id ) ) {
 			$connected = $this->get_connected( $to_check, array( 'fields' => 'ids' ) )->posts;
