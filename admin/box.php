@@ -31,7 +31,7 @@ class P2P_Box {
 
 		$this->ctype = $ctype;
 
-		$this->ptype = P2P_Util::get_first_valid_ptype( $this->ctype->get_other_post_type() );
+		$this->ptype = P2P_Util::get_first_valid_ptype( $this->ctype->get_opposite( 'side' )->post_type );
 
 		add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
 
@@ -299,12 +299,14 @@ class P2P_Box {
 		if ( !$this->args->can_create_post )
 			return false;
 
-		$base_qv = $this->ctype->get_opposite( 'side' )->query_vars;
+		$side = $this->ctype->get_opposite( 'side' );
+
+		$base_qv = $side->query_vars;
 
 		if ( !empty( $base_qv ) )
 			return false;
 
-		if ( count( $this->ctype->get_other_post_type() ) > 1 )
+		if ( count( $side->post_type ) > 1 )
 			return false;
 
 		return $this->check_capability();

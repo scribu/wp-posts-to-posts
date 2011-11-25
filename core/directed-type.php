@@ -52,14 +52,6 @@ class P2P_Directed_Connection_Type {
 		return 'one' == $this->get_opposite( 'cardinality' );
 	}
 
-	public function get_current_post_type() {
-		return $this->get_current( 'side' )->post_type;
-	}
-
-	public function get_other_post_type() {
-		return $this->get_opposite( 'side' )->post_type;
-	}
-
 	private function get_base_qv() {
 		return $this->get_opposite( 'side' )->get_base_qv();
 	}
