@@ -113,15 +113,12 @@ function p2p_type( $p2p_type ) {
  * Retrieve connections.
  *
  * @param string $p2p_type A valid connection type.
- * @param array $p2p_id The connection id.
+ * @param array $args Query args.
  *
  * @return bool|array False on failure, list of connection objects on success.
  */
 function p2p_get_connections( $p2p_type, $args = array() ) {
 	global $wpdb;
-
-	if ( !p2p_type( $p2p_type ) )
-		return false;
 
 	extract( wp_parse_args( $args, array(
 		'from' => 'any',
