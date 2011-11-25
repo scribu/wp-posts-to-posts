@@ -93,7 +93,19 @@ class Generic_Connection_Type {
 		return new P2P_Directed_Connection_Type( $this, $direction );
 	}
 
-	public function find_direction( $post_type, $instantiate = true ) {
+	/**
+	 * Attempt to guess direction based on a post id or post type.
+	 *
+	 * @param int|string $arg A post id or a post type.
+	 * @param bool Whether to return an instance of P2P_Directed_Connection_Type or just the direction
+	 *
+	 * @return bool|object|string False on failure, P2P_Directed_Connection_Type instance or direction on success.
+	 */
+	public function find_direction( $arg, $instantiate = true ) {
+		$post_type = P2P_Util::find_post_type( $arg );
+		if ( !$post_type )
+			return false;
+
 		foreach ( array( 'from', 'to' ) as $direction ) {
 			$side = $this->side[ $direction ];
 
@@ -102,6 +114,9 @@ class Generic_Connection_Type {
 
 			if ( !in_array( $post_type, $side->post_type ) )
 				continue;
+
+			if ( $this->indeterminate )
+				$direction = $this->reciprocal ? 'any' : 'from';
 
 			if ( $instantiate )
 				return $this->set_direction( $direction );
@@ -130,32 +145,6 @@ class P2P_Connection_Type extends Generic_Connection_Type {
 			return $this->side[ $key ]->post_type;
 
 		return $this->args[$key];
-	}
-
-	/**
-	 * Attempt to guess direction based on a post id or post type.
-	 *
-	 * @param int|string $arg A post id or a post type.
-	 * @param bool Whether to return an instance of P2P_Directed_Connection_Type or just the direction
-	 *
-	 * @return bool|object|string False on failure, P2P_Directed_Connection_Type instance or direction on success.
-	 */
-	public function find_direction( $arg, $instantiate = true ) {
-		$post_type = P2P_Util::find_post_type( $arg );
-		if ( !$post_type )
-			return false;
-
-		$direction = P2P_Util::get_direction( $post_type, $this->from, $this->to );
-		if ( !$direction )
-			return false;
-
-		if ( $this->indeterminate )
-			$direction = $this->reciprocal ? 'any' : 'from';
-
-		if ( $instantiate )
-			return $this->set_direction( $direction );
-
-		return $direction;
 	}
 
 	/**

@@ -37,27 +37,6 @@ abstract class P2P_Util {
 	}
 
 	/**
-	 * Check if a certain post or post type could have connections of this type.
-	 *
-	 * @param string A post type to check against.
-	 * @param array List of post types (from).
-	 * @param array List of post types (to).
-	 *
-	 * @return bool|string False on failure, direction on success.
-	 */
-	static function get_direction( $post_type, $from, $to ) {
-		if ( in_array( $post_type, $from ) ) {
-			$direction = 'from';
-		} elseif ( in_array( $post_type, $to ) ) {
-			$direction = 'to';
-		} else {
-			$direction = false;
-		}
-
-		return $direction;
-	}
-
-	/**
 	 * @param string The direction in which ordering is allowed
 	 * @param string The current direction
 	 *
