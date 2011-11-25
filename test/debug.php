@@ -11,8 +11,25 @@ class P2P_Debug {
 	}
 
 	function _init() {
+		self::posts_to_users();
 		self::contacts_and_tickets();
 		self::actors_and_movies();
+	}
+
+	function posts_to_users() {
+		p2p_register_connection_type( array(
+			'name' => 'posts_to_users',
+			'from' => 'post',
+			'to' => array( 'object' => 'user' ),
+			'title' => array( 'from' => 'Posts 2 Users' )
+		) );
+
+		p2p_register_connection_type( array(
+			'name' => 'users_to_posts',
+			'from' => array( 'object' => 'user' ),
+			'to' => 'post',
+			'title' => array( 'to' => 'Users 2 Posts' )
+		) );
 	}
 
 	function contacts_and_tickets() {

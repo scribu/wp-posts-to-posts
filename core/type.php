@@ -1,6 +1,9 @@
 <?php
 
 class Generic_Connection_Type {
+
+	public $indeterminate = false;
+
 	public $side;
 
 	public $cardinality;
@@ -64,31 +67,6 @@ class Generic_Connection_Type {
 	public function __isset( $key ) {
 		return isset( $this->args[$key] );
 	}
-}
-
-
-class P2P_Connection_type extends Generic_Connection_Type {
-
-	protected $indeterminate;
-
-	public function __construct( $sides, $args ) {
-		parent::__construct( $sides, $args );
-
-		$common = array_intersect( $this->from, $this->to );
-
-		if ( !empty( $common ) )
-			$this->indeterminate = true;
-	}
-
-	public function __get( $key ) {
-		if ( 'from' == $key || 'to' == $key )
-			return $this->side[ $key ]->post_type;
-
-		if ( 'indeterminate' == $key )
-			return $this->indeterminate;
-
-		return $this->args[$key];
-	}
 
 	public function __call( $method, $args ) {
 		$directed = $this->find_direction( $args[0] );
@@ -113,6 +91,39 @@ class P2P_Connection_type extends Generic_Connection_Type {
 			return new P2P_Ordered_Connection_Type( $this, $direction, $orderby_key );
 
 		return new P2P_Directed_Connection_Type( $this, $direction );
+	}
+
+	public function find_direction( $arg, $instantiate = true ) {
+		foreach ( array( 'from', 'to' ) as $direction ) {
+			if ( 'post' == $this->side[ $direction ]->object ) {
+				if ( $instantiate )
+					return $this->set_direction( $direction );
+
+				return $direction;
+			}
+		}
+
+		return false;
+	}
+}
+
+
+class P2P_Connection_Type extends Generic_Connection_Type {
+
+	public function __construct( $sides, $args ) {
+		parent::__construct( $sides, $args );
+
+		$common = array_intersect( $this->from, $this->to );
+
+		if ( !empty( $common ) )
+			$this->indeterminate = true;
+	}
+
+	public function __get( $key ) {
+		if ( 'from' == $key || 'to' == $key )
+			return $this->side[ $key ]->post_type;
+
+		return $this->args[$key];
 	}
 
 	/**

@@ -68,5 +68,10 @@ class P2P_Side_User extends P2P_Side {
 	function check_capability() {
 		return true;
 	}
+
+	// TODO
+	function get_base_qv() {
+		return array();
+	}
 }
 
