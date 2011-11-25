@@ -210,7 +210,7 @@ function p2p_create_connection( $p2p_type, $args ) {
  *
  * @return int Number of connections deleted
  */
-function p2p_delete_connections( $p2p_type, $args ) {
+function p2p_delete_connections( $p2p_type, $args = array() ) {
 	$args['fields'] = 'p2p_id';
 
 	return p2p_delete_connection( p2p_get_connections( $p2p_type, $args ) );
