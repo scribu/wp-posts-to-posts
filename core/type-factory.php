@@ -5,7 +5,7 @@ class P2P_Connection_Type_Factory {
 
 	public static function register( $args ) {
 		$args = wp_parse_args( $args, array(
-			'type' => false,
+			'name' => false,
 			'from' => 'post',
 			'to' => 'post',
 			'data' => array(),
