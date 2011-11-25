@@ -55,6 +55,13 @@ abstract class P2P_Util {
 
 		return false;
 	}
+
+	static function expand_direction( $direction ) {
+		if ( 'any' == $direction )
+			return array( 'from', 'to' );
+		else
+			return array( $direction );
+	}
 }
 
 /**
