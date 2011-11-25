@@ -47,16 +47,15 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$actor_id = $this->generate_post( 'actor' );
 
 		p2p_type( 'normal' )->connect( $post_id, $actor_id );
-		p2p_type( 'normal' )->connect( $actor_id, $post_id, array( 'foo', 'bar' ) );
+		p2p_type( 'normal' )->connect( $actor_id, $post_id, array( 'foo' => 'bar' ) );
 
 		wp_delete_post( $post_id, true );
 
-		$this->assertEmpty( p2p_get_connections( 'normal', array( 'fields' => 'p2p_id' ) ) );
+		$this->assertEmpty( p2p_get_connections( 'normal', array( 'from' => $post_id, 'fields' => 'p2p_id' ) ) );
+		$this->assertEmpty( p2p_get_connections( 'normal', array( 'to' => $post_id, 'fields' => 'p2p_id' ) ) );
 	}
 
 	function test_p2p_types() {
-		$this->assertInstanceOf( 'P2P_Connection_Type', p2p_type( 'normal' ) );
-
 		// make sure a unique id is generated when none is given
 		$ctype = p2p_register_connection_type( 'studio', 'movie' );
 		$this->assertTrue( strlen( $ctype->name ) > 0 );
