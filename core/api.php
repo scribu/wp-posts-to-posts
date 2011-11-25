@@ -173,26 +173,30 @@ function p2p_get_connection( $p2p_id ) {
  * Create a connection.
  *
  * @param int $p2p_type A valid connection type.
- * @param int $from
- * @param int $to
- * @param array $data additional data about the connection.
+ * @param array $args Connection information.
  *
  * @return bool|int False on failure, p2p_id on success.
  */
-function p2p_create_connection( $p2p_type, $p2p_from, $p2p_to, $data = array() ) {
+function p2p_create_connection( $p2p_type, $args ) {
 	global $wpdb;
 
-	$p2p_from = absint( $p2p_from );
-	$p2p_to = absint( $p2p_to );
+	extract( wp_parse_args( $args, array(
+		'from' => false,
+		'to' => false,
+		'meta' => array()
+	) ), EXTR_SKIP );
 
-	if ( !$p2p_from || !$p2p_to )
+	$from = absint( $from );
+	$to = absint( $to );
+
+	if ( !$from || !$to )
 		return false;
 
-	$wpdb->insert( $wpdb->p2p, compact( 'p2p_type', 'p2p_from', 'p2p_to' ) );
+	$wpdb->insert( $wpdb->p2p, array( 'p2p_type' => $p2p_type, 'p2p_from' => $from, 'p2p_to' => $to ) );
 
 	$p2p_id = $wpdb->insert_id;
 
-	foreach ( $data as $key => $value )
+	foreach ( $meta as $key => $value )
 		p2p_add_meta( $p2p_id, $key, $value );
 
 	return $p2p_id;
@@ -201,28 +205,31 @@ function p2p_create_connection( $p2p_type, $p2p_from, $p2p_to, $data = array() )
 /**
  * Delete one or more connections.
  *
- * @param int|array $p2p_id Connection ids
+ * @param int $p2p_type A valid connection type.
+ * @param array $args Connection information.
  *
  * @return int Number of connections deleted
  */
-function p2p_delete_connection( $p2p_id ) {
-	return p2p_delete_connections( (array) $p2p_id );
+function p2p_delete_connections( $p2p_type, $args ) {
+	$args['fields'] = 'p2p_id';
+
+	return p2p_delete_connections_by_p2p_id( p2p_get_connections( $p2p_type, $args ) );
 }
 
 /**
- * Delete connections.
+ * Delete connections using p2p_ids.
  *
  * @param int|array $p2p_id Connection ids
  *
  * @return int Number of connections deleted
  */
-function p2p_delete_connections( $p2p_id ) {
+function p2p_delete_connections_by_p2p_id( $p2p_id ) {
 	global $wpdb;
 
 	if ( empty( $p2p_id ) )
 		return 0;
 
-	$p2p_ids = array_map( 'absint', $p2p_id );
+	$p2p_ids = array_map( 'absint', (array) $p2p_id );
 
 	$where = "WHERE p2p_id IN (" . implode( ',', $p2p_ids ) . ")";
 

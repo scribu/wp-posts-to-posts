@@ -170,7 +170,11 @@ class P2P_Directed_Connection_Type {
 			if ( 'to' == $this->direction )
 				$args = array_reverse( $args );
 
-			$p2p_id = p2p_create_connection( $this->name, $args[0], $args[1], $this->data );
+			$p2p_id = p2p_create_connection( $this->name, array(
+				'from' => $args[0],
+				'to' => $args[1],
+				'meta' => $this->data
+			) );
 		}
 
 		return $p2p_id;
