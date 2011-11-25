@@ -213,7 +213,7 @@ function p2p_create_connection( $p2p_type, $args ) {
 function p2p_delete_connections( $p2p_type, $args ) {
 	$args['fields'] = 'p2p_id';
 
-	return p2p_delete_connections_by_p2p_id( p2p_get_connections( $p2p_type, $args ) );
+	return p2p_delete_connection( p2p_get_connections( $p2p_type, $args ) );
 }
 
 /**
@@ -223,7 +223,7 @@ function p2p_delete_connections( $p2p_type, $args ) {
  *
  * @return int Number of connections deleted
  */
-function p2p_delete_connections_by_p2p_id( $p2p_id ) {
+function p2p_delete_connection( $p2p_id ) {
 	global $wpdb;
 
 	if ( empty( $p2p_id ) )

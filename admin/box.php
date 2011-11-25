@@ -270,7 +270,7 @@ class P2P_Box {
 	}
 
 	public function ajax_disconnect() {
-		p2p_delete_connections_by_p2p_id( $_POST['p2p_id'] );
+		p2p_delete_connection( $_POST['p2p_id'] );
 
 		die(1);
 	}
