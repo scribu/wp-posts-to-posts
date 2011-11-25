@@ -113,11 +113,11 @@ function p2p_type( $p2p_type ) {
  * Retrieve connections.
  *
  * @param string $p2p_type A valid connection type.
- * @param int $p2p_id The connection id.
+ * @param array $p2p_id The connection id.
  *
  * @return bool|array False on failure, list of connection objects on success.
  */
-function p2p_get_connections( $p2p_type, $args ) {
+function p2p_get_connections( $p2p_type, $args = array() ) {
 	global $wpdb;
 
 	if ( !p2p_type( $p2p_type ) )
@@ -126,7 +126,9 @@ function p2p_get_connections( $p2p_type, $args ) {
 	extract( wp_parse_args( $args, array(
 		'from' => 'any',
 		'to' => 'any',
-		'fields' => 'all'
+		'fields' => 'all',
+		'number' => '',
+		'offset' => ''
 	) ), EXTR_SKIP );
 
 	$where = $wpdb->prepare( 'WHERE p2p_type = %s', $p2p_type );
@@ -138,10 +140,19 @@ function p2p_get_connections( $p2p_type, $args ) {
 		$where .= $wpdb->prepare( " AND $key = %d", $$key );
 	}
 
-	if ( 'p2p_id' == $fields )
-		return $wpdb->get_col( "SELECT p2p_id FROM $wpdb->p2p $where" );
+	if ( $number ) {
+		if ( $offset )
+			$limit = $wpdb->prepare( "LIMIT %d, %d", $offset, $number );
+		else
+			$limit = $wpdb->prepare( "LIMIT %d", $number );
+	} else {
+		$limit = '';
+	}
 
-	return $wpdb->get_results( "SELECT * FROM $wpdb->p2p $where" );
+	if ( 'p2p_id' == $fields )
+		return $wpdb->get_col( "SELECT p2p_id FROM $wpdb->p2p $where $limit" );
+
+	return $wpdb->get_results( "SELECT * FROM $wpdb->p2p $where $limit" );
 }
 
 /**
