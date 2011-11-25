@@ -26,6 +26,7 @@ class P2P_Tools extends scbAdminPage {
 		foreach ( P2P_Connection_Type_Factory::get_all_instances() as $p2p_type => $ctype ) {
 			$args = $ctype->set_direction( 'any' )->get_connected_args( 'any', array(
 				'cache_results' => false,
+				'post_status' => 'any',
 				'nopaging' => true
 			) );
 			unset( $args['p2p_type'] );
