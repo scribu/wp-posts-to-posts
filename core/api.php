@@ -178,9 +178,6 @@ function p2p_get_connection( $p2p_id ) {
 function p2p_create_connection( $p2p_type, $p2p_from, $p2p_to, $data = array() ) {
 	global $wpdb;
 
-	if ( !p2p_type( $p2p_type ) )
-		return false;
-
 	$p2p_from = absint( $p2p_from );
 	$p2p_to = absint( $p2p_to );
 
