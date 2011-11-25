@@ -5,6 +5,8 @@ class Generic_Connection_Type {
 
 	public $cardinality;
 
+	public $title;
+
 	protected $args;
 
 	public function __construct( $sides, $args ) {
@@ -13,6 +15,8 @@ class Generic_Connection_Type {
 		$this->args = $args;
 
 		$this->set_cardinality();
+
+		$this->title = $this->expand_title( _p2p_pluck( $this->args, 'title' ) );
 	}
 
 	protected function set_cardinality() {
@@ -25,6 +29,32 @@ class Generic_Connection_Type {
 			if ( 'one' != $value )
 				$value = 'many';
 		}
+	}
+
+	private function expand_title( $title ) {
+		if ( !$title )
+			$title = array();
+
+		if ( $title && !is_array( $title ) ) {
+			return array(
+				'from' => $title,
+				'to' => $title,
+			);
+		}
+
+		foreach ( array( 'from', 'to' ) as $key ) {
+			if ( isset( $title[$key] ) )
+				continue;
+
+			$other_key = ( 'from' == $key ) ? 'to' : 'from';
+
+			$title[$key] = sprintf(
+				__( 'Connected %s', P2P_TEXTDOMAIN ),
+				$this->side[ $other_key ]->get_title()
+			);
+		}
+
+		return $title;
 	}
 
 	public function __get( $key ) {
@@ -48,8 +78,6 @@ class P2P_Connection_type extends Generic_Connection_Type {
 
 		if ( !empty( $common ) )
 			$this->indeterminate = true;
-
-		$this->args['title'] = P2P_Util::expand_title( $this->args['title'], $this->from, $this->to );
 	}
 
 	public function __get( $key ) {

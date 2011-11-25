@@ -84,36 +84,6 @@ abstract class P2P_Util {
 
 		return false;
 	}
-
-	static function get_ptype_label( $ptypes ) {
-		return get_post_type_object( $ptypes[0] )->labels->name;
-	}
-
-	static function expand_title( $title, $from, $to ) {
-		if ( !$title )
-			$title = array();
-
-		if ( $title && !is_array( $title ) ) {
-			return array(
-				'from' => $title,
-				'to' => $title,
-			);
-		}
-
-		foreach ( array( 'from', 'to' ) as $key ) {
-			if ( isset( $title[$key] ) )
-				continue;
-
-			$other_key = ( 'from' == $key ) ? 'to' : 'from';
-
-			$title[$key] = sprintf(
-				__( 'Connected %s', P2P_TEXTDOMAIN ),
-				P2P_Util::get_ptype_label( $$other_key )
-			);
-		}
-
-		return $title;
-	}
 }
 
 /**
