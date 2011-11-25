@@ -78,11 +78,23 @@ class P2P_Query {
 			$search = implode( ',', array_map( 'absint', (array) $connected_posts ) );
 		}
 
-		$direction = $wp_query->get( 'connected_direction' );
-		if ( !in_array( $direction, array( 'from', 'to', 'any' ) ) )
-			$direction = 'any';
+		$fields = array( 'p2p_from', 'p2p_to' );
 
-		if ( 'any' == $direction ) {
+		switch ( $wp_query->get( 'connected_direction' ) ) {
+
+		case 'from':
+			$fields = array_reverse( $fields );
+			// fallthrough
+		case 'to':
+			list( $from, $to ) = $fields;
+
+			$clauses['where'] .= " AND $wpdb->posts.ID = $wpdb->p2p.$from";
+			if ( $search ) {
+				$clauses['where'] .= " AND $wpdb->p2p.$to IN ($search)";
+			}
+
+			break;
+		default:
 			if ( $search ) {
 				$clauses['where'] .= " AND (
 					($wpdb->posts.ID = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from IN ($search)) OR
@@ -90,17 +102,6 @@ class P2P_Query {
 				)";
 			} else {
 				$clauses['where'] .= " AND ($wpdb->posts.ID = $wpdb->p2p.p2p_to OR $wpdb->posts.ID = $wpdb->p2p.p2p_from)";
-			}
-		} else {
-			$fields = array( 'p2p_from', 'p2p_to' );
-			if ( 'from' == $direction )
-				$fields = array_reverse( $fields );
-
-			list( $from, $to ) = $fields;
-
-			$clauses['where'] .= " AND $wpdb->posts.ID = $wpdb->p2p.$from";
-			if ( $search ) {
-				$clauses['where'] .= " AND $wpdb->p2p.$to IN ($search)";
 			}
 		}
 
