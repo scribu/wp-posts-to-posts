@@ -35,7 +35,10 @@ class P2P_Connection_Type_Factory {
 		}
 
 		if ( !$args['name'] ) {
-			$args['name'] = md5( serialize( $sides ) );
+			$to_hash = array_map( 'get_object_vars', $sides );
+			$to_hash['data'] = $args['data'];
+
+			$args['name'] = md5( serialize( $to_hash ) );
 		}
 
 		if ( $sides['from']->object == $sides['to']->object && 'post' == $sides['from']->object )
