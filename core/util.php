@@ -36,14 +36,6 @@ abstract class P2P_Util {
 		return $post_type;
 	}
 
-	static function get_first_valid_ptype( $post_types ) {
-		do {
-			$ptype = get_post_type_object( array_shift( $post_types ) );
-		} while ( !$ptype && !empty( $post_types ) );
-
-		return $ptype;
-	}
-
 	/**
 	 * Check if a certain post or post type could have connections of this type.
 	 *

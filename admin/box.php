@@ -31,7 +31,7 @@ class P2P_Box {
 
 		$this->ctype = $ctype;
 
-		$this->ptype = P2P_Util::get_first_valid_ptype( $this->ctype->get_opposite( 'side' )->post_type );
+		$this->labels = $this->ctype->get_opposite( 'side' )->get_labels();
 
 		add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
 
@@ -52,7 +52,7 @@ class P2P_Box {
 	protected function init_columns() {
 		$this->columns = array(
 			'delete' => new P2P_Field_Delete,
-			'title' => new P2P_Field_Title( $this->ptype->labels->singular_name ),
+			'title' => new P2P_Field_Title( $this->labels->singular_name ),
 		);
 
 		foreach ( $this->args->fields as $key => $data ) {
@@ -126,7 +126,7 @@ class P2P_Box {
 
 		// Search tab
 		$tab_content = P2P_Mustache::render( 'tab-search', array(
-			'placeholder' => $this->ptype->labels->search_items,
+			'placeholder' => $this->labels->search_items,
 		) );
 
 		$data['tabs'][] = array(
@@ -146,12 +146,12 @@ class P2P_Box {
 		// Create post tab
 		if ( $this->can_create_post() ) {
 			$tab_content = P2P_Mustache::render( 'tab-create-post', array(
-				'title' => $this->ptype->labels->add_new_item
+				'title' => $this->labels->add_new_item
 			) );
 
 			$data['tabs'][] = array(
 				'tab-id' => 'create-post',
-				'tab-title' => $this->ptype->labels->new_item,
+				'tab-title' => $this->labels->new_item,
 				'tab-content' => $tab_content
 			);
 		}
@@ -242,7 +242,7 @@ class P2P_Box {
 		$args = array(
 			'post_title' => $_POST['post_title'],
 			'post_author' => get_current_user_id(),
-			'post_type' => $this->ptype->name
+			'post_type' => $this->ctype->get_opposite( 'side' )->post_type[0]
 		);
 
 		$args = apply_filters( 'p2p_new_post_args', $args, $this->ctype );
@@ -288,7 +288,7 @@ class P2P_Box {
 			$results = compact( 'rows' );
 		} else {
 			$results = array(
-				'msg' => $this->ptype->labels->not_found,
+				'msg' => $this->labels->not_found,
 			);
 		}
 
@@ -309,11 +309,11 @@ class P2P_Box {
 		if ( count( $side->post_type ) > 1 )
 			return false;
 
-		return $this->check_capability();
+		return $side->check_capability();
 	}
 
 	public function check_capability() {
-		return current_user_can( $this->ptype->cap->edit_posts );
+		return $this->ctype->get_opposite( 'side' )->check_capability();
 	}
 
 	function _search_by_title( $sql, $wp_query ) {
