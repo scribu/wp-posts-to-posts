@@ -69,7 +69,7 @@ class P2P_Box {
 			'nopaging' => true
 		);
 
-		$this->connected_items = $this->ctype->get_connected( $post->ID, $qv )->items;
+		$this->connected_items = $this->ctype->get_connected( $post->ID, $qv );
 
 		$data = array(
 			'p2p-type' => $this->ctype->name,
@@ -102,8 +102,8 @@ class P2P_Box {
 			$data['hide'] = 'style="display:none"';
 
 		$tbody = array();
-		foreach ( $this->connected_items as $connected ) {
-			$tbody[] = $this->connection_row( $connected->p2p_id, $connected->ID );
+		foreach ( $this->connected_items as $p2p_id => $item_id ) {
+			$tbody[] = $this->connection_row( $p2p_id, $item_id );
 		}
 		$data['tbody'] = $tbody;
 

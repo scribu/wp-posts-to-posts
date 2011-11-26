@@ -49,7 +49,7 @@ class P2P_Side_Post extends P2P_Side {
 
 	public function get_connected( $directed, $post_id, $extra_qv = array() ) {
 		$query = new WP_Query( $this->get_connected_args( $directed, $post_id, $extra_qv ) );
-		return $this->standardize_results( $query );
+		return scb_list_fold( $query->posts, 'p2p_id', 'ID' );
 	}
 
 	public function get_connected_args( $directed, $post_id, $extra_qv = array() ) {
@@ -83,7 +83,7 @@ class P2P_Side_Post extends P2P_Side {
 		$args = array_merge( $extra_qv, $this->get_base_qv() );
 
 		if ( $to_check = $directed->cardinality_check( $post_id ) ) {
-			$connected = $this->get_connected( $directed, $to_check, array( 'fields' => 'ids' ) )->items;
+			$connected = $this->get_connected( $directed, $to_check, array( 'fields' => 'ids' ) );
 
 			if ( !empty( $connected ) ) {
 				$args = array_merge_recursive( $args, array(
@@ -96,10 +96,6 @@ class P2P_Side_Post extends P2P_Side {
 
 		$query = new WP_Query( $args );
 
-		return $this->standardize_results( $query );
-	}
-
-	private function standardize_results( $query ) {
 		return (object) array(
 			'items' => $query->posts,
 			'current_page' => max( 1, $query->get('paged') ),
@@ -131,10 +127,16 @@ class P2P_Side_User extends P2P_Side {
 		return current_user_can( 'list_users' );
 	}
 
-	function get_connected( $item_id ) {
-		return (object) array(
-			'items' => array(),
-		);
+	public function get_connected( $directed, $post_id, $extra_qv = array() ) {
+		$direction = $directed->get_direction();
+
+		$connections = p2p_get_connections( $directed->name, array(
+			$direction => $post_id
+		) );
+
+		$key = ( 'to' == $direction ) ? 'p2p_from' : 'p2p_to';
+
+		return scb_list_fold( $connections, 'p2p_id', $key );
 	}
 
 	public function get_connectable( $directed, $user_id, $page = 1, $search = '' ) {
@@ -148,10 +150,7 @@ class P2P_Side_User extends P2P_Side {
 		}
 
 		$query = new WP_User_Query( $args );
-		return $this->standardize_results( $query, $page );
-	}
 
-	private function standardize_results( $query, $page ) {
 		return (object) array(
 			'items' => $query->get_results(),
 			'current_page' => $page,
