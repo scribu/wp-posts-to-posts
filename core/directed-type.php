@@ -93,36 +93,6 @@ class P2P_Directed_Connection_Type {
 		return $this->get_opposite( 'side' )->get_connectable( $this, $post_id, $page, $search );
 	}
 
-	public function cardinality_check( $post_id ) {
-		if ( 'one' == $this->get_current( 'cardinality' ) ) {
-			$to_check = 'any';
-		} elseif ( $this->prevent_duplicates ) {
-			$to_check = $post_id;
-		} else {
-			return false;
-		}
-
-		$to_check = array();
-
-		foreach ( P2P_Util::expand_direction( $this->direction ) as $direction ) {
-			$to_check = array_merge( $to_check, p2p_get_connections( $this->name, array(
-				$direction => $to_check,
-				'fields' => ( 'to' == $direction ) ? 'p2p_from' : 'p2p_to'
-			) ) );
-		}
-
-		return $to_check;
-	}
-
-	public function get_p2p_id( $from, $to ) {
-		$connected = $this->get_connected( $from, array( 'post__in' => array( $to ) ) );
-
-		if ( !empty( $connected->posts ) )
-			return (int) $connected->posts[0]->p2p_id;
-
-		return false;
-	}
-
 	/**
 	 * Connect two posts.
 	 *
@@ -137,7 +107,7 @@ class P2P_Directed_Connection_Type {
 
 		$p2p_id = false;
 
-		if ( 'one' == $this->cardinality ) {
+		if ( 'one' == $this->get_current( 'cardinality' ) ) {
 			$connected = $this->get_connected( $from, array( 'fields' => 'ids' ) );
 			if ( !empty( $connected->posts ) )
 				return false;
@@ -182,6 +152,43 @@ class P2P_Directed_Connection_Type {
 		foreach ( P2P_Util::expand_direction( $this->direction ) as $dir ) {
 			p2p_delete_connections( $this->name, array( $dir => $from ) );
 		}
+	}
+
+	protected function check_against( $post_id ) {
+		if ( 'one' == $this->get_current( 'cardinality' ) ) {
+			return 'any';
+		} elseif ( $this->prevent_duplicates ) {
+			return $post_id;
+		} else {
+			return false;
+		}
+	}
+
+	public function cardinality_check( $post_id ) {
+		$against = $this->check_against( $post_id );
+
+		if ( !$against )
+			return false;
+
+		$to_check = array();
+
+		foreach ( P2P_Util::expand_direction( $this->direction ) as $direction ) {
+			$to_check = array_merge( $to_check, p2p_get_connections( $this->name, array(
+				$direction => $to_check,
+				'fields' => ( 'to' == $direction ) ? 'p2p_from' : 'p2p_to'
+			) ) );
+		}
+
+		return $to_check;
+	}
+
+	public function get_p2p_id( $from, $to ) {
+		$connected = $this->get_connected( $from, array( 'post__in' => array( $to ) ) );
+
+		if ( !empty( $connected->posts ) )
+			return (int) $connected->posts[0]->p2p_id;
+
+		return false;
 	}
 }
 
