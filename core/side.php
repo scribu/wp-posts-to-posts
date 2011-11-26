@@ -1,5 +1,7 @@
 <?php
 
+define( 'ADMIN_BOX_PER_PAGE', 5 );
+
 abstract class P2P_Side {
 
 	function __construct( $args ) {
@@ -69,7 +71,7 @@ class P2P_Side_Post extends P2P_Side {
 			'update_post_term_cache' => false,
 			'update_post_meta_cache' => false,
 			'post_status' => 'any',
-			'posts_per_page' => 5,
+			'posts_per_page' => ADMIN_BOX_PER_PAGE,
 			'paged' => $page,
 		);
 
@@ -136,16 +138,24 @@ class P2P_Side_User extends P2P_Side {
 	}
 
 	public function get_connectable( $directed, $user_id, $page = 1, $search = '' ) {
-		// TODO
-		$query = new WP_User_Query( array( 'offset' => 0 ) );
-		return $this->standardize_results( $query );
+		$args = array(
+			'number' => ADMIN_BOX_PER_PAGE,
+			'offset' => ADMIN_BOX_PER_PAGE * ( $page - 1 )
+		);
+
+		if ( $search ) {
+			$args['search'] = '*' . $search . '*';
+		}
+
+		$query = new WP_User_Query( $args );
+		return $this->standardize_results( $query, $page );
 	}
 
-	private function standardize_results( $query ) {
+	private function standardize_results( $query, $page ) {
 		return (object) array(
 			'items' => $query->get_results(),
-			'current_page' => 1, // TODO
-			'total_pages' => 1 // TODO
+			'current_page' => $page,
+			'total_pages' => ceil( $query->get_total() / ADMIN_BOX_PER_PAGE )
 		);
 	}
 }
