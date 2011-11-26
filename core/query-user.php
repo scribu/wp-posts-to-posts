@@ -32,15 +32,16 @@ class P2P_User_Query {
 
 		$clauses = array();
 
-		foreach ( $map as $clause => $key ) {
+		foreach ( $map as $clause => $key )
 			$clauses[$clause] = $query->$key;
-		}
 
 		$clauses = P2P_Query::alter_clauses( $clauses, P2P_Query::get_qv( $q ), "$wpdb->users.ID" );
 
-		foreach ( $map as $clause => $key ) {
+		if ( 0 !== strpos( $clauses['orderby'], 'ORDER BY ' ) )
+			$clauses['orderby'] = 'ORDER BY ' . $clauses['orderby'];
+
+		foreach ( $map as $clause => $key )
 			$query->$key = $clauses[$clause];
-		}
 	}
 }
 

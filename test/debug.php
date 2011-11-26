@@ -28,7 +28,8 @@ class P2P_Debug {
 			'name' => 'users_to_posts',
 			'from' => array( 'object' => 'user' ),
 			'to' => 'post',
-			'title' => array( 'to' => 'Users 2 Posts' )
+			'title' => array( 'to' => 'Users 2 Posts' ),
+			'sortable' => true
 		) );
 	}
 
