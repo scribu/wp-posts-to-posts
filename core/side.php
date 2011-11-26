@@ -156,6 +156,11 @@ class P2P_Side_User extends P2P_Side {
 			$args['search'] = '*' . $search . '*';
 		}
 
+		$to_check = $directed->cardinality_check( $user_id );
+		if ( !empty( $to_check ) ) {
+			$args['exclude'] = $to_check;
+		}
+
 		$query = new WP_User_Query( $args );
 
 		return (object) array(
