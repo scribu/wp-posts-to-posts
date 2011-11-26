@@ -71,6 +71,14 @@ class P2P_Directed_Connection_Type {
 
 	// called from P2P_Query
 	public function get_connected_args( $q ) {
+		if ( $orderby_key = $this->get_orderby_key() ) {
+			$q = wp_parse_args( $q, array(
+				'connected_orderby' => $orderby_key,
+				'connected_order' => 'ASC',
+				'connected_order_num' => true,
+			) );
+		}
+
 		$q = array_merge( $this->get_opposite( 'side' )->query_vars, $q, array(
 			'p2p_type' => $this->name,
 			'connected_direction' => $this->get_direction(),
@@ -81,6 +89,20 @@ class P2P_Directed_Connection_Type {
 		) );
 
 		return apply_filters( 'p2p_connected_args', $q, $this, $q['connected_items'] );
+	}
+
+	public function get_orderby_key() {
+		if ( !$this->sortable || 'any' == $this->direction )
+			return false;
+
+		if ( 'any' == $this->sortable || $this->direction == $this->sortable )
+			return '_order_' . $this->direction;
+
+		// Back-compat
+		if ( 'from' == $this->direction )
+			return $this->sortable;
+
+		return false;
 	}
 
 	/**

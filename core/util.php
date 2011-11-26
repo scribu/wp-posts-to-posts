@@ -36,26 +36,6 @@ abstract class P2P_Util {
 		return $post_type;
 	}
 
-	/**
-	 * @param string The direction in which ordering is allowed
-	 * @param string The current direction
-	 *
-	 * @return bool|string False on failure, the connection field key otherwise
-	 */
-	static function get_orderby_key( $order_dir, $connection_dir ) {
-		if ( !$order_dir || 'any' == $connection_dir )
-			return false;
-
-		if ( 'any' == $order_dir || $connection_dir == $order_dir )
-			return '_order_' . $connection_dir;
-
-		// Back-compat
-		if ( 'from' == $connection_dir )
-			return $order_dir;
-
-		return false;
-	}
-
 	static function expand_direction( $direction ) {
 		if ( 'any' == $direction )
 			return array( 'from', 'to' );

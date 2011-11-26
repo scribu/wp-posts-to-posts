@@ -87,9 +87,6 @@ class Generic_Connection_Type {
 		if ( !in_array( $direction, array( 'from', 'to', 'any' ) ) )
 			return false;
 
-		if ( $orderby_key = P2P_Util::get_orderby_key( $this->sortable, $direction ) )
-			return new P2P_Ordered_Connection_Type( $this, $direction, $orderby_key );
-
 		return new P2P_Directed_Connection_Type( $this, $direction );
 	}
 
