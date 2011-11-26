@@ -4,8 +4,6 @@ define( 'ADMIN_BOX_PER_PAGE', 5 );
 
 abstract class P2P_Side {
 
-	public $query_vars = array();
-
 	function __construct( $args ) {
 		foreach ( $args as $key => $value ) {
 			$this->$key = $value;
@@ -15,11 +13,17 @@ abstract class P2P_Side {
 	abstract function get_title();
 	abstract function get_labels();
 
+	function get_base_qv() {
+		return array();
+	}
+
 	abstract function check_capability();
 }
 
 
 class P2P_Side_Post extends P2P_Side {
+
+	public $query_vars = array();
 
 	function __construct( $args ) {
 		parent::__construct( $args );
@@ -27,8 +31,10 @@ class P2P_Side_Post extends P2P_Side {
 		$this->post_type = array_values( array_filter( $this->post_type, 'post_type_exists' ) );
 		if ( empty( $this->post_type ) )
 			$this->post_type = array( 'post' );
+	}
 
-		$this->query_vars = array_merge( $this->query_vars, array(
+	function get_base_qv() {
+		return array_merge( $this->query_vars, array(
 			'post_type' => $this->post_type,
 			'suppress_filters' => false,
 			'ignore_sticky_posts' => true,
@@ -68,7 +74,7 @@ class P2P_Side_Post extends P2P_Side {
 	}
 
 	public function get_connectable( $directed, $item_id, $page = 1, $search = '' ) {
-		$qv = array_merge( $this->query_vars, self::$admin_box_qv, array(
+		$qv = array_merge( $this->get_base_qv(), self::$admin_box_qv, array(
 			'posts_per_page' => ADMIN_BOX_PER_PAGE,
 			'paged' => $page,
 		) );
