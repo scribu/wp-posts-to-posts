@@ -65,6 +65,13 @@ class P2P_Directed_Connection_Type {
 	}
 
 	/**
+	 * @internal
+	 */
+	public function get_connections( $post_id ) {
+		return $this->get_opposite( 'side' )->get_connections( $this, $post_id );
+	}
+
+	/**
 	 * Get a list of posts that could be connected to a given post.
 	 *
 	 * @param int $post_id A post id.

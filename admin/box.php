@@ -62,14 +62,7 @@ class P2P_Box {
 	}
 
 	function render( $post ) {
-		$qv = array(
-			'update_post_term_cache' => false,
-			'update_post_meta_cache' => false,
-			'post_status' => 'any',
-			'nopaging' => true
-		);
-
-		$this->connected_items = $this->ctype->get_connected( $post->ID, $qv );
+		$this->connected_items = $this->ctype->get_connections( $post->ID );
 
 		$data = array(
 			'p2p-type' => $this->ctype->name,

@@ -48,8 +48,7 @@ class P2P_Side_Post extends P2P_Side {
 	}
 
 	public function get_connected( $directed, $post_id, $extra_qv = array() ) {
-		$query = new WP_Query( $this->get_connected_args( $directed, $post_id, $extra_qv ) );
-		return scb_list_fold( $query->posts, 'p2p_id', 'ID' );
+		return new WP_Query( $this->get_connected_args( $directed, $post_id, $extra_qv ) );
 	}
 
 	public function get_connected_args( $directed, $post_id, $extra_qv = array() ) {
@@ -66,24 +65,37 @@ class P2P_Side_Post extends P2P_Side {
 		return apply_filters( 'p2p_connected_args', $args, $directed, $post_id );
 	}
 
+	private static $admin_box_qv = array(
+		'update_post_term_cache' => false,
+		'update_post_meta_cache' => false,
+		'post_status' => 'any',
+	);
+
+	public function get_connections( $directed, $post_id ) {
+		$qv = array_merge( self::$admin_box_qv, array(
+			'nopaging' => true
+		) );
+
+		$query = $this->get_connected( $directed, $post_id, $qv );
+
+		return scb_list_fold( $query->posts, 'p2p_id', 'ID' );
+	}
+
 	public function get_connectable( $directed, $post_id, $page = 1, $search = '' ) {
-		$extra_qv = array(
-			'update_post_term_cache' => false,
-			'update_post_meta_cache' => false,
-			'post_status' => 'any',
+		$qv = array_merge( self::$admin_box_qv, array(
 			'posts_per_page' => ADMIN_BOX_PER_PAGE,
 			'paged' => $page,
-		);
+		) );
 
 		if ( $search ) {
-			$args['_p2p_box'] = true;
-			$args['s'] = $search;
+			$qv['_p2p_box'] = true;
+			$qv['s'] = $search;
 		}
 
-		$args = array_merge( $extra_qv, $this->get_base_qv() );
+		$args = array_merge( $qv, $this->get_base_qv() );
 
 		if ( $to_check = $directed->cardinality_check( $post_id ) ) {
-			$connected = $this->get_connected( $directed, $to_check, array( 'fields' => 'ids' ) );
+			$connected = $this->get_connected( $directed, $to_check, array( 'fields' => 'ids' ) )->posts;
 
 			if ( !empty( $connected ) ) {
 				$args = array_merge_recursive( $args, array(
@@ -127,7 +139,7 @@ class P2P_Side_User extends P2P_Side {
 		return current_user_can( 'list_users' );
 	}
 
-	public function get_connected( $directed, $post_id, $extra_qv = array() ) {
+	public function get_connections( $directed, $post_id ) {
 		$direction = $directed->get_direction();
 
 		$connections = p2p_get_connections( $directed->name, array(
