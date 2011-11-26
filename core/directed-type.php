@@ -108,8 +108,8 @@ class P2P_Directed_Connection_Type {
 		$p2p_id = false;
 
 		if ( 'one' == $this->get_current( 'cardinality' ) ) {
-			$connected = $this->get_connected( $from, array( 'fields' => 'ids' ) );
-			if ( !empty( $connected->posts ) )
+			$connected = $this->get_connections( $from, array( 'fields' => 'ids' ) );
+			if ( !empty( $connected ) )
 				return false;
 		}
 
@@ -183,10 +183,21 @@ class P2P_Directed_Connection_Type {
 	}
 
 	public function get_p2p_id( $from, $to ) {
-		$connected = $this->get_connected( $from, array( 'post__in' => array( $to ) ) );
+		foreach ( P2P_Util::expand_direction( $this->direction ) as $direction ) {
+			$args = array( $from, $to );
+			if ( 'to' == $direction ) {
+				$args = array_reverse( $args );
+			}
 
-		if ( !empty( $connected->posts ) )
-			return (int) $connected->posts[0]->p2p_id;
+			$ids = p2p_get_connections( $this->name, array(
+				'from' => $args[0],
+				'to' => $args[1],
+				'fields' => 'p2p_id'
+			) );
+
+			if ( !empty( $ids ) )
+				return reset( $ids );
+		}
 
 		return false;
 	}
