@@ -47,12 +47,7 @@ class P2P_Side_Post extends P2P_Side {
 		return current_user_can( $this->get_ptype()->cap->edit_posts );
 	}
 
-	public function get_connected( $directed, $post_id, $extra_qv = array() ) {
-		$args = array_merge( $extra_qv, array(
-			'connected_type' => $directed->name,
-			'connected_items' => $post_id
-		) );
-
+	public function get_connected( $args ) {
 		return new WP_Query( $args );
 	}
 
@@ -67,7 +62,7 @@ class P2P_Side_Post extends P2P_Side {
 			'nopaging' => true
 		) );
 
-		$query = $this->get_connected( $directed, $post_id, $qv );
+		$query = $directed->get_connected( $post_id, $qv );
 
 		return scb_list_fold( $query->posts, 'p2p_id', 'ID' );
 	}

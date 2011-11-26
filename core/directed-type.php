@@ -58,12 +58,18 @@ class P2P_Directed_Connection_Type {
 	 * @param int|array $post_id A post id or an array of post ids.
 	 * @param array $extra_qv Additional query variables to use.
 	 *
-	 * @return object A WP_Query instance
+	 * @return object
 	 */
 	public function get_connected( $post_id, $extra_qv = array() ) {
-		return $this->get_opposite( 'side' )->get_connected( $this, $post_id, $extra_qv );
+		$args = array_merge( $extra_qv, array(
+			'connected_type' => $this->name,
+			'connected_items' => $post_id
+		) );
+
+		return $this->get_opposite( 'side' )->get_connected( $args );
 	}
 
+	// called from P2P_Query
 	public function get_connected_args( $q ) {
 		$q = array_merge( $this->get_opposite( 'side' )->query_vars, $q, array(
 			'p2p_type' => $this->name,
