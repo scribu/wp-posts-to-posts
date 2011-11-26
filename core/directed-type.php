@@ -137,7 +137,7 @@ class P2P_Directed_Connection_Type {
 		$p2p_id = false;
 
 		if ( 'one' == $this->get_current( 'cardinality' ) ) {
-			$connected = $this->get_connections( $from, array( 'fields' => 'ids' ) );
+			$connected = $this->get_connections_raw( $against );
 			if ( !empty( $connected ) )
 				return false;
 		}
@@ -199,6 +199,10 @@ class P2P_Directed_Connection_Type {
 		if ( !$against )
 			return false;
 
+		return $this->get_connections_raw( $against );
+	}
+
+	protected function get_connections_raw( $from ) {
 		$to_check = array();
 
 		foreach ( P2P_Util::expand_direction( $this->direction ) as $direction ) {
