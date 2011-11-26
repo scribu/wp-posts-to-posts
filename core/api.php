@@ -130,10 +130,12 @@ function p2p_get_connections( $p2p_type, $args = array() ) {
 
 	$where = $wpdb->prepare( 'WHERE p2p_type = %s', $p2p_type );
 
+	$direction = array();
 	foreach ( array( 'from', 'to' ) as $key ) {
 		if ( 'any' == $$key )
 			continue;
 
+		$direction[] = $key;
 		$where .= $wpdb->prepare( " AND p2p_$key = %d", $$key );
 	}
 
@@ -146,14 +148,22 @@ function p2p_get_connections( $p2p_type, $args = array() ) {
 		$limit = '';
 	}
 
-	$fields = ( 'p2p_id' == $fields ) ? 'p2p_id' : '*';
+	switch ( $fields ) {
+	case 'p2p_id':
+	case 'p2p_from':
+	case 'p2p_to':
+		$sql_field = $fields;
+		break;
+	default:
+		$sql_field = '*';
+	}
 
-	$query = "SELECT $fields FROM $wpdb->p2p $where $limit";
+	$query = "SELECT $sql_field FROM $wpdb->p2p $where $limit";
 
-	if ( 'p2p_id' == $fields )
+	if ( '*' == $sql_field )
+		return $wpdb->get_results( $query );
+	else
 		return $wpdb->get_col( $query );
-
-	return $wpdb->get_results( $query );
 }
 
 /**

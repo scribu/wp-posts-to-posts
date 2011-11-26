@@ -82,12 +82,23 @@ class P2P_Directed_Connection_Type {
 
 	public function cardinality_check( $post_id ) {
 		if ( 'one' == $this->get_current( 'cardinality' ) ) {
-			return 'any';
+			$to_check = 'any';
 		} elseif ( $this->prevent_duplicates ) {
-			return $post_id;
+			$to_check = $post_id;
 		} else {
 			return false;
 		}
+
+		$to_check = array();
+
+		foreach ( P2P_Util::expand_direction( $this->direction ) as $direction ) {
+			$to_check = array_merge( $to_check, p2p_get_connections( $this->name, array(
+				$direction => $to_check,
+				'fields' => ( 'to' == $direction ) ? 'p2p_from' : 'p2p_to'
+			) ) );
+		}
+
+		return $to_check;
 	}
 
 	public function get_p2p_id( $from, $to ) {

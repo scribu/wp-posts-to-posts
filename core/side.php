@@ -94,14 +94,9 @@ class P2P_Side_Post extends P2P_Side {
 
 		$args = array_merge( $qv, $this->get_base_qv() );
 
-		if ( $to_check = $directed->cardinality_check( $post_id ) ) {
-			$connected = $this->get_connected( $directed, $to_check, array( 'fields' => 'ids' ) )->posts;
-
-			if ( !empty( $connected ) ) {
-				$args = array_merge_recursive( $args, array(
-					'post__not_in' => $connected
-				) );
-			}
+		$to_check = $directed->cardinality_check( $post_id );
+		if ( !empty( $to_check ) ) {
+			$args['post__not_in'] = $to_check;
 		}
 
 		$args = apply_filters( 'p2p_connectable_args', $args, $directed, $post_id );
