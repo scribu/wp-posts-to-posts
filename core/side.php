@@ -118,16 +118,14 @@ class P2P_Side_User extends P2P_Side {
 		return current_user_can( 'list_users' );
 	}
 
+	public function get_connected( $args ) {
+		return new WP_User_Query( $args );
+	}
+
 	public function get_connections( $directed, $post_id ) {
-		$direction = $directed->get_direction();
+		$query = $directed->get_connected( $post_id );
 
-		$connections = p2p_get_connections( $directed->name, array(
-			$direction => $post_id
-		) );
-
-		$key = ( 'to' == $direction ) ? 'p2p_from' : 'p2p_to';
-
-		return scb_list_fold( $connections, 'p2p_id', $key );
+		return scb_list_fold( $query->results, 'p2p_id', 'ID' );
 	}
 
 	public function get_connectable( $directed, $user_id, $page = 1, $search = '' ) {

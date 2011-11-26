@@ -12,7 +12,9 @@ class P2P_WP_Query {
 	}
 
 	function parse_query( $wp_query ) {
-		$r = P2P_Query::handle_qv( $wp_query->query_vars );
+		$q =& $wp_query->query_vars;
+
+		$r = P2P_Query::handle_qv( $q );
 
 		if ( null === $r )
 			return;
@@ -24,23 +26,16 @@ class P2P_WP_Query {
 	}
 
 	function posts_clauses( $clauses, $wp_query ) {
-		$qv_list = array(
-			'items', 'direction', 'meta',
-			'orderby', 'order_num', 'order'
-		);
+		global $wpdb;
 
-		foreach ( $qv_list as $key ) {
-			$qv[$key] = $wp_query->get( "connected_$key" );
-		}
-
-		$qv['p2p_type'] = $wp_query->get( 'p2p_type' );
+		$qv = P2P_Query::get_qv( $wp_query->query_vars );
 
 		if ( empty( $qv['items'] ) )
 			return $clauses;
 
 		$wp_query->_p2p_cache = true;
 
-		return P2P_Query::alter_clauses( $clauses, $qv );
+		return P2P_Query::alter_clauses( $clauses, $qv, "$wpdb->posts.ID" );
 	}
 
 	/**

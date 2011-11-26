@@ -7,17 +7,40 @@ class P2P_User_Query {
 	}
 
 	function pre_user_query( $query ) {
+		global $wpdb;
+
 		$q =& $query->query_vars;
 
-		$directed = P2P_Query::handle_qv( $q );
+		$r = P2P_Query::handle_qv( $q );
 
-		if ( null === $directed )
+		if ( null === $r )
 			return;
 
-		if ( false === $directed )
-			$q = array( 'include' => array(0) );
+		if ( false === $r ) {
+			$query->query_where = " AND 1=0";
+			return;
+		}
 
+		// alter query
 
+		$map = array(
+			'fields' => 'query_fields',
+			'join' => 'query_from',
+			'where' => 'query_where',
+			'orderby' => 'query_orderby',
+		);
+
+		$clauses = array();
+
+		foreach ( $map as $clause => $key ) {
+			$clauses[$clause] = $query->$key;
+		}
+
+		$clauses = P2P_Query::alter_clauses( $clauses, P2P_Query::get_qv( $q ), "$wpdb->users.ID" );
+
+		foreach ( $map as $clause => $key ) {
+			$query->$key = $clauses[$clause];
+		}
 	}
 }
 

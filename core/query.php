@@ -40,7 +40,22 @@ class P2P_Query {
 		return true;
 	}
 
-	function alter_clauses( $clauses, $q ) {
+	function get_qv( $q ) {
+		$qv_list = array(
+			'items', 'direction', 'meta',
+			'orderby', 'order_num', 'order'
+		);
+
+		foreach ( $qv_list as $key ) {
+			$qv[$key] = isset( $q["connected_$key"] ) ?  $q["connected_$key"] : false;
+		}
+
+		$qv['p2p_type'] = isset( $q['p2p_type'] ) ?  $q['p2p_type'] : false;
+
+		return $qv;
+	}
+
+	function alter_clauses( $clauses, $q, $main_id_column ) {
 		global $wpdb;
 
 		$clauses['fields'] .= ", $wpdb->p2p.*";
@@ -67,7 +82,7 @@ class P2P_Query {
 		case 'to':
 			list( $from, $to ) = $fields;
 
-			$clauses['where'] .= " AND $wpdb->posts.ID = $wpdb->p2p.$from";
+			$clauses['where'] .= " AND $main_id_column = $wpdb->p2p.$from";
 			if ( $search ) {
 				$clauses['where'] .= " AND $wpdb->p2p.$to IN ($search)";
 			}
@@ -76,11 +91,11 @@ class P2P_Query {
 		default:
 			if ( $search ) {
 				$clauses['where'] .= " AND (
-					($wpdb->posts.ID = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from IN ($search)) OR
-					($wpdb->posts.ID = $wpdb->p2p.p2p_from AND $wpdb->p2p.p2p_to IN ($search))
+					($main_id_column = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from IN ($search)) OR
+					($main_id_column = $wpdb->p2p.p2p_from AND $wpdb->p2p.p2p_to IN ($search))
 				)";
 			} else {
-				$clauses['where'] .= " AND ($wpdb->posts.ID = $wpdb->p2p.p2p_to OR $wpdb->posts.ID = $wpdb->p2p.p2p_from)";
+				$clauses['where'] .= " AND ($main_id_column = $wpdb->p2p.p2p_to OR $main_id_column = $wpdb->p2p.p2p_from)";
 			}
 		}
 
