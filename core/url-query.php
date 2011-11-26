@@ -8,7 +8,7 @@ class P2P_URL_Query {
 
 	function query_vars( $public_qv ) {
 		$public_qv[] = 'connected_type';
-		$public_qv[] = 'connected_posts';
+		$public_qv[] = 'connected_items';
 
 		return $public_qv;
 	}

@@ -28,7 +28,7 @@ class P2P_Column {
 			$args = array(
 				'post_type' => get_post_type( $post_id ),
 				'connected_type' => $this->ctype->name,
-				'connected_posts' => $post->ID,
+				'connected_items' => $post->ID,
 			);
 
 			$url = add_query_arg( $args, admin_url( 'edit.php' ) );

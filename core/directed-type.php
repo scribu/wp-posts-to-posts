@@ -64,6 +64,19 @@ class P2P_Directed_Connection_Type {
 		return $this->get_opposite( 'side' )->get_connected( $this, $post_id, $extra_qv );
 	}
 
+	public function get_connected_args( $q ) {
+		$q = array_merge( $this->get_opposite( 'side' )->query_vars, $q, array(
+			'p2p_type' => $this->name,
+			'connected_direction' => $this->get_direction(),
+		) );
+
+		$q = array_merge_recursive( $q, array(
+			'connected_meta' => $this->data
+		) );
+
+		return apply_filters( 'p2p_connected_args', $q, $this, $q['connected_items'] );
+	}
+
 	/**
 	 * @internal
 	 */

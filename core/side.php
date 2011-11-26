@@ -4,6 +4,8 @@ define( 'ADMIN_BOX_PER_PAGE', 5 );
 
 abstract class P2P_Side {
 
+	public $query_vars = array();
+
 	function __construct( $args ) {
 		foreach ( $args as $key => $value ) {
 			$this->$key = $value;
@@ -25,6 +27,12 @@ class P2P_Side_Post extends P2P_Side {
 		$this->post_type = array_values( array_filter( $this->post_type, 'post_type_exists' ) );
 		if ( empty( $this->post_type ) )
 			$this->post_type = array( 'post' );
+
+		$this->query_vars = array_merge( $this->query_vars, array(
+			'post_type' => $this->post_type,
+			'suppress_filters' => false,
+			'ignore_sticky_posts' => true,
+		) );
 	}
 
 	function get_title() {
@@ -39,30 +47,13 @@ class P2P_Side_Post extends P2P_Side {
 		return current_user_can( $this->get_ptype()->cap->edit_posts );
 	}
 
-	private function get_base_qv() {
-		return array_merge( $this->query_vars, array(
-			'post_type' => $this->post_type,
-			'suppress_filters' => false,
-			'ignore_sticky_posts' => true,
-		) );
-	}
-
 	public function get_connected( $directed, $post_id, $extra_qv = array() ) {
-		return new WP_Query( $this->get_connected_args( $directed, $post_id, $extra_qv ) );
-	}
-
-	public function get_connected_args( $directed, $post_id, $extra_qv = array() ) {
-		$args = array_merge( $extra_qv, $this->get_base_qv() );
-
-		// don't completely overwrite 'connected_meta', but ensure that $this->data is added
-		$args = array_merge_recursive( $args, array(
-			'p2p_type' => $directed->name,
-			'connected_posts' => $post_id,
-			'connected_direction' => $directed->get_direction(),
-			'connected_meta' => $directed->data
+		$args = array_merge( $extra_qv, array(
+			'connected_type' => $directed->name,
+			'connected_items' => $post_id
 		) );
 
-		return apply_filters( 'p2p_connected_args', $args, $directed, $post_id );
+		return new WP_Query( $args );
 	}
 
 	private static $admin_box_qv = array(
@@ -92,16 +83,14 @@ class P2P_Side_Post extends P2P_Side {
 			$qv['s'] = $search;
 		}
 
-		$args = array_merge( $qv, $this->get_base_qv() );
-
 		$to_check = $directed->cardinality_check( $post_id );
 		if ( !empty( $to_check ) ) {
-			$args['post__not_in'] = $to_check;
+			$qv['post__not_in'] = $to_check;
 		}
 
-		$args = apply_filters( 'p2p_connectable_args', $args, $directed, $post_id );
+		$qv = apply_filters( 'p2p_connectable_args', $qv, $directed, $post_id );
 
-		$query = new WP_Query( $args );
+		$query = new WP_Query( $qv );
 
 		return (object) array(
 			'items' => $query->posts,
