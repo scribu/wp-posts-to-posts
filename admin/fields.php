@@ -146,10 +146,20 @@ class P2P_Field_Title_User extends P2P_Field_Title_Post {
 		$data = array(
 			'title-attr' => '',
 			'title' => $user->display_name,
-			'url' => get_edit_profile_url( $user_id ),
+			'url' => $this->get_edit_url( $user_id ),
 		);
 
 		return P2P_Mustache::render( 'column-title', $data );
+	}
+
+	private function get_edit_url( $user_id ) {
+		if ( get_current_user_id() == $user_id ) {
+			$edit_link = 'profile.php';
+		} else {
+			$edit_link = "user-edit.php?user_id=$user_id";
+		}
+
+		return admin_url( $edit_link );
 	}
 }
 
