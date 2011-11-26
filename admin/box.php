@@ -20,12 +20,6 @@ class P2P_Box {
 
 	private $columns;
 
-	private static $extra_qv = array(
-		'update_post_term_cache' => false,
-		'update_post_meta_cache' => false,
-		'post_status' => 'any',
-	);
-
 	function __construct( $args, $ctype ) {
 		$this->args = $args;
 
@@ -50,9 +44,12 @@ class P2P_Box {
 	}
 
 	protected function init_columns() {
+		$object_type = $this->ctype->get_opposite( 'side' )->object;
+		$title_class = 'P2P_Field_Title_' . ucfirst( $object_type );
+
 		$this->columns = array(
 			'delete' => new P2P_Field_Delete,
-			'title' => new P2P_Field_Title( $this->labels->singular_name ),
+			'title' => new $title_class( $this->labels->singular_name ),
 		);
 
 		foreach ( $this->args->fields as $key => $data ) {
@@ -65,10 +62,14 @@ class P2P_Box {
 	}
 
 	function render( $post ) {
-		$qv = self::$extra_qv;
-		$qv['nopaging'] = true;
+		$qv = array(
+			'update_post_term_cache' => false,
+			'update_post_meta_cache' => false,
+			'post_status' => 'any',
+			'nopaging' => true
+		);
 
-		$this->connected_posts = $this->ctype->get_connected( $post->ID, $qv )->posts;
+		$this->connected_items = $this->ctype->get_connected( $post->ID, $qv )->items;
 
 		$data = array(
 			'p2p-type' => $this->ctype->name,
@@ -97,11 +98,11 @@ class P2P_Box {
 	protected function render_connections_table( $post ) {
 		$data = array();
 
-		if ( empty( $this->connected_posts ) )
+		if ( empty( $this->connected_items ) )
 			$data['hide'] = 'style="display:none"';
 
 		$tbody = array();
-		foreach ( $this->connected_posts as $connected ) {
+		foreach ( $this->connected_items as $connected ) {
 			$tbody[] = $this->connection_row( $connected->p2p_id, $connected->ID );
 		}
 		$data['tbody'] = $tbody;
@@ -121,7 +122,7 @@ class P2P_Box {
 			'label' => __( 'Create connections:', P2P_TEXTDOMAIN )
 		);
 
-		if ( $this->ctype->accepts_single_connection() && !empty( $this->connected_posts ) )
+		if ( $this->ctype->accepts_single_connection() && !empty( $this->connected_items ) )
 			$data['hide'] = 'style="display:none"';
 
 		// Search tab
@@ -180,36 +181,20 @@ class P2P_Box {
 	}
 
 	protected function post_rows( $current_post_id, $page = 1, $search = '' ) {
-		$args = array_merge( self::$extra_qv, array(
-			'paged' => $page,
-			'posts_per_page' => 5,
-		) );
+		$candidate = $this->ctype->get_connectable( $current_post_id, $page, $search );
 
-		if ( $search ) {
-			$args['_p2p_box'] = true;
-			$args['s'] = $search;
-		}
-
-		$query = $this->ctype->get_connectable( $current_post_id, $args );
-
-		if ( empty( $query->posts ) )
+		if ( empty( $candidate->items ) )
 			return false;
-
-		$candidate = (object) array(
-			'posts' => $query->posts,
-			'current_page' => max( 1, $query->get('paged') ),
-			'total_pages' => $query->max_num_pages
-		);
 
 		$data = array();
 
 		$columns = array(
 			'create' => new P2P_Field_Create,
-			'title' => new P2P_Field_Title,
+			'title' => $this->columns['title']
 		);
 
-		foreach ( $candidate->posts as $post ) {
-			$data['rows'][] = $this->table_row( $columns, 0, $post->ID );
+		foreach ( $candidate->items as $item ) {
+			$data['rows'][] = $this->table_row( $columns, 0, $item->ID );
 		}
 
 		if ( $candidate->total_pages > 1 ) {

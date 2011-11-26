@@ -61,50 +61,19 @@ class P2P_Directed_Connection_Type {
 	 * @return object A WP_Query instance
 	 */
 	public function get_connected( $post_id, $extra_qv = array() ) {
-		return new WP_Query( $this->get_connected_args( $post_id, $extra_qv ) );
-	}
-
-	public function get_connected_args( $post_id, $extra_qv = array() ) {
-		$args = array_merge( $extra_qv, $this->get_opposite( 'side' )->get_base_qv() );
-
-		// don't completely overwrite 'connected_meta', but ensure that $this->data is added
-		$args = array_merge_recursive( $args, array(
-			'p2p_type' => $this->name,
-			'connected_posts' => $post_id,
-			'connected_direction' => $this->direction,
-			'connected_meta' => $this->data
-		) );
-
-		return apply_filters( 'p2p_connected_args', $args, $this, $post_id );
+		return $this->get_opposite( 'side' )->get_connected( $this, $post_id, $extra_qv );
 	}
 
 	/**
 	 * Get a list of posts that could be connected to a given post.
 	 *
 	 * @param int $post_id A post id.
-	 * @param array $extra_qv Additional query variables to use.
-	 *
-	 * @return bool|object False on failure; A WP_Query instance on success.
 	 */
-	public function get_connectable( $post_id, $extra_qv = array() ) {
-		$args = array_merge( $extra_qv, $this->get_opposite( 'side' )->get_base_qv() );
-
-		if ( $to_check = $this->cardinality_check( $post_id ) ) {
-			$connected = $this->get_connected( $to_check, array( 'fields' => 'ids' ) )->posts;
-
-			if ( !empty( $connected ) ) {
-				$args = array_merge_recursive( $args, array(
-					'post__not_in' => $connected
-				) );
-			}
-		}
-
-		$args = apply_filters( 'p2p_connectable_args', $args, $this, $post_id );
-
-		return new WP_Query( $args );
+	public function get_connectable( $post_id, $page, $search ) {
+		return $this->get_opposite( 'side' )->get_connectable( $this, $post_id, $page, $search );
 	}
 
-	protected function cardinality_check( $post_id ) {
+	public function cardinality_check( $post_id ) {
 		if ( 'one' == $this->get_current( 'cardinality' ) ) {
 			return 'any';
 		} elseif ( $this->prevent_duplicates ) {

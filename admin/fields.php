@@ -70,7 +70,42 @@ class P2P_Field_Order implements P2P_Field {
 /**
  * @package Administration
  */
-class P2P_Field_Title implements P2P_Field {
+class P2P_Field_Generic implements P2P_Field {
+
+	protected $data;
+
+	function __construct( $data ) {
+		$this->data = $data;
+	}
+
+	function get_title() {
+		return $this->data['title'];
+	}
+
+	function render( $key, $p2p_id, $post_id ) {
+		$args = array(
+			'name' => $key,
+			'type' => $this->data['type']
+		);
+
+		if ( isset( $this->data['values'] ) )
+			$args['value'] = $this->data['values'];
+
+		$single_value = ( 'checkbox' != $args['type'] );
+
+		$form = new scbForm(
+			array( $key => p2p_get_meta( $p2p_id, $key, $single_value ) ),
+			array( 'p2p_meta', $p2p_id )
+		);
+
+		return $form->input( $args );
+	}
+}
+
+/**
+ * @package Administration
+ */
+class P2P_Field_Title_Post implements P2P_Field {
 
 	protected $title;
 
@@ -102,38 +137,19 @@ class P2P_Field_Title implements P2P_Field {
 	}
 }
 
-/**
- * @package Administration
- */
-class P2P_Field_Generic implements P2P_Field {
 
-	protected $data;
+class P2P_Field_Title_User extends P2P_Field_Title_Post {
 
-	function __construct( $data ) {
-		$this->data = $data;
-	}
+	function render( $key, $p2p_id, $user_id ) {
+		$user = get_user_by( 'id', $user_id );
 
-	function get_title() {
-		return $this->data['title'];
-	}
-
-	function render( $key, $p2p_id, $post_id ) {
-		$args = array(
-			'name' => $key,
-			'type' => $this->data['type']
+		$data = array(
+			'title-attr' => '',
+			'title' => $user->display_name,
+			'url' => get_edit_profile_url( $user_id ),
 		);
 
-		if ( isset( $this->data['values'] ) )
-			$args['value'] = $this->data['values'];
-
-		$single_value = ( 'checkbox' != $args['type'] );
-
-		$form = new scbForm(
-			array( $key => p2p_get_meta( $p2p_id, $key, $single_value ) ),
-			array( 'p2p_meta', $p2p_id )
-		);
-
-		return $form->input( $args );
+		return P2P_Mustache::render( 'column-title', $data );
 	}
 }
 
