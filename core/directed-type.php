@@ -102,6 +102,7 @@ class P2P_Directed_Connection_Type {
 	 * @return int p2p_id
 	 */
 	public function connect( $from, $to ) {
+		// TODO
 		if ( !get_post( $from ) || !get_post( $to ) )
 			return false;
 
