@@ -57,17 +57,17 @@ class P2P_Side_Post extends P2P_Side {
 		'post_status' => 'any',
 	);
 
-	public function get_connections( $directed, $post_id ) {
+	public function get_connections( $directed, $item_id ) {
 		$qv = array_merge( self::$admin_box_qv, array(
 			'nopaging' => true
 		) );
 
-		$query = $directed->get_connected( $post_id, $qv );
+		$query = $directed->get_connected( $item_id, $qv );
 
 		return scb_list_fold( $query->posts, 'p2p_id', 'ID' );
 	}
 
-	public function get_connectable( $directed, $post_id, $page = 1, $search = '' ) {
+	public function get_connectable( $directed, $item_id, $page = 1, $search = '' ) {
 		$qv = array_merge( $this->query_vars, self::$admin_box_qv, array(
 			'posts_per_page' => ADMIN_BOX_PER_PAGE,
 			'paged' => $page,
@@ -78,12 +78,12 @@ class P2P_Side_Post extends P2P_Side {
 			$qv['s'] = $search;
 		}
 
-		$to_check = $directed->cardinality_check( $post_id );
+		$to_check = $directed->cardinality_check( $item_id );
 		if ( !empty( $to_check ) ) {
 			$qv['post__not_in'] = $to_check;
 		}
 
-		$qv = apply_filters( 'p2p_connectable_args', $qv, $directed, $post_id );
+		$qv = apply_filters( 'p2p_connectable_args', $qv, $directed, $item_id );
 
 		$query = new WP_Query( $qv );
 
@@ -122,28 +122,30 @@ class P2P_Side_User extends P2P_Side {
 		return new WP_User_Query( $args );
 	}
 
-	public function get_connections( $directed, $post_id ) {
-		$query = $directed->get_connected( $post_id );
+	public function get_connections( $directed, $item_id ) {
+		$query = $directed->get_connected( $item_id );
 
 		return scb_list_fold( $query->results, 'p2p_id', 'ID' );
 	}
 
-	public function get_connectable( $directed, $user_id, $page = 1, $search = '' ) {
-		$args = array(
+	public function get_connectable( $directed, $item_id, $page = 1, $search = '' ) {
+		$qv = array(
 			'number' => ADMIN_BOX_PER_PAGE,
 			'offset' => ADMIN_BOX_PER_PAGE * ( $page - 1 )
 		);
 
 		if ( $search ) {
-			$args['search'] = '*' . $search . '*';
+			$qv['search'] = '*' . $search . '*';
 		}
 
-		$to_check = $directed->cardinality_check( $user_id );
+		$to_check = $directed->cardinality_check( $item_id );
 		if ( !empty( $to_check ) ) {
-			$args['exclude'] = $to_check;
+			$qv['exclude'] = $to_check;
 		}
 
-		$query = new WP_User_Query( $args );
+		$qv = apply_filters( 'p2p_connectable_args', $qv, $directed, $item_id );
+
+		$query = new WP_User_Query( $qv );
 
 		return (object) array(
 			'items' => $query->get_results(),
