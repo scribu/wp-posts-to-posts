@@ -10,14 +10,9 @@ abstract class P2P_Side {
 		}
 	}
 
-	abstract function get_title();
-	abstract function get_labels();
-
 	function get_base_qv() {
 		return array();
 	}
-
-	abstract function check_capability();
 }
 
 
@@ -97,6 +92,10 @@ class P2P_Side_Post extends P2P_Side {
 		);
 	}
 
+	function item_exists( $item_id ) {
+		return (bool) get_post( $item_id );
+	}
+
 	private function get_ptype() {
 		return get_post_type_object( $this->post_type[0] );
 	}
@@ -152,6 +151,10 @@ class P2P_Side_User extends P2P_Side {
 			'current_page' => $page,
 			'total_pages' => ceil( $query->get_total() / ADMIN_BOX_PER_PAGE )
 		);
+	}
+
+	function item_exists( $item_id ) {
+		return (bool) get_user_by( 'id', $item_id );
 	}
 }
 

@@ -145,8 +145,10 @@ class P2P_Directed_Connection_Type {
 	 * @return int p2p_id
 	 */
 	public function connect( $from, $to ) {
-		// TODO
-		if ( !get_post( $from ) || !get_post( $to ) )
+		if ( !$this->get_current( 'side' )->item_exists( $from ) )
+			return false;
+
+		if ( !$this->get_opposite( 'side' )->item_exists( $to ) )
 			return false;
 
 		if ( $this->accepts_single_connection() )
