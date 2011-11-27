@@ -145,7 +145,7 @@ class P2P_Directed_Connection_Type {
 	 *
 	 * @return int p2p_id
 	 */
-	public function connect( $from, $to, $meta ) {
+	public function connect( $from, $to, $meta = array() ) {
 		if ( !$this->get_current( 'side' )->item_exists( $from ) )
 			return false;
 
