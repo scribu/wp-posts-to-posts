@@ -1,0 +1,90 @@
+# Copyright (C) 2010 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts 2 Posts\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
+"POT-Creation-Date: 2011-09-24 13:12:56+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2011-10-17 12:17+0100\n"
+"Last-Translator: Joel Arvidsson <joel@oblador.se>\n"
+"Language-Team: \n"
+"X-Poedit-Language: Swedish\n"
+"X-Poedit-Country: SWEDEN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: scb/AdminPage.php:163
+msgid "Settings <strong>saved</strong>."
+msgstr "Inställningar <strong>sparade</strong>."
+
+#: scb/AdminPage.php:176
+#: scb/AdminPage.php:187
+msgid "Save Changes"
+msgstr "Spara ändringar"
+
+#: scb/AdminPage.php:348
+msgid "Settings"
+msgstr "Inställningar"
+
+#: admin/fields.php:13
+msgid "Create connection"
+msgstr "Skapa koppling"
+
+#: admin/fields.php:25
+msgid "Delete all connections"
+msgstr "Radera alla kopplingar"
+
+#: admin/fields.php:34
+msgid "Delete connection"
+msgstr "Radera koppling"
+
+#: admin/box.php:59
+msgid "Are you sure you want to delete all connections?"
+msgstr "Är du säker på att du vill radera alla kopplingar?"
+
+#: admin/box.php:69
+msgid "Connected %s"
+msgstr "Kopplad %s"
+
+#: admin/box.php:116
+msgid "Create connections:"
+msgstr "Skapa kopplingar: "
+
+#: admin/box.php:125
+msgid "Search"
+msgstr "Sök"
+
+#: admin/box.php:133
+msgid "View All"
+msgstr "Visa alla"
+
+#: admin/box.php:216
+msgid "previous"
+msgstr "föregående"
+
+#: admin/box.php:217
+msgid "next"
+msgstr "nästa"
+
+#: admin/box.php:218
+msgid "of"
+msgstr "av"
+
+#: core/widget.php:14
+msgid "Posts 2 Posts"
+msgstr ""
+
+#: core/widget.php:15
+msgid "A list of posts connected to the current post"
+msgstr "En lista över inlägg kopplade till aktuellt inlägg"
+
+#: core/widget.php:29
+msgid "Connection type:"
+msgstr "Kopplingstyp: "
+
+#: core/widget.php:53
+msgid "Related %s"
+msgstr "Relaterade %s"
+
