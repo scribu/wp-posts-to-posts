@@ -115,8 +115,25 @@ class P2P_Directed_Connection_Type {
 	 *
 	 * @param int $post_id A post id.
 	 */
-	public function get_connectable( $post_id, $page, $search ) {
-		return $this->get_opposite( 'side' )->get_connectable( $this, $post_id, $page, $search );
+	public function get_connectable( $item_id, $page, $search ) {
+		$to_exclude = array();
+
+		if ( 'one' == $this->get_current( 'cardinality' ) ) {
+			_p2p_append( $to_exclude, p2p_get_connections( $this->name, array(
+				'direction' => ( 'to' == $this->direction ? 'from' : 'to' ),
+				'fields' => 'object_id'
+			) ) );
+		}
+
+		if ( $this->prevent_duplicates ) {
+			_p2p_append( $to_exclude, p2p_get_connections( $this->name, array(
+				'direction' => $this->direction,
+				'from' => $item_id,
+				'fields' => 'object_id'
+			) ) );
+		}
+
+		return $this->get_opposite( 'side' )->get_connectable( $item_id, $page, $search, $to_exclude, $this );
 	}
 
 	/**
@@ -132,30 +149,26 @@ class P2P_Directed_Connection_Type {
 		if ( !get_post( $from ) || !get_post( $to ) )
 			return false;
 
-		$p2p_id = false;
+		if ( $this->accepts_single_connection() )
+			$to_check = 'any';
+		elseif ( $this->prevent_duplicates )
+			$to_check = $to;
+		else
+			$to_check = false;
 
-		if ( 'one' == $this->get_current( 'cardinality' ) ) {
-			$connected = $this->get_already_connected( $from );
-			if ( !empty( $connected ) )
-				return false;
-		}
+		if ( $to_check && $this->get_p2p_id( $from, $to_check ) )
+			return false;
 
-		if ( $this->prevent_duplicates ) {
-			$p2p_id = $this->get_p2p_id( $from, $to );
-		}
+		$args = array( $from, $to );
 
-		if ( !$p2p_id ) {
-			$args = array( $from, $to );
+		if ( 'to' == $this->direction )
+			$args = array_reverse( $args );
 
-			if ( 'to' == $this->direction )
-				$args = array_reverse( $args );
-
-			$p2p_id = p2p_create_connection( $this->name, array(
-				'from' => $args[0],
-				'to' => $args[1],
-				'meta' => $this->data
-			) );
-		}
+		$p2p_id = p2p_create_connection( $this->name, array(
+			'from' => $args[0],
+			'to' => $args[1],
+			'meta' => $this->data
+		) );
 
 		return $p2p_id;
 	}
@@ -183,33 +196,6 @@ class P2P_Directed_Connection_Type {
 		return p2p_delete_connections( $this->name, array(
 			'direction' => $this->direction,
 			'from' => $from,
-		) );
-	}
-
-	protected function check_against( $post_id ) {
-		if ( 'one' == $this->get_current( 'cardinality' ) ) {
-			return 'any';
-		} elseif ( $this->prevent_duplicates ) {
-			return $post_id;
-		} else {
-			return false;
-		}
-	}
-
-	public function cardinality_check( $post_id ) {
-		$against = $this->check_against( $post_id );
-
-		if ( !$against )
-			return false;
-
-		return $this->get_already_connected( $against );
-	}
-
-	protected function get_already_connected( $from ) {
-		return p2p_get_connections( $this->name, array(
-			'direction' => ( 'to' == $this->direction ? 'from' : 'to' ),
-			'from' => $from,
-			'fields' => 'object_id'
 		) );
 	}
 

@@ -73,7 +73,7 @@ class P2P_Side_Post extends P2P_Side {
 		return scb_list_fold( $query->posts, 'p2p_id', 'ID' );
 	}
 
-	public function get_connectable( $directed, $item_id, $page = 1, $search = '' ) {
+	public function get_connectable( $item_id, $page, $search, $to_exclude, $directed ) {
 		$qv = array_merge( $this->get_base_qv(), self::$admin_box_qv, array(
 			'posts_per_page' => ADMIN_BOX_PER_PAGE,
 			'paged' => $page,
@@ -84,10 +84,7 @@ class P2P_Side_Post extends P2P_Side {
 			$qv['s'] = $search;
 		}
 
-		$to_check = $directed->cardinality_check( $item_id );
-		if ( !empty( $to_check ) ) {
-			$qv['post__not_in'] = $to_check;
-		}
+		$qv['post__not_in'] = $to_exclude;
 
 		$qv = apply_filters( 'p2p_connectable_args', $qv, $directed, $item_id );
 
@@ -134,7 +131,7 @@ class P2P_Side_User extends P2P_Side {
 		return scb_list_fold( $query->results, 'p2p_id', 'ID' );
 	}
 
-	public function get_connectable( $directed, $item_id, $page = 1, $search = '' ) {
+	public function get_connectable( $item_id, $page, $search, $to_exclude, $directed ) {
 		$qv = array(
 			'number' => ADMIN_BOX_PER_PAGE,
 			'offset' => ADMIN_BOX_PER_PAGE * ( $page - 1 )
@@ -144,10 +141,7 @@ class P2P_Side_User extends P2P_Side {
 			$qv['search'] = '*' . $search . '*';
 		}
 
-		$to_check = $directed->cardinality_check( $item_id );
-		if ( !empty( $to_check ) ) {
-			$qv['exclude'] = $to_check;
-		}
+		$qv['exclude'] = $to_exclude;
 
 		$qv = apply_filters( 'p2p_connectable_args', $qv, $directed, $item_id );
 

@@ -73,6 +73,10 @@ function _p2p_pluck( &$arr, $key ) {
 	return $value;
 }
 
+function _p2p_append( &$arr, $values ) {
+	$arr = array_merge( $arr, $values );
+}
+
 /**
  * @internal
  */
