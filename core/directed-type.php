@@ -137,14 +137,15 @@ class P2P_Directed_Connection_Type {
 	}
 
 	/**
-	 * Connect two posts.
+	 * Connect two items.
 	 *
 	 * @param int The first end of the connection.
 	 * @param int The second end of the connection.
+	 * @param array Additional information about the connection.
 	 *
 	 * @return int p2p_id
 	 */
-	public function connect( $from, $to ) {
+	public function connect( $from, $to, $meta ) {
 		if ( !$this->get_current( 'side' )->item_exists( $from ) )
 			return false;
 
@@ -166,13 +167,11 @@ class P2P_Directed_Connection_Type {
 		if ( 'to' == $this->direction )
 			$args = array_reverse( $args );
 
-		$p2p_id = p2p_create_connection( $this->name, array(
+		return p2p_create_connection( $this->name, array(
 			'from' => $args[0],
 			'to' => $args[1],
-			'meta' => $this->data
+			'meta' => array_merge( $meta, $this->data )
 		) );
-
-		return $p2p_id;
 	}
 
 	/**
