@@ -83,11 +83,14 @@ class Generic_Connection_Type {
 	 *
 	 * @return object P2P_Directed_Connection_Type instance
 	 */
-	public function set_direction( $direction ) {
+	public function set_direction( $direction, $instantiate = true ) {
 		if ( !in_array( $direction, array( 'from', 'to', 'any' ) ) )
 			return false;
 
-		return new P2P_Directed_Connection_Type( $this, $direction );
+		if ( $instantiate )
+			return new P2P_Directed_Connection_Type( $this, $direction );
+
+		return $direction;
 	}
 
 	/**
@@ -98,10 +101,21 @@ class Generic_Connection_Type {
 	 *
 	 * @return bool|object|string False on failure, P2P_Directed_Connection_Type instance or direction on success.
 	 */
-	public function find_direction( $arg, $instantiate = true ) {
+	public function find_direction( $arg, $instantiate = true, $object_type = false ) {
+		if ( $object_type ) {
+			$opposite_side = P2P_Util::choose_side( $object_type,
+				$this->side['from']->object,
+				$this->side['to']->object
+			);
+
+			if ( !$opposite_side )
+				return false;
+
+			if ( 'any' != $opposite_side )
+				return $this->set_direction( $opposite_side, $instantiate );
+		}
+
 		$post_type = P2P_Util::find_post_type( $arg );
-		if ( !$post_type )
-			return false;
 
 		foreach ( array( 'from', 'to' ) as $direction ) {
 			$side = $this->side[ $direction ];
@@ -115,10 +129,7 @@ class Generic_Connection_Type {
 			if ( $this->indeterminate )
 				$direction = $this->reciprocal ? 'any' : 'from';
 
-			if ( $instantiate )
-				return $this->set_direction( $direction );
-
-			return $direction;
+			return $this->set_direction( $direction, $instantiate );
 		}
 
 		return false;

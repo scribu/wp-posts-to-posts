@@ -11,7 +11,7 @@ class P2P_User_Query {
 
 		$q =& $query->query_vars;
 
-		if ( false === P2P_Query::handle_qv( $q ) ) {
+		if ( false === P2P_Query::handle_qv( $q, 'user' ) ) {
 			$query->query_where = " AND 1=0";
 			return;
 		}

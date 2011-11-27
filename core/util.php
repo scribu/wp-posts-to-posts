@@ -42,6 +42,19 @@ abstract class P2P_Util {
 		else
 			return array( $direction );
 	}
+
+	static function choose_side( $current, $from, $to ) {
+		if ( $from == $to && $current == $from )
+			return 'any';
+
+		if ( $current == $from )
+			return 'to';
+
+		if ( $current == $to )
+			return 'from';
+
+		return false;
+	}
 }
 
 /**

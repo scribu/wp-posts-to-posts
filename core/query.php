@@ -2,7 +2,7 @@
 
 class P2P_Query {
 
-	function handle_qv( &$q ) {
+	function handle_qv( &$q, $object_type ) {
 		// Handle shortcut args
 		$qv_map = array(
 			'connected' => 'any',
@@ -29,7 +29,7 @@ class P2P_Query {
 		if ( isset( $q['connected_direction'] ) )
 			$directed = $ctype->set_direction( _p2p_pluck( $q, 'connected_direction' ) );
 		else {
-			$directed = $ctype->find_direction( $q['connected_items'] );
+			$directed = $ctype->find_direction( $q['connected_items'], true, $object_type );
 		}
 
 		if ( !$directed )
