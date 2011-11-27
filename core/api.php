@@ -267,20 +267,20 @@ function p2p_delete_connection( $p2p_id ) {
 	return $count;
 }
 
-function p2p_get_meta( $p2p_id, $key, $single = false ) {
+function p2p_get_meta( $p2p_id, $key = '', $single = false ) {
 	return get_metadata( 'p2p', $p2p_id, $key, $single );
 }
 
-function p2p_update_meta( $p2p_id, $meta_key, $meta_value, $prev_value = '' ) {
-	return update_metadata( 'p2p', $p2p_id, $meta_key, $meta_value, $prev_value );
+function p2p_update_meta( $p2p_id, $key, $value, $prev_value = '' ) {
+	return update_metadata( 'p2p', $p2p_id, $key, $value, $prev_value );
 }
 
-function p2p_add_meta( $p2p_id, $meta_key, $meta_value, $unique = false ) {
-	return add_metadata( 'p2p', $p2p_id, $meta_key, $meta_value, $unique );
+function p2p_add_meta( $p2p_id, $key, $value, $unique = false ) {
+	return add_metadata( 'p2p', $p2p_id, $key, $value, $unique );
 }
 
-function p2p_delete_meta( $p2p_id, $meta_key, $meta_value = '' ) {
-	return delete_metadata( 'p2p', $p2p_id, $meta_key, $meta_value );
+function p2p_delete_meta( $p2p_id, $key, $value = '' ) {
+	return delete_metadata( 'p2p', $p2p_id, $key, $value );
 }
 
 /**
