@@ -65,7 +65,7 @@ class P2P_Directed_Connection_Type {
 			'connected_items' => $post_id
 		) );
 
-		return $this->get_opposite( 'side' )->get_connected( $this->get_connected_args( $args ) );
+		return $this->get_opposite( 'side' )->do_query( $this->get_connected_args( $args ) );
 	}
 
 	public function get_connected_args( $q ) {

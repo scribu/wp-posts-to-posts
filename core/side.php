@@ -48,7 +48,7 @@ class P2P_Side_Post extends P2P_Side {
 		return current_user_can( $this->get_ptype()->cap->edit_posts );
 	}
 
-	function get_connected( $args ) {
+	function do_query( $args ) {
 		return new WP_Query( $args );
 	}
 
@@ -120,7 +120,7 @@ class P2P_Side_User extends P2P_Side {
 		return current_user_can( 'list_users' );
 	}
 
-	function get_connected( $args ) {
+	function do_query( $args ) {
 		return new WP_User_Query( $args );
 	}
 
