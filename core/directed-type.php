@@ -62,14 +62,12 @@ class P2P_Directed_Connection_Type {
 	 */
 	public function get_connected( $post_id, $extra_qv = array() ) {
 		$args = array_merge( $extra_qv, array(
-			'connected_type' => $this->name,
 			'connected_items' => $post_id
 		) );
 
-		return $this->get_opposite( 'side' )->get_connected( $args );
+		return $this->get_opposite( 'side' )->get_connected( $this->get_connected_args( $args ) );
 	}
 
-	// called from P2P_Query
 	public function get_connected_args( $q ) {
 		if ( $orderby_key = $this->get_orderby_key() ) {
 			$q = wp_parse_args( $q, array(
