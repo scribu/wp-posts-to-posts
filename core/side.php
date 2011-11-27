@@ -53,7 +53,7 @@ class P2P_Side_Post extends P2P_Side {
 		return current_user_can( $this->get_ptype()->cap->edit_posts );
 	}
 
-	public function get_connected( $args ) {
+	function get_connected( $args ) {
 		return new WP_Query( $args );
 	}
 
@@ -63,7 +63,7 @@ class P2P_Side_Post extends P2P_Side {
 		'post_status' => 'any',
 	);
 
-	public function get_connections( $directed, $item_id ) {
+	function get_connections( $directed, $item_id ) {
 		$qv = array_merge( self::$admin_box_qv, array(
 			'nopaging' => true
 		) );
@@ -73,7 +73,7 @@ class P2P_Side_Post extends P2P_Side {
 		return scb_list_fold( $query->posts, 'p2p_id', 'ID' );
 	}
 
-	public function get_connectable( $item_id, $page, $search, $to_exclude, $directed ) {
+	function get_connectable( $item_id, $page, $search, $to_exclude, $directed ) {
 		$qv = array_merge( $this->get_base_qv(), self::$admin_box_qv, array(
 			'posts_per_page' => ADMIN_BOX_PER_PAGE,
 			'paged' => $page,
@@ -121,17 +121,17 @@ class P2P_Side_User extends P2P_Side {
 		return current_user_can( 'list_users' );
 	}
 
-	public function get_connected( $args ) {
+	function get_connected( $args ) {
 		return new WP_User_Query( $args );
 	}
 
-	public function get_connections( $directed, $item_id ) {
+	function get_connections( $directed, $item_id ) {
 		$query = $directed->get_connected( $item_id );
 
 		return scb_list_fold( $query->results, 'p2p_id', 'ID' );
 	}
 
-	public function get_connectable( $item_id, $page, $search, $to_exclude, $directed ) {
+	function get_connectable( $item_id, $page, $search, $to_exclude, $directed ) {
 		$qv = array(
 			'number' => ADMIN_BOX_PER_PAGE,
 			'offset' => ADMIN_BOX_PER_PAGE * ( $page - 1 )
