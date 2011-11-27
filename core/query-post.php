@@ -14,14 +14,8 @@ class P2P_WP_Query {
 	function parse_query( $wp_query ) {
 		$q =& $wp_query->query_vars;
 
-		$r = P2P_Query::handle_qv( $q );
-
-		if ( null === $r )
-			return;
-
-		if ( false === $r ) {
+		if ( false === P2P_Query::handle_qv( $q ) ) {
 			$q = array( 'year' => 2525 );
-			return;
 		}
 	}
 

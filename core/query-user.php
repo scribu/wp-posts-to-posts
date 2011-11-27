@@ -11,17 +11,17 @@ class P2P_User_Query {
 
 		$q =& $query->query_vars;
 
-		$r = P2P_Query::handle_qv( $q );
-
-		if ( null === $r )
-			return;
-
-		if ( false === $r ) {
+		if ( false === P2P_Query::handle_qv( $q ) ) {
 			$query->query_where = " AND 1=0";
 			return;
 		}
 
 		// alter query
+
+		$qv = P2P_Query::get_qv( $q );
+
+		if ( empty( $qv['items'] ) )
+			return;
 
 		$map = array(
 			'fields' => 'query_fields',
@@ -35,7 +35,7 @@ class P2P_User_Query {
 		foreach ( $map as $clause => $key )
 			$clauses[$clause] = $query->$key;
 
-		$clauses = P2P_Query::alter_clauses( $clauses, P2P_Query::get_qv( $q ), "$wpdb->users.ID" );
+		$clauses = P2P_Query::alter_clauses( $clauses, $qv, "$wpdb->users.ID" );
 
 		if ( 0 !== strpos( $clauses['orderby'], 'ORDER BY ' ) )
 			$clauses['orderby'] = 'ORDER BY ' . $clauses['orderby'];
