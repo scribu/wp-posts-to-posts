@@ -4,6 +4,8 @@ define( 'ADMIN_BOX_PER_PAGE', 5 );
 
 abstract class P2P_Side {
 
+	public $query_vars = array();
+
 	function __construct( $args ) {
 		foreach ( $args as $key => $value ) {
 			$this->$key = $value;
@@ -11,14 +13,14 @@ abstract class P2P_Side {
 	}
 
 	function get_base_qv() {
-		return array();
+		return $this->query_vars;
 	}
 }
 
 
 class P2P_Side_Post extends P2P_Side {
 
-	public $query_vars = array();
+	public $post_type = array();
 
 	function __construct( $args ) {
 		parent::__construct( $args );
