@@ -137,7 +137,7 @@ class P2P_Directed_Connection_Type {
 		$p2p_id = false;
 
 		if ( 'one' == $this->get_current( 'cardinality' ) ) {
-			$connected = $this->get_connections_raw( $against );
+			$connected = $this->get_connections_raw( $from );
 			if ( !empty( $connected ) )
 				return false;
 		}
@@ -169,7 +169,11 @@ class P2P_Directed_Connection_Type {
 	 * @param int The second end of the connection.
 	 */
 	public function disconnect( $from, $to ) {
-		return p2p_delete_connection( $this->get_p2p_id( $from, $to ) );
+		return p2p_delete_connections( $this->name, array(
+			'direction' => $this->direction,
+			'from' => $from,
+			'to' => $to,
+		) );
 	}
 
 	/**
@@ -178,9 +182,10 @@ class P2P_Directed_Connection_Type {
 	 * @param int The post id.
 	 */
 	public function disconnect_all( $from ) {
-		foreach ( P2P_Util::expand_direction( $this->direction ) as $dir ) {
-			p2p_delete_connections( $this->name, array( $dir => $from ) );
-		}
+		return p2p_delete_connections( $this->name, array(
+			'direction' => $this->direction,
+			'from' => $from,
+		) );
 	}
 
 	protected function check_against( $post_id ) {
@@ -203,34 +208,23 @@ class P2P_Directed_Connection_Type {
 	}
 
 	protected function get_connections_raw( $from ) {
-		$to_check = array();
-
-		foreach ( P2P_Util::expand_direction( $this->direction ) as $direction ) {
-			$to_check = array_merge( $to_check, p2p_get_connections( $this->name, array(
-				$direction => $to_check,
-				'fields' => ( 'to' == $direction ) ? 'p2p_from' : 'p2p_to'
-			) ) );
-		}
-
-		return $to_check;
+		return p2p_get_connections( $this->name, array(
+			'direction' => $this->direction,
+			'from' => $from,
+			'fields' => 'object_id'
+		) );
 	}
 
 	public function get_p2p_id( $from, $to ) {
-		foreach ( P2P_Util::expand_direction( $this->direction ) as $direction ) {
-			$args = array( $from, $to );
-			if ( 'to' == $direction ) {
-				$args = array_reverse( $args );
-			}
+		$ids = p2p_get_connections( $this->name, array(
+			'direction' => $this->direction,
+			'from' => $from,
+			'to' => $to,
+			'fields' => 'p2p_id'
+		) );
 
-			$ids = p2p_get_connections( $this->name, array(
-				'from' => $args[0],
-				'to' => $args[1],
-				'fields' => 'p2p_id'
-			) );
-
-			if ( !empty( $ids ) )
-				return reset( $ids );
-		}
+		if ( !empty( $ids ) )
+			return reset( $ids );
 
 		return false;
 	}
