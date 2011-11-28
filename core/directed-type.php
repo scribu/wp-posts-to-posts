@@ -152,6 +152,11 @@ class P2P_Directed_Connection_Type {
 		if ( !$this->get_opposite( 'side' )->item_exists( $to ) )
 			return false;
 
+		$args = array( $from, $to );
+
+		if ( 'to' == $this->direction )
+			$args = array_reverse( $args );
+
 		if ( $this->accepts_single_connection() )
 			$to_check = 'any';
 		elseif ( $this->prevent_duplicates )
@@ -159,13 +164,8 @@ class P2P_Directed_Connection_Type {
 		else
 			$to_check = false;
 
-		if ( $to_check && $this->get_p2p_id( $from, $to_check ) )
+		if ( $to_check && $this->get_p2p_id( $args[0], $to_check ) )
 			return false;
-
-		$args = array( $from, $to );
-
-		if ( 'to' == $this->direction )
-			$args = array_reverse( $args );
 
 		return p2p_create_connection( $this->name, array(
 			'from' => $args[0],
