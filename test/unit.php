@@ -118,7 +118,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		// 'prevent_duplicates'
 		$p2p_id_2 = $ctype->connect( $actor_id, $movie_id );
-		$this->assertEquals( $p2p_id_1, $p2p_id_2 );
+		$this->assertFalse( $p2p_id_2 );
 
 		// get connected
 		$this->assertEquals( array( $movie_id ), $ctype->get_connected( $actor_id, array( 'fields' => 'ids' ) )->posts );
