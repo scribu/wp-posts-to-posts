@@ -164,7 +164,11 @@ class P2P_Directed_Connection_Type {
 		else
 			$to_check = false;
 
-		if ( $to_check && $this->get_p2p_id( $args[0], $to_check ) )
+		if ( $to_check && p2p_connection_exists( $this->name, array(
+			'direction' => $this->direction,
+			'from' => $args[0],
+			'to' => $to_check
+		) ) )
 			return false;
 
 		return p2p_create_connection( $this->name, array(
