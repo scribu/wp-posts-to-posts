@@ -11,11 +11,11 @@ class P2P_Storage {
 		scb_register_table( 'p2p' );
 		scb_register_table( 'p2pmeta' );
 
-		add_action( 'admin_notices', array( __CLASS__, 'install' ) );
+		add_action( 'admin_notices', array( __CLASS__, 'maybe_install' ) );
 		add_action( 'deleted_post', array( __CLASS__, 'deleted_post' ) );
 	}
 
-	function install() {
+	function maybe_install() {
 		if ( !current_user_can( 'manage_options' ) )
 			return;
 
@@ -24,6 +24,19 @@ class P2P_Storage {
 		if ( $current_ver == self::$version )
 			return;
 
+		self::install();
+
+		if ( $current_ver ) {
+			echo scb_admin_notice( sprintf(
+				__( 'You need to run the <a href="%s">upgrade script</a> before using Posts 2 Posts again.', P2P_TEXTDOMAIN ),
+				admin_url( 'tools.php?page=p2p-tools&upgrade' )
+			) );
+		} else {
+			update_option( 'p2p_storage', P2P_Storage::$version );
+		}
+	}
+
+	function install() {
 		scb_install_table( 'p2p', "
 			p2p_id bigint(20) unsigned NOT NULL auto_increment,
 			p2p_from bigint(20) unsigned NOT NULL,
@@ -44,15 +57,6 @@ class P2P_Storage {
 			KEY p2p_id (p2p_id),
 			KEY meta_key (meta_key)
 		" );
-
-		if ( $current_ver ) {
-			echo scb_admin_notice( sprintf(
-				__( 'You need to run the <a href="%s">upgrade script</a> before using Posts 2 Posts again.', P2P_TEXTDOMAIN ),
-				admin_url( 'tools.php?page=p2p-tools&upgrade' )
-			) );
-		} else {
-			update_option( 'p2p_storage', P2P_Storage::$version );
-		}
 	}
 
 	function deleted_post( $post_id ) {
