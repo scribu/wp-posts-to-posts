@@ -25,7 +25,7 @@ class P2P_Box {
 
 		$this->ctype = $ctype;
 
-		$this->labels = $this->ctype->get_opposite( 'side' )->get_labels();
+		$this->labels = $this->ctype->get_opposite( 'labels' );
 
 		add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
 

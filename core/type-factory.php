@@ -13,6 +13,8 @@ class P2P_Connection_Type_Factory {
 			'prevent_duplicates' => true,
 			'sortable' => false,
 			'title' => '',
+			'from_labels' => '',
+			'to_labels' => '',
 			'reciprocal' => false,
 		) );
 

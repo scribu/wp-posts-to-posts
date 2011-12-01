@@ -27,6 +27,10 @@
  *
  * - 'title' - string|array The box's title. Default: 'Connected {$post_type}s'
  *
+ * - 'from_labels' - array Additional labels for the admin box (optional)
+ *
+ * - 'to_labels' - array Additional labels for the admin box (optional)
+ *
  * - 'reciprocal' - bool For indeterminate connections: True means all connections are displayed in a single box. False means 'from' connections are shown in one box and 'to' connections are shown in another box. Default: false.
  *
  * - 'admin_box' - bool|string|array Whether and where to show the admin connections box.

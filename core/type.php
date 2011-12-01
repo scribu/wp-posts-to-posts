@@ -10,6 +10,8 @@ class Generic_Connection_Type {
 
 	public $title;
 
+	public $labels;
+
 	protected $args;
 
 	public function __construct( $sides, $args ) {
@@ -18,6 +20,8 @@ class Generic_Connection_Type {
 		$this->args = $args;
 
 		$this->set_cardinality();
+
+		$this->set_labels();
 
 		$this->title = $this->expand_title( _p2p_pluck( $this->args, 'title' ) );
 	}
@@ -31,6 +35,15 @@ class Generic_Connection_Type {
 		foreach ( $this->cardinality as $key => &$value ) {
 			if ( 'one' != $value )
 				$value = 'many';
+		}
+	}
+
+	protected function set_labels() {
+		foreach ( array( 'from', 'to' ) as $key ) {
+			$labels = _p2p_pluck( $this->args, $key . '_labels' );
+			if ( empty( $labels ) )
+				$labels = $this->side[ $key ]->get_labels();
+			$this->labels[ $key ] = $labels;
 		}
 	}
 
