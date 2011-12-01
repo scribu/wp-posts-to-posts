@@ -12,7 +12,7 @@ class P2P_Connection_Type_Factory {
 			'cardinality' => 'many-to-many',
 			'prevent_duplicates' => true,
 			'sortable' => false,
-			'title' => '',
+			'title' => array(),
 			'from_labels' => '',
 			'to_labels' => '',
 			'reciprocal' => false,
@@ -21,13 +21,13 @@ class P2P_Connection_Type_Factory {
 		$sides = array();
 
 		foreach ( array( 'from', 'to' ) as $direction ) {
-			$side = (array) $args[ $direction ];
+			$side = (array) _p2p_pluck( $args, $direction );
 
 			if ( !isset( $side['object'] ) )
 				$side = array( 'object' => 'post', 'post_type' => $side );
 
-			if ( 'post' == $side['object'] && isset( $args["{$direction}_query_vars"] ) )
-				$side['query_vars'] = _p2p_pluck( $args, "{$direction}_query_vars" );
+			if ( 'post' == $side['object'] && isset( $args[ $direction . '_query_vars'] ) )
+				$side['query_vars'] = _p2p_pluck( $args, $direction . '_query_vars' );
 
 			$class = 'P2P_Side_' . ucfirst( $side['object'] );
 

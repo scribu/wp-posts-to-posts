@@ -12,22 +12,22 @@ class Generic_Connection_Type {
 
 	public $labels;
 
-	protected $args;
-
 	public function __construct( $sides, $args ) {
 		$this->side = $sides;
 
-		$this->args = $args;
+		$this->set_cardinality( _p2p_pluck( $args, 'cardinality' ) );
 
-		$this->set_cardinality();
+		$this->set_labels( $args );
 
-		$this->set_labels();
+		$this->title = $this->expand_title( _p2p_pluck( $args, 'title' ) );
 
-		$this->title = $this->expand_title( _p2p_pluck( $this->args, 'title' ) );
+		foreach ( $args as $key => $value ) {
+			$this->$key = $value;
+		}
 	}
 
-	protected function set_cardinality() {
-		$parts = explode( '-', _p2p_pluck( $this->args, 'cardinality' ) );
+	private function set_cardinality( $cardinality ) {
+		$parts = explode( '-', $cardinality );
 
 		$this->cardinality['from'] = $parts[0];
 		$this->cardinality['to'] = $parts[2];
@@ -38,9 +38,9 @@ class Generic_Connection_Type {
 		}
 	}
 
-	protected function set_labels() {
+	private function set_labels( &$args ) {
 		foreach ( array( 'from', 'to' ) as $key ) {
-			$labels = _p2p_pluck( $this->args, $key . '_labels' );
+			$labels = _p2p_pluck( $args, $key . '_labels' );
 			if ( empty( $labels ) )
 				$labels = $this->side[ $key ]->get_labels();
 			$this->labels[ $key ] = $labels;
@@ -48,9 +48,6 @@ class Generic_Connection_Type {
 	}
 
 	private function expand_title( $title ) {
-		if ( !$title )
-			$title = array();
-
 		if ( $title && !is_array( $title ) ) {
 			return array(
 				'from' => $title,
@@ -71,14 +68,6 @@ class Generic_Connection_Type {
 		}
 
 		return $title;
-	}
-
-	public function __get( $key ) {
-		return $this->args[$key];
-	}
-
-	public function __isset( $key ) {
-		return isset( $this->args[$key] );
 	}
 
 	public function __call( $method, $args ) {
@@ -164,8 +153,6 @@ class P2P_Connection_Type extends Generic_Connection_Type {
 	public function __get( $key ) {
 		if ( 'from' == $key || 'to' == $key )
 			return $this->side[ $key ]->post_type;
-
-		return $this->args[$key];
 	}
 
 	/**
