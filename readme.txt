@@ -9,13 +9,16 @@ Create connections between posts
 
 == Description ==
 
-This plugin allows you to create many-to-many relationships between posts of any type: post, page, custom etc.
-
-A few example use cases:
+This plugin allows you to create many-to-many relationships between posts of any type: post, page, custom etc. A few example use cases:
 
 * post series
 * manually curated lists of related posts
 * 'actor' posts connected to 'movie' posts
+
+Additionally, you can create many-to-many relationships between posts and users. So, you could also implement:
+
+* favorite posts of users
+* multiple authors per post
 
 etc.
 
