@@ -47,12 +47,10 @@ function _p2p_init() {
 
 	if ( is_admin() ) {
 		_p2p_load_files( "$base/admin", array(
-			'utils', 'tools',
+			'utils',
 			'box-factory', 'box', 'fields',
 			'column-factory', 'column'
 		) );
-
-		new P2P_Tools( __FILE__ );
 	}
 }
 scb_init( '_p2p_init' );
