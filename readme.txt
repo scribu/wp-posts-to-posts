@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Tags: cms, custom post types, relationships, many-to-many
 Requires at least: 3.2
 Tested up to: 3.3
-Stable tag: 1.0.1
+Stable tag: 1.1
 
 Create connections between posts
 
@@ -52,6 +52,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * new low-level api: p2p_create_connection(), p2p_get_connections(), p2p_delete_connections(), p2p_connection_exists()
 * support posts-to-users and users-to-posts connection types in the admin
 * add 'from_labels' and 'to_labels' args to p2p_register_connection_type()
+* [more info](http://scribu.net/wordpress/posts-to-posts/p2p-1-1.html)
 
 = 1.0.1 =
 * don't show metabox at all if user doesn't have the required capability
