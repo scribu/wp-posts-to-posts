@@ -65,7 +65,7 @@ class P2P_Debug {
 		}
 
 		p2p_register_connection_type(array(
-			'id' => 'posts_to_contact',
+			'name' => 'posts_to_contact',
 			'from' => 'contact',
 			'to' => 'contact',
 			'title' => 'Registry',
@@ -73,14 +73,14 @@ class P2P_Debug {
 		));
 
 		p2p_register_connection_type(array(
-			'id' => 'ticket_to_contact',
+			'name' => 'ticket_to_contact',
 			'from' => 'ticket',
 			'to' => 'contact',
 			'reciprocal' => true
 		));
 
 		p2p_register_connection_type(array(
-			'id' => 'ticket_to_post',
+			'name' => 'ticket_to_post',
 			'from' => 'ticket',
 			'to' => 'post',
 			'reciprocal' => true
@@ -115,7 +115,7 @@ class P2P_Debug {
 
 
 		p2p_register_connection_type( array(
-			'id' => 'actor_movie',
+			'name' => 'actor_movie',
 			'from' => 'actor',
 			'to' => 'movie',
 			'fields' => array(
