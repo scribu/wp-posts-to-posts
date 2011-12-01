@@ -50,6 +50,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 1.1.1 =
+* fixed faulty scbFramework loading
+
 = 1.1 =
 * add p2p_type column to the wp_p2p table
 * new low-level api: p2p_create_connection(), p2p_get_connections(), p2p_delete_connections(), p2p_connection_exists()
