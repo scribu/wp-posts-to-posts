@@ -47,6 +47,12 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 1.1 =
+* add p2p_type column to the wp_p2p table
+* new low-level api: p2p_create_connection(), p2p_get_connections(), p2p_delete_connections(), p2p_connection_exists()
+* support posts-to-users and users-to-posts connection types in the admin
+* add 'from_labels' and 'to_labels' args to p2p_register_connection_type()
+
 = 1.0.1 =
 * don't show metabox at all if user doesn't have the required capability
 * fix checkbox handling when there are no other input fields
