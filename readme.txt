@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Tags: connections, custom post types, relationships, many-to-many, users
 Requires at least: 3.2
 Tested up to: 3.3
-Stable tag: 1.1
+Stable tag: 1.1.1
 
 Efficient many-to-many connections between posts, pages, custom post types, users.
 
@@ -52,6 +52,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 = 1.1.1 =
 * fixed faulty scbFramework loading
+* simplified syntax for defining posts-to-users connection types
 
 = 1.1 =
 * add p2p_type column to the wp_p2p table
