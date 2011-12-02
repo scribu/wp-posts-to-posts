@@ -44,7 +44,7 @@ class P2P_Box {
 	}
 
 	protected function init_columns() {
-		$object_type = $this->ctype->get_opposite( 'side' )->object;
+		$object_type = $this->ctype->get_opposite( 'object' );
 		$title_class = 'P2P_Field_Title_' . ucfirst( $object_type );
 
 		$this->columns = array(
@@ -277,10 +277,10 @@ class P2P_Box {
 		if ( !$this->args->can_create_post )
 			return false;
 
-		$side = $this->ctype->get_opposite( 'side' );
-
-		if ( 'post' != $side->object )
+		if ( 'post' != $this->ctype->get_opposite( 'object' ) )
 			return false;
+
+		$side = $this->ctype->get_opposite( 'side' );
 
 		if ( count( $side->post_type ) > 1 )
 			return false;

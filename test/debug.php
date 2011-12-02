@@ -19,15 +19,13 @@ class P2P_Debug {
 	function posts_to_users() {
 		p2p_register_connection_type( array(
 			'name' => 'posts_to_users',
-			'from' => 'post',
-			'to' => array( 'object' => 'user' ),
+			'to_object' => 'user',
 			'title' => array( 'from' => 'Posts 2 Users' )
 		) );
 
 		p2p_register_connection_type( array(
 			'name' => 'users_to_posts',
-			'from' => array( 'object' => 'user' ),
-			'to' => 'post',
+			'from_object' => 'user',
 			'title' => array( 'to' => 'Users 2 Posts' ),
 			'sortable' => true
 		) );

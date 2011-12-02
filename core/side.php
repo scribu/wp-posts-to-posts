@@ -4,12 +4,10 @@ define( 'ADMIN_BOX_PER_PAGE', 5 );
 
 abstract class P2P_Side {
 
-	public $query_vars = array();
+	public $query_vars;
 
-	function __construct( $args ) {
-		foreach ( $args as $key => $value ) {
-			$this->$key = $value;
-		}
+	function __construct( $query_vars ) {
+		$this->query_vars = $query_vars;
 	}
 
 	function get_base_qv() {
@@ -22,10 +20,10 @@ class P2P_Side_Post extends P2P_Side {
 
 	public $post_type = array();
 
-	function __construct( $args ) {
-		parent::__construct( $args );
+	function __construct( $query_vars ) {
+		parent::__construct( $query_vars );
 
-		$this->post_type = array_values( array_filter( $this->post_type, 'post_type_exists' ) );
+		$this->post_type = array_values( array_filter( (array) $this->query_vars['post_type'], 'post_type_exists' ) );
 		if ( empty( $this->post_type ) )
 			$this->post_type = array( 'post' );
 	}

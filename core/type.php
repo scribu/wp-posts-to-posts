@@ -4,6 +4,8 @@ class Generic_Connection_Type {
 
 	public $indeterminate = false;
 
+	public $object;
+
 	public $side;
 
 	public $cardinality;
@@ -12,8 +14,14 @@ class Generic_Connection_Type {
 
 	public $labels;
 
-	public function __construct( $sides, $args ) {
-		$this->side = $sides;
+	public function __construct( $args ) {
+		foreach ( array( 'from', 'to' ) as $direction ) {
+			$this->object[ $direction ] = _p2p_pluck( $args, $direction . '_object' );
+
+			$class = 'P2P_Side_' . ucfirst( $this->object[ $direction ] );
+
+			$this->side[ $direction ] = new $class( _p2p_pluck( $args, $direction . '_query_vars' ) );
+		}
 
 		$this->set_cardinality( _p2p_pluck( $args, 'cardinality' ) );
 
@@ -106,8 +114,8 @@ class Generic_Connection_Type {
 	public function find_direction( $arg, $instantiate = true, $object_type = false ) {
 		if ( $object_type ) {
 			$opposite_side = P2P_Util::choose_side( $object_type,
-				$this->side['from']->object,
-				$this->side['to']->object
+				$this->object['from'],
+				$this->object['to']
 			);
 
 			if ( !$opposite_side )
@@ -120,12 +128,10 @@ class Generic_Connection_Type {
 		$post_type = P2P_Util::find_post_type( $arg );
 
 		foreach ( array( 'from', 'to' ) as $direction ) {
-			$side = $this->side[ $direction ];
-
-			if ( 'post' != $side->object )
+			if ( 'post' != $this->object[ $direction ] )
 				continue;
 
-			if ( !in_array( $post_type, $side->post_type ) )
+			if ( !in_array( $post_type, $this->side[ $direction ]->post_type ) )
 				continue;
 
 			if ( $this->indeterminate )
@@ -141,8 +147,8 @@ class Generic_Connection_Type {
 
 class P2P_Connection_Type extends Generic_Connection_Type {
 
-	public function __construct( $sides, $args ) {
-		parent::__construct( $sides, $args );
+	public function __construct( $args ) {
+		parent::__construct( $args );
 
 		$common = array_intersect( $this->from, $this->to );
 

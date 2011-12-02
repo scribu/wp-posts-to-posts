@@ -6,8 +6,12 @@ class P2P_Connection_Type_Factory {
 	public static function register( $args ) {
 		$args = wp_parse_args( $args, array(
 			'name' => false,
+			'from_object' => 'post',
+			'to_object' => 'post',
 			'from' => 'post',
 			'to' => 'post',
+			'from_query_vars' => array(),
+			'to_query_vars' => array(),
 			'data' => array(),
 			'cardinality' => 'many-to-many',
 			'prevent_duplicates' => true,
@@ -21,32 +25,26 @@ class P2P_Connection_Type_Factory {
 		$sides = array();
 
 		foreach ( array( 'from', 'to' ) as $direction ) {
-			$side = (array) _p2p_pluck( $args, $direction );
+			$post_type = _p2p_pluck( $args, $direction );
 
-			if ( !isset( $side['object'] ) )
-				$side = array( 'object' => 'post', 'post_type' => $side );
-
-			if ( 'post' == $side['object'] && isset( $args[ $direction . '_query_vars'] ) )
-				$side['query_vars'] = _p2p_pluck( $args, $direction . '_query_vars' );
-
-			$class = 'P2P_Side_' . ucfirst( $side['object'] );
-
-			$sides[ $direction ] = new $class( $side );
+			if ( 'post' == $args[ $direction . '_object' ] )
+				$args[ $direction . '_query_vars' ]['post_type'] = $post_type;
 		}
 
 		if ( !$args['name'] ) {
-			$to_hash = array_map( 'get_object_vars', $sides );
-			$to_hash['data'] = $args['data'];
-
-			$args['name'] = md5( serialize( $to_hash ) );
+			$args['name'] = md5( serialize( array_values( wp_array_slice_assoc( $args, array(
+				'from_object', 'to_object',
+				'from_query_vars', 'to_query_vars',
+				'data'
+			) ) ) ) );
 		}
 
-		if ( $sides['from']->object == $sides['to']->object && 'post' == $sides['from']->object )
+		if ( $args['from_object'] == $args['to_object'] && 'post' == $args['from_object'] )
 			$class = 'P2P_Connection_Type';
 		else
 			$class = 'Generic_Connection_Type';
 
-		$ctype = new $class( $sides, $args );
+		$ctype = new $class( $args );
 
 		if ( isset( self::$instances[ $ctype->name ] ) ) {
 			trigger_error( 'Connection type is already defined.', E_USER_NOTICE );
