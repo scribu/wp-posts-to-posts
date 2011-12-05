@@ -8,6 +8,7 @@ class P2P_Debug {
 
 		add_action('init', array(__CLASS__, '_init'));
 		//add_action('admin_notices', array(__CLASS__, 'setup_example'));
+		add_action('admin_notices', array(__CLASS__, 'test_chain'));
 	}
 
 	function _init() {
@@ -184,6 +185,16 @@ class P2P_Debug {
 				$ctype->connect( $actor_id, $movie_id );
 			}
 		}
+	}
+
+	function test_chain() {
+		$q = new WP_Query( array(
+			'connected_items' => 1139,
+#			'connected_chain' => array( 'posts_to_users', 'posts_to_users' )
+			'connected_chain' => array( 'users_to_posts', 'users_to_posts' )
+		) );
+
+		debug( $q->posts );
 	}
 
 	private function make_post( $type, $title ) {

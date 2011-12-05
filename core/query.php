@@ -13,26 +13,82 @@ class P2P_Query {
 
 		if ( isset( $q['connected_type'] ) )
 			return self::expand_connected_type( $q, $object_type );
+
+		if ( isset( $q['connected_chain'] ) )
+			return self::expand_connected_chain( $q, $object_type );
+	}
+
+	protected function expand_connected_chain( &$q, $object_type ) {
+		$chain = _p2p_pluck( $q, 'connected_chain' );
+
+		foreach ( $chain as $p2p_type ) {
+			$ctype = p2p_type( $p2p_type );
+			if ( !$ctype ) {
+				trigger_error( "Undefined connection type: '$p2p_type'", E_USER_NOTICE );
+				return false;
+			}
+		}
+
+		// the $object_type hint will be used on the final connection type
+		$directed = self::find_direction( array_shift( $chain ), $q, false );
+		if ( !$directed )
+			return false;
+
+		$directions = array(
+			array( $directed->name, $directed->get_direction() )
+		);
+
+		foreach ( $chain as $p2p_type ) {
+			$ctype = p2p_type( $p2p_type );
+
+			$side = $directed->get_opposite( 'side' );
+
+			if ( isset( $side->post_type ) )
+				$post_type = $side->post_type[0];
+			else
+				$post_type = false;
+
+			$directed = $ctype->find_direction( $post_type, true, $directed->get_current( 'object' ) );
+			if ( !$directed )
+				return false;
+
+			$directions[] = array( $directed->name, $directed->get_direction() );
+		}
+
+		if ( $object_type && $directed->get_opposite( 'object' ) != $object_type ) {
+			trigger_error( sprintf( "Final object type '%s' does not match expected object type '%s'.",
+				$directed->get_opposite( 'object' ),
+				$object_type
+			), E_USER_NOTICE );
+			return false;
+		}
+
+		$q['p2p_directions'] = $directions;
+
+		return true;
 	}
 
 	protected function expand_connected_type( &$q, $object_type ) {
-		$ctype = p2p_type( _p2p_pluck( $q, 'connected_type' ) );
-
-		if ( !$ctype )
-			return false;
-
-		if ( isset( $q['connected_direction'] ) )
-			$directed = $ctype->set_direction( _p2p_pluck( $q, 'connected_direction' ) );
-		else {
-			$directed = $ctype->find_direction( $q['connected_items'], true, $object_type );
-		}
-
+		$directed = self::find_direction(  _p2p_pluck( $q, 'connected_type' ), $q, $object_type );
 		if ( !$directed )
 			return false;
 
 		$q = $directed->get_connected_args( $q );
 
 		return true;
+	}
+
+	protected function find_direction( $p2p_type, &$q, $object_type ) {
+		$ctype = p2p_type( $p2p_type );
+
+		if ( !$ctype )
+			return false;
+
+		if ( isset( $q['connected_direction'] ) )
+			return $ctype->set_direction( _p2p_pluck( $q, 'connected_direction' ) );
+		else {
+			return $ctype->find_direction( $q['connected_items'], true, $object_type );
+		}
 	}
 
 	protected function expand_shortcut_qv( &$q ) {
