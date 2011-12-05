@@ -2,25 +2,20 @@
 
 class P2P_Query {
 
+	// null means do nothing
+	// false means trigger 404
+	// true means found valid p2p query vars
 	function handle_qv( &$q, $object_type ) {
-		// Handle shortcut args
-		$qv_map = array(
-			'connected' => 'any',
-			'connected_to' => 'to',
-			'connected_from' => 'from',
-		);
+		self::expand_shortcut_qv( $q );
 
-		foreach ( $qv_map as $key => $direction ) {
-			if ( !empty( $q[ $key ] ) ) {
-				$q['connected_items'] = _p2p_pluck( $q, $key );
-				$q['connected_direction'] = $direction;
-			}
-		}
-
-		// Handle connected_type arg
-		if ( !isset( $q['connected_items'] ) || !isset( $q['connected_type'] ) )
+		if ( !isset( $q['connected_items'] ) )
 			return;
 
+		if ( isset( $q['connected_type'] ) )
+			return self::expand_connected_type( $q, $object_type );
+	}
+
+	protected function expand_connected_type( &$q, $object_type ) {
 		$ctype = p2p_type( _p2p_pluck( $q, 'connected_type' ) );
 
 		if ( !$ctype )
@@ -38,6 +33,21 @@ class P2P_Query {
 		$q = $directed->get_connected_args( $q );
 
 		return true;
+	}
+
+	protected function expand_shortcut_qv( &$q ) {
+		$qv_map = array(
+			'connected' => 'any',
+			'connected_to' => 'to',
+			'connected_from' => 'from',
+		);
+
+		foreach ( $qv_map as $key => $direction ) {
+			if ( !empty( $q[ $key ] ) ) {
+				$q['connected_items'] = _p2p_pluck( $q, $key );
+				$q['connected_direction'] = $direction;
+			}
+		}
 	}
 
 	function get_qv( $q ) {
