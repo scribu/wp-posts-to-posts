@@ -142,10 +142,7 @@ class Generic_Connection_Type {
 			$this->object['to']
 		);
 
-		if ( !$opposite_side )
-			return false;
-
-		if ( 'any' == $opposite_side )
+		if ( !$opposite_side || 'any' == $opposite_side )
 			return false;
 
 		return $opposite_side;
