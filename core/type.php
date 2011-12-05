@@ -112,18 +112,8 @@ class Generic_Connection_Type {
 	 * @return bool|object|string False on failure, P2P_Directed_Connection_Type instance or direction on success.
 	 */
 	public function find_direction( $arg, $instantiate = true, $object_type = false ) {
-		if ( $object_type ) {
-			$opposite_side = P2P_Util::choose_side( $object_type,
-				$this->object['from'],
-				$this->object['to']
-			);
-
-			if ( !$opposite_side )
-				return false;
-
-			if ( 'any' != $opposite_side )
-				return $this->set_direction( $opposite_side, $instantiate );
-		}
+		if ( $direction = $this->find_direction_from_object_type( $object_type ) )
+			return $this->set_direction( $opposite_side, $instantiate );
 
 		$post_type = P2P_Util::find_post_type( $arg );
 
@@ -141,6 +131,24 @@ class Generic_Connection_Type {
 		}
 
 		return false;
+	}
+
+	protected function find_direction_from_object_type( $object_type ) {
+		if ( !$object_type )
+			return false;
+
+		$opposite_side = P2P_Util::choose_side( $object_type,
+			$this->object['from'],
+			$this->object['to']
+		);
+
+		if ( !$opposite_side )
+			return false;
+
+		if ( 'any' == $opposite_side )
+			return false;
+
+		return $opposite_side;
 	}
 }
 
