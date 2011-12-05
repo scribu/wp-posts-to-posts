@@ -124,19 +124,14 @@ class P2P_Query {
 	function alter_clauses( $clauses, $q, $main_id_column ) {
 		global $wpdb;
 
+		// Handle SELECT
 		$clauses['fields'] .= ", $wpdb->p2p.*";
 
-		$clauses['join'] .= " INNER JOIN $wpdb->p2p";
+		// Handle JOIN
+		$clauses['join'] .= " INNER JOIN $wpdb->p2p ON (";
 
-		// Handle main query
 		if ( $q['p2p_type'] )
-			$clauses['where'] .= $wpdb->prepare( " AND $wpdb->p2p.p2p_type = %s", $q['p2p_type'] );
-
-		if ( 'any' == $q['items'] ) {
-			$search = false;
-		} else {
-			$search = implode( ',', array_map( 'absint', (array) $q['items'] ) );
-		}
+			$clauses['join'] .= $wpdb->prepare( "$wpdb->p2p.p2p_type = %s AND ", $q['p2p_type'] );
 
 		$fields = array( 'p2p_from', 'p2p_to' );
 
@@ -148,20 +143,30 @@ class P2P_Query {
 		case 'to':
 			list( $from, $to ) = $fields;
 
-			$clauses['where'] .= " AND $main_id_column = $wpdb->p2p.$from";
-			if ( $search ) {
-				$clauses['where'] .= " AND $wpdb->p2p.$to IN ($search)";
-			}
-
+			$clauses['join'] .= "$main_id_column = $wpdb->p2p.$from";
 			break;
 		default:
-			if ( $search ) {
+			$clauses['join'] .= "($main_id_column = $wpdb->p2p.p2p_to OR $main_id_column = $wpdb->p2p.p2p_from)";
+		}
+
+		$clauses['join'] .= ")";
+
+		// Handle WHERE
+		if ( 'any' != $q['items'] ) {
+			$search = implode( ',', array_map( 'absint', (array) $q['items'] ) );
+
+			switch ( $q['direction'] ) {
+
+			case 'from':
+			case 'to':
+				$clauses['where'] .= " AND $wpdb->p2p.$to IN ($search)";
+
+				break;
+			default:
 				$clauses['where'] .= " AND (
 					($main_id_column = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from IN ($search)) OR
 					($main_id_column = $wpdb->p2p.p2p_from AND $wpdb->p2p.p2p_to IN ($search))
 				)";
-			} else {
-				$clauses['where'] .= " AND ($main_id_column = $wpdb->p2p.p2p_to OR $main_id_column = $wpdb->p2p.p2p_from)";
 			}
 		}
 

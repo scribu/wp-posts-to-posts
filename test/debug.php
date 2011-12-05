@@ -188,13 +188,23 @@ class P2P_Debug {
 	}
 
 	function test_chain() {
+		//$q = new WP_Query( array(
+			//'connected_items' => 1139,
+			//'connected_chain' => array( 'posts_to_users', 'posts_to_users' )
+		//) );
+
+		$related = wp_list_pluck( p2p_type( 'actor_movie' )->get_related( 623 )->posts, 'ID' );
+
+		debug( $related );
+
 		$q = new WP_Query( array(
-			'connected_items' => 1139,
-#			'connected_chain' => array( 'posts_to_users', 'posts_to_users' )
-			'connected_chain' => array( 'users_to_posts', 'users_to_posts' )
+			'fields' => 'ids',
+			'connected_items' => 623,
+			'connected_chain' => array( 'actor_movie', 'actor_movie' )
 		) );
 
-		debug( $q->posts );
+		debug($q->posts);
+
 	}
 
 	private function make_post( $type, $title ) {
