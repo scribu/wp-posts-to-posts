@@ -52,6 +52,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 = 1.1.2 =
 * fixed missing "New Post" tab in admin box
+* fixed notice when deleting post
 
 = 1.1.1 =
 * fixed faulty scbFramework loading
