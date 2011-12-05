@@ -77,10 +77,11 @@ class P2P_Directed_Connection_Type {
 			) );
 		}
 
-		$q = array_merge( $this->get_opposite( 'side' )->get_base_qv(), $q, array(
-			'p2p_type' => $this->name,
-			'connected_direction' => $this->get_direction(),
-		) );
+		$q = array_merge( $this->get_opposite( 'side' )->get_base_qv(), $q );
+
+		$q['p2p_directions'] = array(
+			array( $this->name, $this->get_direction() )
+		);
 
 		$q = array_merge_recursive( $q, array(
 			'connected_meta' => $this->data

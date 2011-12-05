@@ -18,6 +18,16 @@ class P2P_Query {
 			return self::expand_connected_chain( $q, $object_type );
 	}
 
+	protected function expand_connected_type( &$q, $object_type ) {
+		$directed = self::find_direction(  _p2p_pluck( $q, 'connected_type' ), $q, $object_type );
+		if ( !$directed )
+			return false;
+
+		$q = $directed->get_connected_args( $q );
+
+		return true;
+	}
+
 	protected function expand_connected_chain( &$q, $object_type ) {
 		$chain = _p2p_pluck( $q, 'connected_chain' );
 
@@ -30,9 +40,11 @@ class P2P_Query {
 		}
 
 		// the $object_type hint will be used on the final connection type
-		$directed = self::find_direction( array_shift( $chain ), $q, false );
-		if ( !$directed )
+		$first_directed = self::find_direction( array_shift( $chain ), $q, false );
+		if ( !$first_directed )
 			return false;
+
+		$directed = $first_directed;
 
 		$directions = array(
 			array( $directed->name, $directed->get_direction() )
@@ -52,6 +64,13 @@ class P2P_Query {
 			if ( !$directed )
 				return false;
 
+			if ( 'any' == $directed->get_direction() ) {
+				trigger_error( sprintf( "Ambiguous direction for '%s'.",
+					$p2p_type
+				), E_USER_NOTICE );
+				return false;
+			}
+
 			$directions[] = array( $directed->name, $directed->get_direction() );
 		}
 
@@ -63,17 +82,9 @@ class P2P_Query {
 			return false;
 		}
 
+		$q = $first_directed->get_connected_args( $q );
+
 		$q['p2p_directions'] = $directions;
-
-		return true;
-	}
-
-	protected function expand_connected_type( &$q, $object_type ) {
-		$directed = self::find_direction(  _p2p_pluck( $q, 'connected_type' ), $q, $object_type );
-		if ( !$directed )
-			return false;
-
-		$q = $directed->get_connected_args( $q );
 
 		return true;
 	}
@@ -107,16 +118,19 @@ class P2P_Query {
 	}
 
 	function get_qv( $q ) {
+		if ( !isset( $q['connected_items'] ) )
+			return false;
+
 		$qv_list = array(
-			'items', 'direction', 'meta',
+			'items', 'meta',
 			'orderby', 'order_num', 'order'
 		);
 
 		foreach ( $qv_list as $key ) {
-			$qv[$key] = isset( $q["connected_$key"] ) ?  $q["connected_$key"] : false;
+			$qv[$key] = isset( $q["connected_$key"] ) ? $q["connected_$key"] : false;
 		}
 
-		$qv['p2p_type'] = isset( $q['p2p_type'] ) ?  $q['p2p_type'] : false;
+		$qv['directions'] = $q['p2p_directions'];
 
 		return $qv;
 	}
@@ -128,37 +142,96 @@ class P2P_Query {
 		$clauses['fields'] .= ", $wpdb->p2p.*";
 
 		// Handle JOIN
-		$clauses['join'] .= " INNER JOIN $wpdb->p2p ON (";
+		$i = 0;
+		$prev_column = $main_id_column;
 
-		if ( $q['p2p_type'] )
-			$clauses['join'] .= $wpdb->prepare( "$wpdb->p2p.p2p_type = %s AND ", $q['p2p_type'] );
+		// TODO: join wp_posts with last p2p instance instead of first:
 
-		$fields = array( 'p2p_from', 'p2p_to' );
+		/*
+			SELECT *
+			FROM wp_posts
+			INNER JOIN (
+					SELECT p2p2.p2p_from
+					FROM wp_p2p
+					INNER JOIN wp_p2p AS p2p2 ON (
+						p2p2.p2p_type = 'actor_movie'
+						AND wp_p2p.p2p_from IN ( 623 )
+						AND wp_p2p.p2p_to = p2p2.p2p_to
+						AND wp_p2p.p2p_id <> p2p2.p2p_id
+					)
+					WHERE 1 =1
+					AND wp_p2p.p2p_type = 'actor_movie'
+					LIMIT 0 , 30
+			) as tmp ON (wp_posts.ID = tmp.p2p_from)
 
-		switch ( $q['direction'] ) {
+			LIMIT 0 , 30
+		 */
 
-		case 'from':
-			$fields = array_reverse( $fields );
-			// fallthrough
-		case 'to':
-			list( $from, $to ) = $fields;
+		foreach ( $q['directions'] as $dir ) {
+			list( $p2p_type, $direction ) = $dir;
 
-			$clauses['join'] .= "$main_id_column = $wpdb->p2p.$from";
-			break;
-		default:
-			$clauses['join'] .= "($main_id_column = $wpdb->p2p.p2p_to OR $main_id_column = $wpdb->p2p.p2p_from)";
+			if ( 0 == $i ) {
+				$alias = $wpdb->p2p;
+				$clauses['join'] .= "\n INNER JOIN $wpdb->p2p ON (";
+			} else {
+				$alias = 'p2p' . ( $i + 1 );
+				$clauses['join'] .= "\n INNER JOIN $wpdb->p2p AS $alias ON (";
+			}
+
+			if ( $p2p_type )
+				$clauses['join'] .= $wpdb->prepare( "$alias.p2p_type = %s AND ", $p2p_type );
+
+			$fields = array( 'p2p_from', 'p2p_to' );
+
+			switch ( $direction ) {
+
+			case 'from':
+				$fields = array_reverse( $fields );
+				// fallthrough
+			case 'to':
+				list( $from, $to ) = $fields;
+
+				if ( $i && $prev_direction != $direction )
+					$from = $to;
+
+				$clauses['join'] .= "$prev_column = $alias.$from";
+
+				if ( $i ) {
+					$clauses['join'] .= " AND $prev_alias.p2p_id <> $alias.p2p_id";
+				}
+				break;
+			default:
+				$clauses['join'] .= "($prev_column = $alias.p2p_to OR $prev_column = $alias.p2p_from)";
+			}
+
+			$clauses['join'] .= ")";
+
+			// chain can't contain direction 'any'
+			if ( 'any' != $direction ) {
+				$prev_alias = $alias;
+				$prev_column = "$alias.$from";
+				$prev_direction = $direction;
+			}
+
+			$i++;
 		}
 
-		$clauses['join'] .= ")";
+		list( $p2p_type, $direction ) = reset( $q['directions'] );
 
 		// Handle WHERE
 		if ( 'any' != $q['items'] ) {
 			$search = implode( ',', array_map( 'absint', (array) $q['items'] ) );
 
-			switch ( $q['direction'] ) {
+			$fields = array( 'p2p_from', 'p2p_to' );
+
+			switch ( $direction ) {
 
 			case 'from':
+				$fields = array_reverse( $fields );
+				// fallthrough
 			case 'to':
+				list( $from, $to ) = $fields;
+
 				$clauses['where'] .= " AND $wpdb->p2p.$to IN ($search)";
 
 				break;

@@ -203,8 +203,8 @@ class P2P_Debug {
 			'connected_chain' => array( 'actor_movie', 'actor_movie' )
 		) );
 
+		debug($q->request);
 		debug($q->posts);
-
 	}
 
 	private function make_post( $type, $title ) {
