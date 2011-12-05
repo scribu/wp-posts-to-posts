@@ -285,7 +285,7 @@ class P2P_Box {
 		if ( count( $side->post_type ) > 1 )
 			return false;
 
-		if ( !empty( $side->query_vars ) )
+		if ( count( $side->query_vars ) > 1 )
 			return false;
 
 		return true;
