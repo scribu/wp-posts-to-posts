@@ -92,10 +92,6 @@ class P2P_Storage {
 			}
 		}
 
-		$subquery = "SELECT ID FROM $wpdb->posts";
-
-		$wpdb->query( "DELETE FROM $wpdb->p2p WHERE p2p_from NOT IN ($subquery) OR p2p_to NOT IN ($subquery)" );
-
 		return $n;
 	}
 
