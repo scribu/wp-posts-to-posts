@@ -110,8 +110,7 @@ class P2P_Box_Factory {
 				if ( !$ctype )
 					continue;
 
-				foreach ( $ctype->get_connected( $post_id )->posts as $post ) {
-					$p2p_id = $post->p2p_id;
+				foreach ( $ctype->get_connections( $post_id ) as $p2p_id => $item_id ) {
 					$data = scbForms::get_value( array( 'p2p_meta', $p2p_id ), $_POST, array() );
 
 					foreach ( self::$box_args[$p2p_type]->fields as $key => $field_args ) {
