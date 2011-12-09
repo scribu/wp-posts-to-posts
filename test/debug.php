@@ -14,6 +14,16 @@ class P2P_Debug {
 		self::posts_to_users();
 		self::contacts_and_tickets();
 		self::actors_and_movies();
+
+#		self::reset_upgrade();
+	}
+
+	function reset_upgrade() {
+		global $wpdb;
+
+		$wpdb->query( "UPDATE $wpdb->p2p SET p2p_type = ''" );
+
+		update_option( 'p2p_storage', 3 );
 	}
 
 	function posts_to_users() {
