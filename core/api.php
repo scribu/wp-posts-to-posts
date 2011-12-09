@@ -133,7 +133,13 @@ function p2p_connection_exists( $p2p_type, $args = array() ) {
  * Retrieve connections.
  *
  * @param string $p2p_type A valid connection type.
- * @param array $args Query args.
+ * @param array $args Query args:
+ *
+ * - 'direction': Can be 'from', 'to' or 'any'
+ * - 'from': Object id. The first end of the connection. (optional)
+ * - 'to': Object id. The second end of the connection. (optional)
+ * - 'fields': Which field of the connection to return. Can be:
+ * 		'all', 'object_id', 'p2p_from', 'p2p_to', 'p2p_id' or 'count'
  *
  * @return array
  */
