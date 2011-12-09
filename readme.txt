@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Tags: connections, custom post types, relationships, many-to-many, users
 Requires at least: 3.2
 Tested up to: 3.3
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 
 Efficient many-to-many connections between posts, pages, custom post types, users.
 
