@@ -50,8 +50,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
-= 1.2-alpha =
+= 1.1.3-alpha =
 * fixed admin columns overwriting each other
+* fixed regression related to posts-to-users direction
 
 = 1.1.2 =
 * fixed fields not being saved for posts-to-users connections
