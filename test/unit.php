@@ -199,5 +199,24 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$this->assertEquals( $query->posts[0]->connected[0]->ID, $actor_id );
 	}
+
+	function test_posts_to_users() {
+		$ctype = p2p_register_connection_type( array(
+			'from' => 'post',
+			'to_object' => 'user',
+		) );
+
+		$post_id = $this->generate_post( 'post' );
+		$user_id = 1;
+
+		$ctype->connect( $post_id, $user_id );
+
+		$connected = get_users( array(
+			'connected_type' => $ctype->name,
+			'connected_items' => $post_id
+		) );
+
+		$this->assertEquals( $user_id, $connected[0]->ID );
+	}
 }
 
