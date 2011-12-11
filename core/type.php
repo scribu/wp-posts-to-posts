@@ -113,7 +113,7 @@ class Generic_Connection_Type {
 	 */
 	public function find_direction( $arg, $instantiate = true, $object_type = false ) {
 		if ( $direction = $this->find_direction_from_object_type( $object_type ) )
-			return $this->set_direction( $opposite_side, $instantiate );
+			return $this->set_direction( $direction, $instantiate );
 
 		$post_type = P2P_Util::find_post_type( $arg );
 
