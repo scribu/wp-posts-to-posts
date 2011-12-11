@@ -15,13 +15,13 @@ class P2P_Column {
 	}
 
 	function add_column( $columns ) {
-		$columns['connected'] = $this->ctype->get_current( 'title' );
+		$columns[ $this->ctype->name ] = $this->ctype->get_current( 'title' );
 
 		return $columns;
 	}
 
 	function display_column( $column, $post_id ) {
-		if ( 'connected' != $column )
+		if ( $this->ctype->name != $column )
 			return;
 
 		foreach ( $this->connected[ $post_id ] as $post ) {

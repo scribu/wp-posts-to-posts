@@ -165,6 +165,7 @@ class P2P_Debug {
 			'title' => array( 'from' => 'Doubles', 'to' => 'Main Actor' ),
 			'data' => array( 'type' => 'doubles' ),
 			'sortable' => 'order',
+			'admin_column' => 'any',
 			'can_create_post' => false
 		) );
 
