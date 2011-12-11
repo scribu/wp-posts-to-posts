@@ -36,11 +36,13 @@ class P2P_Column_Factory {
 
 			$column = new P2P_Column( $directed );
 
+			$column->styles();
+
 			add_filter( "manage_{$screen->id}_columns", array( $column, 'add_column' ) );
 			add_action( "manage_{$post_type}_posts_custom_column", array( $column, 'display_column' ), 10, 2 );
 		}
 	}
 }
 
-add_action( 'admin_head', array( 'P2P_Column_Factory', 'add_columns' ) );
+add_action( 'admin_print_styles', array( 'P2P_Column_Factory', 'add_columns' ) );
 

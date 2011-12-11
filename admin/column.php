@@ -20,10 +20,22 @@ class P2P_Column {
 		return $columns;
 	}
 
+	function styles() {
+?>
+<style type="text/css">
+.column-<?php echo $this->ctype->name; ?> ul {
+	margin-top: -17px;
+	margin-bottom: 0;
+}
+</style>
+<?php
+	}
+
 	function display_column( $column, $post_id ) {
 		if ( $this->ctype->name != $column )
 			return;
 
+		echo '<ul>';
 		foreach ( $this->connected[ $post_id ] as $post ) {
 			$args = array(
 				'post_type' => get_post_type( $post_id ),
@@ -35,6 +47,7 @@ class P2P_Column {
 
 			echo html( 'li', html_link( $url, $post->post_title ) );
 		}
+		echo '</ul>';
 	}
 }
 
