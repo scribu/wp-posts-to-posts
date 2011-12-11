@@ -216,7 +216,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 			'connected_items' => $post_id
 		) );
 
-		$this->assertEquals( $user_id, $connected[0]->ID );
+		$this->assertEquals( array( $user_id ), wp_list_pluck( $connected, 'ID' ) );
 	}
 }
 
