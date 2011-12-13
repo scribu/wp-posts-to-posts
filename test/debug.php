@@ -170,7 +170,7 @@ class P2P_Debug {
 		) );
 
 		p2p_register_connection_type( array(
-			'from' => array( 'foo', 'actor' ),
+			'from' => array( 'actor' ),
 			'to' => 'actor',
 			'reciprocal' => true,
 			'title' => 'Friends with',

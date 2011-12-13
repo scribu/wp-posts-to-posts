@@ -23,9 +23,7 @@ class P2P_Side_Post extends P2P_Side {
 	function __construct( $query_vars ) {
 		parent::__construct( $query_vars );
 
-		$this->post_type = array_values( array_filter( (array) $this->query_vars['post_type'], 'post_type_exists' ) );
-		if ( empty( $this->post_type ) )
-			$this->post_type = array( 'post' );
+		$this->post_type = $this->query_vars['post_type'];
 	}
 
 	function get_base_qv() {
