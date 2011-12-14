@@ -61,6 +61,11 @@ function p2p_register_connection_type( $args ) {
 		$args['name'] = _p2p_pluck( $args, 'id' );
 	}
 
+	if ( isset( $args['name'] ) && strlen( $args['name'] ) > 32 ) {
+		trigger_error( sprintf( "Connection name '%s' is longer than 32 characters.", $args['name'] ), E_USER_WARNING );
+		return false;
+	}
+
 	if ( isset( $args['show_ui'] ) ) {
 		$args['admin_box'] = array(
 			'show' => _p2p_pluck( $args, 'show_ui' )
