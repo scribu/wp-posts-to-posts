@@ -21,7 +21,7 @@
       jQuery('.p2p-search input[placeholder]').each(setVal).focus(clearVal).blur(setVal);
     }
     return jQuery('.p2p-box').each(function(){
-      var $metabox, $connections, $spinner, ajax_request, row_ajax_request, append_connection, clear_connections, delete_connection, create_connection, switch_to_tab, PostsTab, searchTab, listTab, $searchInput, $createButton, $createInput;
+      var $metabox, $connections, $spinner, ajax_request, row_ajax_request, maybe_hide_table, append_connection, clear_connections, delete_connection, create_connection, switch_to_tab, PostsTab, searchTab, listTab, $searchInput, $createButton, $createInput;
       $metabox = jQuery(this);
       $connections = $metabox.find('.p2p-connections');
       $spinner = jQuery('<img>', {
@@ -45,6 +45,11 @@
       row_ajax_request = function($td, data, callback){
         $td.html($spinner.show());
         return ajax_request(data, callback);
+      };
+      maybe_hide_table = function($table){
+        if (!$table.find('tbody tr').length) {
+          return $table.hide();
+        }
       };
       append_connection = function(html){
         $connections.show().find('tbody').append(html);
@@ -79,9 +84,7 @@
         };
         row_ajax_request($td, data, function(response){
           $td.closest('tr').remove();
-          if (!$connections.find('tbody tr').length) {
-            $connections.hide();
-          }
+          maybe_hide_table($connections);
           return $metabox.find('.p2p-create-connections').show();
         });
         return false;
@@ -95,15 +98,10 @@
           to: $self.data('post_id')
         };
         row_ajax_request($td, data, function(response){
-          var $table;
           append_connection(response);
           if ($metabox.data('prevent_duplicates')) {
-            $table = $td.closest('table');
-            if (1 == $table.find('tbody tr').length) {
-              return $table.remove();
-            } else {
-              return $td.closest('tr').remove();
-            }
+            $td.closest('tr').remove();
+            return maybe_hide_table($td.closest('table'));
           } else {
             return $td.html($self);
           }

@@ -48,6 +48,9 @@ jQuery ->
 
 				ajax_request data, callback
 
+		maybe_hide_table = ($table) ->
+			if not $table.find('tbody tr').length
+				$table.hide()
 
 		append_connection = (html) ->
 			$connections.show()
@@ -88,8 +91,7 @@ jQuery ->
 			row_ajax_request $td, data, (response) ~>
 				$td.closest('tr').remove()
 
-				if not $connections.find('tbody tr').length
-					$connections.hide()
+				maybe_hide_table $connections
 
 				$metabox.find('.p2p-create-connections').show()
 
@@ -107,12 +109,8 @@ jQuery ->
 				append_connection(response)
 
 				if $metabox.data('prevent_duplicates')
-					$table = $td.closest('table')
-
-					if 1 == $table.find('tbody tr').length
-						$table.remove()
-					else
-						$td.closest('tr').remove()
+					$td.closest('tr').remove()
+					maybe_hide_table $td.closest('table')
 				else
 					$td.html $self
 
