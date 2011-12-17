@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Tags: connections, custom post types, relationships, many-to-many, users
 Requires at least: 3.2
 Tested up to: 3.3
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 
 Efficient many-to-many connections between posts, pages, custom post types, users.
 
@@ -50,9 +50,11 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
-= 1.1.3-alpha =
-* fixed admin columns overwriting each other
+= 1.1.3 =
 * fixed regression related to posts-to-users direction
+* fixed admin columns overwriting each other
+* fixed incorrect direction in admin column links
+* added notices when connection type is not properly defined
 
 = 1.1.2 =
 * fixed fields not being saved for posts-to-users connections
