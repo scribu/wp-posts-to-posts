@@ -35,12 +35,21 @@ class P2P_Column {
 		if ( $this->ctype->name != $column )
 			return;
 
+		$opposite_direction = array(
+			'from' => 'to',
+			'to' => 'from',
+			'any' => 'any'
+		);
+
 		echo '<ul>';
 		foreach ( $this->connected[ $post_id ] as $post ) {
+			$direction = $opposite_direction[ $this->ctype->get_direction() ];
+
 			$args = array(
 				'post_type' => get_post_type( $post_id ),
 				'connected_type' => $this->ctype->name,
 				'connected_items' => $post->ID,
+				'connected_direction' => $direction
 			);
 
 			$url = add_query_arg( $args, admin_url( 'edit.php' ) );

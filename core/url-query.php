@@ -7,10 +7,11 @@ class P2P_URL_Query {
 	}
 
 	function query_vars( $public_qv ) {
-		$public_qv[] = 'connected_type';
-		$public_qv[] = 'connected_items';
-
-		return $public_qv;
+		return array_merge( $public_qv, array(
+			'connected_type',
+			'connected_items',
+			'connected_direction',
+		) );
 	}
 }
 
