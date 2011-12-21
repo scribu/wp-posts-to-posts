@@ -95,6 +95,13 @@ class P2P_Storage {
 		return $n;
 	}
 
+	function uninstall() {
+		scb_uninstall_table( 'p2p' );
+		scb_uninstall_table( 'p2pmeta' );
+
+		delete_option( 'p2p_storage' );
+	}
+
 	function deleted_post( $post_id ) {
 		foreach ( P2P_Connection_Type_Factory::get_all_instances() as $p2p_type => $ctype ) {
 			foreach ( array( 'from', 'to' ) as $direction ) {

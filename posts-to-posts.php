@@ -43,7 +43,7 @@ function _p2p_init() {
 		'api', 'widget'
 	) );
 
-	P2P_Widget::init( __FILE__ );
+	P2P_Widget::init();
 
 	if ( is_admin() ) {
 		_p2p_load_files( "$base/admin", array(
@@ -52,6 +52,8 @@ function _p2p_init() {
 			'column-factory', 'column'
 		) );
 	}
+
+	register_uninstall_hook( __FILE__, array( 'P2P_Storage', 'uninstall' ) );
 }
 scb_init( '_p2p_init' );
 

@@ -7,8 +7,8 @@ class P2P_Widget extends scbWidget {
 		'listing' => 'connected'
 	);
 
-	static function init( $file ) {
-		parent::init( __CLASS__, $file, 'p2p' );
+	static function init() {
+		parent::init( __CLASS__, false, 'p2p' );
 	}
 
 	function __construct() {
