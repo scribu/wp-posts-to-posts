@@ -30,7 +30,10 @@ class P2P_Debug {
 		p2p_register_connection_type( array(
 			'name' => 'posts_to_users',
 			'to_object' => 'user',
-			'title' => array( 'from' => 'Posts 2 Users' )
+			'to_query_vars' => array(
+				'role' => 'editor'
+			),
+			'title' => array( 'from' => 'Posts 2 Editors' )
 		) );
 
 		p2p_register_connection_type( array(

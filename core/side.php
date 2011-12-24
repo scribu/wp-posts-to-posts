@@ -129,10 +129,10 @@ class P2P_Side_User extends P2P_Side {
 	}
 
 	function get_connectable( $item_id, $page, $search, $to_exclude, $directed ) {
-		$qv = array(
+		$qv = array_merge( $this->get_base_qv(), array(
 			'number' => ADMIN_BOX_PER_PAGE,
 			'offset' => ADMIN_BOX_PER_PAGE * ( $page - 1 )
-		);
+		) );
 
 		if ( $search ) {
 			$qv['search'] = '*' . $search . '*';
