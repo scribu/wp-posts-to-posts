@@ -25,12 +25,15 @@ class P2P_Connection_Type_Factory {
 		$sides = array();
 
 		foreach ( array( 'from', 'to' ) as $direction ) {
-			$post_type = (array) _p2p_pluck( $args, $direction );
+			$object = _p2p_pluck( $args, $direction );
+
+			if ( 'user' == $object )
+				$args[ $direction . '_object' ] = 'user';
 
 			if ( 'post' == $args[ $direction . '_object' ] ) {
 				$validated = array();
 
-				foreach ( $post_type as $ptype ) {
+				foreach ( (array) $object as $ptype ) {
 					if ( !post_type_exists( $ptype ) ) {
 						trigger_error( "Post type '$ptype' is not defined." );
 					} else {

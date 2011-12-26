@@ -111,6 +111,7 @@ function _p2p_back_compat_args( $argv ) {
 		$args['admin_box'] = array(
 			'show' => _p2p_pluck( $args, 'show_ui' )
 		);
+
 		if ( isset( $args['context'] ) )
 			$args['admin_box']['context'] = _p2p_pluck( $args, 'context' );
 	}

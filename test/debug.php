@@ -29,7 +29,7 @@ class P2P_Debug {
 	function posts_to_users() {
 		p2p_register_connection_type( array(
 			'name' => 'posts_to_users',
-			'to_object' => 'user',
+			'to' => 'user',
 			'to_query_vars' => array(
 				'role' => 'editor'
 			),
@@ -38,7 +38,7 @@ class P2P_Debug {
 
 		p2p_register_connection_type( array(
 			'name' => 'users_to_posts',
-			'from_object' => 'user',
+			'from' => 'user',
 			'title' => array( 'to' => 'Users 2 Posts' ),
 			'fields' => array(
 				'foo' => 'Foo'
