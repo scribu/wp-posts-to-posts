@@ -27,8 +27,10 @@ class P2P_Query {
 			$directed = $ctype->find_direction( $q['connected_items'], true, $object_type );
 		}
 
-		if ( !$directed )
+		if ( !$directed ) {
+			trigger_error( "Can't determine direction", E_USER_WARNING );
 			return false;
+		}
 
 		$q = $directed->get_connected_args( $q );
 

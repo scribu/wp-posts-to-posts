@@ -80,8 +80,10 @@ class Generic_Connection_Type {
 
 	public function __call( $method, $args ) {
 		$directed = $this->find_direction( $args[0] );
-		if ( !$directed )
+		if ( !$directed ) {
+			trigger_error( "Can't determine direction", E_USER_WARNING );
 			return false;
+		}
 
 		return call_user_func_array( array( $directed, $method ), $args );
 	}
