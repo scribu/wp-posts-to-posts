@@ -44,8 +44,7 @@ class P2P_Box {
 	}
 
 	protected function init_columns() {
-		$object_type = $this->ctype->get_opposite( 'object' );
-		$title_class = 'P2P_Field_Title_' . ucfirst( $object_type );
+		$title_class = $this->get_column_title_class();
 
 		$this->columns = array(
 			'delete' => new P2P_Field_Delete,
@@ -59,6 +58,12 @@ class P2P_Box {
 		if ( $orderby_key = $this->ctype->get_orderby_key() ) {
 			$this->columns['order'] = new P2P_Field_Order( $orderby_key );
 		}
+	}
+
+	protected function get_column_title_class() {
+		$object_type = $this->ctype->get_opposite( 'object' );
+
+		return 'P2P_Field_Title_' . ucfirst( $object_type );
 	}
 
 	function render( $post ) {
