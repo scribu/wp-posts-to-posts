@@ -126,6 +126,8 @@ td.p2p-col-create {
 }
 
 .p2p-col-title img {
+	display: block;
+	margin: 2px 0;
 	max-height: 32px;
 	max-width: 40px;
 }
