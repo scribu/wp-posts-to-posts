@@ -1,8 +1,6 @@
 <?php
 
-/**
- * @package Administration
- */
+/** @package Administration */
 class P2P_Field_Create implements P2P_Field {
 
 	function get_title() {
@@ -20,9 +18,8 @@ class P2P_Field_Create implements P2P_Field {
 	}
 }
 
-/**
- * @package Administration
- */
+
+/** @package Administration */
 class P2P_Field_Delete implements P2P_Field {
 
 	function get_title() {
@@ -43,9 +40,8 @@ class P2P_Field_Delete implements P2P_Field {
 	}
 }
 
-/**
- * @package Administration
- */
+
+/** @package Administration */
 class P2P_Field_Order implements P2P_Field {
 
 	protected $sort_key;
@@ -67,9 +63,7 @@ class P2P_Field_Order implements P2P_Field {
 	}
 }
 
-/**
- * @package Administration
- */
+/** @package Administration */
 class P2P_Field_Generic implements P2P_Field {
 
 	protected $data;
@@ -102,9 +96,8 @@ class P2P_Field_Generic implements P2P_Field {
 	}
 }
 
-/**
- * @package Administration
- */
+
+/** @package Administration */
 class P2P_Field_Title_Post implements P2P_Field {
 
 	protected $title;
@@ -138,6 +131,24 @@ class P2P_Field_Title_Post implements P2P_Field {
 }
 
 
+/** @package Administration */
+class P2P_Field_Title_Attachment extends P2P_Field_Title_Post {
+
+	function render( $key, $p2p_id, $attachment_id ) {
+		list( $src ) = wp_get_attachment_image_src( $attachment_id, 'thumbnail', true );
+
+		$data = array(
+			'title-attr' => get_post_field( 'post_title', $attachment_id ),
+			'title' => html( 'img', compact( 'src' ) ),
+			'url' => get_edit_post_link( $attachment_id ),
+		);
+
+		return P2P_Mustache::render( 'column-title', $data );
+	}
+}
+
+
+/** @package Administration */
 class P2P_Field_Title_User extends P2P_Field_Title_Post {
 
 	function render( $key, $p2p_id, $user_id ) {

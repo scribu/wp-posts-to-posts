@@ -29,6 +29,8 @@ class P2P_Connection_Type_Factory {
 
 			if ( 'user' == $object )
 				$args[ $direction . '_object' ] = 'user';
+			elseif ( 'attachment' == $object )
+				$args[ $direction . '_object' ] = 'attachment';
 
 			if ( 'post' == $args[ $direction . '_object' ] ) {
 				$validated = array();

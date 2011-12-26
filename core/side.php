@@ -94,8 +94,18 @@ class P2P_Side_Post extends P2P_Side {
 		return (bool) get_post( $item_id );
 	}
 
-	private function get_ptype() {
+	protected function get_ptype() {
 		return get_post_type_object( $this->post_type[0] );
+	}
+}
+
+
+class P2P_Side_Attachment extends P2P_Side_Post {
+
+	function __construct( $query_vars ) {
+		P2P_Side::__construct( $query_vars );
+
+		$this->post_type = array( 'attachment' );
 	}
 }
 
