@@ -56,7 +56,7 @@ function p2p_register_connection_type( $args ) {
 			return false;
 		}
 	} else {
-		trigger_error( "Missing 'name' parameter. Will use auto-generated name.", E_USER_WARNING );
+		trigger_error( "Connection types without a 'name' parameter are deprecated.", E_USER_WARNING );
 	}
 
 	// Box args
