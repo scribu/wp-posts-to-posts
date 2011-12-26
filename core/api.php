@@ -50,9 +50,13 @@ function p2p_register_connection_type( $args ) {
 
 	$args = _p2p_back_compat_args( $argv );
 
-	if ( isset( $args['name'] ) && strlen( $args['name'] ) > 32 ) {
-		trigger_error( sprintf( "Connection name '%s' is longer than 32 characters.", $args['name'] ), E_USER_WARNING );
-		return false;
+	if ( isset( $args['name'] ) ) {
+		if ( strlen( $args['name'] ) > 32 ) {
+			trigger_error( sprintf( "Connection name '%s' is longer than 32 characters.", $args['name'] ), E_USER_WARNING );
+			return false;
+		}
+	} else {
+		trigger_error( "Missing 'name' parameter. Will use auto-generated name.", E_USER_WARNING );
 	}
 
 	// Box args

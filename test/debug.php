@@ -67,6 +67,7 @@ class P2P_Debug {
 
 		foreach ( $types as $type => $title ) {
 			p2p_register_connection_type( array(
+				'name' => "contact_to_$type",
 				'from' => 'contact',
 				'to' => 'ticket',
 				'to_query_vars' => array(
@@ -162,6 +163,7 @@ class P2P_Debug {
 		) );
 
 		p2p_register_connection_type( array(
+			'name' => 'actor_doubles',
 			'from' => 'actor',
 			'to' => 'actor',
 			'cardinality' => 'one-to-many',
@@ -173,6 +175,7 @@ class P2P_Debug {
 		) );
 
 		p2p_register_connection_type( array(
+			'name' => 'actor_friends',
 			'from' => array( 'actor' ),
 			'to' => 'actor',
 			'reciprocal' => true,
