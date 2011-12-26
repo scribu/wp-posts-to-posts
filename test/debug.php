@@ -11,11 +11,20 @@ class P2P_Debug {
 	}
 
 	function _init() {
+		self::posts_to_attachments();
 		self::posts_to_users();
 		self::contacts_and_tickets();
 		self::actors_and_movies();
 
 #		self::reset_upgrade();
+	}
+
+	function posts_to_attachments() {
+		p2p_register_connection_type( array(
+			'name' => 'posts_to_attachments',
+			'from' => 'post',
+			'to' => 'attachment'
+		) );
 	}
 
 	function reset_upgrade() {
