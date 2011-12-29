@@ -8,7 +8,7 @@ class P2P_Field_Create implements P2P_Field {
 		return '';
 	}
 
-	function render( $key, $p2p_id, $post_id ) {
+	function render( $p2p_id, $post_id ) {
 		$data = array(
 			'post_id' => $post_id,
 			'title' => __( 'Create connection', P2P_TEXTDOMAIN )
@@ -30,7 +30,7 @@ class P2P_Field_Delete implements P2P_Field {
 		return P2P_Mustache::render( 'column-delete-all', $data );
 	}
 
-	function render( $key, $p2p_id, $post_id ) {
+	function render( $p2p_id, $post_id ) {
 		$data = array(
 			'p2p_id' => $p2p_id,
 			'title' => __( 'Delete connection', P2P_TEXTDOMAIN )
@@ -54,7 +54,7 @@ class P2P_Field_Order implements P2P_Field {
 		return '';
 	}
 
-	function render( $key, $p2p_id, $post_id ) {
+	function render( $p2p_id, $post_id ) {
 		return html( 'input', array(
 			'type' => 'hidden',
 			'name' => "p2p_order[$this->sort_key][]",
@@ -66,9 +66,11 @@ class P2P_Field_Order implements P2P_Field {
 /** @package Administration */
 class P2P_Field_Generic implements P2P_Field {
 
+	protected $key;
 	protected $data;
 
-	function __construct( $data ) {
+	function __construct( $key, $data ) {
+		$this->key = $key;
 		$this->data = $data;
 	}
 
@@ -76,9 +78,9 @@ class P2P_Field_Generic implements P2P_Field {
 		return $this->data['title'];
 	}
 
-	function render( $key, $p2p_id, $post_id ) {
+	function render( $p2p_id, $post_id ) {
 		$args = array(
-			'name' => $key,
+			'name' => $this->key,
 			'type' => $this->data['type']
 		);
 
@@ -87,10 +89,11 @@ class P2P_Field_Generic implements P2P_Field {
 
 		$single_value = ( 'checkbox' != $args['type'] );
 
-		$form = new scbForm(
-			array( $key => p2p_get_meta( $p2p_id, $key, $single_value ) ),
-			array( 'p2p_meta', $p2p_id )
+		$data = array(
+			$this->key => p2p_get_meta( $p2p_id, $this->key, $single_value )
 		);
+
+		$form = new scbForm( $data, array( 'p2p_meta', $p2p_id ) );
 
 		return $form->input( $args );
 	}
@@ -110,7 +113,7 @@ class P2P_Field_Title_Post implements P2P_Field {
 		return $this->title;
 	}
 
-	function render( $key, $p2p_id, $post_id ) {
+	function render( $p2p_id, $post_id ) {
 		$data = array(
 			'title-attr' => get_permalink( $post_id ),
 			'title' => get_post_field( 'post_title', $post_id ),
@@ -134,7 +137,7 @@ class P2P_Field_Title_Post implements P2P_Field {
 /** @package Administration */
 class P2P_Field_Title_Attachment extends P2P_Field_Title_Post {
 
-	function render( $key, $p2p_id, $attachment_id ) {
+	function render( $p2p_id, $attachment_id ) {
 		list( $src ) = wp_get_attachment_image_src( $attachment_id, 'thumbnail', true );
 
 		$data = array(
@@ -151,7 +154,7 @@ class P2P_Field_Title_Attachment extends P2P_Field_Title_Post {
 /** @package Administration */
 class P2P_Field_Title_User extends P2P_Field_Title_Post {
 
-	function render( $key, $p2p_id, $user_id ) {
+	function render( $p2p_id, $user_id ) {
 		$user = get_user_by( 'id', $user_id );
 
 		$data = array(
