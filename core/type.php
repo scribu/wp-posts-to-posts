@@ -193,7 +193,7 @@ class P2P_Connection_Type extends Generic_Connection_Type {
 		$posts = array();
 
 		foreach ( $query->posts as $post ) {
-			$post->$prop_name = array();
+			if(!isset($post->$prop_name)) $post->$prop_name = array();
 			$posts[ $post->ID ] = $post;
 		}
 
@@ -222,7 +222,8 @@ class P2P_Connection_Type extends Generic_Connection_Type {
 				continue;
 			}
 
-			array_push( $posts[ $outer_post_id ]->$prop_name, $inner_post );
+			if(isset($posts[ $outer_post_id ]->{$prop_name}[$this->name])) array_push( $posts[ $outer_post_id ]->{$prop_name}[$this->name], $inner_post );
+			else $posts[ $outer_post_id ]->{$prop_name}[$this->name] = array($inner_post);
 		}
 	}
 
