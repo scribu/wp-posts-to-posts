@@ -11,7 +11,14 @@ class P2P_User_Query {
 
 		$q =& $query->query_vars;
 
-		if ( false === P2P_Query::handle_qv( $q, 'user' ) ) {
+		P2P_Query::expand_shortcut_qv( $q );
+
+		if ( !isset( $q['connected_items'] ) )
+			return;
+
+		$r = P2P_Query::expand_connected_type( $q, 'user' );
+
+		if ( false === $r ) {
 			$query->query_where = " AND 1=0";
 			return;
 		}

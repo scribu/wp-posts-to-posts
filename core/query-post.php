@@ -14,7 +14,12 @@ class P2P_WP_Query {
 	function parse_query( $wp_query ) {
 		$q =& $wp_query->query_vars;
 
-		$r = P2P_Query::handle_qv( $q, 'post' );
+		P2P_Query::expand_shortcut_qv( $q );
+
+		if ( !isset( $q['connected_items'] ) )
+			return;
+
+		$r = P2P_Query::expand_connected_type( $q, 'post' );
 
 		if ( false === $r ) {
 			$q = array( 'year' => 2525 );
