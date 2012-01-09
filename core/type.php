@@ -117,13 +117,8 @@ class Generic_Connection_Type {
 		if ( $direction = $this->find_direction_from_object_type( $object_type ) )
 			return $this->set_direction( $direction, $instantiate );
 
-		$post_type = P2P_Util::find_post_type( $arg );
-
 		foreach ( array( 'from', 'to' ) as $direction ) {
-			if ( 'post' != $this->object[ $direction ] )
-				continue;
-
-			if ( !in_array( $post_type, $this->side[ $direction ]->post_type ) )
+			if ( !$this->side[ $direction ]->recognize_item( $arg ) )
 				continue;
 
 			if ( $this->indeterminate )

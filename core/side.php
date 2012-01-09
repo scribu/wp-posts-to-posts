@@ -94,6 +94,10 @@ class P2P_Side_Post extends P2P_Side {
 		return (bool) get_post( $item_id );
 	}
 
+	function recognize_item( $arg ) {
+		return in_array( P2P_Util::find_post_type( $arg ), $this->post_type );
+	}
+
 	protected function get_ptype() {
 		return get_post_type_object( $this->post_type[0] );
 	}
@@ -163,6 +167,10 @@ class P2P_Side_User extends P2P_Side {
 
 	function item_exists( $item_id ) {
 		return (bool) get_user_by( 'id', $item_id );
+	}
+
+	function recognize_item( $arg ) {
+		return false;
 	}
 }
 
