@@ -177,7 +177,7 @@ class P2P_Connection_Type extends Generic_Connection_Type {
 	 * @param string|array $extra_qv Additional query vars for the inner query.
 	 * @param boolean $multiple Set results under array key for multiple connection queries.
 	 */
-	public function each_connected( $query, $extra_qv = array() ) {
+	public function each_connected( $query, $extra_qv = array(), $multiple = false ) {
 		if ( empty( $query->posts ) || !is_object( $query->posts[0] ) )
 			return;
 
