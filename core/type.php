@@ -175,6 +175,7 @@ class P2P_Connection_Type extends Generic_Connection_Type {
 	 *
 	 * @param object $query WP_Query instance.
 	 * @param string|array $extra_qv Additional query vars for the inner query.
+	 * @param boolean $multiple Set results under array key for multiple connection queries.
 	 */
 	public function each_connected( $query, $extra_qv = array() ) {
 		if ( empty( $query->posts ) || !is_object( $query->posts[0] ) )
@@ -222,8 +223,11 @@ class P2P_Connection_Type extends Generic_Connection_Type {
 				continue;
 			}
 
-			if(isset($posts[ $outer_post_id ]->{$prop_name}[$this->name])) array_push( $posts[ $outer_post_id ]->{$prop_name}[$this->name], $inner_post );
-			else $posts[ $outer_post_id ]->{$prop_name}[$this->name] = array($inner_post);
+			if(!$multiple) array_push( $posts[ $outer_post_id ]->$prop_name, $inner_post );
+			else {
+				if(isset($posts[ $outer_post_id ]->{$prop_name}[$this->name])) array_push( $posts[ $outer_post_id ]->{$prop_name}[$this->name], $inner_post );
+				else $posts[ $outer_post_id ]->{$prop_name}[$this->name] = array($inner_post);
+			}
 		}
 	}
 
