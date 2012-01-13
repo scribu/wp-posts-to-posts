@@ -1,18 +1,13 @@
 <?php
 
 /**
- * Various utilities for working with connection types.
- *
- * They come wit no backwards-compatibility warantee.
+ * @internal
  */
-abstract class P2P_Util {
-
-	static function expand_direction( $direction ) {
-		if ( 'any' == $direction )
-			return array( 'from', 'to' );
-		else
-			return array( $direction );
-	}
+function _p2p_expand_direction( $direction ) {
+	if ( 'any' == $direction )
+		return array( 'from', 'to' );
+	else
+		return array( $direction );
 }
 
 /**

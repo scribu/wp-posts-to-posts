@@ -170,7 +170,7 @@ function p2p_get_connections( $p2p_type, $args = array() ) {
 
 	$r = array();
 
-	foreach ( P2P_Util::expand_direction( $direction ) as $direction ) {
+	foreach ( _p2p_expand_direction( $direction ) as $direction ) {
 		$args = array( $from, $to );
 
 		if ( 'to' == $direction ) {

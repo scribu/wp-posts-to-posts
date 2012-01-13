@@ -87,7 +87,7 @@ class P2P_Box_Factory {
 			return array();
 
 		if ( $ctype->indeterminate && !$ctype->reciprocal ) {
-			return P2P_Util::expand_direction( $show_ui );
+			return _p2p_expand_direction( $show_ui );
 		}
 
 		if ( 'any' == $show_ui || $direction == $show_ui )
