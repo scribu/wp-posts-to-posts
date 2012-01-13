@@ -183,8 +183,9 @@ class P2P_Connection_Type extends Generic_Connection_Type {
 	 *
 	 * @param object $query WP_Query instance.
 	 * @param string|array $extra_qv Additional query vars for the inner query.
+	 * @param string $prop_name The name of the property used to store the list of connected items on each post object.
 	 */
-	public function each_connected( $query, $extra_qv = array() ) {
+	public function each_connected( $query, $extra_qv = array(), $prop_name = 'connected' ) {
 		if ( empty( $query->posts ) || !is_object( $query->posts[0] ) )
 			return;
 
@@ -195,8 +196,6 @@ class P2P_Connection_Type extends Generic_Connection_Type {
 		$directed = $this->find_direction( $post_type );
 		if ( !$directed )
 			return false;
-
-		$prop_name = 'connected';
 
 		$posts = array();
 
