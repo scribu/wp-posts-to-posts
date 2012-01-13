@@ -94,8 +94,29 @@ class P2P_Side_Post extends P2P_Side {
 		return (bool) get_post( $item_id );
 	}
 
+	/**
+	 * @param mixed A post type, a post id, a post object, an array of post ids or of objects.
+	 */
 	function recognize_item( $arg ) {
-		return in_array( P2P_Util::find_post_type( $arg ), $this->post_type );
+		if ( is_array( $arg ) ) {
+			$arg = reset( $arg );
+		}
+
+		if ( is_object( $arg ) ) {
+			$post_type = $arg->post_type;
+		} elseif ( $post_id = (int) $arg ) {
+			$post = get_post( $post_id );
+			if ( !$post )
+				return false;
+			$post_type = $post->post_type;
+		} else {
+			$post_type = $arg;
+		}
+
+		if ( !post_type_exists( $post_type ) )
+			return false;
+
+		return in_array( $post_type, $this->post_type );
 	}
 
 	protected function get_ptype() {

@@ -7,35 +7,6 @@
  */
 abstract class P2P_Util {
 
-	/**
-	 * Attempt to find a post type.
-	 *
-	 * @param mixed A post type, a post id, a post object, an array of post ids or of objects.
-	 *
-	 * @return bool|string False on failure, post type on success.
-	 */
-	static function find_post_type( $arg ) {
-		if ( is_array( $arg ) ) {
-			$arg = reset( $arg );
-		}
-
-		if ( is_object( $arg ) ) {
-			$post_type = $arg->post_type;
-		} elseif ( $post_id = (int) $arg ) {
-			$post = get_post( $post_id );
-			if ( !$post )
-				return false;
-			$post_type = $post->post_type;
-		} else {
-			$post_type = $arg;
-		}
-
-		if ( !post_type_exists( $post_type ) )
-			return false;
-
-		return $post_type;
-	}
-
 	static function expand_direction( $direction ) {
 		if ( 'any' == $direction )
 			return array( 'from', 'to' );
