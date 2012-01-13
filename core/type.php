@@ -134,7 +134,7 @@ class Generic_Connection_Type {
 		if ( !$object_type )
 			return false;
 
-		$opposite_side = P2P_Util::choose_side( $object_type,
+		$opposite_side = self::choose_side( $object_type,
 			$this->object['from'],
 			$this->object['to']
 		);
@@ -143,6 +143,19 @@ class Generic_Connection_Type {
 			return false;
 
 		return $opposite_side;
+	}
+
+	private static function choose_side( $current, $from, $to ) {
+		if ( $from == $to && $current == $from )
+			return 'any';
+
+		if ( $current == $from )
+			return 'to';
+
+		if ( $current == $to )
+			return 'from';
+
+		return false;
 	}
 }
 
