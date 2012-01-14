@@ -10,7 +10,7 @@ Text Domain: posts-to-posts
 Domain Path: /lang
 
 
-Copyright (C) 2010-2011 Cristi Burcă (mail@scribu.net)
+Copyright (C) 2010-2012 Cristi Burcă (mail@scribu.net)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-define( 'P2P_PLUGIN_VERSION', '1.2-alpha' );
+define( 'P2P_PLUGIN_VERSION', '1.1.4' );
 
 define( 'P2P_TEXTDOMAIN', 'posts-to-posts' );
 

@@ -50,6 +50,13 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 1.1.4 =
+* show attachment thumbnail instead of title
+* merged 'from_object' into 'from' and 'to_object' into 'to'
+* made posts-to-users queries respect 'to_query_vars' args
+* added $prop_name parameter to P2P_Type::each_connected()
+* fixed connection field name conflict
+
 = 1.1.3 =
 * fixed regression related to posts-to-users direction
 * fixed admin columns overwriting each other
