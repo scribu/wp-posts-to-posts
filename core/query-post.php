@@ -19,7 +19,10 @@ class P2P_WP_Query {
 		if ( !isset( $q['connected_items'] ) )
 			return;
 
-		$r = P2P_Query::expand_connected_type( $q, 'post' );
+		if ( !isset( $q['connected_type'] ) )
+			return;
+
+		$r = self::expand_connected_type( $q, 'post' );
 
 		if ( false === $r ) {
 			$q = array( 'year' => 2525 );
@@ -27,6 +30,40 @@ class P2P_WP_Query {
 			$wp_query->is_home = false;
 			$wp_query->is_archive = true;
 		}
+	}
+
+	// null means do nothing
+	// false means trigger 404
+	// true means found valid p2p query vars
+	function expand_connected_type( &$q, $object_type ) {
+		if ( !isset( $q['connected_type'] ) )
+			return;
+
+		$ctype = p2p_type( _p2p_pluck( $q, 'connected_type' ) );
+
+		if ( !$ctype )
+			return false;
+
+		if ( isset( $q['connected_direction'] ) ) {
+			$directed = $ctype->set_direction( _p2p_pluck( $q, 'connected_direction' ) );
+		} else {
+			if ( 'any' == $q['connected_items'] ) {
+				$post_type = isset( $q['post_type'] ) ? $q['post_type'] : 'post';
+			} else {
+				$post_type = $q['connected_items'];
+			}
+
+			$directed = $ctype->find_direction( $post_type, true, $object_type );
+		}
+
+		if ( !$directed ) {
+			trigger_error( "Can't determine direction", E_USER_WARNING );
+			return false;
+		}
+
+		$q = $directed->get_connected_args( $q );
+
+		return true;
 	}
 
 	function posts_clauses( $clauses, $wp_query ) {
