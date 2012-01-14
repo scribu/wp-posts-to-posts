@@ -130,6 +130,7 @@ class Generic_Connection_Type {
 		return false;
 	}
 
+	// TODO: move to P2P_Query
 	protected function find_direction_from_object_type( $object_type ) {
 		if ( !$object_type )
 			return false;

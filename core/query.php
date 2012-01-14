@@ -17,34 +17,6 @@ class P2P_Query {
 		}
 	}
 
-	// null means do nothing
-	// false means trigger 404
-	// true means found valid p2p query vars
-	function expand_connected_type( &$q, $object_type ) {
-		if ( !isset( $q['connected_type'] ) )
-			return;
-
-		$ctype = p2p_type( _p2p_pluck( $q, 'connected_type' ) );
-
-		if ( !$ctype )
-			return false;
-
-		if ( isset( $q['connected_direction'] ) )
-			$directed = $ctype->set_direction( _p2p_pluck( $q, 'connected_direction' ) );
-		else {
-			$directed = $ctype->find_direction( $q['connected_items'], true, $object_type );
-		}
-
-		if ( !$directed ) {
-			trigger_error( "Can't determine direction", E_USER_WARNING );
-			return false;
-		}
-
-		$q = $directed->get_connected_args( $q );
-
-		return true;
-	}
-
 	function get_qv( $q ) {
 		$qv_list = array(
 			'items', 'direction', 'meta',
