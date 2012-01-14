@@ -24,7 +24,7 @@ class P2P_Column {
 ?>
 <style type="text/css">
 .column-<?php echo $this->ctype->name; ?> ul {
-	margin-top: -17px;
+	margin-top: 0;
 	margin-bottom: 0;
 }
 </style>
