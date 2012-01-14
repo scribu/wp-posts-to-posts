@@ -6,7 +6,7 @@ class P2P_Debug {
 		if ( !function_exists('p2p_register_connection_type') )
 			return;
 
-		add_action('init', array(__CLASS__, '_init'));
+		add_action('wp_loaded', array(__CLASS__, '_init'));
 		//add_action('admin_notices', array(__CLASS__, 'setup_example'));
 	}
 
