@@ -104,5 +104,30 @@ class P2P_Query {
 
 		return $clauses;
 	}
+
+	function find_direction( $ctype, $arg, $object_type ) {
+		$opposite_side = self::choose_side( $object_type,
+			$ctype->object['from'],
+			$ctype->object['to']
+		);
+
+		if ( in_array( $opposite_side, array( 'from', 'to' ) ) )
+			return $ctype->set_direction( $opposite_side );
+
+		return $ctype->find_direction( $arg );
+	}
+
+	private static function choose_side( $current, $from, $to ) {
+		if ( $from == $to && $current == $from )
+			return 'any';
+
+		if ( $current == $from )
+			return 'to';
+
+		if ( $current == $to )
+			return 'from';
+
+		return false;
+	}
 }
 

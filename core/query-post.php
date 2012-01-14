@@ -53,7 +53,7 @@ class P2P_WP_Query {
 				$post_type = $q['connected_items'];
 			}
 
-			$directed = $ctype->find_direction( $post_type, true, $object_type );
+			$directed = P2P_Query::find_direction( $ctype, $post_type, $object_type );
 		}
 
 		if ( !$directed ) {

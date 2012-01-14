@@ -66,7 +66,7 @@ class P2P_User_Query {
 		if ( isset( $q['connected_direction'] ) )
 			$directed = $ctype->set_direction( _p2p_pluck( $q, 'connected_direction' ) );
 		else {
-			$directed = $ctype->find_direction( $q['connected_items'], true, $object_type );
+			$directed = P2P_Query::find_direction( $ctype, $q['connected_items'], $object_type );
 		}
 
 		if ( !$directed ) {
