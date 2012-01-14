@@ -22,7 +22,7 @@ class P2P_WP_Query {
 		if ( !isset( $q['connected_type'] ) )
 			return;
 
-		$r = self::expand_connected_type( $q, 'post' );
+		$r = self::expand_connected_type( $q );
 
 		if ( false === $r ) {
 			$q = array( 'year' => 2525 );
@@ -35,7 +35,7 @@ class P2P_WP_Query {
 	// null means do nothing
 	// false means trigger 404
 	// true means found valid p2p query vars
-	function expand_connected_type( &$q, $object_type ) {
+	function expand_connected_type( &$q ) {
 		if ( !isset( $q['connected_type'] ) )
 			return;
 
@@ -53,7 +53,7 @@ class P2P_WP_Query {
 				$post_type = $q['connected_items'];
 			}
 
-			$directed = P2P_Query::find_direction( $ctype, $post_type, $object_type );
+			$directed = P2P_Query::find_direction( $ctype, $post_type, 'post' );
 		}
 
 		if ( !$directed ) {
