@@ -115,11 +115,12 @@ class P2P_Debug {
 		register_post_type('actor', array(
 			'public' => true,
 			'labels' => array(
-				'name' => 'Actors',
-				'singular_name' => 'Actor',
-				'search_items' => 'Search Actors',
-				'new_item' => 'New Actor',
-				'not_found' => 'No actors found.'
+				'name' => '&Agrave;ctors',
+				'singular_name' => '&Agrave;ctor',
+				'search_items' => 'Search &Agrave;ctors',
+				'new_item' => 'New &Agrave;ctor',
+				'not_found' => 'No actors found.',
+				'add_new_item' => 'Add new &agrave;ctor'
 			),
 			'has_archive' => 'actors',
 			'supports' => array( 'title' )
