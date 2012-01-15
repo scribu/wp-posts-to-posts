@@ -49,8 +49,12 @@ class Generic_Connection_Type {
 	private function set_labels( &$args ) {
 		foreach ( array( 'from', 'to' ) as $key ) {
 			$labels = _p2p_pluck( $args, $key . '_labels' );
+
 			if ( empty( $labels ) )
 				$labels = $this->side[ $key ]->get_labels();
+			else
+				$labels = (object) $labels;
+
 			$this->labels[ $key ] = $labels;
 		}
 	}

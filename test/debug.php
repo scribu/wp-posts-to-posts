@@ -181,7 +181,12 @@ class P2P_Debug {
 			'data' => array( 'type' => 'doubles' ),
 			'sortable' => 'order',
 			'admin_column' => 'any',
-			'can_create_post' => false
+			'can_create_post' => false,
+			'to_labels' => array(
+				'singular_name' => 'Double',
+				'search_items' => 'Search doubles',
+				'not_found' => 'No doubles found'
+			)
 		) );
 
 		p2p_register_connection_type( array(
