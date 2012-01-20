@@ -27,8 +27,6 @@ class P2P_Box {
 
 		$this->labels = $this->ctype->get_opposite( 'labels' );
 
-		add_filter( 'posts_search', array( __CLASS__, '_search_by_title' ), 10, 2 );
-
 		$this->init_columns();
 	}
 
@@ -298,15 +296,6 @@ class P2P_Box {
 
 	public function check_capability() {
 		return $this->ctype->get_opposite( 'side' )->check_capability();
-	}
-
-	function _search_by_title( $sql, $wp_query ) {
-		if ( $wp_query->is_search && $wp_query->get( '_p2p_box' ) ) {
-			list( $sql ) = explode( ' OR ', $sql, 2 );
-			return $sql . '))';
-		}
-
-		return $sql;
 	}
 }
 

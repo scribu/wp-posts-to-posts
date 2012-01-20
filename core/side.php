@@ -73,7 +73,6 @@ class P2P_Side_Post extends P2P_Side {
 		) );
 
 		if ( $search ) {
-			$qv['_p2p_box'] = true;
 			$qv['s'] = $search;
 		}
 
