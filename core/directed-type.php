@@ -60,12 +60,19 @@ class P2P_Directed_Connection_Type {
 	 *
 	 * @return object
 	 */
-	public function get_connected( $post_id, $extra_qv = array() ) {
+	public function get_connected( $post_id, $extra_qv = array(), $output = 'raw' ) {
 		$args = array_merge( $extra_qv, array(
 			'connected_items' => $post_id
 		) );
 
-		return $this->get_opposite( 'side' )->do_query( $this->get_connected_args( $args ) );
+		$side = $this->get_opposite( 'side' );
+
+		$query = $side->do_query( $this->get_connected_args( $args ) );
+
+		if ( 'abstract' == $output )
+			$query = $side->abstract_query( $query );
+
+		return $query;
 	}
 
 	public function get_connected_args( $q ) {
@@ -107,7 +114,11 @@ class P2P_Directed_Connection_Type {
 	 * @internal
 	 */
 	public function get_connections( $post_id ) {
-		return $this->get_opposite( 'side' )->get_connections( $this, $post_id );
+		$side = $this->get_opposite( 'side' );
+
+		$query = $this->get_connected( $post_id, $side->get_connections_qv() );
+
+		return scb_list_fold( $side->abstract_query( $query )->items, 'p2p_id', 'ID' );
 	}
 
 	/**
@@ -133,7 +144,13 @@ class P2P_Directed_Connection_Type {
 			) ) );
 		}
 
-		return $this->get_opposite( 'side' )->get_connectable( $item_id, $page, $search, $to_exclude, $this );
+		$side = $this->get_opposite( 'side' );
+
+		$qv = $side->get_connectable_qv( $item_id, $page, $search, $to_exclude );
+
+		$qv = apply_filters( 'p2p_connectable_args', $qv, $this, $item_id );
+
+		return $side->abstract_query( $side->do_query( $qv ) );
 	}
 
 	/**
