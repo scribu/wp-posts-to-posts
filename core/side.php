@@ -70,7 +70,7 @@ class P2P_Side_Post extends P2P_Side {
 		) );
 	}
 
-	function get_connectable_qv( $item_id, $page, $search, $to_exclude, $directed ) {
+	function get_connectable_qv( $item_id, $page, $search, $to_exclude ) {
 		$qv = array_merge( $this->get_base_qv(), self::$admin_box_qv, array(
 			'posts_per_page' => ADMIN_BOX_PER_PAGE,
 			'paged' => $page,
