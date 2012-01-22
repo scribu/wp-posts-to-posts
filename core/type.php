@@ -179,11 +179,6 @@ class Generic_Connection_Type {
 				continue;
 			}
 
-			if ( $outer_item_id == $inner_item->ID ) {
-				trigger_error( 'Item connected to itself.', E_USER_WARNING );
-				continue;
-			}
-
 			array_push( $posts[ $outer_item_id ]->$prop_name, $inner_item );
 		}
 	}
