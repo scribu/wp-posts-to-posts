@@ -1,0 +1,114 @@
+# Translation of the WordPress plugin Posts 2 Posts 1.1.4 by scribu.
+# Copyright (C) 2011 scribu
+# This file is distributed under the same license as the Posts 2 Posts package.
+# ÖNDER CEYLAN <ondercey@yahoo.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts 2 Posts 1.1.4\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-to-posts\n"
+"POT-Creation-Date: 2011-03-30 21:56+0300\n"
+"PO-Revision-Date: 2012-01-23 00:54+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin/box.php:42
+msgid "Are you sure you want to delete all connections?"
+msgstr "Tüm bağlantıları kaldırmak istediğinizden emin misiniz?"
+
+#: admin/box.php:120
+msgid "Create connections:"
+msgstr "Bağlantı yarat:"
+
+#: admin/box.php:133
+msgid "Search"
+msgstr "Ara"
+
+#: admin/box.php:141
+msgid "View All"
+msgstr "Tümünü Listele"
+
+#: admin/box.php:209
+msgid "previous"
+msgstr "önceki"
+
+#: admin/box.php:210
+msgid "next"
+msgstr "sonraki"
+
+#: admin/box.php:211
+msgid "of"
+msgstr "arasından"
+
+#: admin/fields.php:14
+msgid "Create connection"
+msgstr "Bağlantı ekle"
+
+#: admin/fields.php:27
+msgid "Delete all connections"
+msgstr "Tüm bağlantıları kaldır"
+
+#: admin/fields.php:36
+msgid "Delete connection"
+msgstr "Bağlantıyı kaldır"
+
+#: core/side.php:141
+msgid "Users"
+msgstr "Kullanıcılar"
+
+#: core/side.php:146
+msgid "User"
+msgstr "Kullanıcı"
+
+#: core/side.php:147
+msgid "Search Users"
+msgstr "Kullanıcı Ara"
+
+#: core/side.php:148
+msgid "No users found."
+msgstr "Kullanıcı bulunamadı."
+
+#: core/storage.php:35
+msgid "Upgraded %d connections."
+msgstr "%d bağlantı güncellendi."
+
+#: core/storage.php:38
+msgid "The Posts 2 Posts connections need to be upgraded. <a href='%s'>Proceed.</a>"
+msgstr "Posts 2 Posts bağlantılarının güncellenmesi gerekiyor. <a href='%s'>Devam et.</a>"
+
+#: core/type.php:73
+msgid "Connected %s"
+msgstr "%s Bağlandı"
+
+#: core/widget.php:15
+msgid "Posts 2 Posts"
+msgstr "Posts 2 Posts"
+
+#: core/widget.php:16
+msgid "A list of posts connected to the current post"
+msgstr "Mevcut sayfayla bağlantılı sayfalar"
+
+#: core/widget.php:37
+msgid "Connection type:"
+msgstr "Bağlantı türü:"
+
+#: core/widget.php:41
+msgid "Connection listing:"
+msgstr "Bağlantı listesi:"
+
+#: core/widget.php:47
+msgid "connected"
+msgstr "bağlı"
+
+#: core/widget.php:48
+msgid "related"
+msgstr "benzer"
+
+#: core/widget.php:73
+msgid "Related %s"
+msgstr "Benzer %s"
+
