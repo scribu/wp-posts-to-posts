@@ -119,7 +119,7 @@ class Generic_Connection_Type {
 	 */
 	public function find_direction( $arg, $instantiate = true ) {
 		foreach ( array( 'from', 'to' ) as $direction ) {
-			if ( !$this->side[ $direction ]->recognize_item( $arg ) )
+			if ( !$this->side[ $direction ]->item_recognize( $arg ) )
 				continue;
 
 			if ( $this->indeterminate )

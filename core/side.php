@@ -85,14 +85,10 @@ class P2P_Side_Post extends P2P_Side {
 		return $qv;
 	}
 
-	function item_exists( $item_id ) {
-		return (bool) get_post( $item_id );
-	}
-
 	/**
 	 * @param mixed A post type, a post id, a post object, an array of post ids or of objects.
 	 */
-	function recognize_item( $arg ) {
+	function item_recognize( $arg ) {
 		if ( is_array( $arg ) ) {
 			$arg = reset( $arg );
 		}
@@ -116,6 +112,14 @@ class P2P_Side_Post extends P2P_Side {
 
 	protected function get_ptype() {
 		return get_post_type_object( $this->post_type[0] );
+	}
+
+	function item_exists( $item_id ) {
+		return (bool) get_post( $item_id );
+	}
+
+	function item_title( $item ) {
+		return $item->post_title;
 	}
 }
 
@@ -180,12 +184,16 @@ class P2P_Side_User extends P2P_Side {
 		return $qv;
 	}
 
+	function item_recognize( $arg ) {
+		return false;
+	}
+
 	function item_exists( $item_id ) {
 		return (bool) get_user_by( 'id', $item_id );
 	}
 
-	function recognize_item( $arg ) {
-		return false;
+	function item_title( $item ) {
+		return $item->display_name;
 	}
 }
 

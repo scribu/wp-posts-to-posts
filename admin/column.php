@@ -31,7 +31,7 @@ class P2P_Column {
 <?php
 	}
 
-	function display_column( $column, $post_id ) {
+	function display_column( $column, $item_id ) {
 		if ( $this->ctype->name != $column )
 			return;
 
@@ -41,20 +41,22 @@ class P2P_Column {
 			'any' => 'any'
 		);
 
-		echo '<ul>';
-		foreach ( $this->connected[ $post_id ] as $post ) {
-			$direction = $opposite_direction[ $this->ctype->get_direction() ];
+		$direction = $opposite_direction[ $this->ctype->get_direction() ];
 
+		$side = $this->ctype->side[ $direction ];
+
+		echo '<ul>';
+		foreach ( $this->connected[ $item_id ] as $item ) {
 			$args = array(
-				'post_type' => get_post_type( $post_id ),
 				'connected_type' => $this->ctype->name,
-				'connected_items' => $post->ID,
-				'connected_direction' => $direction
+				'connected_direction' => $direction,
+				'connected_items' => $item->ID,
+				'post_type' => get_current_screen()->post_type
 			);
 
 			$url = add_query_arg( $args, admin_url( 'edit.php' ) );
 
-			echo html( 'li', html_link( $url, $post->post_title ) );
+			echo html( 'li', html_link( $url, $side->item_title( $item ) ) );
 		}
 		echo '</ul>';
 	}

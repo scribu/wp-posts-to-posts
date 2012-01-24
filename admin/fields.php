@@ -155,11 +155,9 @@ class P2P_Field_Title_Attachment extends P2P_Field_Title_Post {
 class P2P_Field_Title_User extends P2P_Field_Title_Post {
 
 	function render( $p2p_id, $user_id ) {
-		$user = get_user_by( 'id', $user_id );
-
 		$data = array(
 			'title-attr' => '',
-			'title' => $user->display_name,
+			'title' => get_user_by( 'id', $user_id )->display_name,
 			'url' => $this->get_edit_url( $user_id ),
 		);
 

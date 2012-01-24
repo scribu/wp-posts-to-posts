@@ -37,12 +37,14 @@ class P2P_Debug {
 
 	function posts_to_users() {
 		p2p_register_connection_type( array(
-			'name' => 'posts_to_users',
+			'name' => 'pages_to_users',
+			'from' => 'page',
 			'to' => 'user',
 			'to_query_vars' => array(
 				'role' => 'editor'
 			),
-			'title' => array( 'from' => 'Posts 2 Editors' )
+			'title' => array( 'from' => 'Pages 2 Editors' ),
+			'admin_column' => 'any'
 		) );
 
 		p2p_register_connection_type( array(
