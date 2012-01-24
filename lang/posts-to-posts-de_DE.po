@@ -1,0 +1,133 @@
+# Copyright (C) 2011 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts 2 Posts 1.1.4\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
+"POT-Creation-Date: 2011-12-01 16:28:04+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2012-01-24 13:03+0100\n"
+"Last-Translator: ms-studio <code@ms-studio.net>\n"
+"Language-Team: \n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+
+#: admin/box-factory.php:56
+msgid " (from)"
+msgstr " (von)"
+
+#: admin/box-factory.php:57
+msgid " (to)"
+msgstr " (zu)"
+
+#: admin/box.php:42
+msgid "Are you sure you want to delete all connections?"
+msgstr "Wollen Sie wirklich alle Verbindungen löschen?"
+
+#: admin/box.php:115
+msgid "Create connections:"
+msgstr "Verbindungen erstellen:"
+
+#: admin/box.php:128
+msgid "Search"
+msgstr "Suchen"
+
+#: admin/box.php:136
+msgid "View All"
+msgstr "Alle Verbindungen"
+
+#: admin/box.php:204
+msgid "previous"
+msgstr "vorherige"
+
+#: admin/box.php:205
+msgid "next"
+msgstr "folgende"
+
+#: admin/box.php:206
+msgid "of"
+msgstr "von"
+
+#: admin/fields.php:16
+msgid "Create connection"
+msgstr "Verbindung erstellen"
+
+#: admin/fields.php:30
+msgid "Delete all connections"
+msgstr "Alle Verbindungen löschen"
+
+#: admin/fields.php:39
+msgid "Delete connection"
+msgstr "Verbindung löschen"
+
+#: scb/AdminPage.php:165
+msgid "Settings <strong>saved</strong>."
+msgstr "Einstellungen <strong>gespeichert</strong>"
+
+#: scb/AdminPage.php:178
+#: scb/AdminPage.php:189
+msgid "Save Changes"
+msgstr "Änderungen speichern"
+
+#: scb/AdminPage.php:350
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: core/type.php:65
+msgid "Connected %s"
+msgstr "Verbundene %s"
+
+#: core/widget.php:15
+msgid "Posts 2 Posts"
+msgstr "Posts 2 Posts"
+
+#: core/widget.php:16
+msgid "A list of posts connected to the current post"
+msgstr "Eine Liste von Artikeln, die mit diesem Artikel verbunden sind"
+
+#: core/widget.php:37
+msgid "Connection type:"
+msgstr "Verbindungs-Typ:"
+
+#: core/widget.php:41
+msgid "Connection listing:"
+msgstr "Verbindungs-Liste:"
+
+#: core/widget.php:47
+msgid "connected"
+msgstr "verbunden"
+
+#: core/widget.php:48
+msgid "related"
+msgstr "verwandt"
+
+#: core/widget.php:73
+msgid "Related %s"
+msgstr "Verwandte %s"
+
+#: core/storage.php:35
+msgid "Upgraded %d connections."
+msgstr "%d Verbindungen wurden ge-upgradet"
+
+#: core/storage.php:38
+msgid "The Posts 2 Posts connections need to be upgraded. <a href=\"%s\">Proceed.</a>"
+msgstr "Die Posts 2 Posts Verbindungen benötigen ein Upgrade. <a href=\"%s\">Ausführen.</a>"
+
+#: core/side.php:110
+msgid "Users"
+msgstr "Benutzer"
+
+#: core/side.php:115
+msgid "User"
+msgstr "Benutzer"
+
+#: core/side.php:116
+msgid "Search Users"
+msgstr "Benutzer suchen"
+
+#: core/side.php:117
+msgid "No users found."
+msgstr "Keine Benutzer gefunden."
+
