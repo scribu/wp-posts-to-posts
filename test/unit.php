@@ -1,7 +1,5 @@
 <?php
 
-define( 'WP_ADMIN', true );
-
 class P2P_Unit_Tests extends WP_UnitTestCase {
 
 	var $plugin_slug = 'p2p/posts-to-posts';
