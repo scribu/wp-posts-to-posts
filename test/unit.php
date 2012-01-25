@@ -172,7 +172,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$query = new WP_Query( array(
 			'post_type' => 'actor',
-			'post__in' => $actor_ids
+			'post__in' => $actor_ids,
+			'order' => 'ASC'
 		) );
 
 		$ctype->each_connected( $query );
