@@ -46,7 +46,7 @@ class P2P_Box {
 
 		$this->columns = array(
 			'delete' => new P2P_Field_Delete,
-			'title' => new $title_class( $this->labels->singular_name ),
+			'title' => new $title_class( $this->labels->all_items ),
 		);
 
 		foreach ( $this->args->fields as $key => $data ) {
