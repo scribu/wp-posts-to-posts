@@ -48,7 +48,7 @@ class P2P_Storage {
 			p2p_id bigint(20) unsigned NOT NULL auto_increment,
 			p2p_from bigint(20) unsigned NOT NULL,
 			p2p_to bigint(20) unsigned NOT NULL,
-			p2p_type varchar(32) NOT NULL default '',
+			p2p_type varchar(44) NOT NULL default '',
 			PRIMARY KEY  (p2p_id),
 			KEY p2p_from (p2p_from),
 			KEY p2p_to (p2p_to),
