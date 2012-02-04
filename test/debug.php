@@ -208,7 +208,7 @@ class P2P_Debug {
 			'Nicholas Cage' => array( 'Lord Of War', 'Adaptation' ),
 			'Jude Law' => array( 'Sherlock Holmes' ),
 			'Brad Pitt' => array( '7 Years In Tibet' ),
-			'Natalie Portam' => array( 'Black Swan' ),
+			'Natalie Portman' => array( 'Black Swan' ),
 			'Charlize Theron' => array()
 		);
 

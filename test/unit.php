@@ -202,7 +202,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_posts_to_users() {
-		$ctype = p2p_register_connection_type( array(
+		$ctype = @p2p_register_connection_type( array(
 			'from' => 'post',
 			'to_object' => 'user',
 		) );
