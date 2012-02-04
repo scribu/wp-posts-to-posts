@@ -111,23 +111,15 @@ class P2P_Box_Factory {
 					continue;
 
 				foreach ( $ctype->get_connections( $post_id ) as $p2p_id => $item_id ) {
+					$fields = self::$box_args[$p2p_type]->fields;
+
+					foreach ( $fields as $key => &$field ) {
+						$field['name'] = $key;
+					}
+
 					$data = scbForms::get_value( array( 'p2p_meta', $p2p_id ), $_POST, array() );
 
-					foreach ( self::$box_args[$p2p_type]->fields as $key => $field_args ) {
-						if ( 'checkbox' == $field_args['type'] ) {
-							$new_values = scbForms::get_value( $key, $data, array() );
-
-							$old_values = p2p_get_meta( $p2p_id, $key );
-
-							foreach ( array_diff( $new_values, $old_values ) as $value )
-								p2p_add_meta( $p2p_id, $key, $value );
-
-							foreach ( array_diff( $old_values, $new_values ) as $value )
-								p2p_delete_meta( $p2p_id, $key, $value );
-						} else {
-							p2p_update_meta( $p2p_id, $key, $data[$key] );
-						}
-					}
+					scbForms::update_meta( $fields, $data, $p2p_id, 'p2p' );
 				}
 			}
 		}
