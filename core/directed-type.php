@@ -110,9 +110,7 @@ class P2P_Directed_Connection_Type {
 		return false;
 	}
 
-	/**
-	 * @internal
-	 */
+	/** @internal */
 	public function get_connections( $post_id ) {
 		$side = $this->get_opposite( 'side' );
 
@@ -172,11 +170,6 @@ class P2P_Directed_Connection_Type {
 		if ( !$this->get_opposite( 'side' )->item_exists( $to ) )
 			return false;
 
-		$args = array( $from, $to );
-
-		if ( 'to' == $this->direction )
-			$args = array_reverse( $args );
-
 		if ( $this->accepts_single_connection() )
 			$to_check = 'any';
 		elseif ( $this->prevent_duplicates )
@@ -186,14 +179,15 @@ class P2P_Directed_Connection_Type {
 
 		if ( $to_check && p2p_connection_exists( $this->name, array(
 			'direction' => $this->direction,
-			'from' => $args[0],
+			'from' => $from,
 			'to' => $to_check
 		) ) )
 			return false;
 
 		return p2p_create_connection( $this->name, array(
-			'from' => $args[0],
-			'to' => $args[1],
+			'direction' => $this->direction,
+			'from' => $from,
+			'to' => $to,
 			'meta' => array_merge( $meta, $this->data )
 		) );
 	}

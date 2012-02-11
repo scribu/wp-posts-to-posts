@@ -197,9 +197,7 @@ function p2p_get_connections( $p2p_type, $args = array() ) {
 	return $r;
 }
 
-/**
- * @internal
- */
+/** @internal */
 function _p2p_get_connections( $p2p_type, $args = array() ) {
 	global $wpdb;
 
@@ -260,6 +258,7 @@ function p2p_create_connection( $p2p_type, $args ) {
 	global $wpdb;
 
 	extract( wp_parse_args( $args, array(
+		'direction' => 'from',
 		'from' => false,
 		'to' => false,
 		'meta' => array()
@@ -271,7 +270,17 @@ function p2p_create_connection( $p2p_type, $args ) {
 	if ( !$from || !$to )
 		return false;
 
-	$wpdb->insert( $wpdb->p2p, array( 'p2p_type' => $p2p_type, 'p2p_from' => $from, 'p2p_to' => $to ) );
+	$args = array( $from, $to );
+
+	if ( 'to' == $direction ) {
+		$args = array_reverse( $args );
+	}
+
+	$wpdb->insert( $wpdb->p2p, array(
+		'p2p_type' => $p2p_type,
+		'p2p_from' => $args[0],
+		'p2p_to' => $args[1]
+	) );
 
 	$p2p_id = $wpdb->insert_id;
 
