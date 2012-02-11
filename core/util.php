@@ -33,6 +33,7 @@ function _p2p_pluck( &$arr, $key ) {
 	return $value;
 }
 
+/** @internal */
 function _p2p_append( &$arr, $values ) {
 	$arr = array_merge( $arr, $values );
 }
@@ -46,5 +47,13 @@ function _p2p_get_field_type( $args ) {
 		return 'select';
 
 	return 'text';
+}
+
+/** @internal */
+function _p2p_first( $args ) {
+	if ( empty( $args ) )
+		return false;
+
+	return reset( $args );
 }
 

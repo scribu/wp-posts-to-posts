@@ -218,18 +218,33 @@ class P2P_Directed_Connection_Type {
 		) );
 	}
 
+	/**
+	 * For one-to-many connections: replaces existing item with a new one.
+	 */
+	public function replace( $from, $to ) {
+		if ( !$this->get_current( 'side' )->item_exists( $from ) )
+			return false;
+
+		if ( ! $this->accepts_single_connection() )
+			return false;
+
+		$existing = $this->get_connections( $from );
+
+		if ( !empty( $existing ) && reset( $existing ) == $to )
+			return;
+
+		$this->disconnect_all( $from );
+
+		$this->connect( $from, $to );
+	}
+
 	public function get_p2p_id( $from, $to ) {
-		$ids = p2p_get_connections( $this->name, array(
+		return _p2p_first( p2p_get_connections( $this->name, array(
 			'direction' => $this->direction,
 			'from' => $from,
 			'to' => $to,
 			'fields' => 'p2p_id'
-		) );
-
-		if ( !empty( $ids ) )
-			return reset( $ids );
-
-		return false;
+		) ) );
 	}
 }
 
