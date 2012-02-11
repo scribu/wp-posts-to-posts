@@ -228,9 +228,7 @@ class P2P_Directed_Connection_Type {
 		if ( ! $this->accepts_single_connection() )
 			return false;
 
-		$existing = $this->get_connections( $from );
-
-		if ( !empty( $existing ) && reset( $existing ) == $to )
+		if ( _p2p_first( $this->get_connections( $from ) ) == $to )
 			return;
 
 		$this->disconnect_all( $from );
