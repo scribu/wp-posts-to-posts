@@ -50,6 +50,14 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 1.1.5 =
+* added P2P_Connection_Type->replace() method
+* added 'self_connections' flag to p2p_register_connection_type()
+* made P2P_Connection_Type->each_connected() work for posts-to-users connections
+* made admin list table columns work for posts-to-users connections
+* fixed 'from_labels' and 'to_labels' parameters
+* fixed search being limited only to post titles
+
 = 1.1.4 =
 * show attachment thumbnail instead of title
 * merged 'from_object' into 'from' and 'to_object' into 'to'
