@@ -59,14 +59,14 @@ class P2P_Debug {
 	}
 
 	function contacts_and_tickets() {
-		register_post_type( 'contact', array(
-			'label' => 'Contacts',
+		register_post_type( 'ticket', array(
+			'label' => 'Tickets',
 			'public' => true,
 			'supports' => array( 'title' )
 		) );
 
-		register_post_type( 'ticket', array(
-			'label' => 'Tickets',
+		register_post_type( 'contact', array(
+			'label' => 'Contacts',
 			'public' => true,
 			'supports' => array( 'title' )
 		) );
@@ -91,25 +91,23 @@ class P2P_Debug {
 		}
 
 		p2p_register_connection_type(array(
+			'name' => 'ticket_to_contact',
+			'from' => 'ticket',
+			'to' => 'contact',
+			'cardinality' => 'one-to-many'
+		));
+
+		p2p_register_connection_type(array(
 			'name' => 'posts_to_contact',
 			'from' => 'contact',
 			'to' => 'contact',
 			'title' => 'Registry',
-			'show_ui' => 'any'
-		));
-
-		p2p_register_connection_type(array(
-			'name' => 'ticket_to_contact',
-			'from' => 'ticket',
-			'to' => 'contact',
-			'reciprocal' => true
 		));
 
 		p2p_register_connection_type(array(
 			'name' => 'ticket_to_post',
 			'from' => 'ticket',
 			'to' => 'post',
-			'reciprocal' => true
 		));
 	}
 
