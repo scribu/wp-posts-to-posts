@@ -127,7 +127,7 @@ class P2P_Directed_Connection_Type {
 	public function get_connectable( $item_id, $page, $search ) {
 		$to_exclude = array();
 
-		if ( !$this->self_connections )
+		if ( $this->indeterminate && !$this->self_connections )
 			$to_exclude[] = $item_id;
 
 		if ( 'one' == $this->get_current( 'cardinality' ) ) {
