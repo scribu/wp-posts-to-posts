@@ -245,25 +245,47 @@ class P2P_Box {
 		$p2p_id = $this->ctype->connect( $from, $to );
 
 		if ( $p2p_id )
-			echo $this->connection_row( $p2p_id, $to, true );
+			$r = array( 'row' => $this->connection_row( $p2p_id, $to, true ) );
+		else
+			$r = array( 'error' => __( "Can't create connection.", P2P_TEXTDOMAIN ) );
 
-		die;
+		die( json_encode( $r ) );
 	}
 
 	public function ajax_disconnect() {
 		p2p_delete_connection( $_POST['p2p_id'] );
 
-		die(1);
+		$this->refresh_candidates();
 	}
 
 	public function ajax_clear_connections() {
 		$this->ctype->disconnect_all( $_POST['from'] );
 
-		die(1);
+		$this->refresh_candidates();
 	}
 
 	public function ajax_search() {
-		$rows = $this->post_rows( $_GET['from'], $_GET['paged'], $_GET['s'] );
+		die( json_encode( $this->_ajax_search( $_GET ) ) );
+	}
+
+	private function refresh_candidates() {
+		$results = array();
+
+		foreach ( array( 'search', 'all' ) as $key ) {
+			$args = $_POST[ $key ];
+			$args['from'] = $_POST['from'];
+
+			if ( 'search' == $key && empty( $args['s'] ) )
+				$results[ $key ] = array();
+			else
+				$results[ $key ] = $this->_ajax_search( $args );
+		}
+
+		die( json_encode( $results ) );
+	}
+
+	private function _ajax_search( $args ) {
+		$rows = $this->post_rows( $args['from'], $args['paged'], $args['s'] );
 
 		if ( $rows ) {
 			$results = compact( 'rows' );
@@ -273,7 +295,7 @@ class P2P_Box {
 			);
 		}
 
-		die( json_encode( $results ) );
+		return $results;
 	}
 
 	protected function can_create_post() {

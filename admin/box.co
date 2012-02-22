@@ -35,11 +35,18 @@ jQuery ->
 				direction: $metabox.data('direction')
 				from: jQuery('#post_ID').val()
 
+			handler = (response) ->
+				try
+					response = jQuery.parseJSON response
+					callback response
+				catch
+					console?.error 'Malformed response', response
+
 			jQuery.ajax(
 				type: type
 				url: ajaxurl
 				data: data
-				success: callback
+				success: handler
 			)
 
 
@@ -47,21 +54,21 @@ jQuery ->
 			(selector) ->
 				@tab = $metabox.find(selector)
 
-				@init_pagination_data()
-
-				@tab.delegate('.p2p-prev, .p2p-next', 'click', this.~change_page)
-
 				@params =
 					subaction: 'search'
 					s: ''
 
+				@init_pagination_data()
+
+				@tab.delegate('.p2p-prev, .p2p-next', 'click', this.~change_page)
+
 			init_pagination_data: ->
-				@current_page = @tab.find('.p2p-current').data('num') || 1
+				@params.paged = @tab.find('.p2p-current').data('num') || 1
 				@total_pages = @tab.find('.p2p-total').data('num') || 1
 
 			change_page: (ev) ->
 				$navButton = jQuery(ev.target)
-				new_page = @current_page
+				new_page = @params.paged
 
 				if $navButton.hasClass('inactive')
 					return false
@@ -76,14 +83,8 @@ jQuery ->
 				return false
 
 			find_posts: (new_page) ->
-				@params.paged =
-					if new_page then
-						if new_page > @total_pages then
-							@current_page
-						else
-							new_page
-					else
-						@current_page
+				if 0 < new_page < @total_pages then
+					@params.paged = new_page
 
 				$spinner.appendTo @tab.find('.p2p-navigation')
 
@@ -91,12 +92,6 @@ jQuery ->
 
 			update_rows: (response) ->
 				$spinner.remove()
-
-				try
-					response = jQuery.parseJSON response
-				catch
-					console?.error 'Malformed response', response
-					return
 
 				@tab.find('.p2p-results, .p2p-navigation, .p2p-notice').remove()
 
@@ -112,20 +107,26 @@ jQuery ->
 
 
 		row_ajax_request = ($td, data, callback) ->
-				$td.html $spinner.show()
+			$td.html $spinner.show()
 
-				ajax_request data, callback
+			ajax_request data, callback
 
 		maybe_hide_table = ($table) ->
 			if not $table.find('tbody tr').length
 				$table.hide()
 
-		append_connection = (html) ->
+		append_connection = (response) ->
 			$connections.show()
-				.find('tbody').append(html)
+				.find('tbody').append(response.row)
 
 			if 'one' == $metabox.data('cardinality')
 				$metabox.find('.p2p-create-connections').hide()
+
+		refresh_candidates = (results) ->
+			$metabox.find('.p2p-create-connections').show()
+
+			searchTab.update_rows(results.search)
+			listTab.update_rows(results.all)
 
 
 		clear_connections = (ev) ->
@@ -137,6 +138,8 @@ jQuery ->
 
 			data =
 				subaction: 'clear_connections'
+				search: searchTab.params
+				all: listTab.params
 
 			row_ajax_request $td, data, (response) ~>
 				$connections.hide()
@@ -144,7 +147,7 @@ jQuery ->
 
 				$td.html($self)
 
-				$metabox.find('.p2p-create-connections').show()
+				refresh_candidates response
 
 			return false
 
@@ -155,13 +158,15 @@ jQuery ->
 			data =
 				subaction: 'disconnect'
 				p2p_id: $self.data('p2p_id')
+				search: searchTab.params
+				all: listTab.params
 
 			row_ajax_request $td, data, (response) ~>
 				$td.closest('tr').remove()
 
 				maybe_hide_table $connections
 
-				$metabox.find('.p2p-create-connections').show()
+				refresh_candidates response
 
 			return false
 

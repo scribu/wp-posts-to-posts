@@ -21,7 +21,7 @@
       jQuery('.p2p-search input[placeholder]').each(setVal).focus(clearVal).blur(setVal);
     }
     return jQuery('.p2p-box').each(function(){
-      var $metabox, $connections, $spinner, ajax_request, PostsTab, searchTab, listTab, row_ajax_request, maybe_hide_table, append_connection, clear_connections, delete_connection, create_connection, switch_to_tab, $searchInput, $createButton, $createInput;
+      var $metabox, $connections, $spinner, ajax_request, PostsTab, searchTab, listTab, row_ajax_request, maybe_hide_table, append_connection, refresh_candidates, clear_connections, delete_connection, create_connection, switch_to_tab, $searchInput, $createButton, $createInput;
       $metabox = jQuery(this);
       $connections = $metabox.find('.p2p-connections');
       $spinner = jQuery('<img>', {
@@ -29,17 +29,26 @@
         'class': 'p2p-spinner'
       });
       ajax_request = function(data, callback, type){
+        var handler;
         type == null && (type = 'POST');
         data.action = 'p2p_box';
         data.nonce = P2PAdmin.nonce;
         data.p2p_type = $metabox.find('input[name^="p2p_types"]').val();
         data.direction = $metabox.data('direction');
         data.from = jQuery('#post_ID').val();
+        handler = function(response){
+          try {
+            response = jQuery.parseJSON(response);
+            return callback(response);
+          } catch (e) {
+            return typeof console != 'undefined' && console !== null ? console.error('Malformed response', response) : void 8;
+          }
+        };
         return jQuery.ajax({
           type: type,
           url: ajaxurl,
           data: data,
-          success: callback
+          success: handler
         });
       };
       PostsTab = (function(){
@@ -47,21 +56,21 @@
         var prototype = PostsTab.prototype, constructor = PostsTab;
         function PostsTab(selector){
           this.tab = $metabox.find(selector);
-          this.init_pagination_data();
-          this.tab.delegate('.p2p-prev, .p2p-next', 'click', __bind(this, this.change_page));
           this.params = {
             subaction: 'search',
             s: ''
           };
+          this.init_pagination_data();
+          this.tab.delegate('.p2p-prev, .p2p-next', 'click', __bind(this, this.change_page));
         }
         prototype.init_pagination_data = function(){
-          this.current_page = this.tab.find('.p2p-current').data('num') || 1;
+          this.params.paged = this.tab.find('.p2p-current').data('num') || 1;
           return this.total_pages = this.tab.find('.p2p-total').data('num') || 1;
         };
         prototype.change_page = function(ev){
           var $navButton, new_page;
           $navButton = jQuery(ev.target);
-          new_page = this.current_page;
+          new_page = this.params.paged;
           if ($navButton.hasClass('inactive')) {
             return false;
           }
@@ -74,22 +83,14 @@
           return false;
         };
         prototype.find_posts = function(new_page){
-          this.params.paged = new_page
-            ? new_page > this.total_pages ? this.current_page : new_page
-            : this.current_page;
+          if (0 < new_page && new_page < this.total_pages) {
+            this.params.paged = new_page;
+          }
           $spinner.appendTo(this.tab.find('.p2p-navigation'));
           return ajax_request(this.params, __bind(this, this.update_rows), 'GET');
         };
         prototype.update_rows = function(response){
           $spinner.remove();
-          try {
-            response = jQuery.parseJSON(response);
-          } catch (e) {
-            if (typeof console != 'undefined' && console !== null) {
-              console.error('Malformed response', response);
-            }
-            return;
-          }
           this.tab.find('.p2p-results, .p2p-navigation, .p2p-notice').remove();
           if (!response.rows) {
             return this.tab.append(jQuery('<div class="p2p-notice">').html(response.msg));
@@ -111,11 +112,16 @@
           return $table.hide();
         }
       };
-      append_connection = function(html){
-        $connections.show().find('tbody').append(html);
+      append_connection = function(response){
+        $connections.show().find('tbody').append(response.row);
         if ('one' == $metabox.data('cardinality')) {
           return $metabox.find('.p2p-create-connections').hide();
         }
+      };
+      refresh_candidates = function(results){
+        $metabox.find('.p2p-create-connections').show();
+        searchTab.update_rows(results.search);
+        return listTab.update_rows(results.all);
       };
       clear_connections = function(ev){
         var $self, $td, data, _this = this;
@@ -125,12 +131,14 @@
         $self = jQuery(ev.target);
         $td = $self.closest('td');
         data = {
-          subaction: 'clear_connections'
+          subaction: 'clear_connections',
+          search: searchTab.params,
+          all: listTab.params
         };
         row_ajax_request($td, data, function(response){
           $connections.hide().find('tbody').html('');
           $td.html($self);
-          return $metabox.find('.p2p-create-connections').show();
+          return refresh_candidates(response);
         });
         return false;
       };
@@ -140,12 +148,14 @@
         $td = $self.closest('td');
         data = {
           subaction: 'disconnect',
-          p2p_id: $self.data('p2p_id')
+          p2p_id: $self.data('p2p_id'),
+          search: searchTab.params,
+          all: listTab.params
         };
         row_ajax_request($td, data, function(response){
           $td.closest('tr').remove();
           maybe_hide_table($connections);
-          return $metabox.find('.p2p-create-connections').show();
+          return refresh_candidates(response);
         });
         return false;
       };
