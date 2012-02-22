@@ -51,7 +51,7 @@ jQuery ->
 
 				@tab.delegate('.p2p-prev, .p2p-next', 'click', this.~change_page)
 
-				@data =
+				@params =
 					subaction: 'search'
 					s: ''
 
@@ -76,7 +76,7 @@ jQuery ->
 				return false
 
 			find_posts: (new_page) ->
-				@data.paged =
+				@params.paged =
 					if new_page then
 						if new_page > @total_pages then
 							@current_page
@@ -87,7 +87,7 @@ jQuery ->
 
 				$spinner.appendTo @tab.find('.p2p-navigation')
 
-				ajax_request @data, this.~update_rows, 'GET'
+				ajax_request @params, this.~update_rows, 'GET'
 
 			update_rows: (response) ->
 				$spinner.remove()
@@ -234,10 +234,10 @@ jQuery ->
 				delayed = setTimeout ->
 					searchStr = $searchInput.val()
 
-					if '' == searchStr || searchStr === searchTab.data.s
+					if '' == searchStr || searchStr === searchTab.params.s
 						return
 
-					searchTab.data.s = searchStr
+					searchTab.params.s = searchStr
 
 					$spinner.insertAfter($searchInput).show()
 

@@ -49,7 +49,7 @@
           this.tab = $metabox.find(selector);
           this.init_pagination_data();
           this.tab.delegate('.p2p-prev, .p2p-next', 'click', __bind(this, this.change_page));
-          this.data = {
+          this.params = {
             subaction: 'search',
             s: ''
           };
@@ -74,11 +74,11 @@
           return false;
         };
         prototype.find_posts = function(new_page){
-          this.data.paged = new_page
+          this.params.paged = new_page
             ? new_page > this.total_pages ? this.current_page : new_page
             : this.current_page;
           $spinner.appendTo(this.tab.find('.p2p-navigation'));
-          return ajax_request(this.data, __bind(this, this.update_rows), 'GET');
+          return ajax_request(this.params, __bind(this, this.update_rows), 'GET');
         };
         prototype.update_rows = function(response){
           $spinner.remove();
@@ -203,10 +203,10 @@
         return delayed = setTimeout(function(){
           var searchStr;
           searchStr = $searchInput.val();
-          if ('' == searchStr || searchStr === searchTab.data.s) {
+          if ('' == searchStr || searchStr === searchTab.params.s) {
             return;
           }
-          searchTab.data.s = searchStr;
+          searchTab.params.s = searchStr;
           $spinner.insertAfter($searchInput).show();
           return searchTab.find_posts(1);
         }, 400);
