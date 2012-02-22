@@ -27,7 +27,6 @@ jQuery ->
 
 		$spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
 
-
 		ajax_request = (data, callback, type = 'POST') ->
 			data <<<
 				action: 'p2p_box'
@@ -42,6 +41,75 @@ jQuery ->
 				data: data
 				success: callback
 			)
+
+
+		class PostsTab
+			(selector) ->
+				@tab = $metabox.find(selector)
+
+				@init_pagination_data()
+
+				@tab.delegate('.p2p-prev, .p2p-next', 'click', this.~change_page)
+
+				@data =
+					subaction: 'search'
+					s: ''
+
+			init_pagination_data: ->
+				@current_page = @tab.find('.p2p-current').data('num') || 1
+				@total_pages = @tab.find('.p2p-total').data('num') || 1
+
+			change_page: (ev) ->
+				$navButton = jQuery(ev.target)
+				new_page = @current_page
+
+				if $navButton.hasClass('inactive')
+					return false
+
+				if $navButton.hasClass('p2p-prev')
+					new_page--
+				else
+					new_page++
+
+				@find_posts(new_page)
+
+				return false
+
+			find_posts: (new_page) ->
+				@data.paged =
+					if new_page then
+						if new_page > @total_pages then
+							@current_page
+						else
+							new_page
+					else
+						@current_page
+
+				$spinner.appendTo @tab.find('.p2p-navigation')
+
+				ajax_request @data, this.~update_rows, 'GET'
+
+			update_rows: (response) ->
+				$spinner.remove()
+
+				try
+					response = jQuery.parseJSON response
+				catch
+					console?.error 'Malformed response', response
+					return
+
+				@tab.find('.p2p-results, .p2p-navigation, .p2p-notice').remove()
+
+				if not response.rows
+					@tab.append jQuery('<div class="p2p-notice">').html(response.msg)
+				else
+					@tab.append response.rows
+
+					@init_pagination_data()
+
+		searchTab = new PostsTab('.p2p-tab-search')
+		listTab = new PostsTab('.p2p-tab-list')
+
 
 		row_ajax_request = ($td, data, callback) ->
 				$td.html $spinner.show()
@@ -150,73 +218,6 @@ jQuery ->
 						$this.width($this.width())
 					return ui
 			}
-
-		class PostsTab
-			(selector) ->
-				@tab = $metabox.find(selector)
-
-				@init_pagination_data()
-
-				@tab.delegate('.p2p-prev, .p2p-next', 'click', this.~change_page)
-
-				@data =
-					subaction: 'search'
-					s: ''
-
-			init_pagination_data: ->
-				@current_page = @tab.find('.p2p-current').data('num') || 1
-				@total_pages = @tab.find('.p2p-total').data('num') || 1
-
-			change_page: (ev) ->
-				$navButton = jQuery(ev.target)
-				new_page = @current_page
-
-				if $navButton.hasClass('inactive')
-					return false
-
-				if $navButton.hasClass('p2p-prev')
-					new_page--
-				else
-					new_page++
-
-				@find_posts(new_page)
-
-				return false
-
-			find_posts: (new_page) ->
-				@data.paged =
-					if new_page then
-						if new_page > @total_pages then
-							@current_page
-						else
-							new_page
-					else
-						@current_page
-
-				$spinner.appendTo( @tab.find('.p2p-navigation') )
-
-				ajax_request @data, this.~update_rows, 'GET'
-
-			update_rows: (response) ->
-				$spinner.remove()
-
-				try
-					response = jQuery.parseJSON response
-				catch
-					console?.error 'Malformed response', response
-					return
-
-				@tab.find('.p2p-results, .p2p-navigation, .p2p-notice').remove()
-
-				if not response.rows
-					@tab.append jQuery('<div class="p2p-notice">').html(response.msg)
-				else
-					@tab.append response.rows
-
-					@init_pagination_data()
-
-		searchTab = new PostsTab('.p2p-tab-search')
-		listTab = new PostsTab('.p2p-tab-list')
 
 		# Search posts
 		$searchInput = $metabox.find('.p2p-tab-search :text')
