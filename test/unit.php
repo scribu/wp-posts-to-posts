@@ -37,7 +37,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		if ( !p2p_type( 'normal' ) ) {
 			p2p_register_connection_type( array(
-				'id' => 'normal',
+				'name' => 'normal',
 				'from' => 'actor',
 				'to' => 'movie'
 			) );
@@ -57,8 +57,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEmpty( p2p_get_connections( 'normal', array( 'to' => $post_id, 'fields' => 'p2p_id' ) ) );
 	}
 
-	function test_p2p_types() {
-		// make sure a unique id is generated when none is given
+	function test_annonymous_ctypes() {
 		$ctype = @p2p_register_connection_type( 'studio', 'movie' );
 		$this->assertTrue( strlen( $ctype->name ) > 0 );
 	}
@@ -204,7 +203,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_posts_to_users() {
-		$ctype = @p2p_register_connection_type( array(
+		$ctype = p2p_register_connection_type( array(
+			'name' => 'posts_to_users',
 			'from' => 'post',
 			'to_object' => 'user',
 		) );
