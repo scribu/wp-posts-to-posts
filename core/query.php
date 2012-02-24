@@ -27,9 +27,53 @@ class P2P_Query {
 			$qv[$key] = isset( $q["connected_$key"] ) ?  $q["connected_$key"] : false;
 		}
 
-		$qv['p2p_type'] = isset( $q['p2p_type'] ) ?  $q['p2p_type'] : false;
+		$qv['p2p_type'] = isset( $q['p2p_type'] ) ? $q['p2p_type'] : false;
 
 		return $qv;
+	}
+
+	// null means do nothing
+	// false means trigger 404
+	// true means found valid p2p query vars
+	function expand_connected_type( &$q, $item ) {
+		if ( !isset( $q['connected_type'] ) )
+			return;
+
+		$ctypes = (array) _p2p_pluck( $q, 'connected_type' );
+
+		if ( isset( $q['connected_direction'] ) )
+			$directions = (array) _p2p_pluck( $q, 'connected_direction' );
+		else
+			$directions = array();
+
+		$p2p_types = array();
+
+		foreach ( $ctypes as $i => $p2p_type ) {
+			$ctype = p2p_type( $p2p_type );
+
+			if ( !$ctype )
+				continue;
+
+			if ( isset( $directions[$i] ) ) {
+				$directed = $ctype->set_direction( $directions[$i] );
+			} else {
+				$directed = self::find_direction( $ctype, $item, 'post' );
+			}
+
+			if ( !$directed ) {
+				trigger_error( "Can't determine direction", E_USER_WARNING );
+				continue;
+			}
+
+			$p2p_types[ $p2p_type ] = $directed->get_direction();
+		}
+
+		if ( 1 == count( $p2p_types ) )
+			$q = $directed->get_connected_args( $q );
+		else
+			$q['p2p_type'] = $p2p_types;
+
+		return true;
 	}
 
 	function alter_clauses( $clauses, $q, $main_id_column ) {
@@ -40,41 +84,55 @@ class P2P_Query {
 		$clauses['join'] .= " INNER JOIN $wpdb->p2p";
 
 		// Handle main query
-		if ( $q['p2p_type'] )
-			$clauses['where'] .= $wpdb->prepare( " AND $wpdb->p2p.p2p_type = %s", $q['p2p_type'] );
-
 		if ( 'any' == $q['items'] ) {
 			$search = false;
 		} else {
 			$search = implode( ',', array_map( 'absint', (array) $q['items'] ) );
 		}
 
-		$fields = array( 'p2p_from', 'p2p_to' );
+		$where_parts = array();
 
-		switch ( $q['direction'] ) {
+		foreach ( $q['p2p_type'] as $p2p_type => $direction ) {
+			if ( false === $p2p_type ) // used by migration script
+				$part = "1 = 1";
+			else
+				$part = $wpdb->prepare( "$wpdb->p2p.p2p_type = %s", $p2p_type );
 
-		case 'from':
-			$fields = array_reverse( $fields );
-			// fallthrough
-		case 'to':
-			list( $from, $to ) = $fields;
+			$fields = array( 'p2p_from', 'p2p_to' );
 
-			$clauses['where'] .= " AND $main_id_column = $wpdb->p2p.$from";
-			if ( $search ) {
-				$clauses['where'] .= " AND $wpdb->p2p.$to IN ($search)";
+			switch ( $direction ) {
+
+			case 'from':
+				$fields = array_reverse( $fields );
+				// fallthrough
+			case 'to':
+				list( $from, $to ) = $fields;
+
+				$part .= " AND $main_id_column = $wpdb->p2p.$from";
+
+				if ( $search ) {
+					$part .= " AND $wpdb->p2p.$to IN ($search)";
+				}
+
+				break;
+			default:
+				if ( $search ) {
+					$part .= " AND (
+						($main_id_column = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from IN ($search)) OR
+						($main_id_column = $wpdb->p2p.p2p_from AND $wpdb->p2p.p2p_to IN ($search))
+					)";
+				} else {
+					$part .= " AND ($main_id_column = $wpdb->p2p.p2p_to OR $main_id_column = $wpdb->p2p.p2p_from)";
+				}
 			}
 
-			break;
-		default:
-			if ( $search ) {
-				$clauses['where'] .= " AND (
-					($main_id_column = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from IN ($search)) OR
-					($main_id_column = $wpdb->p2p.p2p_from AND $wpdb->p2p.p2p_to IN ($search))
-				)";
-			} else {
-				$clauses['where'] .= " AND ($main_id_column = $wpdb->p2p.p2p_to OR $main_id_column = $wpdb->p2p.p2p_from)";
-			}
+			$where_parts[] = '(' . $part . ')';
 		}
+
+		if ( 1 == count( $where_parts ) )
+			$clauses['where'] .= " AND " . $where_parts[0];
+		else
+			$clauses['where'] .= " AND (" . implode( ' OR ', $where_parts ) . ")";
 
 		// Handle custom fields
 		if ( !empty( $q['meta'] ) ) {
@@ -105,7 +163,7 @@ class P2P_Query {
 		return $clauses;
 	}
 
-	function find_direction( $ctype, $arg, $object_type ) {
+	private function find_direction( $ctype, $arg, $object_type ) {
 		$opposite_side = self::choose_side( $object_type,
 			$ctype->object['from'],
 			$ctype->object['to']
