@@ -16,7 +16,7 @@ class P2P_User_Query {
 		if ( !isset( $q['connected_items'] ) )
 			return;
 
-		$r = P2P_Query::expand_connected_type( $q, $q['connected_items'] );
+		$r = P2P_Query::expand_connected_type( $q, $q['connected_items'], 'user' );
 
 		if ( false === $r ) {
 			$query->query_where = " AND 1=0";

@@ -28,7 +28,7 @@ class P2P_WP_Query {
 			$item = $q['connected_items'];
 		}
 
-		$r = P2P_Query::expand_connected_type( $q, $item );
+		$r = P2P_Query::expand_connected_type( $q, $item, 'post' );
 
 		if ( false === $r ) {
 			$q = array( 'year' => 2525 );

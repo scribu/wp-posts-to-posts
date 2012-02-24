@@ -35,7 +35,7 @@ class P2P_Query {
 	// null means do nothing
 	// false means trigger 404
 	// true means found valid p2p query vars
-	function expand_connected_type( &$q, $item ) {
+	function expand_connected_type( &$q, $item, $object_type ) {
 		if ( !isset( $q['connected_type'] ) )
 			return;
 
@@ -57,7 +57,7 @@ class P2P_Query {
 			if ( isset( $directions[$i] ) ) {
 				$directed = $ctype->set_direction( $directions[$i] );
 			} else {
-				$directed = self::find_direction( $ctype, $item, 'post' );
+				$directed = self::find_direction( $ctype, $item, $object_type );
 			}
 
 			if ( !$directed ) {
