@@ -67,7 +67,7 @@ class P2P_Connection_Type_Factory {
 		$ctype = new $class( $args );
 
 		if ( isset( self::$instances[ $ctype->name ] ) ) {
-			trigger_error( 'Connection type is already defined.', E_USER_NOTICE );
+			trigger_error( "Connection type '$ctype->name' is already defined.", E_USER_NOTICE );
 		}
 
 		self::$instances[ $ctype->name ] = $ctype;
