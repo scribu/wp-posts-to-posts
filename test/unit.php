@@ -35,11 +35,13 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		foreach ( array( 'actor', 'movie', 'studio' ) as $ptype )
 			register_post_type( $ptype );
 
-		p2p_register_connection_type( array(
-			'id' => 'normal',
-			'from' => 'actor',
-			'to' => 'movie'
-		) );
+		if ( !p2p_type( 'normal' ) ) {
+			p2p_register_connection_type( array(
+				'id' => 'normal',
+				'from' => 'actor',
+				'to' => 'movie'
+			) );
+		}
 	}
 
 	function test_storage() {
