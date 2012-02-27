@@ -21,7 +21,7 @@
       jQuery('.p2p-search input[placeholder]').each(setVal).focus(clearVal).blur(setVal);
     }
     return jQuery('.p2p-box').each(function(){
-      var $metabox, $connections, $spinner, ajax_request, PostsTab, searchTab, listTab, row_ajax_request, maybe_hide_table, append_connection, refresh_candidates, clear_connections, delete_connection, create_connection, switch_to_tab, $searchInput, $createButton, $createInput;
+      var $metabox, $connections, $spinner, ajax_request, PostsTab, searchTab, row_ajax_request, maybe_hide_table, append_connection, refresh_candidates, clear_connections, delete_connection, create_connection, switch_to_tab, $viewAll, $searchInput, $createButton, $createInput;
       $metabox = jQuery(this);
       $connections = $metabox.find('.p2p-connections');
       $spinner = jQuery('<img>', {
@@ -83,7 +83,7 @@
           return false;
         };
         prototype.find_posts = function(new_page){
-          if (0 < new_page && new_page < this.total_pages) {
+          if (0 < new_page && new_page <= this.total_pages) {
             this.params.paged = new_page;
           }
           $spinner.appendTo(this.tab.find('.p2p-navigation'));
@@ -91,7 +91,7 @@
         };
         prototype.update_rows = function(response){
           $spinner.remove();
-          this.tab.find('.p2p-results, .p2p-navigation, .p2p-notice').remove();
+          this.tab.find('button, .p2p-results, .p2p-navigation, .p2p-notice').remove();
           if (!response.rows) {
             return this.tab.append(jQuery('<div class="p2p-notice">').html(response.msg));
           } else {
@@ -102,7 +102,6 @@
         return PostsTab;
       }());
       searchTab = new PostsTab('.p2p-tab-search');
-      listTab = new PostsTab('.p2p-tab-list');
       row_ajax_request = function($td, data, callback){
         $td.html($spinner.show());
         return ajax_request(data, callback);
@@ -120,8 +119,7 @@
       };
       refresh_candidates = function(results){
         $metabox.find('.p2p-create-connections').show();
-        searchTab.update_rows(results.search);
-        return listTab.update_rows(results.all);
+        return searchTab.update_rows(results.search);
       };
       clear_connections = function(ev){
         var $self, $td, data, _this = this;
@@ -132,8 +130,7 @@
         $td = $self.closest('td');
         data = {
           subaction: 'clear_connections',
-          search: searchTab.params,
-          all: listTab.params
+          search: searchTab.params
         };
         row_ajax_request($td, data, function(response){
           $connections.hide().find('tbody').html('');
@@ -149,8 +146,7 @@
         data = {
           subaction: 'disconnect',
           p2p_id: $self.data('p2p_id'),
-          search: searchTab.params,
-          all: listTab.params
+          search: searchTab.params
         };
         row_ajax_request($td, data, function(response){
           $td.closest('tr').remove();
@@ -200,6 +196,11 @@
           }
         });
       }
+      $viewAll = $metabox.find('.p2p-tab-search button');
+      $viewAll.click(function(){
+        searchTab.find_posts(1);
+        return false;
+      });
       $searchInput = $metabox.find('.p2p-tab-search :text');
       $searchInput.keypress(function(ev){
         if (13 === ev.keyCode) {
@@ -221,7 +222,7 @@
           return searchTab.find_posts(1);
         }, 400);
       });
-      $createButton = $metabox.find('.p2p-tab-create-post .button');
+      $createButton = $metabox.find('.p2p-tab-create-post button');
       $createInput = $metabox.find('.p2p-tab-create-post :text');
       $createButton.click(function(){
         var $button, title, data;

@@ -124,6 +124,7 @@ class P2P_Box {
 		// Search tab
 		$tab_content = P2P_Mustache::render( 'tab-search', array(
 			'placeholder' => $this->labels->search_items,
+			'view-all' => __( 'View All', P2P_TEXTDOMAIN ),
 		) );
 
 		$data['tabs'][] = array(
@@ -131,13 +132,6 @@ class P2P_Box {
 			'tab-title' => __( 'Search', P2P_TEXTDOMAIN ),
 			'is-active' => array(true),
 			'tab-content' => $tab_content
-		);
-
-		// List tab
-		$data['tabs'][] = array(
-			'tab-id' => 'list',
-			'tab-title' => __( 'View All', P2P_TEXTDOMAIN ),
-			'tab-content' => $this->post_rows( $post->ID )
 		);
 
 		// Create post tab

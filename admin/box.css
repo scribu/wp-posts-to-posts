@@ -40,9 +40,14 @@
 	width: 100%;
 }
 
+.p2p-box .tabs-panel button {
+	clear: both;
+	display: block;
+	margin-top: 8px;
+}
+
 .p2p-search + .p2p-results,
-.p2p-results + .p2p-navigation,
-.p2p-tab-create-post .button {
+.p2p-results + .p2p-navigation {
 	margin-top: 8px;
 }
 
@@ -154,7 +159,8 @@ tr:hover td.p2p-col-order {
 }
 
 .p2p-tab-create-post input[type="text"] {
-	width: 94%;
+	width: 100%;
+	display: block;
 }
 
 #side-sortables .p2p-notice {

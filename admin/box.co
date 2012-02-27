@@ -83,7 +83,7 @@ jQuery ->
 				return false
 
 			find_posts: (new_page) ->
-				if 0 < new_page < @total_pages then
+				if 0 < new_page <= @total_pages then
 					@params.paged = new_page
 
 				$spinner.appendTo @tab.find('.p2p-navigation')
@@ -93,7 +93,7 @@ jQuery ->
 			update_rows: (response) ->
 				$spinner.remove()
 
-				@tab.find('.p2p-results, .p2p-navigation, .p2p-notice').remove()
+				@tab.find('button, .p2p-results, .p2p-navigation, .p2p-notice').remove()
 
 				if not response.rows
 					@tab.append jQuery('<div class="p2p-notice">').html(response.msg)
@@ -103,7 +103,6 @@ jQuery ->
 					@init_pagination_data()
 
 		searchTab = new PostsTab('.p2p-tab-search')
-		listTab = new PostsTab('.p2p-tab-list')
 
 
 		row_ajax_request = ($td, data, callback) ->
@@ -126,7 +125,6 @@ jQuery ->
 			$metabox.find('.p2p-create-connections').show()
 
 			searchTab.update_rows(results.search)
-			listTab.update_rows(results.all)
 
 
 		clear_connections = (ev) ->
@@ -139,7 +137,6 @@ jQuery ->
 			data =
 				subaction: 'clear_connections'
 				search: searchTab.params
-				all: listTab.params
 
 			row_ajax_request $td, data, (response) ~>
 				$connections.hide()
@@ -159,7 +156,6 @@ jQuery ->
 				subaction: 'disconnect'
 				p2p_id: $self.data('p2p_id')
 				search: searchTab.params
-				all: listTab.params
 
 			row_ajax_request $td, data, (response) ~>
 				$td.closest('tr').remove()
@@ -224,6 +220,13 @@ jQuery ->
 					return ui
 			}
 
+		# View all posts
+		$viewAll = $metabox.find('.p2p-tab-search button')
+
+		$viewAll.click ->
+			searchTab.find_posts(1)
+			false
+
 		# Search posts
 		$searchInput = $metabox.find('.p2p-tab-search :text')
 
@@ -250,7 +253,7 @@ jQuery ->
 				, 400
 
 		# Post creation
-		$createButton = $metabox.find('.p2p-tab-create-post .button')
+		$createButton = $metabox.find('.p2p-tab-create-post button')
 		$createInput = $metabox.find('.p2p-tab-create-post :text')
 
 		$createButton.click ->
