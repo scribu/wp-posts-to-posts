@@ -81,6 +81,7 @@
           } else {
             new_page++;
           }
+          $spinner.appendTo(this.tab.find('.p2p-navigation'));
           this.find_posts(new_page);
           return false;
         };
@@ -88,7 +89,6 @@
           if (0 < new_page && new_page <= this.total_pages) {
             this.params.paged = new_page;
           }
-          $spinner.appendTo(this.tab.find('.p2p-navigation'));
           return ajax_request(this.params, __bind(this, this.update_rows), 'GET');
         };
         prototype.update_rows = function(response){

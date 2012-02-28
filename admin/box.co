@@ -80,6 +80,8 @@ jQuery ->
 				else
 					new_page++
 
+				$spinner.appendTo @tab.find('.p2p-navigation')
+
 				@find_posts(new_page)
 
 				return false
@@ -87,8 +89,6 @@ jQuery ->
 			find_posts: (new_page) ->
 				if 0 < new_page <= @total_pages then
 					@params.paged = new_page
-
-				$spinner.appendTo @tab.find('.p2p-navigation')
 
 				ajax_request @params, this.~update_rows, 'GET'
 
