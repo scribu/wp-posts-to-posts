@@ -263,17 +263,7 @@ class P2P_Box {
 	}
 
 	private function refresh_candidates() {
-		$results = array();
-
-		foreach ( array( 'search', 'all' ) as $key ) {
-			$args = $_POST[ $key ];
-			$args['from'] = $_POST['from'];
-
-			if ( 'search' == $key && empty( $args['s'] ) )
-				$results[ $key ] = array();
-			else
-				$results[ $key ] = $this->_ajax_search( $args );
-		}
+		$results = $this->_ajax_search( $_POST );
 
 		die( json_encode( $results ) );
 	}

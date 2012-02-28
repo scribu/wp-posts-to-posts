@@ -34,6 +34,8 @@ jQuery ->
 				p2p_type: $metabox.find('input[name^="p2p_types"]').val()
 				direction: $metabox.data('direction')
 				from: jQuery('#post_ID').val()
+				s: searchTab.params.s
+				paged: searchTab.params.paged
 
 			handler = (response) ->
 				try
@@ -124,7 +126,7 @@ jQuery ->
 		refresh_candidates = (results) ->
 			$metabox.find('.p2p-create-connections').show()
 
-			searchTab.update_rows(results.search)
+			searchTab.update_rows(results)
 
 
 		clear_connections = (ev) ->
@@ -136,7 +138,6 @@ jQuery ->
 
 			data =
 				subaction: 'clear_connections'
-				search: searchTab.params
 
 			row_ajax_request $td, data, (response) ~>
 				$connections.hide()
@@ -155,7 +156,6 @@ jQuery ->
 			data =
 				subaction: 'disconnect'
 				p2p_id: $self.data('p2p_id')
-				search: searchTab.params
 
 			row_ajax_request $td, data, (response) ~>
 				$td.closest('tr').remove()
@@ -242,7 +242,7 @@ jQuery ->
 				delayed = setTimeout ->
 					searchStr = $searchInput.val()
 
-					if '' == searchStr || searchStr === searchTab.params.s
+					if searchStr === searchTab.params.s
 						return
 
 					searchTab.params.s = searchStr

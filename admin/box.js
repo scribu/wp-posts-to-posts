@@ -36,6 +36,8 @@
         data.p2p_type = $metabox.find('input[name^="p2p_types"]').val();
         data.direction = $metabox.data('direction');
         data.from = jQuery('#post_ID').val();
+        data.s = searchTab.params.s;
+        data.paged = searchTab.params.paged;
         handler = function(response){
           try {
             response = jQuery.parseJSON(response);
@@ -119,7 +121,7 @@
       };
       refresh_candidates = function(results){
         $metabox.find('.p2p-create-connections').show();
-        return searchTab.update_rows(results.search);
+        return searchTab.update_rows(results);
       };
       clear_connections = function(ev){
         var $self, $td, data, _this = this;
@@ -129,8 +131,7 @@
         $self = jQuery(ev.target);
         $td = $self.closest('td');
         data = {
-          subaction: 'clear_connections',
-          search: searchTab.params
+          subaction: 'clear_connections'
         };
         row_ajax_request($td, data, function(response){
           $connections.hide().find('tbody').html('');
@@ -145,8 +146,7 @@
         $td = $self.closest('td');
         data = {
           subaction: 'disconnect',
-          p2p_id: $self.data('p2p_id'),
-          search: searchTab.params
+          p2p_id: $self.data('p2p_id')
         };
         row_ajax_request($td, data, function(response){
           $td.closest('tr').remove();
@@ -214,7 +214,7 @@
         return delayed = setTimeout(function(){
           var searchStr;
           searchStr = $searchInput.val();
-          if ('' == searchStr || searchStr === searchTab.params.s) {
+          if (searchStr === searchTab.params.s) {
             return;
           }
           searchTab.params.s = searchStr;
