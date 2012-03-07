@@ -52,45 +52,7 @@ function p2p_register_connection_type( $args ) {
 
 	$args = _p2p_back_compat_args( $argv );
 
-	if ( isset( $args['name'] ) ) {
-		if ( strlen( $args['name'] ) > 44 ) {
-			trigger_error( sprintf( "Connection name '%s' is longer than 44 characters.", $args['name'] ), E_USER_WARNING );
-			return false;
-		}
-	} else {
-		trigger_error( "Connection types without a 'name' parameter are deprecated.", E_USER_WARNING );
-	}
-
-	// Box args
-	if ( isset( $args['admin_box'] ) ) {
-		$metabox_args = _p2p_pluck( $args, 'admin_box' );
-		if ( !is_array( $metabox_args ) )
-			$metabox_args = array( 'show' => $metabox_args );
-	} else {
-		$metabox_args = array();
-	}
-
-	foreach ( array( 'fields', 'can_create_post' ) as $key ) {
-		if ( isset( $args[ $key ] ) ) {
-			$metabox_args[ $key ] = _p2p_pluck( $args, $key );
-		}
-	}
-
-	// Column args
-	if ( isset( $args['admin_column'] ) ) {
-		$column_args = _p2p_pluck( $args, 'admin_column' );
-	} else {
-		$column_args = false;
-	}
-
-	$ctype = P2P_Connection_Type_Factory::register( $args );
-
-	if ( is_admin() ) {
-		P2P_Box_Factory::register( $ctype->name, $metabox_args );
-		P2P_Column_Factory::register( $ctype->name, $column_args );
-	}
-
-	return $ctype;
+	return P2P_Connection_Type_Factory::register( $args );
 }
 
 /** @internal */

@@ -4,6 +4,15 @@ class P2P_Connection_Type_Factory {
 	private static $instances = array();
 
 	public static function register( $args ) {
+		if ( isset( $args['name'] ) ) {
+			if ( strlen( $args['name'] ) > 44 ) {
+				trigger_error( sprintf( "Connection name '%s' is longer than 44 characters.", $args['name'] ), E_USER_WARNING );
+				return false;
+			}
+		} else {
+			trigger_error( "Connection types without a 'name' parameter are deprecated.", E_USER_WARNING );
+		}
+
 		$args = wp_parse_args( $args, array(
 			'name' => false,
 			'from_object' => 'post',
@@ -63,6 +72,8 @@ class P2P_Connection_Type_Factory {
 			$class = 'P2P_Connection_Type';
 		else
 			$class = 'Generic_Connection_Type';
+
+		$args = apply_filters( 'p2p_register_connection_type', $args );
 
 		$ctype = new $class( $args );
 

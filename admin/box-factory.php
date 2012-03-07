@@ -9,6 +9,34 @@ class P2P_Box_Factory {
 
 	private static $box_args = array();
 
+	static function init() {
+		add_filter( 'p2p_register_connection_type', array( __CLASS__, 'filter_args' ) );
+
+		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
+		add_action( 'save_post', array( __CLASS__, 'save_post' ), 10, 2 );
+		add_action( 'wp_ajax_p2p_box', array( __CLASS__, 'wp_ajax_p2p_box' ) );
+	}
+
+	static function filter_args( $args ) {
+		if ( isset( $args['admin_box'] ) ) {
+			$box_args = _p2p_pluck( $args, 'admin_box' );
+			if ( !is_array( $box_args ) )
+				$box_args = array( 'show' => $box_args );
+		} else {
+			$box_args = array();
+		}
+
+		foreach ( array( 'fields', 'can_create_post' ) as $key ) {
+			if ( isset( $args[ $key ] ) ) {
+				$box_args[ $key ] = _p2p_pluck( $args, $key );
+			}
+		}
+
+		self::register( $args['name'], $box_args );
+
+		return $args;
+	}
+
 	static function register( $p2p_type, $box_args ) {
 		if ( isset( self::$box_args[$p2p_type] ) )
 			return false;
@@ -36,12 +64,6 @@ class P2P_Box_Factory {
 		self::$box_args[$p2p_type] = $box_args;
 
 		return true;
-	}
-
-	static function init() {
-		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
-		add_action( 'save_post', array( __CLASS__, 'save_post' ), 10, 2 );
-		add_action( 'wp_ajax_p2p_box', array( __CLASS__, 'wp_ajax_p2p_box' ) );
 	}
 
 	static function add_meta_boxes( $post_type ) {
