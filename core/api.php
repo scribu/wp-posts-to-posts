@@ -50,13 +50,6 @@ function p2p_register_connection_type( $args ) {
 
 	$argv = func_get_args();
 
-	$args = _p2p_back_compat_args( $argv );
-
-	return P2P_Connection_Type_Factory::register( $args );
-}
-
-/** @internal */
-function _p2p_back_compat_args( $argv ) {
 	if ( count( $argv ) > 1 ) {
 		$args = array();
 		foreach ( array( 'from', 'to', 'reciprocal' ) as $i => $key ) {
@@ -80,7 +73,7 @@ function _p2p_back_compat_args( $argv ) {
 			$args['admin_box']['context'] = _p2p_pluck( $args, 'context' );
 	}
 
-	return $args;
+	return P2P_Connection_Type_Factory::register( $args );
 }
 
 /**
