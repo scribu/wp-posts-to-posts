@@ -2,12 +2,12 @@
 	color: #AAA;
 }
 
-.p2p-connections {
-	margin-bottom: 8px;
-}
-
 .p2p-box a {
 	text-decoration: none;
+}
+
+.p2p-create-connections p {
+	margin-bottom: .5em;
 }
 
 /* Tabs */
@@ -23,11 +23,11 @@
 	display: block;
 }
 
-/* Connections */
-
-.p2p-connections {
-	margin-top: 4px;
+.tabs-panel {
+	border-radius: 0 3px 3px 3px;
 }
+
+/* Connections */
 
 .p2p-results,
 .p2p-connections {

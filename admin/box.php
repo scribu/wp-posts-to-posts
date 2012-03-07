@@ -147,6 +147,8 @@ class P2P_Box {
 			);
 		}
 
+		$data['show-tab-headers'] = count( $data['tabs'] ) > 1 ? array(true) : false;
+
 		return $data;
 	}
 
