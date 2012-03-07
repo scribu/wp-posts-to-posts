@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Posts 2 Posts\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
-"POT-Creation-Date: 2011-12-01 16:28:04+00:00\n"
-"PO-Revision-Date: 2011-12-01 18:31+0200\n"
+"POT-Creation-Date: 2012-03-07 20:34:30+00:00\n"
+"PO-Revision-Date: 2012-03-07 22:35+0200\n"
 "Last-Translator: scribu <mail@scribu.net>\n"
 "Language-Team: ROMANIAN <LL@li.org>\n"
 "Language: \n"
@@ -16,68 +16,83 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin/box-factory.php:56
+#: admin/box-factory.php:78
 msgid " (from)"
 msgstr "(de la)"
 
-#: admin/box-factory.php:57
+#: admin/box-factory.php:79
 msgid " (to)"
 msgstr "(la)"
 
-#: admin/box.php:42
+#: admin/box.php:40
 msgid "Are you sure you want to delete all connections?"
 msgstr "Sigur vreți să ștergeți toate conexiunile?"
 
-#: admin/box.php:115
+#: admin/box.php:118
 msgid "Create connections:"
 msgstr "Creează conexiuni:"
 
-#: admin/box.php:128
-msgid "Search"
-msgstr "Căutare"
-
-#: admin/box.php:136
+#: admin/box.php:127
 msgid "View All"
 msgstr "Vezi toate"
 
-#: admin/box.php:204
+#: admin/box.php:132
+msgid "Search"
+msgstr "Căutare"
+
+#: admin/box.php:203
 msgid "previous"
 msgstr "anterioare"
 
-#: admin/box.php:205
+#: admin/box.php:204
 msgid "next"
 msgstr "următoare"
 
-#: admin/box.php:206
+#: admin/box.php:205
 msgid "of"
 msgstr "din"
 
-#: admin/fields.php:16
+#: admin/box.php:246
+msgid "Can't create connection."
+msgstr "Conexiunea nu poate fi creată."
+
+#: admin/fields.php:14
 msgid "Create connection"
 msgstr "Crează conexiune"
 
-#: admin/fields.php:30
+#: admin/fields.php:27
 msgid "Delete all connections"
 msgstr "Șterge toate conexiunile"
 
-#: admin/fields.php:39
+#: admin/fields.php:36
 msgid "Delete connection"
 msgstr "Șterge conexiune"
 
-#: scb/AdminPage.php:165
-msgid "Settings <strong>saved</strong>."
-msgstr "Setări <strong>salvate</strong>."
+#: core/side.php:140
+msgid "Users"
+msgstr "Utilizatori"
 
-#: scb/AdminPage.php:178
-#: scb/AdminPage.php:189
-msgid "Save Changes"
-msgstr "Salvează schimbările"
+#: core/side.php:145
+msgid "User"
+msgstr "Utilizator"
 
-#: scb/AdminPage.php:350
-msgid "Settings"
-msgstr "Setări"
+#: core/side.php:146
+msgid "Search Users"
+msgstr "Caută utilizatori"
 
-#: core/type.php:65
+#: core/side.php:147
+msgid "No users found."
+msgstr "Niciun utilizator găsit."
+
+#: core/storage.php:35
+msgid "Upgraded %d connections."
+msgstr "Am actualizat %d conexiuni."
+
+#: core/storage.php:38
+msgid "The Posts 2 Posts connections need to be upgraded. <a href=\"%s\">Proceed.</a>"
+msgstr "Conexiunile Posts 2 Posts trebuie actualizate. <a href=\"%s\">Pornește.</a>"
+
+#: core/type.php:77
 msgid "Connected %s"
 msgstr "%s conectate"
 
@@ -109,29 +124,18 @@ msgstr "înrudite"
 msgid "Related %s"
 msgstr "%s înrudite"
 
-#: core/storage.php:35
-msgid "Upgraded %d connections."
-msgstr "Am actualizat %d conexiuni."
+#: scb/AdminPage.php:172
+msgid "Settings <strong>saved</strong>."
+msgstr "Setări <strong>salvate</strong>."
 
-#: core/storage.php:38
-msgid "The Posts 2 Posts connections need to be upgraded. <a href=\"%s\">Proceed.</a>"
-msgstr "Conexiunile Posts 2 Posts trebuie actualizate. <a href=\"%s\">Pornește.</a>"
+#: scb/AdminPage.php:185
+#: scb/AdminPage.php:196
+msgid "Save Changes"
+msgstr "Salvează schimbările"
 
-#: core/side.php:110
-msgid "Users"
-msgstr "Utilizatori"
-
-#: core/side.php:115
-msgid "User"
-msgstr "Utilizator"
-
-#: core/side.php:116
-msgid "Search Users"
-msgstr "Caută utilizatori"
-
-#: core/side.php:117
-msgid "No users found."
-msgstr "Niciun utilizator găsit."
+#: scb/AdminPage.php:360
+msgid "Settings"
+msgstr "Setări"
 
 #~ msgid "Recent"
 #~ msgstr "Recente"
