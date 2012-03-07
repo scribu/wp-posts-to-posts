@@ -10,7 +10,7 @@ class P2P_Box_Factory {
 	private static $box_args = array();
 
 	static function init() {
-		add_filter( 'p2p_register_connection_type', array( __CLASS__, 'filter_args' ) );
+		add_filter( 'p2p_connection_type_args', array( __CLASS__, 'filter_args' ) );
 
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
 		add_action( 'save_post', array( __CLASS__, 'save_post' ), 10, 2 );

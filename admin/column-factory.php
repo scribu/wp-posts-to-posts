@@ -5,7 +5,7 @@ class P2P_Column_Factory {
 	private static $column_args = array();
 
 	static function init() {
-		add_filter( 'p2p_register_connection_type', array( __CLASS__, 'filter_args' ) );
+		add_filter( 'p2p_connection_type_args', array( __CLASS__, 'filter_args' ) );
 
 		add_action( 'admin_print_styles', array( __CLASS__, 'add_columns' ) );
 	}

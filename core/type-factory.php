@@ -73,7 +73,7 @@ class P2P_Connection_Type_Factory {
 		else
 			$class = 'Generic_Connection_Type';
 
-		$args = apply_filters( 'p2p_register_connection_type', $args );
+		$args = apply_filters( 'p2p_connection_type_args', $args );
 
 		$ctype = new $class( $args );
 
