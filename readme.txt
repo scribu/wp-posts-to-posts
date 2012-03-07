@@ -19,8 +19,7 @@ Additionally, you can create many-to-many relationships between posts and users.
 
 * favorite posts of users
 * multiple authors per post
-
-etc.
+* etc.
 
 Links: [**Documentation**](http://github.com/scribu/wp-posts-to-posts/wiki) | [Plugin News](http://scribu.net/wordpress/posts-to-posts) | [Author's Site](http://scribu.net)
 
