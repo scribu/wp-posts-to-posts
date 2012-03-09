@@ -49,6 +49,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 1.1.7 =
+* fix migration script
+
 = 1.1.6 =
 * converted "View All" tab into button
 * refresh candidate list after deleting a connection
