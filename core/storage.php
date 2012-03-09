@@ -82,7 +82,7 @@ class P2P_Storage {
 				'nopaging' => true
 			) );
 
-			$args['p2p_type'] = array( false => $args['direction'] );
+			$args['p2p_type'] = array( 0 => 'any' );
 
 			foreach ( get_posts( $args ) as $post ) {
 				// some connections might be ambiguous, spanning multiple connection types; first one wins

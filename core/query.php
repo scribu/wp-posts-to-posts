@@ -19,7 +19,7 @@ class P2P_Query {
 
 	function get_qv( $q ) {
 		$qv_list = array(
-			'items', 'direction', 'meta',
+			'items', 'meta',
 			'orderby', 'order_num', 'order'
 		);
 
@@ -93,7 +93,7 @@ class P2P_Query {
 		$where_parts = array();
 
 		foreach ( $q['p2p_type'] as $p2p_type => $direction ) {
-			if ( false === $p2p_type ) // used by migration script
+			if ( 0 === $p2p_type ) // used by migration script
 				$part = "1 = 1";
 			else
 				$part = $wpdb->prepare( "$wpdb->p2p.p2p_type = %s", $p2p_type );
