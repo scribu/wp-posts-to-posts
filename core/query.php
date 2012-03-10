@@ -19,7 +19,7 @@ class P2P_Query {
 
 	function get_qv( $q ) {
 		$qv_list = array(
-			'items', 'meta',
+			'items', 'direction', 'meta',
 			'orderby', 'order_num', 'order'
 		);
 
