@@ -53,11 +53,12 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * fix migration script
 
 = 1.1.6 =
-* converted "View All" tab into button
+* convert "View All" tab into button
 * refresh candidate list after deleting a connection
-* fixed cardinality check
-* introduced 'p2p_connection_type_args' filter
+* fix cardinality check
+* introduce 'p2p_connection_type_args' filter
 * make 'connected_type' accept an array of connection type names
+* inadvertently remove support for queries without 'connected_type' parameter
 
 = 1.1.5 =
 * added P2P_Connection_Type->replace() method
