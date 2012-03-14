@@ -328,7 +328,7 @@ function p2p_list_posts( $posts, $args = array() ) {
 
 		setup_postdata( $post );
 
-		echo $before_item;
+		if ( !isset( $separator ) ) echo $before_item;
 
 		if ( $template )
 			locate_template( $template, true, false );
@@ -337,7 +337,7 @@ function p2p_list_posts( $posts, $args = array() ) {
 			
 			echo html( 'a', array( 'href' => get_permalink( $post->ID ) ), get_the_title( $post->ID ) );
 
-		echo $after_item;
+		if ( !isset( $separator ) ) echo $after_item;
 		
 		$i++;
 	}
