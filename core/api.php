@@ -336,7 +336,7 @@ function p2p_list_posts( $posts, $args = array() ) {
 		else
 			if ( 0 < $i && $separator ) echo $separator;
 
-			echo html( 'a', array( 'href' => get_permalink( $post->ID ) ), get_the_title( $post->ID ) );
+			echo html( 'a', array( 'href' => get_permalink() ), get_the_title() );
 
 		if ( !$separator ) echo $after_item;
 
