@@ -1,0 +1,7 @@
+.widefat {
+	margin-top: 15px;
+}
+
+.widefat .error {
+	background-color: pink;
+}

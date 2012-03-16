@@ -1,0 +1,18 @@
+<table class="widefat">
+	<thead>
+		<tr>
+			{{#columns}}
+			<th>{{.}}</th>
+			{{/columns}}
+		</tr>
+	</thead>
+	<tbody>
+		{{#rows}}
+		<tr class="{{class}}">
+			<td>{{p2p_type}}</td>
+			<td>{{{desc}}}</td>
+			<td>{{count}}</td>
+		</tr>
+		{{/rows}}
+	</tbody>
+</table>
