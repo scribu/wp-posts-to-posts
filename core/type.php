@@ -287,5 +287,30 @@ class P2P_Connection_Type extends Generic_Connection_Type {
 
 		return $adjacent[0];
 	}
+
+	public function get_desc() {
+		foreach ( array( 'from', 'to' ) as $key ) {
+			$$key = implode( ', ', array_map( array( $this, 'post_type_label' ), $this->$key ) );
+		}
+
+		if ( $this->indeterminate )
+			$arrow = '&harr;';
+		else
+			$arrow = '&rarr;';
+
+		$label = "$from $arrow $to";
+
+		$title = $this->title[ 'from' ];
+
+		if ( $title )
+			$label .= " ($title)";
+
+		return $label;
+	}
+
+	private function post_type_label( $post_type ) {
+		$cpt = get_post_type_object( $post_type );
+		return $cpt ? $cpt->label : $post_type;
+	}
 }
 

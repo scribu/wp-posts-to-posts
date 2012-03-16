@@ -27,7 +27,7 @@ class P2P_Widget extends scbWidget {
 			if ( ! $ctype instanceof P2P_Connection_Type )
 				continue;
 
-			$ctypes[ $p2p_type ] = self::ctype_label( $ctype );
+			$ctypes[ $p2p_type ] = $ctype->get_desc();
 		}
 
 		echo html( 'p', $this->input( array(
@@ -93,31 +93,6 @@ class P2P_Widget extends scbWidget {
 		p2p_list_posts( $connected );
 
 		echo $after_widget;
-	}
-
-	private static function ctype_label( $ctype ) {
-		foreach ( array( 'from', 'to' ) as $key ) {
-			$$key = implode( ', ', array_map( array( __CLASS__, 'post_type_label' ), $ctype->$key ) );
-		}
-
-		if ( $ctype->indeterminate )
-			$arrow = '&harr;';
-		else
-			$arrow = '&rarr;';
-
-		$label = "$from $arrow $to";
-
-		$title = $ctype->title[ 'from' ];
-
-		if ( $title )
-			$label .= " ($title)";
-
-		return $label;
-	}
-
-	private static function post_type_label( $post_type ) {
-		$cpt = get_post_type_object( $post_type );
-		return $cpt ? $cpt->label : $post_type;
 	}
 }
 
