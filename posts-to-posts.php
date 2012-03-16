@@ -49,7 +49,8 @@ function _p2p_init() {
 		_p2p_load_files( "$base/admin", array(
 			'mustache',
 			'box-factory', 'box', 'fields',
-			'column-factory', 'column'
+			'column-factory', 'column',
+			'tools'
 		) );
 	}
 

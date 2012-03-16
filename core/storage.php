@@ -11,36 +11,7 @@ class P2P_Storage {
 		scb_register_table( 'p2p' );
 		scb_register_table( 'p2pmeta' );
 
-		add_action( 'admin_notices', array( __CLASS__, 'maybe_install' ) );
-
 		add_action( 'deleted_post', array( __CLASS__, 'deleted_post' ) );
-	}
-
-	function maybe_install() {
-		if ( !current_user_can( 'manage_options' ) )
-			return;
-
-		$current_ver = get_option( 'p2p_storage' );
-
-		if ( $current_ver == self::$version )
-			return;
-
-		self::install();
-
-		if ( isset( $_GET['p2p-upgrade'] ) ) {
-			$n = self::upgrade();
-
-			update_option( 'p2p_storage', P2P_Storage::$version );
-
-			echo scb_admin_notice( sprintf( __( 'Upgraded %d connections.', P2P_TEXTDOMAIN ), $n ) );
-		} elseif ( $current_ver ) {
-			echo scb_admin_notice( sprintf(
-				__( 'The Posts 2 Posts connections need to be upgraded. <a href="%s">Proceed.</a>', P2P_TEXTDOMAIN ),
-				admin_url( 'tools.php?p2p-upgrade' )
-			) );
-		} else {
-			update_option( 'p2p_storage', P2P_Storage::$version );
-		}
 	}
 
 	function install() {
