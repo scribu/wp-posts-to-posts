@@ -47,7 +47,7 @@ function _p2p_init() {
 
 	if ( is_admin() ) {
 		_p2p_load_files( "$base/admin", array(
-			'utils',
+			'mustache',
 			'box-factory', 'box', 'fields',
 			'column-factory', 'column'
 		) );
