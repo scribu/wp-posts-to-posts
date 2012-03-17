@@ -72,14 +72,6 @@ class P2P_Tools_Page extends scbAdminPage {
 	}
 
 	function page_content() {
-		global $wpdb;
-
-		$stats = $wpdb->get_results( "
-			SELECT p2p_type, COUNT(*) as count
-			FROM $wpdb->p2p
-			GROUP BY p2p_type
-		" );
-
 		$data = array(
 			'columns' => array(
 				__( 'Name', P2P_TEXTDOMAIN ),
@@ -88,7 +80,7 @@ class P2P_Tools_Page extends scbAdminPage {
 			)
 		);
 
-		foreach ( scb_list_fold( $stats, 'p2p_type', 'count' ) as $p2p_type => $count ) {
+		foreach ( $this->get_connection_counts() as $p2p_type => $count ) {
 			$row = array(
 				'p2p_type' => $p2p_type,
 				'count' => number_format_i18n( $count )
@@ -107,6 +99,27 @@ class P2P_Tools_Page extends scbAdminPage {
 		}
 
 		echo P2P_Mustache::render( 'connection-types', $data );
+	}
+
+	private function get_connection_counts() {
+		global $wpdb;
+
+		$stats = $wpdb->get_results( "
+			SELECT p2p_type, COUNT(*) as count
+			FROM $wpdb->p2p
+			GROUP BY p2p_type
+		" );
+
+		$stats = scb_list_fold( $stats, 'p2p_type', 'count' );
+
+		foreach ( P2P_Connection_Type_Factory::get_all_instances() as $p2p_type => $ctype ) {
+			if ( !isset( $stats[ $p2p_type ] ) )
+				$stats[ $p2p_type ] = 0;
+		}
+
+		ksort( $stats );
+
+		return $stats;
 	}
 
 	private function get_dropdown( $p2p_type ) {
