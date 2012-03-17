@@ -49,7 +49,8 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
-= 1.1.7 =
+= 1.2 =
+* add Tools -> Connection Types admin screen
 * fix migration script
 
 = 1.1.6 =
