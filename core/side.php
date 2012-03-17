@@ -34,6 +34,15 @@ class P2P_Side_Post extends P2P_Side {
 		) );
 	}
 
+	function get_desc() {
+		return implode( ', ', array_map( array( $this, 'post_type_label' ), $this->post_type ) );
+	}
+
+	private function post_type_label( $post_type ) {
+		$cpt = get_post_type_object( $post_type );
+		return $cpt ? $cpt->label : $post_type;
+	}
+
 	function get_title() {
 		return $this->get_ptype()->labels->name;
 	}
@@ -136,8 +145,12 @@ class P2P_Side_Attachment extends P2P_Side_Post {
 
 class P2P_Side_User extends P2P_Side {
 
-	function get_title() {
+	function get_desc() {
 		return __( 'Users', P2P_TEXTDOMAIN );
+	}
+
+	function get_title() {
+		return $this->get_desc();
 	}
 
 	function get_labels() {
