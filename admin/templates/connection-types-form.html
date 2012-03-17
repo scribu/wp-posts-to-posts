@@ -1,0 +1,8 @@
+<input type="hidden" name="old_p2p_type" value="{{old_p2p_type}}" />
+<select name="new_p2p_type">
+	<option></option>
+	{{#options}}
+	<option>{{.}}</option>
+	{{/options}}
+</select>
+<input class="button" type="submit" name="p2p_convert" value="{{{button_text}}}" />

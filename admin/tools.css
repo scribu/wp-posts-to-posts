@@ -5,3 +5,11 @@
 .widefat .error {
 	background-color: pink;
 }
+
+.widefat td form {
+	display: inline;
+}
+
+.widefat td {
+	vertical-align: middle;
+}

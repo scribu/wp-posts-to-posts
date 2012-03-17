@@ -39,6 +39,34 @@ class P2P_Tools_Page extends scbAdminPage {
 		}
 	}
 
+	function form_handler() {
+		if ( empty( $_POST['p2p_convert'] ) )
+			return false;
+
+		check_admin_referer( $this->nonce );
+
+		global $wpdb;
+
+		$old_p2p_type = $_POST['old_p2p_type'];
+		$new_p2p_type = $_POST['new_p2p_type'];
+
+		if ( !p2p_type( $new_p2p_type ) ) {
+			$this->admin_msg( sprintf( __( '<em>%s</em> is not a registered connection type.', P2P_TEXTDOMAIN ), esc_html( $new_p2p_type ) ) );
+			return;
+		}
+
+		$count = $wpdb->update( $wpdb->p2p,
+			array( 'p2p_type' => $new_p2p_type ),
+			array( 'p2p_type' => $old_p2p_type )
+		);
+
+		$this->admin_msg( sprintf( __( 'Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>.' ),
+			number_format_i18n( $count ),
+			esc_html( $old_p2p_type ),
+			esc_html( $new_p2p_type )
+		) );
+	}
+
 	function page_head() {
 		wp_enqueue_style( 'p2p-tools', plugins_url( 'tools.css', __FILE__ ), array(), P2P_PLUGIN_VERSION );
 	}
@@ -55,7 +83,7 @@ class P2P_Tools_Page extends scbAdminPage {
 		$data = array(
 			'columns' => array(
 				__( 'Name', P2P_TEXTDOMAIN ),
-				__( 'Description', P2P_TEXTDOMAIN ),
+				__( 'Information', P2P_TEXTDOMAIN ),
 				__( 'Connections', P2P_TEXTDOMAIN ),
 			)
 		);
@@ -71,6 +99,7 @@ class P2P_Tools_Page extends scbAdminPage {
 			if ( $ctype ) {
 				$row['desc'] = $ctype->get_desc();
 			} else {
+				$row['desc'] = __( 'Convert to registered connection type:', P2P_TEXTDOMAIN ) . scbForms::form_wrap( $this->get_dropdown( $p2p_type ), $this->nonce );
 				$row['class'] = 'error';
 			}
 
@@ -78,6 +107,16 @@ class P2P_Tools_Page extends scbAdminPage {
 		}
 
 		echo P2P_Mustache::render( 'connection-types', $data );
+	}
+
+	private function get_dropdown( $p2p_type ) {
+		$data = array(
+			'old_p2p_type' => $p2p_type,
+			'options' => array_keys( P2P_Connection_Type_Factory::get_all_instances() ),
+			'button_text' => __( 'Go', P2P_TEXTDOMAIN )
+		);
+
+		return P2P_Mustache::render( 'connection-types-form', $data );
 	}
 }
 
