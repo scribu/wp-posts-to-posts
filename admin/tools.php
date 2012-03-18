@@ -104,22 +104,22 @@ class P2P_Tools_Page extends scbAdminPage {
 	private function get_connection_counts() {
 		global $wpdb;
 
-		$stats = $wpdb->get_results( "
+		$counts = $wpdb->get_results( "
 			SELECT p2p_type, COUNT(*) as count
 			FROM $wpdb->p2p
 			GROUP BY p2p_type
 		" );
 
-		$stats = scb_list_fold( $stats, 'p2p_type', 'count' );
+		$counts = scb_list_fold( $counts, 'p2p_type', 'count' );
 
 		foreach ( P2P_Connection_Type_Factory::get_all_instances() as $p2p_type => $ctype ) {
-			if ( !isset( $stats[ $p2p_type ] ) )
-				$stats[ $p2p_type ] = 0;
+			if ( !isset( $counts[ $p2p_type ] ) )
+				$counts[ $p2p_type ] = 0;
 		}
 
-		ksort( $stats );
+		ksort( $counts );
 
-		return $stats;
+		return $counts;
 	}
 
 	private function get_dropdown( $p2p_type ) {
@@ -133,5 +133,5 @@ class P2P_Tools_Page extends scbAdminPage {
 	}
 }
 
-new P2P_Tools_Page( false );
+new P2P_Tools_Page;
 
