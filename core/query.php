@@ -40,9 +40,14 @@ class P2P_Query {
 		return $qv;
 	}
 
-	// null means do nothing
-	// false means trigger 404
-	// true means found valid p2p query vars
+	/**
+	 * Sets 'p2p_type' => array( connection_type => direction )
+	 *
+	 * @return:
+	 * null means ignore current query
+	 * false means trigger 404
+	 * true means proceed
+	 */
 	function expand_connected_type( &$q, $item, $object_type ) {
 		if ( !isset( $q['connected_type'] ) )
 			return;
