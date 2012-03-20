@@ -14,12 +14,7 @@ class P2P_WP_Query {
 	function parse_query( $wp_query ) {
 		$q =& $wp_query->query_vars;
 
-		P2P_Query::expand_shortcut_qv( $q );
-
-		if ( !isset( $q['connected_items'] ) )
-			return;
-
-		if ( !isset( $q['connected_type'] ) )
+		if ( !P2P_Query::expand_shortcut_qv( $q ) )
 			return;
 
 		if ( 'any' == $q['connected_items'] ) {

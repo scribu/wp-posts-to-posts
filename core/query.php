@@ -15,6 +15,14 @@ class P2P_Query {
 				$q['connected_direction'] = $direction;
 			}
 		}
+
+		if ( !isset( $q['connected_type'] ) )
+			return false;
+
+		if ( !isset( $q['connected_items'] ) )
+			$q['connected_items'] = 'any';
+
+		return true;
 	}
 
 	function get_qv( $q ) {

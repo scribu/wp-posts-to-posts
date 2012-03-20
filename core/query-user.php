@@ -11,9 +11,7 @@ class P2P_User_Query {
 
 		$q =& $query->query_vars;
 
-		P2P_Query::expand_shortcut_qv( $q );
-
-		if ( !isset( $q['connected_items'] ) )
+		if ( !P2P_Query::expand_shortcut_qv( $q ) )
 			return;
 
 		$r = P2P_Query::expand_connected_type( $q, $q['connected_items'], 'user' );
