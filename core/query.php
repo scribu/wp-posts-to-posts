@@ -33,6 +33,8 @@ class P2P_Query {
 		if ( !isset( $q['p2p_type'] ) )
 			return false;
 
+		$qv['p2p_type'] = $q['p2p_type'];
+
 		$qv_list = array(
 			'items', 'direction', 'meta',
 			'orderby', 'order_num', 'order'
