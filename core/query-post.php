@@ -38,7 +38,7 @@ class P2P_WP_Query {
 
 		$qv = P2P_Query::get_qv( $wp_query->query_vars );
 
-		if ( empty( $qv['items'] ) )
+		if ( !$qv )
 			return $clauses;
 
 		$wp_query->_p2p_cache = true;

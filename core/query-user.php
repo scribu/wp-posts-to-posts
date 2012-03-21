@@ -25,7 +25,7 @@ class P2P_User_Query {
 
 		$qv = P2P_Query::get_qv( $q );
 
-		if ( empty( $qv['items'] ) )
+		if ( !$qv )
 			return;
 
 		$map = array(
