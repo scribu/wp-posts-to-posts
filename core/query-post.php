@@ -14,13 +14,12 @@ class P2P_WP_Query {
 	function parse_query( $wp_query ) {
 		$q =& $wp_query->query_vars;
 
-		if ( !P2P_Query::expand_shortcut_qv( $q ) )
-			return;
+		P2P_Query::expand_shortcut_qv( $q );
 
-		if ( 'any' == $q['connected_items'] ) {
-			$item = isset( $q['post_type'] ) ? $q['post_type'] : 'post';
-		} else {
+		if ( isset( $q['connected_items'] ) ) {
 			$item = $q['connected_items'];
+		} else {
+			$item = isset( $q['post_type'] ) ? $q['post_type'] : 'post';
 		}
 
 		$r = P2P_Query::expand_connected_type( $q, $item, 'post' );
