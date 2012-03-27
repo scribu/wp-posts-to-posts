@@ -85,7 +85,7 @@ class Generic_Connection_Type {
 	public function __call( $method, $args ) {
 		$directed = $this->find_direction( $args[0] );
 		if ( !$directed ) {
-			trigger_error( "Can't determine direction", E_USER_WARNING );
+			trigger_error( sprintf( "Can't determine direction for '%s' type.", $this->name ), E_USER_WARNING );
 			return false;
 		}
 
