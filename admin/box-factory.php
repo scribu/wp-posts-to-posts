@@ -126,23 +126,17 @@ class P2P_Box_Factory {
 			return;
 
 		// Custom fields
-		if ( isset( $_POST['p2p_types'] ) ) {
-			foreach ( $_POST['p2p_types'] as $p2p_type ) {
-				$ctype = p2p_type( $p2p_type );
-				if ( !$ctype )
-					continue;
+		if ( isset( $_POST['p2p_meta'] ) ) {
+			foreach ( $_POST['p2p_meta'] as $p2p_id => $data ) {
+				$connection = p2p_get_connection( $p2p_id );
 
-				foreach ( $ctype->get_connections( $post_id ) as $p2p_id => $item_id ) {
-					$fields = self::$box_args[$p2p_type]->fields;
+				$fields = self::$box_args[$connection->p2p_type]->fields;
 
-					foreach ( $fields as $key => &$field ) {
-						$field['name'] = $key;
-					}
-
-					$data = scbForms::get_value( array( 'p2p_meta', $p2p_id ), $_POST, array() );
-
-					scbForms::update_meta( $fields, $data, $p2p_id, 'p2p' );
+				foreach ( $fields as $key => &$field ) {
+					$field['name'] = $key;
 				}
+
+				scbForms::update_meta( $fields, $data, $p2p_id, 'p2p' );
 			}
 		}
 

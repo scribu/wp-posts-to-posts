@@ -68,7 +68,6 @@ class P2P_Box {
 		$this->connected_items = $this->ctype->get_connections( $post->ID );
 
 		$data = array(
-			'p2p-type' => $this->ctype->name,
 			'attributes' => $this->render_data_attributes(),
 			'connections' => $this->render_connections_table( $post ),
 			'create-connections' => $this->render_create_connections( $post ),
