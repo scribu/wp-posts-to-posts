@@ -105,9 +105,9 @@ class P2P_Debug {
 		));
 
 		p2p_register_connection_type(array(
-			'name' => 'ticket_to_post',
+			'name' => 'ticket_to_stuff',
 			'from' => 'ticket',
-			'to' => 'post',
+			'to' => array( 'post', 'page' )
 		));
 	}
 
