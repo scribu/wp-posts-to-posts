@@ -110,19 +110,17 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( 'any', $reciprocal->find_direction( 'movie' )->get_direction() );
 	}
 
-	function test_ctype_api() {
+	function test_connection_create() {
+		$ctype = p2p_type( 'actor_to_movie' );
+
 		$actor_id = $this->generate_post( 'actor' );
 		$movie_id = $this->generate_post( 'movie' );
 
-		$ctype = p2p_type( 'actor_to_movie' );
-
 		// create connection
-		$p2p_id_1 = $ctype->connect( $actor_id, $movie_id );
-		$this->assertTrue( (int) $p2p_id_1 > 0 );
+		$this->assertTrue( $ctype->connect( $actor_id, $movie_id ) > 0 );
 
 		// 'prevent_duplicates'
-		$p2p_id_2 = $ctype->connect( $actor_id, $movie_id );
-		$this->assertFalse( $p2p_id_2 );
+		$this->assertFalse( $ctype->connect( $actor_id, $movie_id ) );
 
 		// get connected
 		$this->assertEquals( array( $movie_id ), $ctype->get_connected( $actor_id, array( 'fields' => 'ids' ) )->posts );
@@ -131,6 +129,23 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		// delete connection
 		$ctype->disconnect( $actor_id, $movie_id );
 		$this->assertFalse( $ctype->get_p2p_id( $actor_id, $movie_id ) );
+	}
+
+	function test_cardinality() {
+		$ctype = p2p_register_connection_type( array(
+			'name' => 'actor_to_movies',
+			'from' => 'actor',
+			'to' => 'movie',
+			'cardinality' => 'one-to-many'
+		) );
+
+		$actor_ids = $this->generate_posts( 'actor', 2 );
+		$movie_ids = $this->generate_posts( 'movie', 2 );
+
+		$this->assertTrue( $ctype->connect( $actor_ids[0], $movie_ids[0] ) > 0 );
+		$this->assertTrue( $ctype->connect( $actor_ids[0], $movie_ids[1] ) > 0 );
+
+		$this->assertFalse( $ctype->connect( $actor_ids[1], $movie_ids[0] ) );
 	}
 
 	function test_wp_query() {
