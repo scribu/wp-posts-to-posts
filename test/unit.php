@@ -35,9 +35,9 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		foreach ( array( 'actor', 'movie', 'studio' ) as $ptype )
 			register_post_type( $ptype );
 
-		if ( !p2p_type( 'normal' ) ) {
+		if ( !p2p_type( 'actor_to_movie' ) ) {
 			p2p_register_connection_type( array(
-				'name' => 'normal',
+				'name' => 'actor_to_movie',
 				'from' => 'actor',
 				'to' => 'movie'
 			) );
@@ -48,13 +48,13 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$post_id = $this->generate_post( 'actor' );
 		$actor_id = $this->generate_post( 'movie' );
 
-		p2p_type( 'normal' )->connect( $post_id, $actor_id );
-		p2p_type( 'normal' )->connect( $actor_id, $post_id, array( 'foo' => 'bar' ) );
+		p2p_type( 'actor_to_movie' )->connect( $post_id, $actor_id );
+		p2p_type( 'actor_to_movie' )->connect( $actor_id, $post_id, array( 'foo' => 'bar' ) );
 
 		wp_delete_post( $post_id, true );
 
-		$this->assertEmpty( p2p_get_connections( 'normal', array( 'from' => $post_id, 'fields' => 'p2p_id' ) ) );
-		$this->assertEmpty( p2p_get_connections( 'normal', array( 'to' => $post_id, 'fields' => 'p2p_id' ) ) );
+		$this->assertEmpty( p2p_get_connections( 'actor_to_movie', array( 'from' => $post_id, 'fields' => 'p2p_id' ) ) );
+		$this->assertEmpty( p2p_get_connections( 'actor_to_movie', array( 'to' => $post_id, 'fields' => 'p2p_id' ) ) );
 	}
 
 	function test_annonymous_ctypes() {
@@ -63,7 +63,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_direction() {
-		$normal = p2p_type( 'normal' );
+		$normal = p2p_type( 'actor_to_movie' );
 
 		$this->assertEquals( 'from', $normal->find_direction( 'actor' )->get_direction() );
 		$this->assertEquals( 'to', $normal->find_direction( 'movie' )->get_direction() );
@@ -111,7 +111,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$actor_id = $this->generate_post( 'actor' );
 		$movie_id = $this->generate_post( 'movie' );
 
-		$ctype = p2p_type( 'normal' );
+		$ctype = p2p_type( 'actor_to_movie' );
 
 		// create connection
 		$p2p_id_1 = $ctype->connect( $actor_id, $movie_id );
@@ -163,7 +163,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_each_connected() {
-		$ctype = p2p_type( 'normal' );
+		$ctype = p2p_type( 'actor_to_movie' );
 
 		$actor_ids = $this->generate_posts( 'actor', 3 );
 		$movie_id = $this->generate_post( 'movie' );
