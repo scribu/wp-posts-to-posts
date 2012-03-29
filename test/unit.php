@@ -214,26 +214,6 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( $query->posts[0]->connected[0]->ID, $actor_id );
 	}
 
-	function test_posts_to_users() {
-		$ctype = p2p_register_connection_type( array(
-			'name' => 'posts_to_users',
-			'from' => 'post',
-			'to_object' => 'user',
-		) );
-
-		$post_id = $this->generate_post( 'post' );
-		$user_id = 1;
-
-		$ctype->connect( $post_id, $user_id );
-
-		$connected = get_users( array(
-			'connected_type' => $ctype->name,
-			'connected_items' => $post_id
-		) );
-
-		$this->assertEquals( array( $user_id ), wp_list_pluck( $connected, 'ID' ) );
-	}
-
 	function test_adjacent() {
 		$ctype = p2p_type( 'actor_to_movie' );
 
@@ -261,6 +241,26 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		}
 
 		$this->assertEquals( $movie_ids[1], $ctype->get_related( $movie_ids[0] )->posts[0]->ID );
+	}
+
+	function test_posts_to_users() {
+		$ctype = p2p_register_connection_type( array(
+			'name' => 'posts_to_users',
+			'from' => 'post',
+			'to_object' => 'user',
+		) );
+
+		$post_id = $this->generate_post( 'post' );
+		$user_id = 1;
+
+		$ctype->connect( $post_id, $user_id );
+
+		$connected = get_users( array(
+			'connected_type' => $ctype->name,
+			'connected_items' => $post_id
+		) );
+
+		$this->assertEquals( array( $user_id ), wp_list_pluck( $connected, 'ID' ) );
 	}
 }
 
