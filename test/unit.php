@@ -66,6 +66,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	function test_direction() {
 		$normal = p2p_type( 'actor_to_movie' );
 
+		$this->assertEquals( $normal, $normal->set_direction( 'to' )->set_direction( 'from' )->lose_direction() );
+
 		$this->assertEquals( 'from', $normal->find_direction( 'actor' )->get_direction() );
 		$this->assertEquals( 'to', $normal->find_direction( 'movie' )->get_direction() );
 		$this->assertFalse( $normal->find_direction( 'post' ) );
