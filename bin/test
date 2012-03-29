@@ -7,8 +7,4 @@ if [[ '' = $wp_tests_dir ]]; then
 	exit
 fi
 
-p2p_dir=$(pwd)
-
-cd $wp_tests_dir
-
-phpunit --no-globals-backup $p2p_dir/test/unit.php
+phpunit --bootstrap $wp_tests_dir/init.php ./test/unit.php
