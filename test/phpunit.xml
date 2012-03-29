@@ -1,0 +1,10 @@
+<phpunit backupGlobals="false">
+	<php>
+		<ini name="memory_limit" value="-1" />
+	</php>
+	<filter>
+		<whitelist>
+			<directory suffix=".php">../core</directory>
+		</whitelist>
+	</filter>
+</phpunit>

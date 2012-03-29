@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# runs the unit tests and generates a Code Coverage Analysis document: test/coverage/index.html
+
+wp_tests_dir=${1-$WP_TESTS_DIR}
+
+if [[ '' = $wp_tests_dir ]]; then
+	echo 'usage: ./bin/test /path/to/wp-tests/'
+	exit
+fi
+
+phpunit --bootstrap $wp_tests_dir/init.php --configuration ./test/phpunit.xml --coverage-html ./test/coverage ./test/unit.php
