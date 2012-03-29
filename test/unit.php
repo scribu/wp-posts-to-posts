@@ -244,8 +244,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 			$ctype->connect( $actor_id, $movie_id, array( $key => $i ) );
 		}
 
-		$this->assertEquals( $ctype->get_previous( $movie_ids[1], $actor_id )->ID, $movie_ids[0] );
-		$this->assertEquals( $ctype->get_next(     $movie_ids[1], $actor_id )->ID, $movie_ids[2] );
+		$this->assertEquals( $ctype->get_prev( $movie_ids[1], $actor_id )->ID, $movie_ids[0] );
+		$this->assertEquals( $ctype->get_next( $movie_ids[1], $actor_id )->ID, $movie_ids[2] );
 	}
 }
 

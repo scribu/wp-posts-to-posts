@@ -246,6 +246,11 @@ class P2P_Connection_Type extends Generic_Connection_Type {
 		) );
 	}
 
+	/** Alias for get_prev() */
+	public function get_previous( $from, $to ) {
+		return $this->get_prev( $from, $to );
+	}
+
 	/**
 	 * Get the previous post in an ordered connection.
 	 *
@@ -254,7 +259,7 @@ class P2P_Connection_Type extends Generic_Connection_Type {
 	 *
 	 * @return bool|object False on failure, post object on success
 	 */
-	public function get_previous( $from, $to ) {
+	public function get_prev( $from, $to ) {
 		return $this->get_adjacent( $from, $to, -1 );
 	}
 
