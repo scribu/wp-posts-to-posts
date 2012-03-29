@@ -72,13 +72,14 @@ class P2P_Query {
 				$directed = self::find_direction( $ctype, $item, $object_type );
 			}
 
-			if ( !$directed ) {
-				trigger_error( "Can't determine direction", E_USER_WARNING );
+			if ( !$directed )
 				continue;
-			}
 
 			$p2p_types[ $p2p_type ] = $directed->get_direction();
 		}
+
+		if ( empty( $p2p_types ) )
+			return false;
 
 		if ( 1 == count( $p2p_types ) )
 			$q = $directed->get_connected_args( $q );
