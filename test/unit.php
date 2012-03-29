@@ -39,7 +39,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 			p2p_register_connection_type( array(
 				'name' => 'actor_to_movie',
 				'from' => 'actor',
-				'to' => 'movie'
+				'to' => 'movie',
+				'sortable' => true
 			) );
 		}
 	}
@@ -229,6 +230,22 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		) );
 
 		$this->assertEquals( array( $user_id ), wp_list_pluck( $connected, 'ID' ) );
+	}
+
+	function test_adjacent() {
+		$ctype = p2p_type( 'actor_to_movie' );
+
+		$actor_id = $this->generate_post( 'actor' );
+		$movie_ids = $this->generate_posts( 'movie', 3 );
+
+		$key = $ctype->set_direction( 'from' )->get_orderby_key();
+
+		foreach ( $movie_ids as $i => $movie_id ) {
+			$ctype->connect( $actor_id, $movie_id, array( $key => $i ) );
+		}
+
+		$this->assertEquals( $ctype->get_previous( $movie_ids[1], $actor_id )->ID, $movie_ids[0] );
+		$this->assertEquals( $ctype->get_next(     $movie_ids[1], $actor_id )->ID, $movie_ids[2] );
 	}
 }
 
