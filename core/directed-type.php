@@ -48,10 +48,6 @@ class P2P_Directed_Connection_Type {
 		return $arg[$direction];
 	}
 
-	public function accepts_single_connection() {
-		return 'one' == $this->get_opposite( 'cardinality' );
-	}
-
 	/**
 	 * Get a list of posts that are connected to a given post.
 	 *
@@ -124,29 +120,9 @@ class P2P_Directed_Connection_Type {
 	 * @param int $post_id A post id.
 	 */
 	public function get_connectable( $item_id, $page, $search ) {
-		$to_exclude = array();
-
-		if ( $this->indeterminate && !$this->self_connections )
-			$to_exclude[] = $item_id;
-
-		if ( 'one' == $this->get_current( 'cardinality' ) ) {
-			_p2p_append( $to_exclude, p2p_get_connections( $this->name, array(
-				'direction' => $this->direction,
-				'fields' => 'object_id'
-			) ) );
-		}
-
-		if ( $this->prevent_duplicates ) {
-			_p2p_append( $to_exclude, p2p_get_connections( $this->name, array(
-				'direction' => $this->direction,
-				'from' => $item_id,
-				'fields' => 'object_id'
-			) ) );
-		}
-
 		$side = $this->get_opposite( 'side' );
 
-		$qv = $side->get_connectable_qv( $item_id, $page, $search, $to_exclude );
+		$qv = $side->get_connectable_qv( $item_id, $page, $search, $this->get_non_connectable( $item_id ) );
 
 		$qv = apply_filters( 'p2p_connectable_args', $qv, $this, $item_id );
 
@@ -169,18 +145,7 @@ class P2P_Directed_Connection_Type {
 		if ( !$this->get_opposite( 'side' )->item_exists( $to ) )
 			return false;
 
-		if ( $this->accepts_single_connection() )
-			$to_check = 'any';
-		elseif ( $this->prevent_duplicates )
-			$to_check = $to;
-		else
-			$to_check = false;
-
-		if ( $to_check && p2p_connection_exists( $this->name, array(
-			'direction' => $this->direction,
-			'from' => $from,
-			'to' => $to_check
-		) ) )
+		if ( in_array( $to, $this->get_non_connectable( $from ) ) )
 			return false;
 
 		return p2p_create_connection( $this->name, array(
@@ -189,6 +154,30 @@ class P2P_Directed_Connection_Type {
 			'to' => $to,
 			'meta' => array_merge( $meta, $this->data )
 		) );
+	}
+
+	private function get_non_connectable( $item_id ) {
+		$to_exclude = array();
+
+		if ( $this->indeterminate && !$this->self_connections )
+			$to_exclude[] = $item_id;
+
+		if ( 'one' == $this->get_current( 'cardinality' ) ) {
+			_p2p_append( $to_exclude, p2p_get_connections( $this->name, array(
+				'direction' => $this->direction,
+				'fields' => 'object_id'
+			) ) );
+		}
+
+		if ( $this->prevent_duplicates ) {
+			_p2p_append( $to_exclude, p2p_get_connections( $this->name, array(
+				'direction' => $this->direction,
+				'from' => $item_id,
+				'fields' => 'object_id'
+			) ) );
+		}
+
+		return $to_exclude;
 	}
 
 	/**
@@ -230,7 +219,7 @@ class P2P_Directed_Connection_Type {
 		if ( !$this->get_current( 'side' )->item_exists( $from ) )
 			return false;
 
-		if ( ! $this->accepts_single_connection() )
+		if ( 'one' != $this->get_current( 'cardinality' ) )
 			return false;
 
 		$existing = _p2p_first( $this->get_connections( $from ) );
