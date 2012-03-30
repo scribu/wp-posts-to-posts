@@ -146,6 +146,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertTrue( $ctype->connect( $actor_ids[0], $movie_ids[1] ) > 0 );
 
 		$this->assertFalse( $ctype->connect( $actor_ids[1], $movie_ids[0] ) );
+		$this->assertFalse( $ctype->connect( $movie_ids[0], $actor_ids[1] ) );
 	}
 
 	function test_wp_query() {
