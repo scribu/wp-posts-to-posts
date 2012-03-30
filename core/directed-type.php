@@ -129,33 +129,6 @@ class P2P_Directed_Connection_Type {
 		return $side->abstract_query( $side->do_query( $qv ) );
 	}
 
-	/**
-	 * Connect two items.
-	 *
-	 * @param int The first end of the connection.
-	 * @param int The second end of the connection.
-	 * @param array Additional information about the connection.
-	 *
-	 * @return int p2p_id
-	 */
-	public function connect( $from, $to, $meta = array() ) {
-		if ( !$this->get_current( 'side' )->item_exists( $from ) )
-			return false;
-
-		if ( !$this->get_opposite( 'side' )->item_exists( $to ) )
-			return false;
-
-		if ( in_array( $to, $this->get_non_connectable( $from ) ) )
-			return false;
-
-		return p2p_create_connection( $this->name, array(
-			'direction' => $this->direction,
-			'from' => $from,
-			'to' => $to,
-			'meta' => array_merge( $meta, $this->data )
-		) );
-	}
-
 	private function get_non_connectable( $item_id ) {
 		$to_exclude = array();
 
@@ -178,6 +151,42 @@ class P2P_Directed_Connection_Type {
 		}
 
 		return $to_exclude;
+	}
+
+	/**
+	 * Connect two items.
+	 *
+	 * @param int The first end of the connection.
+	 * @param int The second end of the connection.
+	 * @param array Additional information about the connection.
+	 *
+	 * @return int p2p_id
+	 */
+	public function connect( $from, $to, $meta = array() ) {
+		if ( !$this->get_current( 'side' )->item_exists( $from ) )
+			return false;
+
+		if ( !$this->get_opposite( 'side' )->item_exists( $to ) )
+			return false;
+
+		if ( !$this->self_connections && $from == $to )
+			return false;
+
+		if ( $this->prevent_duplicates && $this->get_p2p_id( $from, $to ) )
+			return false;
+
+		if ( 'one' == $this->get_opposite( 'cardinality' ) && p2p_connection_exists( $this->name, array(
+			'direction' => $this->direction,
+			'from' => $from
+		) ) )
+			return false;
+
+		return p2p_create_connection( $this->name, array(
+			'direction' => $this->direction,
+			'from' => $from,
+			'to' => $to,
+			'meta' => array_merge( $meta, $this->data )
+		) );
 	}
 
 	/**
