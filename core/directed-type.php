@@ -221,34 +221,6 @@ class P2P_Directed_Connection_Type {
 		) );
 	}
 
-	/**
-	 * For one-to-many connections: replaces existing item with a new one.
-	 *
-	 * @param int The first end of the connection.
-	 * @param int The second end of the connection.
-	 * @param array Additional information about the connection.
-	 *
-	 * @return int p2p_id
-	 */
-	public function replace( $from, $to, $meta = array() ) {
-		if ( !$this->get_current( 'side' )->item_exists( $from ) )
-			return false;
-
-		if ( 'one' != $this->get_current( 'cardinality' ) )
-			return false;
-
-		$existing = _p2p_first( $this->get_connections( $from ) );
-
-		if ( $existing ) {
-			if ( $existing == $to )
-				return;
-
-			$this->disconnect_all( $from );
-		}
-
-		return $this->connect( $from, $to, $meta );
-	}
-
 	public function get_p2p_id( $from, $to ) {
 		return _p2p_first( p2p_get_connections( $this->name, array(
 			'direction' => $this->direction,
