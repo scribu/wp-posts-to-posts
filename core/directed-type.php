@@ -181,6 +181,12 @@ class P2P_Directed_Connection_Type {
 		) ) )
 			return false;
 
+		if ( 'one' == $this->get_current( 'cardinality' ) && p2p_connection_exists( $this->name, array(
+			'direction' => $this->direction,
+			'to' => $to
+		) ) )
+			return false;
+
 		return p2p_create_connection( $this->name, array(
 			'direction' => $this->direction,
 			'from' => $from,
