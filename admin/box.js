@@ -33,7 +33,7 @@
         type == null && (type = 'POST');
         data.action = 'p2p_box';
         data.nonce = P2PAdmin.nonce;
-        data.p2p_type = $metabox.find('input[name^="p2p_types"]').val();
+        data.p2p_type = $metabox.data('p2p_type');
         data.direction = $metabox.data('direction');
         data.from = jQuery('#post_ID').val();
         data.s = searchTab.params.s;

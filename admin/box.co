@@ -31,7 +31,7 @@ jQuery ->
 			data <<<
 				action: 'p2p_box'
 				nonce: P2PAdmin.nonce
-				p2p_type: $metabox.find('input[name^="p2p_types"]').val()
+				p2p_type: $metabox.data('p2p_type')
 				direction: $metabox.data('direction')
 				from: jQuery('#post_ID').val()
 				s: searchTab.params.s
