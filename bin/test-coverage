@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# runs the unit tests and generates a Code Coverage Analysis document: test/coverage/index.html
+# runs the unit tests and generates a Code Coverage Analysis document: /tmp/p2p-coverage/index.html
 
 wp_tests_dir=${1-$WP_TESTS_DIR}
 
@@ -9,4 +9,6 @@ if [[ '' = $wp_tests_dir ]]; then
 	exit
 fi
 
-phpunit --bootstrap $wp_tests_dir/init.php --configuration ./test/phpunit.xml --coverage-html ./test/coverage ./test/unit.php
+rm -rf /tmp/p2p-coverage
+
+phpunit --bootstrap $wp_tests_dir/init.php --configuration ./test/phpunit.xml --coverage-html /tmp/p2p-coverage ./test/unit.php
