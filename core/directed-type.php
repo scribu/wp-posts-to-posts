@@ -105,15 +105,6 @@ class P2P_Directed_Connection_Type {
 		return false;
 	}
 
-	/** @internal */
-	public function get_connections( $post_id ) {
-		$side = $this->get_opposite( 'side' );
-
-		$query = $this->get_connected( $post_id, $side->get_connections_qv() );
-
-		return scb_list_fold( $side->abstract_query( $query )->items, 'p2p_id', 'ID' );
-	}
-
 	/**
 	 * Get a list of posts that could be connected to a given post.
 	 *

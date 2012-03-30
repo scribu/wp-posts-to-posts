@@ -65,7 +65,7 @@ class P2P_Box {
 	}
 
 	function render( $post ) {
-		$this->connected_items = $this->ctype->get_connections( $post->ID );
+		$this->connected_items = $this->get_folded_connections( $post->ID );
 
 		$data = array(
 			'attributes' => $this->render_data_attributes(),
@@ -74,6 +74,14 @@ class P2P_Box {
 		);
 
 		echo P2P_Mustache::render( 'box', $data );
+	}
+
+	protected function get_folded_connections( $post_id ) {
+		$side = $this->ctype->get_opposite( 'side' );
+
+		$query = $this->ctype->get_connected( $post_id, $side->get_connections_qv() );
+
+		return scb_list_fold( $side->abstract_query( $query )->items, 'p2p_id', 'ID' );
 	}
 
 	protected function render_data_attributes() {
