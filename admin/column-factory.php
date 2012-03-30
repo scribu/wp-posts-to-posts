@@ -34,7 +34,7 @@ class P2P_Column_Factory {
 		return true;
 	}
 
-	function add_columns() {
+	static function add_columns() {
 		$screen = get_current_screen();
 
 		if ( 'edit' != $screen->base )

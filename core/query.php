@@ -2,7 +2,7 @@
 
 class P2P_Query {
 
-	function expand_shortcut_qv( &$q ) {
+	static function expand_shortcut_qv( &$q ) {
 		$qv_map = array(
 			'connected' => 'any',
 			'connected_to' => 'to',
@@ -17,7 +17,7 @@ class P2P_Query {
 		}
 	}
 
-	function get_qv( $q ) {
+	static function get_qv( $q ) {
 		if ( !isset( $q['p2p_type'] ) ) {
 			if ( isset( $q['connected_items'] ) ) {
 				trigger_error( "P2P queries without 'connected_type' are no longer supported." );
@@ -47,7 +47,7 @@ class P2P_Query {
 	 * false means trigger 404
 	 * true means proceed
 	 */
-	function expand_connected_type( &$q, $item, $object_type ) {
+	static function expand_connected_type( &$q, $item, $object_type ) {
 		if ( !isset( $q['connected_type'] ) )
 			return;
 
@@ -89,7 +89,7 @@ class P2P_Query {
 		return true;
 	}
 
-	function alter_clauses( $clauses, $q, $main_id_column ) {
+	static function alter_clauses( $clauses, $q, $main_id_column ) {
 		global $wpdb;
 
 		$clauses['fields'] .= ", $wpdb->p2p.*";

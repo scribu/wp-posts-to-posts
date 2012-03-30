@@ -7,14 +7,14 @@ class P2P_Storage {
 
 	static $version = 4;
 
-	function init() {
+	static function init() {
 		scb_register_table( 'p2p' );
 		scb_register_table( 'p2pmeta' );
 
 		add_action( 'deleted_post', array( __CLASS__, 'deleted_post' ) );
 	}
 
-	function install() {
+	static function install() {
 		scb_install_table( 'p2p', "
 			p2p_id bigint(20) unsigned NOT NULL auto_increment,
 			p2p_from bigint(20) unsigned NOT NULL,
@@ -37,7 +37,7 @@ class P2P_Storage {
 		" );
 	}
 
-	function upgrade() {
+	static function upgrade() {
 		global $wpdb;
 
 		$n = 0;
@@ -67,14 +67,14 @@ class P2P_Storage {
 		return $n;
 	}
 
-	function uninstall() {
+	static function uninstall() {
 		scb_uninstall_table( 'p2p' );
 		scb_uninstall_table( 'p2pmeta' );
 
 		delete_option( 'p2p_storage' );
 	}
 
-	function deleted_post( $post_id ) {
+	static function deleted_post( $post_id ) {
 		foreach ( P2P_Connection_Type_Factory::get_all_instances() as $p2p_type => $ctype ) {
 			foreach ( array( 'from', 'to' ) as $direction ) {
 				if ( 'post' == $ctype->object[ $direction ] ) {

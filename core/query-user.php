@@ -2,11 +2,11 @@
 
 class P2P_User_Query {
 
-	function init() {
+	static function init() {
 		add_action( 'pre_user_query', array( __CLASS__, 'pre_user_query' ) );
 	}
 
-	function pre_user_query( $query ) {
+	static function pre_user_query( $query ) {
 		global $wpdb;
 
 		$q =& $query->query_vars;

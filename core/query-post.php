@@ -5,13 +5,13 @@
  */
 class P2P_WP_Query {
 
-	function init() {
+	static function init() {
 		add_action( 'parse_query', array( __CLASS__, 'parse_query' ) );
 		add_filter( 'posts_clauses', array( __CLASS__, 'posts_clauses' ), 10, 2 );
 		add_filter( 'the_posts', array( __CLASS__, 'cache_p2p_meta' ), 11, 2 );
 	}
 
-	function parse_query( $wp_query ) {
+	static function parse_query( $wp_query ) {
 		$q =& $wp_query->query_vars;
 
 		P2P_Query::expand_shortcut_qv( $q );
@@ -32,7 +32,7 @@ class P2P_WP_Query {
 		}
 	}
 
-	function posts_clauses( $clauses, $wp_query ) {
+	static function posts_clauses( $clauses, $wp_query ) {
 		global $wpdb;
 
 		$qv = P2P_Query::get_qv( $wp_query->query_vars );
@@ -48,7 +48,7 @@ class P2P_WP_Query {
 	/**
 	 * Pre-populates the p2p meta cache to decrease the number of queries.
 	 */
-	function cache_p2p_meta( $the_posts, $wp_query ) {
+	static function cache_p2p_meta( $the_posts, $wp_query ) {
 		if ( empty( $the_posts ) )
 			return $the_posts;
 
