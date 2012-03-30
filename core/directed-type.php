@@ -205,7 +205,7 @@ class P2P_Directed_Connection_Type {
 	}
 
 	/**
-	 * Transforms $this->get_connections( ... ) to p2p_get_connections( $this->name, ... ) etc.
+	 * Transforms $this->get_connections( ... ) into p2p_get_connections( $this->name, ... ) etc.
 	 */
 	public function __call( $method, $args ) {
 		$args[0]['direction'] = $this->direction;
