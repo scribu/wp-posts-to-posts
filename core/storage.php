@@ -11,7 +11,8 @@ class P2P_Storage {
 		scb_register_table( 'p2p' );
 		scb_register_table( 'p2pmeta' );
 
-		add_action( 'deleted_post', array( __CLASS__, 'deleted_post' ) );
+		add_action( 'deleted_post', array( __CLASS__, 'deleted_object' ) );
+		add_action( 'deleted_user', array( __CLASS__, 'deleted_object' ) );
 	}
 
 	static function install() {
@@ -74,12 +75,14 @@ class P2P_Storage {
 		delete_option( 'p2p_storage' );
 	}
 
-	static function deleted_post( $post_id ) {
+	static function deleted_object( $object_id ) {
+		$object_type = str_replace( 'deleted_', '', current_filter() );
+
 		foreach ( P2P_Connection_Type_Factory::get_all_instances() as $p2p_type => $ctype ) {
 			foreach ( array( 'from', 'to' ) as $direction ) {
-				if ( 'post' == $ctype->object[ $direction ] ) {
+				if ( $object_type == $ctype->object[ $direction ] ) {
 					p2p_delete_connections( $p2p_type, array(
-						$direction => $post_id,
+						$direction => $object_id,
 					) );
 				}
 			}

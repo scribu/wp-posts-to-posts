@@ -27,6 +27,17 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		return $posts[0];
 	}
 
+	private function generate_user() {
+		global $wpdb;
+
+		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->users" );
+
+		return wp_insert_user( array(
+			'user_login' => 'user_' . $total,
+			'user_pass' => ''
+		) );
+	}
+
 	function setUp() {
 		parent::setUp();
 
@@ -43,19 +54,39 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 				'sortable' => true
 			) );
 		}
+
+		if ( !p2p_type( 'posts_to_users' ) ) {
+			p2p_register_connection_type( array(
+				'name' => 'posts_to_users',
+				'from' => 'post',
+				'to_object' => 'user',
+			) );
+		}
 	}
 
-	function test_storage() {
-		$post_id = $this->generate_post( 'actor' );
-		$actor_id = $this->generate_post( 'movie' );
+	function test_storage_post() {
+		$actor_id = $this->generate_post( 'actor' );
+		$movie_id = $this->generate_post( 'movie' );
 
-		p2p_type( 'actor_to_movie' )->connect( $post_id, $actor_id );
-		p2p_type( 'actor_to_movie' )->connect( $actor_id, $post_id, array( 'foo' => 'bar' ) );
+		p2p_type( 'actor_to_movie' )->connect( $actor_id, $movie_id );
 
-		wp_delete_post( $post_id, true );
+		wp_delete_post( $actor_id, true );
 
-		$this->assertEmpty( p2p_get_connections( 'actor_to_movie', array( 'from' => $post_id, 'fields' => 'p2p_id' ) ) );
-		$this->assertEmpty( p2p_get_connections( 'actor_to_movie', array( 'to' => $post_id, 'fields' => 'p2p_id' ) ) );
+		$this->assertFalse( p2p_connection_exists( 'actor_to_movie', array( 'from' => $actor_id ) ) );
+	}
+
+	function test_storage_user() {
+		$post_id = $this->generate_post( 'post' );
+		$user_id = $this->generate_user();
+
+		p2p_create_connection( 'posts_to_users', array(
+			'from' => $post_id,
+			'to' => $user_id
+		) );
+
+		wp_delete_user( $user_id, true );
+
+		$this->assertFalse( p2p_connection_exists( 'posts_to_users', array( 'from' => $post_id ) ) );
 	}
 
 	function test_annonymous_ctypes() {
@@ -260,19 +291,13 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_posts_to_users() {
-		$ctype = p2p_register_connection_type( array(
-			'name' => 'posts_to_users',
-			'from' => 'post',
-			'to_object' => 'user',
-		) );
-
 		$post_id = $this->generate_post( 'post' );
 		$user_id = 1;
 
-		$ctype->connect( $post_id, $user_id );
+		p2p_type( 'posts_to_users' )->connect( $post_id, $user_id );
 
 		$connected = get_users( array(
-			'connected_type' => $ctype->name,
+			'connected_type' => 'posts_to_users',
 			'connected_items' => $post_id
 		) );
 
