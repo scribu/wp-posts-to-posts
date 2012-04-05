@@ -3,7 +3,7 @@
 class P2P_User_Query {
 
 	static function init() {
-		add_action( 'pre_user_query', array( __CLASS__, 'pre_user_query' ) );
+		add_action( 'pre_user_query', array( __CLASS__, 'pre_user_query' ), 20 );
 	}
 
 	static function pre_user_query( $query ) {

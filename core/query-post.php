@@ -6,9 +6,9 @@
 class P2P_WP_Query {
 
 	static function init() {
-		add_action( 'parse_query', array( __CLASS__, 'parse_query' ) );
+		add_action( 'parse_query', array( __CLASS__, 'parse_query' ), 20 );
 		add_filter( 'posts_clauses', array( __CLASS__, 'posts_clauses' ), 10, 2 );
-		add_filter( 'the_posts', array( __CLASS__, 'cache_p2p_meta' ), 11, 2 );
+		add_filter( 'the_posts', array( __CLASS__, 'cache_p2p_meta' ), 20, 2 );
 	}
 
 	static function parse_query( $wp_query ) {
