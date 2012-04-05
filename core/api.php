@@ -164,7 +164,12 @@ function _p2p_get_connections( $p2p_type, $args = array() ) {
 		if ( 'any' == $$key )
 			continue;
 
-		$where .= $wpdb->prepare( " AND p2p_$key = %d", $$key );
+		if ( empty( $$key ) )
+			return array();
+
+		$value = scbUtil::array_to_sql( (array) $$key );
+
+		$where .= " AND p2p_$key IN ($value)";
 	}
 
 	switch ( $fields ) {
