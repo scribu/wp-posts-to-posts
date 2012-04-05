@@ -149,26 +149,26 @@ class P2P_Directed_Connection_Type {
 	 * @param int The second end of the connection.
 	 * @param array Additional information about the connection.
 	 *
-	 * @return int p2p_id
+	 * @return int|object p2p_id or WP_Error on failure
 	 */
 	public function connect( $from, $to, $meta = array() ) {
 		if ( !$this->get_current( 'side' )->item_exists( $from ) )
-			return false;
+			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
 
 		if ( !$this->get_opposite( 'side' )->item_exists( $to ) )
-			return false;
+			return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
 
 		if ( !$this->self_connections && $from == $to )
-			return false;
+			return new WP_Error( 'self_connection', 'Connection between an element and itself is not allowed.' );
 
 		if ( $this->prevent_duplicates && $this->get_p2p_id( $from, $to ) )
-			return false;
+			return new WP_Error( 'duplicate_connection', 'Duplicate connections are not allowed.' );
 
 		if ( 'one' == $this->get_opposite( 'cardinality' ) && $this->connection_exists( compact( 'from' ) ) )
-			return false;
+			return new WP_Error( 'cardinality_opposite', 'Cardinality problem.' );
 
 		if ( 'one' == $this->get_current( 'cardinality' ) && $this->connection_exists( compact( 'to' ) ) )
-			return false;
+			return new WP_Error( 'cardinality_current', 'Cardinality problem.' );
 
 		return $this->create_connection( array(
 			'from' => $from,
