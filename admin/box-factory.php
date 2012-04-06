@@ -2,9 +2,6 @@
 
 define( 'P2P_BOX_NONCE', 'p2p-box' );
 
-/**
- * @package Administration
- */
 class P2P_Box_Factory {
 
 	private static $box_args = array();

@@ -1,16 +1,10 @@
 <?php
 
-/**
- * @package Administration
- */
 interface P2P_Field {
 	function get_title();
 	function render( $p2p_id, $post_id );
 }
 
-/**
- * @package Administration
- */
 class P2P_Box {
 	private $ctype;
 

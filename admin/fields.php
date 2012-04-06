@@ -1,6 +1,5 @@
 <?php
 
-/** @package Administration */
 class P2P_Field_Create implements P2P_Field {
 
 	function get_title() {
@@ -19,7 +18,6 @@ class P2P_Field_Create implements P2P_Field {
 }
 
 
-/** @package Administration */
 class P2P_Field_Delete implements P2P_Field {
 
 	function get_title() {
@@ -41,7 +39,6 @@ class P2P_Field_Delete implements P2P_Field {
 }
 
 
-/** @package Administration */
 class P2P_Field_Order implements P2P_Field {
 
 	protected $sort_key;
@@ -63,7 +60,6 @@ class P2P_Field_Order implements P2P_Field {
 	}
 }
 
-/** @package Administration */
 class P2P_Field_Generic implements P2P_Field {
 
 	protected $key;
@@ -92,7 +88,6 @@ class P2P_Field_Generic implements P2P_Field {
 }
 
 
-/** @package Administration */
 class P2P_Field_Title_Post implements P2P_Field {
 
 	protected $title;
@@ -126,7 +121,6 @@ class P2P_Field_Title_Post implements P2P_Field {
 }
 
 
-/** @package Administration */
 class P2P_Field_Title_Attachment extends P2P_Field_Title_Post {
 
 	function render( $p2p_id, $attachment_id ) {
@@ -143,7 +137,6 @@ class P2P_Field_Title_Attachment extends P2P_Field_Title_Post {
 }
 
 
-/** @package Administration */
 class P2P_Field_Title_User extends P2P_Field_Title_Post {
 
 	function render( $p2p_id, $user_id ) {
