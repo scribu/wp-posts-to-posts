@@ -83,6 +83,9 @@ class P2P_Field_Generic implements P2P_Field {
 		if ( isset( $this->data['values'] ) )
 			$args['value'] = $this->data['values'];
 
+		if ( 'select' == $args['type'] )
+			$args['text'] = '';
+
 		return scbForms::input_from_meta( $args, $p2p_id, 'p2p' );
 	}
 }
