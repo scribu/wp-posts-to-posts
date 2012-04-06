@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Posts 2 Posts\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
-"POT-Creation-Date: 2012-03-07 20:34:30+00:00\n"
-"PO-Revision-Date: 2012-03-07 22:35+0200\n"
+"POT-Creation-Date: 2012-04-06 20:57:17+00:00\n"
+"PO-Revision-Date: 2012-04-06 23:59+0200\n"
 "Last-Translator: scribu <mail@scribu.net>\n"
 "Language-Team: ROMANIAN <LL@li.org>\n"
 "Language: \n"
@@ -16,81 +16,113 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin/box-factory.php:78
+#: admin/box-factory.php:75
 msgid " (from)"
 msgstr "(de la)"
 
-#: admin/box-factory.php:79
+#: admin/box-factory.php:76
 msgid " (to)"
 msgstr "(la)"
 
-#: admin/box.php:40
+#: admin/box.php:34
 msgid "Are you sure you want to delete all connections?"
 msgstr "Sigur vreți să ștergeți toate conexiunile?"
 
-#: admin/box.php:118
+#: admin/box.php:120
 msgid "Create connections:"
 msgstr "Creează conexiuni:"
 
-#: admin/box.php:127
+#: admin/box.php:129
 msgid "View All"
 msgstr "Vezi toate"
 
-#: admin/box.php:132
+#: admin/box.php:134
 msgid "Search"
 msgstr "Căutare"
 
-#: admin/box.php:203
+#: admin/box.php:205
 msgid "previous"
 msgstr "anterioare"
 
-#: admin/box.php:204
+#: admin/box.php:206
 msgid "next"
 msgstr "următoare"
 
-#: admin/box.php:205
+#: admin/box.php:207
 msgid "of"
 msgstr "din"
 
-#: admin/box.php:246
+#: admin/box.php:248
 msgid "Can't create connection."
 msgstr "Conexiunea nu poate fi creată."
 
-#: admin/fields.php:14
+#: admin/fields.php:13
 msgid "Create connection"
 msgstr "Crează conexiune"
 
-#: admin/fields.php:27
+#: admin/fields.php:25
 msgid "Delete all connections"
 msgstr "Șterge toate conexiunile"
 
-#: admin/fields.php:36
+#: admin/fields.php:34
 msgid "Delete connection"
 msgstr "Șterge conexiune"
 
-#: core/side.php:140
-msgid "Users"
-msgstr "Utilizatori"
+#: admin/tools.php:7
+msgid "Connection Types"
+msgstr "Tipuri de conexiuni:"
 
-#: core/side.php:145
-msgid "User"
-msgstr "Utilizator"
-
-#: core/side.php:146
-msgid "Search Users"
-msgstr "Caută utilizatori"
-
-#: core/side.php:147
-msgid "No users found."
-msgstr "Niciun utilizator găsit."
-
-#: core/storage.php:35
+#: admin/tools.php:31
 msgid "Upgraded %d connections."
 msgstr "Am actualizat %d conexiuni."
 
-#: core/storage.php:38
+#: admin/tools.php:34
 msgid "The Posts 2 Posts connections need to be upgraded. <a href=\"%s\">Proceed.</a>"
 msgstr "Conexiunile Posts 2 Posts trebuie actualizate. <a href=\"%s\">Pornește.</a>"
+
+#: admin/tools.php:54
+msgid "<em>%s</em> is not a registered connection type."
+msgstr "<em>%s</em> nu e un tip de conexiune înregistrat."
+
+#: admin/tools.php:63
+msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
+msgstr "Am convertit %1$s conexiuni din <em>%2$s</em> în <em>%3$s</em>."
+
+#: admin/tools.php:77
+msgid "Name"
+msgstr "Nume"
+
+#: admin/tools.php:78
+msgid "Information"
+msgstr "Informații"
+
+#: admin/tools.php:79
+msgid "Connections"
+msgstr "Conexiuni"
+
+#: admin/tools.php:94
+msgid "Convert to registered connection type:"
+msgstr "Convertește într-un tip de conexiune înregistrat:"
+
+#: admin/tools.php:129
+msgid "Go"
+msgstr "Go"
+
+#: core/side.php:149
+msgid "Users"
+msgstr "Utilizatori"
+
+#: core/side.php:158
+msgid "User"
+msgstr "Utilizator"
+
+#: core/side.php:159
+msgid "Search Users"
+msgstr "Caută utilizatori"
+
+#: core/side.php:160
+msgid "No users found."
+msgstr "Niciun utilizator găsit."
 
 #: core/type.php:77
 msgid "Connected %s"
