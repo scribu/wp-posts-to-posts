@@ -305,12 +305,9 @@ class P2P_Connection_Type extends Generic_Connection_Type {
 					'value' => $order + $which
 				)
 			)
-		) )->posts;
+		), 'abstract' );
 
-		if ( empty( $adjacent ) )
-			return false;
-
-		return $adjacent[0];
+		return _p2p_first( $adjacent->items );
 	}
 }
 
