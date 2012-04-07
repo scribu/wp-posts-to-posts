@@ -1,6 +1,7 @@
 <?php
 
 class P2P_Connection_Type_Factory {
+
 	private static $instances = array();
 
 	public static function register( $args ) {
@@ -67,6 +68,9 @@ class P2P_Connection_Type_Factory {
 				'data'
 			) ) ) ) );
 		}
+
+		if ( $args['from_object'] != $args['to_object'] )
+			$args['self_connections'] = true;
 
 		if ( $args['from_object'] == $args['to_object'] && 'post' == $args['from_object'] )
 			$class = 'P2P_Connection_Type';
