@@ -79,17 +79,20 @@ class P2P_Side_Post extends P2P_Side {
 		) );
 	}
 
-	function get_connectable_qv( $item_id, $page, $search, $to_exclude ) {
-		$qv = array_merge( $this->get_base_qv(), self::$admin_box_qv, array(
-			'posts_per_page' => ADMIN_BOX_PER_PAGE,
-			'paged' => $page,
-		) );
+	function get_connectable_qv( $qv ) {
+		return array_merge( $this->get_base_qv(), self::$admin_box_qv, $this->translate_qv( $qv ) );
+	}
 
-		if ( $search ) {
-			$qv['s'] = $search;
-		}
+	function translate_qv( $qv ) {
+		$map = array(
+			'exclude' => 'post__not_in',
+			'search' => 's',
+			'page' => 'paged'
+		);
 
-		$qv['post__not_in'] = $to_exclude;
+		foreach ( $map as $old => $new )
+			if ( isset( $qv["p2p:$old"] ) )
+				$qv[$new] = _p2p_pluck( $qv, "p2p:$old" );
 
 		return $qv;
 	}
@@ -172,7 +175,7 @@ class P2P_Side_User extends P2P_Side {
 	function abstract_query( $query ) {
 		return (object) array(
 			'items' => $query->get_results(),
-			'current_page' => isset( $query->query_vars['_p2p_page'] ) ? $query->query_vars['_p2p_page'] : 1,
+			'current_page' => isset( $query->query_vars['p2p:page'] ) ? $query->query_vars['p2p:page'] : 1,
 			'total_pages' => ceil( $query->get_total() / ADMIN_BOX_PER_PAGE )
 		);
 	}
@@ -181,18 +184,21 @@ class P2P_Side_User extends P2P_Side {
 		return array();
 	}
 
-	function get_connectable_qv( $item_id, $page, $search, $to_exclude ) {
-		$qv = array_merge( $this->get_base_qv(), array(
-			'number' => ADMIN_BOX_PER_PAGE,
-			'offset' => ADMIN_BOX_PER_PAGE * ( $page - 1 ),
-			'_p2p_page' => $page
-		) );
+	function get_connectable_qv( $qv ) {
+		return array_merge( $this->get_base_qv(), $this->translate_qv( $qv ) );
+	}
 
-		if ( $search ) {
-			$qv['search'] = '*' . $search . '*';
+	function translate_qv( $qv ) {
+		if ( isset( $qv['p2p:exclude'] ) )
+			$qv['exclude'] = _p2p_pluck( $qv, 'p2p:exclude' );
+
+		if ( isset( $qv['p2p:search'] ) && $qv['p2p:search'] )
+			$qv['search'] = '*' . _p2p_pluck( $qv, 'p2p:search' ) . '*';
+
+		if ( isset( $qv['p2p:page'] ) ) {
+			$qv['number'] = ADMIN_BOX_PER_PAGE;
+			$qv['offset'] = ADMIN_BOX_PER_PAGE * ( $qv['p2p:page'] - 1 );
 		}
-
-		$qv['exclude'] = $to_exclude;
 
 		return $qv;
 	}
