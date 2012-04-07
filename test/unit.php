@@ -302,17 +302,18 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_posts_to_users() {
-		$post_id = $this->generate_post( 'post' );
+		$post_ids = $this->generate_posts( 'post', 2 );
 		$user_id = 1;
 
-		p2p_type( 'posts_to_users' )->connect( $post_id, $user_id );
+		p2p_type( 'posts_to_users' )->connect( $post_ids[0], $user_id );
 
 		$connected = get_users( array(
+			'fields' => 'ids',
 			'connected_type' => 'posts_to_users',
-			'connected_items' => $post_id
+			'connected_items' => $post_ids[0]
 		) );
 
-		$this->assertEquals( array( $user_id ), wp_list_pluck( $connected, 'ID' ) );
+		$this->assertEquals( array( $user_id ), $connected );
 	}
 }
 
