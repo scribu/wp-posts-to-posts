@@ -303,9 +303,12 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 	function test_posts_to_users() {
 		$post_ids = $this->generate_posts( 'post', 2 );
-		$user_id = 1;
+		$user_id = $this->generate_user();
 
-		p2p_type( 'posts_to_users' )->connect( $post_ids[0], $user_id );
+		$ctype = p2p_type( 'posts_to_users' );
+
+		$ctype->connect( $post_ids[0], $user_id );
+		$ctype->connect( $post_ids[1], $user_id );
 
 		$connected = get_users( array(
 			'fields' => 'ids',
@@ -314,6 +317,9 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		) );
 
 		$this->assertEquals( array( $user_id ), $connected );
+
+		$related = $ctype->get_related( $post_ids[0] );
+		$this->assertEquals( array( $post_ids[1] ), wp_list_pluck( $related->posts, 'ID' ) );
 	}
 }
 

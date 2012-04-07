@@ -194,6 +194,34 @@ class Generic_Connection_Type {
 
 		return _p2p_first( $adjacent->items );
 	}
+
+	/**
+	 * Get a list of posts connected to other posts connected to a post.
+	 *
+	 * @param int|array $post_id A post id or array of post ids
+	 * @param array $extra_qv Additional query variables to use.
+	 *
+	 * @return bool|object False on failure; A WP_Query instance on success.
+	 */
+	public function get_related( $post_id, $extra_qv = array() ) {
+		$post_id = (array) $post_id;
+
+		$extra_qv['fields'] = 'ids';
+
+		$connected = $this->get_connected( $post_id, $extra_qv, 'abstract' );
+		if ( !$connected )
+			return false;
+
+		if ( empty( $connected->items ) )
+			return new WP_Query;
+
+		return new WP_Query( array(
+			'connected_type' => $this->name,
+			'connected_items' => $connected->items,
+			'post__not_in' => $post_id,
+		) );
+	}
+
 	/**
 	 * Optimized inner query, after the outer query was executed.
 	 *
@@ -282,31 +310,6 @@ class P2P_Connection_Type extends Generic_Connection_Type {
 	public function __get( $key ) {
 		if ( 'from' == $key || 'to' == $key )
 			return $this->side[ $key ]->post_type;
-	}
-
-	/**
-	 * Get a list of posts connected to other posts connected to a post.
-	 *
-	 * @param int|array $post_id A post id or array of post ids
-	 * @param array $extra_qv Additional query variables to use.
-	 *
-	 * @return bool|object False on failure; A WP_Query instance on success.
-	 */
-	public function get_related( $post_id, $extra_qv = array() ) {
-		$post_id = (array) $post_id;
-
-		$extra_qv['fields'] = 'ids';
-
-		$connected = $this->get_connected( $post_id, $extra_qv, 'abstract' );
-		if ( !$connected )
-			return false;
-
-		if ( empty( $connected->items ) )
-			return new WP_Query;
-
-		return $this->get_connected( $connected->items, array(
-			'post__not_in' => $post_id,
-		) );
 	}
 }
 
