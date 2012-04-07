@@ -55,11 +55,19 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 			) );
 		}
 
+		if ( !p2p_type( 'movies_to_movies' ) ) {
+			p2p_register_connection_type( array(
+				'name' => 'movies_to_movies',
+				'from' => 'movie',
+				'to' => 'movie',
+			) );
+		}
+
 		if ( !p2p_type( 'posts_to_users' ) ) {
 			p2p_register_connection_type( array(
 				'name' => 'posts_to_users',
 				'from' => 'post',
-				'to_object' => 'user',
+				'to' => 'user',
 			) );
 		}
 	}
@@ -99,17 +107,17 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$this->assertEquals( $normal, $normal->set_direction( 'to' )->set_direction( 'from' )->lose_direction() );
 
-		$this->assertEquals( 'from', $normal->find_direction( 'actor' )->get_direction() );
-		$this->assertEquals( 'to', $normal->find_direction( 'movie' )->get_direction() );
+		$this->assertEquals( 'from', $normal->find_direction( 'actor', false ) );
+		$this->assertEquals( 'to', $normal->find_direction( 'movie', false ) );
 		$this->assertFalse( $normal->find_direction( 'post' ) );
 
 		// 'from' array
 		$ctype = @p2p_register_connection_type( array( 'actor', 'movie' ), 'studio' );
 		$this->assertFalse( $ctype->indeterminate );
 
-		$this->assertEquals( 'from', $ctype->find_direction( 'actor' )->get_direction() );
-		$this->assertEquals( 'from', $ctype->find_direction( 'movie' )->get_direction() );
-		$this->assertEquals( 'to', $ctype->find_direction( 'studio' )->get_direction() );
+		$this->assertEquals( 'from', $ctype->find_direction( 'actor', false ) );
+		$this->assertEquals( 'from', $ctype->find_direction( 'movie', false ) );
+		$this->assertEquals( 'to', $ctype->find_direction( 'studio', false ) );
 
 		$this->assertFalse( $ctype->find_direction( 'post' ) );
 
@@ -117,18 +125,18 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$ctype = @p2p_register_connection_type( 'actor', array( 'movie', 'studio' ) );
 		$this->assertFalse( $ctype->indeterminate );
 
-		$this->assertEquals( 'from', $ctype->find_direction( 'actor' )->get_direction() );
-		$this->assertEquals( 'to', $ctype->find_direction( 'movie' )->get_direction() );
-		$this->assertEquals( 'to', $ctype->find_direction( 'studio' )->get_direction() );
+		$this->assertEquals( 'from', $ctype->find_direction( 'actor', false ) );
+		$this->assertEquals( 'to', $ctype->find_direction( 'movie', false ) );
+		$this->assertEquals( 'to', $ctype->find_direction( 'studio', false ) );
 
 		$this->assertFalse( $ctype->find_direction( 'post' ) );
 
 		// indeterminate
-		$indeterminate = @p2p_register_connection_type( 'actor', 'actor' );
+		$indeterminate = p2p_type( 'movies_to_movies' );
 		$this->assertTrue( $indeterminate->indeterminate );
 
 		$this->assertFalse( $indeterminate->find_direction( 'post' ) );
-		$this->assertEquals( 'from', $indeterminate->find_direction( 'actor' )->get_direction() );
+		$this->assertEquals( 'from', $indeterminate->find_direction( 'movie', false ) );
 
 		// reciprocal
 		$reciprocal = @p2p_register_connection_type( array(
@@ -136,9 +144,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 			'to' => 'movie',
 			'reciprocal' => true
 		) );
-		$this->assertInstanceOf( 'P2P_Connection_Type', $reciprocal );
 
-		$this->assertEquals( 'any', $reciprocal->find_direction( 'movie' )->get_direction() );
+		$this->assertEquals( 'any', $reciprocal->find_direction( 'movie', false ) );
 	}
 
 	function test_connection_create() {
@@ -148,7 +155,10 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$movie_id = $this->generate_post( 'movie' );
 
 		// create connection
-		$this->assertTrue( $ctype->connect( $actor_id, $movie_id ) > 0 );
+		$this->assertFalse( is_wp_error( $ctype->connect( $actor_id, $movie_id ) ) );
+
+		// 'self_connections'
+		$this->assertTrue( is_wp_error( p2p_type( 'movies_to_movies' )->connect( $movie_id, $movie_id ) ) );
 
 		// 'prevent_duplicates'
 		$this->assertTrue( is_wp_error( $ctype->connect( $actor_id, $movie_id ) ) );
