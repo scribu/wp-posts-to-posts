@@ -1,6 +1,6 @@
 <?php
 
-class Generic_Connection_Type {
+class P2P_Connection_Type {
 
 	public $indeterminate = false;
 
@@ -21,6 +21,17 @@ class Generic_Connection_Type {
 			$class = 'P2P_Side_' . ucfirst( $this->object[ $direction ] );
 
 			$this->side[ $direction ] = new $class( _p2p_pluck( $args, $direction . '_query_vars' ) );
+		}
+
+		if ( $this->object['from'] == $this->object['to'] ) {
+			if ( 'post' == $this->object['to'] ) {
+				$common = array_intersect( $this->side['from']->post_type, $this->side['to']->post_type );
+
+				if ( !empty( $common ) )
+					$this->indeterminate = true;
+			}
+		} else {
+			$this->self_connections = true;
 		}
 
 		$this->set_cardinality( _p2p_pluck( $args, 'cardinality' ) );
@@ -292,24 +303,6 @@ class Generic_Connection_Type {
 			$label .= " ($title)";
 
 		return $label;
-	}
-}
-
-
-class P2P_Connection_Type extends Generic_Connection_Type {
-
-	public function __construct( $args ) {
-		parent::__construct( $args );
-
-		$common = array_intersect( $this->from, $this->to );
-
-		if ( !empty( $common ) )
-			$this->indeterminate = true;
-	}
-
-	public function __get( $key ) {
-		if ( 'from' == $key || 'to' == $key )
-			return $this->side[ $key ]->post_type;
 	}
 }
 
