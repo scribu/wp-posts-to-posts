@@ -298,7 +298,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 			$ctype->connect( $actor_ids[0], $movie_id );
 		}
 
-		$this->assertEquals( $movie_ids[1], $ctype->get_related( $movie_ids[0] )->posts[0]->ID );
+		$related = $ctype->get_related( $movie_ids[0] )->posts;
+		$this->assertEquals( array( $movie_ids[1] ), wp_list_pluck( $related, 'ID' ) );
 	}
 
 	function test_posts_to_users() {
@@ -318,8 +319,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$this->assertEquals( array( $user_id ), $connected );
 
-		$related = $ctype->get_related( $post_ids[0] );
-		$this->assertEquals( array( $post_ids[1] ), wp_list_pluck( $related->posts, 'ID' ) );
+		$related = $ctype->get_related( $post_ids[0] )->posts;
+		$this->assertEquals( array( $post_ids[1] ), wp_list_pluck( $related, 'ID' ) );
 	}
 }
 
