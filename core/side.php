@@ -65,22 +65,6 @@ class P2P_Side_Post extends P2P_Side {
 		);
 	}
 
-	private static $admin_box_qv = array(
-		'update_post_term_cache' => false,
-		'update_post_meta_cache' => false,
-		'post_status' => 'any',
-	);
-
-	function get_connections_qv() {
-		return array_merge( self::$admin_box_qv, array(
-			'nopaging' => true
-		) );
-	}
-
-	function get_connectable_qv( $qv ) {
-		return array_merge( $this->get_base_qv(), self::$admin_box_qv, $this->translate_qv( $qv ) );
-	}
-
 	function translate_qv( $qv ) {
 		$map = array(
 			'exclude' => 'post__not_in',
@@ -189,14 +173,6 @@ class P2P_Side_User extends P2P_Side {
 		return (object) $r;
 	}
 
-	function get_connections_qv() {
-		return array();
-	}
-
-	function get_connectable_qv( $qv ) {
-		return array_merge( $this->get_base_qv(), $this->translate_qv( $qv ) );
-	}
-
 	function translate_qv( $qv ) {
 		if ( isset( $qv['p2p:exclude'] ) )
 			$qv['exclude'] = _p2p_pluck( $qv, 'p2p:exclude' );
@@ -204,7 +180,7 @@ class P2P_Side_User extends P2P_Side {
 		if ( isset( $qv['p2p:search'] ) && $qv['p2p:search'] )
 			$qv['search'] = '*' . _p2p_pluck( $qv, 'p2p:search' ) . '*';
 
-		if ( isset( $qv['p2p:page'] ) ) {
+		if ( isset( $qv['p2p:page'] ) && $qv['p2p:page'] > 0 ) {
 			$qv['number'] = $qv['p2p:per_page'];
 			$qv['offset'] = $qv['p2p:per_page'] * ( $qv['p2p:page'] - 1 );
 		}

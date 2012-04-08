@@ -115,7 +115,9 @@ class P2P_Directed_Connection_Type {
 
 		$extra_qv['p2p:exclude'] = $this->get_non_connectable( $item_id );
 
-		$qv = apply_filters( 'p2p_connectable_args', $side->get_connectable_qv( $extra_qv ), $this, $item_id );
+		$extra_qv = array_merge( $side->get_base_qv(), $side->translate_qv( $extra_qv ) );
+
+		$qv = apply_filters( 'p2p_connectable_args', $extra_qv, $this, $item_id );
 
 		return $side->abstract_query( $side->do_query( $qv ) );
 	}

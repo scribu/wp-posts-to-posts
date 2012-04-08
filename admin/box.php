@@ -14,6 +14,12 @@ class P2P_Box {
 
 	private $columns;
 
+	private static $admin_box_qv = array(
+		'update_post_term_cache' => false,
+		'update_post_meta_cache' => false,
+		'post_status' => 'any',
+	);
+
 	function __construct( $args, $ctype ) {
 		$this->args = $args;
 
@@ -71,11 +77,13 @@ class P2P_Box {
 	}
 
 	protected function get_folded_connections( $post_id ) {
-		$side = $this->ctype->get_opposite( 'side' );
+		$extra_qv = array_merge( self::$admin_box_qv, array(
+			'p2p:per_page' => -1
+		) );
 
-		$query = $this->ctype->get_connected( $post_id, $side->get_connections_qv() );
+		$query = $this->ctype->get_connected( $post_id, $extra_qv, 'abstract' );
 
-		return scb_list_fold( $side->abstract_query( $query )->items, 'p2p_id', 'ID' );
+		return scb_list_fold( $query->items, 'p2p_id', 'ID' );
 	}
 
 	protected function render_data_attributes() {
@@ -175,11 +183,13 @@ class P2P_Box {
 	}
 
 	protected function post_rows( $current_post_id, $page = 1, $search = '' ) {
-		$candidate = $this->ctype->get_connectable( $current_post_id, array(
+		$extra_qv = array_merge( self::$admin_box_qv, array(
 			'p2p:search' => $search,
 			'p2p:page' => $page,
 			'p2p:per_page' => 5
 		) );
+
+		$candidate = $this->ctype->get_connectable( $current_post_id, $extra_qv );
 
 		if ( empty( $candidate->items ) )
 			return false;
