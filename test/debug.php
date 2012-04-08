@@ -16,6 +16,7 @@ class P2P_Debug {
 		self::contacts_and_tickets();
 		self::actors_and_movies();
 
+#		self::setup_example();
 #		self::reset_upgrade();
 	}
 
@@ -52,7 +53,19 @@ class P2P_Debug {
 			'from' => 'user',
 			'title' => array( 'to' => 'Users 2 Posts' ),
 			'fields' => array(
-				'foo' => 'Foo'
+				'text' => 'Text',
+				'select' => array( 'type' => 'select', 'title' => 'Select', 'values' => range(1, 10) ),
+				'single_checkbox' => array(
+					'title' => 'Ya?',
+					'type' => 'checkbox',
+				),
+				'color' => array(
+					'title' => 'Color',
+					'type' => 'checkbox',
+					'values' => array(
+						'white', 'red', 'green', 'blue'
+					)
+				),
 			),
 			'sortable' => true,
 		) );
@@ -149,17 +162,6 @@ class P2P_Debug {
 					'title' => 'Role Type',
 					'values' => array( 'lead', 'secondary', 'episodic' )
 				),
-				'single_checkbox' => array(
-					'title' => 'Ya?',
-					'type' => 'checkbox',
-				),
-				'color' => array(
-					'title' => 'Color',
-					'type' => 'checkbox',
-					'values' => array(
-						'white', 'red', 'green', 'blue'
-					)
-				),
 			),
 			'sortable' => 'any',
 			'prevent_duplicates' => false,
@@ -205,8 +207,8 @@ class P2P_Debug {
 		$data = array(
 			'Nicholas Cage' => array( 'Lord Of War', 'Adaptation' ),
 			'Jude Law' => array( 'Sherlock Holmes' ),
-			'Brad Pitt' => array( '7 Years In Tibet' ),
-			'Natalie Portman' => array( 'Black Swan' ),
+			'Brad Pitt' => array( '7 Years In Tibet', 'Fight Club' ),
+			'Natalie Portman' => array( 'Black Swan', 'Thor' ),
 			'Charlize Theron' => array()
 		);
 
