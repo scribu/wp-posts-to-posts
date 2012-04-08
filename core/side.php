@@ -1,7 +1,5 @@
 <?php
 
-define( 'ADMIN_BOX_PER_PAGE', 5 );
-
 abstract class P2P_Side {
 
 	public $query_vars;
@@ -87,7 +85,8 @@ class P2P_Side_Post extends P2P_Side {
 		$map = array(
 			'exclude' => 'post__not_in',
 			'search' => 's',
-			'page' => 'paged'
+			'page' => 'paged',
+			'per_page' => 'posts_per_page'
 		);
 
 		foreach ( $map as $old => $new )
@@ -173,11 +172,21 @@ class P2P_Side_User extends P2P_Side {
 	}
 
 	function abstract_query( $query ) {
-		return (object) array(
-			'items' => $query->get_results(),
-			'current_page' => isset( $query->query_vars['p2p:page'] ) ? $query->query_vars['p2p:page'] : 1,
-			'total_pages' => ceil( $query->get_total() / ADMIN_BOX_PER_PAGE )
+		$qv = $query->query_vars;
+
+		$r = array(
+			'items' => $query->get_results()
 		);
+
+		if ( isset( $qv['p2p:page'] ) ) {
+			$r['current_page'] = $qv['p2p:page'];
+			$r['total_pages'] = ceil( $query->get_total() / $qv['p2p:per_page'] );
+		} else {
+			$r['current_page'] = 1;
+			$r['total_pages'] = 0;
+		}
+
+		return (object) $r;
 	}
 
 	function get_connections_qv() {
@@ -196,8 +205,8 @@ class P2P_Side_User extends P2P_Side {
 			$qv['search'] = '*' . _p2p_pluck( $qv, 'p2p:search' ) . '*';
 
 		if ( isset( $qv['p2p:page'] ) ) {
-			$qv['number'] = ADMIN_BOX_PER_PAGE;
-			$qv['offset'] = ADMIN_BOX_PER_PAGE * ( $qv['p2p:page'] - 1 );
+			$qv['number'] = $qv['p2p:per_page'];
+			$qv['offset'] = $qv['p2p:per_page'] * ( $qv['p2p:page'] - 1 );
 		}
 
 		return $qv;

@@ -175,7 +175,11 @@ class P2P_Box {
 	}
 
 	protected function post_rows( $current_post_id, $page = 1, $search = '' ) {
-		$candidate = $this->ctype->get_connectable( $current_post_id, $page, $search );
+		$candidate = $this->ctype->get_connectable( $current_post_id, array(
+			'p2p:search' => $search,
+			'p2p:page' => $page,
+			'p2p:per_page' => 5
+		) );
 
 		if ( empty( $candidate->items ) )
 			return false;

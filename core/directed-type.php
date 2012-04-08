@@ -110,16 +110,12 @@ class P2P_Directed_Connection_Type {
 	 *
 	 * @param int $post_id A post id.
 	 */
-	public function get_connectable( $item_id, $page, $search ) {
+	public function get_connectable( $item_id, $extra_qv = array() ) {
 		$side = $this->get_opposite( 'side' );
 
-		$qv = $side->get_connectable_qv( array(
-			'p2p:page' => $page,
-			'p2p:search' => $search,
-			'p2p:exclude' => $this->get_non_connectable( $item_id )
-		) );
+		$extra_qv['p2p:exclude'] = $this->get_non_connectable( $item_id );
 
-		$qv = apply_filters( 'p2p_connectable_args', $qv, $this, $item_id );
+		$qv = apply_filters( 'p2p_connectable_args', $side->get_connectable_qv( $extra_qv ), $this, $item_id );
 
 		return $side->abstract_query( $side->do_query( $qv ) );
 	}
