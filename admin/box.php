@@ -271,7 +271,7 @@ class P2P_Box {
 	}
 
 	public function ajax_clear_connections() {
-		$this->ctype->disconnect_all( $_POST['from'] );
+		$this->ctype->disconnect( $_POST['from'], 'any' );
 
 		$this->refresh_candidates();
 	}
