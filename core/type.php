@@ -188,14 +188,15 @@ class P2P_Connection_Type {
 		if ( !$directed )
 			return false;
 
-		if ( !method_exists( $directed, 'get_orderby_key' ) )
+		$key = $directed->get_orderby_key();
+		if ( !$key )
 			return false;
 
 		$p2p_id = $directed->get_p2p_id( $to, $from );
 		if ( !$p2p_id )
 			return false;
 
-		$order = (int) p2p_get_meta( $p2p_id, $directed->get_orderby_key(), true );
+		$order = (int) p2p_get_meta( $p2p_id, $key, true );
 
 		$adjacent = $directed->get_connected( $to, array(
 			'connected_meta' => array(
