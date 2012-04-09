@@ -81,7 +81,9 @@ class P2P_Side_Post extends P2P_Side {
 	}
 
 	function item_recognize( $arg ) {
-		if ( is_object( $arg ) && isset( $arg->post_type ) ) {
+		if ( is_object( $arg ) ) {
+			if ( !isset( $arg->post_type ) )
+				return false;
 			$post_type = $arg->post_type;
 		} elseif ( $post_id = (int) $arg ) {
 			$post_type = get_post_type( $post_id );
