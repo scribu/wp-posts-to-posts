@@ -322,5 +322,15 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$related = $ctype->get_related( $post_ids[0] )->posts;
 		$this->assertEquals( array( $post_ids[1] ), wp_list_pluck( $related, 'ID' ) );
 	}
+
+	function test_object_passing() {
+		$post = get_post( $this->generate_post() );
+		$user = new WP_User( $this->generate_user() );
+
+		$ctype = p2p_type( 'posts_to_users' );
+
+		$this->assertEquals( 'from', $ctype->find_direction( $post, false ) );
+		$this->assertEquals( 'to', $ctype->find_direction( $user, false ) );
+	}
 }
 
