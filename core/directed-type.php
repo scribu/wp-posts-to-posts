@@ -184,10 +184,20 @@ class P2P_Directed_Connection_Type {
 	/**
 	 * Disconnect two posts.
 	 *
-	 * @param int The first end of the connection.
-	 * @param int The second end of the connection.
+	 * @param mixed The first end of the connection.
+	 * @param mixed The second end of the connection.
+	 *
+	 * @return int|object count or WP_Error on failure
 	 */
 	public function disconnect( $from, $to ) {
+		$from = $this->get_current( 'side' )->item_id( $from );
+		if ( !$from )
+			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
+
+		$to = $this->get_opposite( 'side' )->item_id( $to );
+		if ( !$to )
+			return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
+
 		return $this->delete_connections( compact( 'from', 'to' ) );
 	}
 

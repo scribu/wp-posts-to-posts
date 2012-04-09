@@ -333,6 +333,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( 'to', $ctype->find_direction( $user, false ) );
 
 		$this->assertTrue( !is_wp_error( $ctype->connect( $user, $post ) ) );
+		$this->assertEquals( 1, $ctype->disconnect( $post, $user ) );
 	}
 }
 
