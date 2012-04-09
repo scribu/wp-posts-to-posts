@@ -101,8 +101,12 @@ class P2P_Side_Post extends P2P_Side {
 		return get_post_type_object( $this->post_type[0] );
 	}
 
-	function item_exists( $item_id ) {
-		return (bool) get_post( $item_id );
+	function item_id( $arg ) {
+		$post = get_post( $arg );
+		if ( $post )
+			return $post->ID;
+
+		return false;
 	}
 
 	function item_title( $item ) {
@@ -184,8 +188,15 @@ class P2P_Side_User extends P2P_Side {
 		return is_a( $arg, 'WP_User' );
 	}
 
-	function item_exists( $item_id ) {
-		return (bool) get_user_by( 'id', $item_id );
+	function item_id( $arg ) {
+		if ( $this->item_recognize( $arg ) )
+			return $arg->ID;
+
+		$user = get_user_by( 'id', $arg );
+		if ( $user )
+			return $user->ID;
+
+		return false;
 	}
 
 	function item_title( $item ) {

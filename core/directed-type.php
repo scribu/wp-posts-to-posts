@@ -147,17 +147,19 @@ class P2P_Directed_Connection_Type {
 	/**
 	 * Connect two items.
 	 *
-	 * @param int The first end of the connection.
-	 * @param int The second end of the connection.
+	 * @param mixed The first end of the connection.
+	 * @param mixed The second end of the connection.
 	 * @param array Additional information about the connection.
 	 *
 	 * @return int|object p2p_id or WP_Error on failure
 	 */
 	public function connect( $from, $to, $meta = array() ) {
-		if ( !$this->get_current( 'side' )->item_exists( $from ) )
+		$from = $this->get_current( 'side' )->item_id( $from );
+		if ( !$from )
 			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
 
-		if ( !$this->get_opposite( 'side' )->item_exists( $to ) )
+		$to = $this->get_opposite( 'side' )->item_id( $to );
+		if ( !$to )
 			return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
 
 		if ( !$this->self_connections && $from == $to )

@@ -22,7 +22,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		return $ids;
 	}
 
-	private function generate_post( $type ) {
+	private function generate_post( $type = 'post' ) {
 		$posts = $this->generate_posts( $type, 1 );
 		return $posts[0];
 	}
@@ -331,6 +331,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$this->assertEquals( 'from', $ctype->find_direction( $post, false ) );
 		$this->assertEquals( 'to', $ctype->find_direction( $user, false ) );
+
+		$this->assertTrue( !is_wp_error( $ctype->connect( $user, $post ) ) );
 	}
 }
 
