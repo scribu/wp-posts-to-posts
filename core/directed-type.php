@@ -49,16 +49,16 @@ class P2P_Directed_Connection_Type {
 	}
 
 	/**
-	 * Get a list of posts that are connected to a given post.
+	 * Get a list of items that are connected to a given item.
 	 *
-	 * @param int|array $post_id A post id or an array of post ids.
+	 * @param mixed $item An object, an object id or an array of such.
 	 * @param array $extra_qv Additional query variables to use.
 	 *
 	 * @return object
 	 */
-	public function get_connected( $post_id, $extra_qv = array(), $output = 'raw' ) {
+	public function get_connected( $item, $extra_qv = array(), $output = 'raw' ) {
 		$args = array_merge( $extra_qv, array(
-			'connected_items' => $post_id
+			'connected_items' => $item
 		) );
 
 		$side = $this->get_opposite( 'side' );
@@ -106,7 +106,7 @@ class P2P_Directed_Connection_Type {
 	}
 
 	/**
-	 * Get a list of posts that could be connected to a given post.
+	 * Get a list of items that could be connected to a given item.
 	 *
 	 * @param int $post_id A post id.
 	 */
@@ -182,7 +182,7 @@ class P2P_Directed_Connection_Type {
 	}
 
 	/**
-	 * Disconnect two posts.
+	 * Disconnect two items.
 	 *
 	 * @param mixed The first end of the connection.
 	 * @param mixed The second end of the connection.
