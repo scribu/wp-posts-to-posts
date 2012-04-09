@@ -24,6 +24,10 @@ class P2P_Side_Post extends P2P_Side {
 		$this->post_type = $this->query_vars['post_type'];
 	}
 
+	private function get_ptype() {
+		return get_post_type_object( $this->post_type[0] );
+	}
+
 	function get_base_qv() {
 		return array_merge( $this->query_vars, array(
 			'post_type' => $this->post_type,
@@ -95,10 +99,6 @@ class P2P_Side_Post extends P2P_Side {
 			return false;
 
 		return in_array( $post_type, $this->post_type );
-	}
-
-	protected function get_ptype() {
-		return get_post_type_object( $this->post_type[0] );
 	}
 
 	function item_id( $arg ) {
