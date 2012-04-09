@@ -76,12 +76,12 @@ class P2P_Box {
 		echo P2P_Mustache::render( 'box', $data );
 	}
 
-	protected function get_folded_connections( $post_id ) {
+	protected function get_folded_connections( $post ) {
 		$extra_qv = array_merge( self::$admin_box_qv, array(
 			'p2p:per_page' => -1
 		) );
 
-		$query = $this->ctype->get_connected( $post_id, $extra_qv, 'abstract' );
+		$query = $this->ctype->get_connected( $post, $extra_qv, 'abstract' );
 
 		return scb_list_fold( $query->items, 'p2p_id', 'ID' );
 	}
