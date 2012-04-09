@@ -9,6 +9,17 @@ function _p2p_expand_direction( $direction ) {
 }
 
 /** @internal */
+function _p2p_get_ids( $items ) {
+	if ( !is_array( $items ) )
+		$items = array( $items );
+
+	if ( is_object( reset( $items ) ) )
+		$items = wp_list_pluck( $items, 'ID' );
+
+	return $items;
+}
+
+/** @internal */
 function _p2p_meta_sql_helper( $data ) {
 	global $wpdb;
 

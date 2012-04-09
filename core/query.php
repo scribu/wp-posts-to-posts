@@ -100,7 +100,7 @@ class P2P_Query {
 		if ( 'any' == $q['items'] ) {
 			$search = false;
 		} else {
-			$search = implode( ',', array_map( 'absint', self::normalize_items( $q['items'] ) ) );
+			$search = implode( ',', array_map( 'absint', _p2p_get_ids( $q['items'] ) ) );
 		}
 
 		$where_parts = array();
@@ -174,16 +174,6 @@ class P2P_Query {
 		}
 
 		return $clauses;
-	}
-
-	private static function normalize_items( $items ) {
-		if ( !is_array( $items ) )
-			$items = array( $items );
-
-		if ( is_object( reset( $items ) ) )
-			$items = wp_list_pluck( $items, 'ID' );
-
-		return $items;
 	}
 
 	private function find_direction( $ctype, $arg, $object_type ) {
