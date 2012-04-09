@@ -256,10 +256,10 @@ class P2P_Box {
 
 		$p2p_id = $this->ctype->connect( $from, $to );
 
-		if ( $p2p_id )
-			$r = array( 'row' => $this->connection_row( $p2p_id, $to, true ) );
+		if ( is_wp_error( $p2p_id ) )
+			$r = array( 'error' => sprintf( __( "Can't create connection: %s", P2P_TEXTDOMAIN ), $p2p_id->get_error_message() ) );
 		else
-			$r = array( 'error' => __( "Can't create connection.", P2P_TEXTDOMAIN ) );
+			$r = array( 'row' => $this->connection_row( $p2p_id, $to, true ) );
 
 		die( json_encode( $r ) );
 	}
