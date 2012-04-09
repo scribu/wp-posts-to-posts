@@ -7,7 +7,13 @@ class P2P_Debug {
 			return;
 
 		add_action('wp_loaded', array(__CLASS__, '_init'));
-		//add_action('admin_notices', array(__CLASS__, 'setup_example'));
+		/* add_action('admin_notices', array(__CLASS__, 'setup_example')); */
+		/* add_action('admin_notices', array(__CLASS__, 'playground')); */
+	}
+
+	function playground() {
+		$q = p2p_type('users_to_posts')->get_connected(wp_get_current_user());
+		debug($q->request, $q->posts);
 	}
 
 	function _init() {
@@ -16,7 +22,6 @@ class P2P_Debug {
 		self::contacts_and_tickets();
 		self::actors_and_movies();
 
-#		self::setup_example();
 #		self::reset_upgrade();
 	}
 
