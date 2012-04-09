@@ -80,21 +80,11 @@ class P2P_Side_Post extends P2P_Side {
 		return $qv;
 	}
 
-	/**
-	 * @param mixed A post type, a post id, a post object, an array of post ids or of objects.
-	 */
 	function item_recognize( $arg ) {
-		if ( is_array( $arg ) ) {
-			$arg = reset( $arg );
-		}
-
-		if ( is_object( $arg ) ) {
+		if ( is_object( $arg ) && isset( $arg->post_type ) ) {
 			$post_type = $arg->post_type;
 		} elseif ( $post_id = (int) $arg ) {
-			$post = get_post( $post_id );
-			if ( !$post )
-				return false;
-			$post_type = $post->post_type;
+			$post_type = get_post_type( $post_id );
 		} else {
 			$post_type = $arg;
 		}
@@ -189,7 +179,7 @@ class P2P_Side_User extends P2P_Side {
 	}
 
 	function item_recognize( $arg ) {
-		return false;
+		return is_a( $arg, 'WP_User' );
 	}
 
 	function item_exists( $item_id ) {

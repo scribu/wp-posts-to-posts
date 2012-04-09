@@ -121,14 +121,17 @@ class P2P_Connection_Type {
 	}
 
 	/**
-	 * Attempt to guess direction based on a post id or post type.
+	 * Attempt to guess direction based on a parameter.
 	 *
-	 * @param int|string $arg A post id or a post type.
+	 * @param mixed A post type, object or object id.
 	 * @param bool Whether to return an instance of P2P_Directed_Connection_Type or just the direction
 	 *
 	 * @return bool|object|string False on failure, P2P_Directed_Connection_Type instance or direction on success.
 	 */
 	public function find_direction( $arg, $instantiate = true ) {
+		if ( is_array( $arg ) )
+			$arg = reset( $arg );
+
 		foreach ( array( 'from', 'to' ) as $direction ) {
 			if ( !$this->side[ $direction ]->item_recognize( $arg ) )
 				continue;
