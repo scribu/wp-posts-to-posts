@@ -50,6 +50,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 1.3 =
+* allow passing entire objects to get_connected(), connect() etc.
+
 = 1.2 =
 * added Tools -> Connection Types admin screen
 * fixed migration script
