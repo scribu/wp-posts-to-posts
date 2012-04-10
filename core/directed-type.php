@@ -91,67 +91,6 @@ class P2P_Directed_Connection_Type {
 		return apply_filters( 'p2p_connected_args', $q, $this, $q['connected_items'] );
 	}
 
-	/** Alias for get_prev() */
-	public function get_previous( $from, $to ) {
-		return $this->get_prev( $from, $to );
-	}
-
-	/**
-	 * Get the previous post in an ordered connection.
-	 *
-	 * @param int The first end of the connection.
-	 * @param int The second end of the connection.
-	 *
-	 * @return bool|object False on failure, post object on success
-	 */
-	public function get_prev( $from, $to ) {
-		return $this->get_adjacent( $from, $to, -1 );
-	}
-
-	/**
-	 * Get the next post in an ordered connection.
-	 *
-	 * @param int The first end of the connection.
-	 * @param int The second end of the connection.
-	 *
-	 * @return bool|object False on failure, post object on success
-	 */
-	public function get_next( $from, $to ) {
-		return $this->get_adjacent( $from, $to, +1 );
-	}
-
-	/**
-	 * Get another post in an ordered connection.
-	 *
-	 * @param int The first end of the connection.
-	 * @param int The second end of the connection.
-	 * @param int The position relative to the second parameter
-	 *
-	 * @return bool|object False on failure, post object on success
-	 */
-	public function get_adjacent( $from, $to, $which ) {
-		$key = $this->get_orderby_key();
-		if ( !$key )
-			return false;
-
-		$p2p_id = $this->get_p2p_id( $from, $to );
-		if ( !$p2p_id )
-			return false;
-
-		$order = (int) p2p_get_meta( $p2p_id, $key, true );
-
-		$adjacent = $this->get_connected( $from, array(
-			'connected_meta' => array(
-				array(
-					'key' => $key,
-					'value' => $order + $which
-				)
-			)
-		), 'abstract' );
-
-		return _p2p_first( $adjacent->items );
-	}
-
 	public function get_orderby_key() {
 		if ( !$this->sortable || 'any' == $this->direction )
 			return false;
