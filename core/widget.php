@@ -27,8 +27,14 @@ class P2P_Widget extends scbWidget {
 			if ( ! $ctype instanceof P2P_Connection_Type )
 				continue;
 
-			$ctypes[ $p2p_type ] = $ctype->get_desc();
+			$ctypes[ $p2p_type ] = self::ctype_label( $ctype );
 		}
+
+		echo html( 'p', $this->input( array(
+			'type' => 'text',
+			'name' => 'title',
+			'desc' => __( 'Title:', P2P_TEXTDOMAIN )
+		), $instance ) );
 
 		echo html( 'p', $this->input( array(
 			'type' => 'select',
@@ -49,6 +55,14 @@ class P2P_Widget extends scbWidget {
 				),
 			), $instance )
 		);
+		
+		echo html( 'p', $this->input( array(
+			'type' => 'text',
+			'name' => 'additional_qv',
+			'desc' => __( 'Additional Query Arguments:', P2P_TEXTDOMAIN )
+		), $instance ) );
+
+
 	}
 
 	function widget( $args, $instance ) {
@@ -69,19 +83,27 @@ class P2P_Widget extends scbWidget {
 
 		if ( 'related' == $instance['listing'] ) {
 			$connected = $ctype->get_related( $post_id );
-			$title = sprintf(
+			/*$title = sprintf(
 				__( 'Related %s', P2P_TEXTDOMAIN ),
 				$directed->get_current( 'side' )->get_title()
-			);
+			);*/
 		} else {
-			$connected = $directed->get_connected( $post_id );
-			$title = $directed->get_current( 'title' );
+			$nv_strings = explode(',', $instance['additional_qv']);
+			$connected_meta = array();
+			foreach($nv_strings as $nv) {
+				$nv_pair = explode('=', $nv);
+				if(count($nv_pair) == 2) {
+					$connected_meta[$nv_pair[0]] = $nv_pair[1];
+				}
+			}
+			$connected = $directed->get_connected( $post_id, array('connected_meta' => $connected_meta) );
+			/*$title = $directed->get_current( 'title' );*/
 		}
 
 		if ( !$connected->have_posts() )
 			return;
 
-		$title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
+		$title = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
 
 		extract( $args );
 
@@ -90,9 +112,37 @@ class P2P_Widget extends scbWidget {
 		if ( ! empty( $title ) )
 			echo $before_title . $title . $after_title;
 
-		p2p_list_posts( $connected );
+		p2p_list_posts( $connected, array(
+		'before_list' => '<ul id="'.$ctype->name.'_list">', 'after_list' => '</ul>',
+		'before_item' => '<li class="'.$ctype->name.'">', 'after_item' => '</li>',
+		'template' => $ctype->name.'.php'));
 
 		echo $after_widget;
+	}
+
+	private static function ctype_label( $ctype ) {
+		foreach ( array( 'from', 'to' ) as $key ) {
+			$$key = implode( ', ', array_map( array( __CLASS__, 'post_type_label' ), $ctype->$key ) );
+		}
+
+		if ( $ctype->indeterminate )
+			$arrow = '&harr;';
+		else
+			$arrow = '&rarr;';
+
+		$label = "$from $arrow $to";
+
+		$title = $ctype->title[ 'from' ];
+
+		if ( $title )
+			$label .= " ($title)";
+
+		return $label;
+	}
+
+	private static function post_type_label( $post_type ) {
+		$cpt = get_post_type_object( $post_type );
+		return $cpt ? $cpt->label : $post_type;
 	}
 }
 
