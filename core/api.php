@@ -336,13 +336,11 @@ function p2p_list_posts( $posts, $args = array() ) {
 
 		if ( !$separator ) echo $before_item;
 
-		if ( $template )
-			locate_template( $template, true, false );
-		else
+		if ( !$template OR strlen(locate_template( $template, true, false )) == 0) {
 			if ( 0 < $i && $separator ) echo $separator;
 
 			echo html( 'a', array( 'href' => get_permalink() ), get_the_title() );
-
+		}
 		if ( !$separator ) echo $after_item;
 
 		$i++;
