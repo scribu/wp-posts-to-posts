@@ -11,6 +11,11 @@ abstract class P2P_Side {
 	function get_base_qv() {
 		return $this->query_vars;
 	}
+
+	function abstract_query( $query ) {
+		$class = str_replace( 'P2P_Side_', 'P2P_List_', get_class( $this ) );
+		return new $class( $query );
+	}
 }
 
 
@@ -59,14 +64,6 @@ class P2P_Side_Post extends P2P_Side {
 
 	function do_query( $args ) {
 		return new WP_Query( $args );
-	}
-
-	function abstract_query( $query ) {
-		return (object) array(
-			'items' => $query->posts,
-			'current_page' => max( 1, $query->get('paged') ),
-			'total_pages' => $query->max_num_pages
-		);
 	}
 
 	function translate_qv( $qv ) {
@@ -155,24 +152,6 @@ class P2P_Side_User extends P2P_Side {
 
 	function do_query( $args ) {
 		return new WP_User_Query( $args );
-	}
-
-	function abstract_query( $query ) {
-		$qv = $query->query_vars;
-
-		$r = array(
-			'items' => $query->get_results()
-		);
-
-		if ( isset( $qv['p2p:page'] ) ) {
-			$r['current_page'] = $qv['p2p:page'];
-			$r['total_pages'] = ceil( $query->get_total() / $qv['p2p:per_page'] );
-		} else {
-			$r['current_page'] = 1;
-			$r['total_pages'] = 0;
-		}
-
-		return (object) $r;
 	}
 
 	function translate_qv( $qv ) {
