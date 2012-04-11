@@ -60,8 +60,6 @@ class P2P_Directed_Connection_Type {
 		$extra_qv['fields'] = 'ids';
 
 		$connected = $this->get_connected( $item, $extra_qv, 'abstract' );
-		if ( !$connected )
-			return false;
 
 		if ( empty( $connected->items ) )
 			return new WP_Query;
