@@ -30,6 +30,15 @@ class P2P_Directed_Connection_Type {
 		return $this->ctype;
 	}
 
+	public function flip_direction() {
+		if ( 'any' == $this->direction )
+			return $this;
+
+		$direction = ( 'to' == $this->direction ) ? 'from' : 'to';
+
+		return $this->set_direction( $direction );
+	}
+
 	public function get_opposite( $key ) {
 		$direction = ( 'to' == $this->direction ) ? 'from' : 'to';
 
@@ -56,7 +65,7 @@ class P2P_Directed_Connection_Type {
 	 *
 	 * @return bool|object False on failure; A WP_Query instance on success.
 	 */
-	public function get_related( $item, $extra_qv = array() ) {
+	public function get_related( $item, $extra_qv = array(), $output = 'raw' ) {
 		$extra_qv['fields'] = 'ids';
 
 		$connected = $this->get_connected( $item, $extra_qv, 'abstract' );
@@ -64,11 +73,9 @@ class P2P_Directed_Connection_Type {
 		if ( empty( $connected->items ) )
 			return new WP_Query;
 
-		return new WP_Query( array(
-			'connected_type' => $this->name,
-			'connected_items' => $connected->items,
-			'post__not_in' => _p2p_normalize( $item ),
-		) );
+		$additional_qv = array( 'p2p:exclude' => _p2p_normalize( $item ) );
+
+		return $this->flip_direction()->get_connected( $connected->items, $additional_qv, $output );
 	}
 
 	/**
@@ -80,11 +87,11 @@ class P2P_Directed_Connection_Type {
 	 * @return object
 	 */
 	public function get_connected( $item, $extra_qv = array(), $output = 'raw' ) {
-		$args = array_merge( $extra_qv, array(
+		$side = $this->get_opposite( 'side' );
+
+		$args = array_merge( $side->translate_qv( $extra_qv ), array(
 			'connected_items' => $item
 		) );
-
-		$side = $this->get_opposite( 'side' );
 
 		$query = $side->do_query( $this->get_connected_args( $args ) );
 

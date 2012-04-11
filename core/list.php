@@ -100,7 +100,7 @@ class P2P_List_User extends P2P_List {
 	}
 
 	protected function render_item( $user ) {
-		return html( 'a', array( 'href' => get_author_posts_url( $user ) ), $user->display_name );
+		return html( 'a', array( 'href' => get_author_posts_url( $user->ID ) ), $user->display_name );
 	}
 }
 

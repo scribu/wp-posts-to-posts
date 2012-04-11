@@ -30,9 +30,9 @@ class P2P_Shortcodes {
 
 		$extra_qv = array( 'p2p:context' => 'shortcode' );
 
-		$connected = $ctype->$method( $post, $extra_qv );
+		$connected = $ctype->$method( $post, $extra_qv, 'abstract' );
 
-		return p2p_list_posts( $connected, array( 'echo' => false ) );
+		return $connected->render( array( 'echo' => false ) );
 	}
 }
 
