@@ -96,9 +96,6 @@ class P2P_Widget extends scbWidget {
 
 		p2p_list_posts( $connected, array(
 			'before_list' => '<ul id="'.$ctype->name.'_list">',
-			'after_list' => '</ul>',
-			'before_item' => '<li class="'.$ctype->name.'">',
-			'after_item' => '</li>',
 			'template' => 'widget-p2p-' . $ctype->name . '.php'
 		) );
 
