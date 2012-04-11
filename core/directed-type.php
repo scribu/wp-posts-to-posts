@@ -49,6 +49,33 @@ class P2P_Directed_Connection_Type {
 	}
 
 	/**
+	 * Get a list of posts connected to other posts connected to a post.
+	 *
+	 * @param int|array $post_id A post id or array of post ids
+	 * @param array $extra_qv Additional query variables to use.
+	 *
+	 * @return bool|object False on failure; A WP_Query instance on success.
+	 */
+	public function get_related( $post_id, $extra_qv = array() ) {
+		$post_id = (array) $post_id;
+
+		$extra_qv['fields'] = 'ids';
+
+		$connected = $this->get_connected( $post_id, $extra_qv, 'abstract' );
+		if ( !$connected )
+			return false;
+
+		if ( empty( $connected->items ) )
+			return new WP_Query;
+
+		return new WP_Query( array(
+			'connected_type' => $this->name,
+			'connected_items' => $connected->items,
+			'post__not_in' => $post_id,
+		) );
+	}
+
+	/**
 	 * Get a list of items that are connected to a given item.
 	 *
 	 * @param mixed $item An object, an object id or an array of such.
