@@ -40,10 +40,11 @@ function _p2p_init() {
 	_p2p_load_files( "$base/core", array(
 		'storage', 'query', 'query-post', 'query-user', 'url-query',
 		'util', 'side', 'type-factory', 'type', 'directed-type',
-		'api', 'widget'
+		'api', 'widget', 'shortcodes'
 	) );
 
 	P2P_Widget::init();
+	P2P_Shortcodes::init();
 
 	if ( is_admin() ) {
 		_p2p_load_files( "$base/admin", array(
