@@ -4,7 +4,8 @@ class P2P_Widget extends scbWidget {
 
 	protected $defaults = array(
 		'ctype' => false,
-		'listing' => 'connected'
+		'listing' => 'connected',
+		'title' => ''
 	);
 
 	static function init() {
@@ -77,13 +78,8 @@ class P2P_Widget extends scbWidget {
 
 		if ( 'related' == $instance['listing'] ) {
 			$connected = $ctype->get_related( $post_id, $extra_qv );
-			/*title = sprintf(
-				__( 'Related %s', P2P_TEXTDOMAIN ),
-				$directed->get_current( 'side' )->get_title()
-			);*/
 		} else {
 			$connected = $directed->get_connected( $post_id, $extra_qv );
-			/*$title = $directed->get_current( 'title' );*/
 		}
 
 		if ( !$connected->have_posts() )
