@@ -55,14 +55,6 @@ class P2P_Widget extends scbWidget {
 				),
 			), $instance )
 		);
-		
-		echo html( 'p', $this->input( array(
-			'type' => 'text',
-			'name' => 'additional_qv',
-			'desc' => __( 'Additional Query Arguments:', P2P_TEXTDOMAIN )
-		), $instance ) );
-
-
 	}
 
 	function widget( $args, $instance ) {
@@ -81,22 +73,16 @@ class P2P_Widget extends scbWidget {
 		if ( !$directed )
 			return;
 
+		$extra_qv = array( 'p2p:context' => 'widget' );
+
 		if ( 'related' == $instance['listing'] ) {
-			$connected = $ctype->get_related( $post_id );
+			$connected = $ctype->get_related( $post_id, $extra_qv );
 			/*title = sprintf(
 				__( 'Related %s', P2P_TEXTDOMAIN ),
 				$directed->get_current( 'side' )->get_title()
 			);*/
 		} else {
-			$nv_strings = explode(',', $instance['additional_qv']);
-			$connected_meta = array();
-			foreach($nv_strings as $nv) {
-				$nv_pair = explode('=', $nv);
-				if(count($nv_pair) == 2) {
-					$connected_meta[$nv_pair[0]] = $nv_pair[1];
-				}
-			}
-			$connected = $directed->get_connected( $post_id, array('connected_meta' => $connected_meta) );
+			$connected = $directed->get_connected( $post_id, $extra_qv );
 			/*$title = $directed->get_current( 'title' );*/
 		}
 
