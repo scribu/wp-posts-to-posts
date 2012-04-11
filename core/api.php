@@ -316,6 +316,6 @@ function p2p_list_posts( $posts, $args = array() ) {
 		$list = new P2P_List_Post( $posts );
 	}
 
-	$list->render( $args );
+	return $list->render( $args );
 }
 

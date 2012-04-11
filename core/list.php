@@ -15,9 +15,13 @@ abstract class P2P_List {
 			'before_item' => '<li>', 'after_item' => '</li>',
 			'separator' => false,
 			'template' => false,
+			'echo' => true
 		) );
 
 		extract( $args, EXTR_SKIP );
+
+		if ( !$echo )
+			ob_start();
 
 		echo $before_list;
 
@@ -38,6 +42,9 @@ abstract class P2P_List {
 		}
 
 		echo $after_list;
+
+		if ( !$echo )
+			return ob_get_clean();
 	}
 
 	abstract protected function render_item( $item );

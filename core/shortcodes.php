@@ -32,9 +32,7 @@ class P2P_Shortcodes {
 
 		$connected = $ctype->$method( $post, $extra_qv );
 
-		ob_start();
-		p2p_list_posts( $connected );
-		return ob_get_clean();
+		return p2p_list_posts( $connected, array( 'echo' => false ) );
 	}
 }
 
