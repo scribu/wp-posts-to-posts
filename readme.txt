@@ -11,9 +11,10 @@ Efficient many-to-many connections between posts, pages, custom post types, user
 
 This plugin allows you to create many-to-many relationships between posts of any type: post, page, custom etc. A few example use cases:
 
-* post series
 * manually curated lists of related posts
-* 'actor' posts connected to 'movie' posts
+* post series
+* products connected to retailers
+* etc.
 
 Additionally, you can create many-to-many relationships between posts and users. So, you could also implement:
 
