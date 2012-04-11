@@ -78,6 +78,7 @@ class P2P_Box {
 
 	protected function get_folded_connections( $post ) {
 		$extra_qv = array_merge( self::$admin_box_qv, array(
+			'p2p:context' => 'admin_box',
 			'p2p:per_page' => -1
 		) );
 
