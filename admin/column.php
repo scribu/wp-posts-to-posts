@@ -9,7 +9,9 @@ class P2P_Column {
 	function __construct( $directed ) {
 		$this->ctype = $directed;
 
-		$this->ctype->lose_direction()->each_connected( $GLOBALS['wp_query'] );
+		$extra_qv = array( 'p2p:context' => 'admin_column' );
+
+		$this->ctype->lose_direction()->each_connected( $GLOBALS['wp_query'], $extra_qv );
 
 		$this->connected = scb_list_fold( $GLOBALS['wp_query']->posts, 'ID', 'connected' );
 	}
