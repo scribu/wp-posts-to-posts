@@ -122,6 +122,12 @@ class P2P_Side_Attachment extends P2P_Side_Post {
 
 		$this->post_type = array( 'attachment' );
 	}
+
+	function get_base_qv() {
+		return array_merge( parent::get_base_qv(), array(
+			'post_status' => 'inherit'
+		) );
+	}
 }
 
 
