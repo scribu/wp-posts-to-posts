@@ -64,22 +64,22 @@ class P2P_Widget extends scbWidget {
 
 		$instance = array_merge( $this->defaults, $instance );
 
-		$post_id = get_queried_object_id();
+		$post = get_queried_object();
 
 		$ctype = p2p_type( $instance['ctype'] );
 		if ( !$ctype )
 			return;
 
-		$directed = $ctype->find_direction( $post_id );
+		$directed = $ctype->find_direction( $post );
 		if ( !$directed )
 			return;
 
 		$extra_qv = array( 'p2p:context' => 'widget' );
 
 		if ( 'related' == $instance['listing'] ) {
-			$connected = $ctype->get_related( $post_id, $extra_qv )->posts;
+			$connected = $ctype->get_related( $post->ID, $extra_qv )->posts;
 		} else {
-			$connected = $directed->get_connected( $post_id, $extra_qv, 'abstract' )->items;
+			$connected = $directed->get_connected( $post, $extra_qv, 'abstract' )->items;
 		}
 
 		if ( empty( $connected ) )
