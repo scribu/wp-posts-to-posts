@@ -30,7 +30,7 @@ class P2P_Shortcodes {
 
 		$extra_qv = array( 'p2p:context' => 'shortcode' );
 
-		$connected = $ctype->$method( $post->ID, $extra_qv );
+		$connected = $ctype->$method( $post, $extra_qv );
 
 		ob_start();
 		p2p_list_posts( $connected );
