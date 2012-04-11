@@ -72,6 +72,10 @@ class P2P_Directed_Connection_Type {
 	}
 
 	public function get_connected_args( $q ) {
+		$q = wp_parse_args( $q, array(
+			'p2p:context' => false
+		) );
+
 		if ( $orderby_key = $this->get_orderby_key() ) {
 			$q = wp_parse_args( $q, array(
 				'connected_orderby' => $orderby_key,
