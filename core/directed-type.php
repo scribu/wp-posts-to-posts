@@ -70,9 +70,6 @@ class P2P_Directed_Connection_Type {
 
 		$connected = $this->get_connected( $item, $extra_qv, 'abstract' );
 
-		if ( empty( $connected->items ) )
-			return new WP_Query;
-
 		$additional_qv = array( 'p2p:exclude' => _p2p_normalize( $item ) );
 
 		return $this->flip_direction()->get_connected( $connected->items, $additional_qv, $output );
