@@ -77,12 +77,12 @@ class P2P_Widget extends scbWidget {
 		$extra_qv = array( 'p2p:context' => 'widget' );
 
 		if ( 'related' == $instance['listing'] ) {
-			$connected = $ctype->get_related( $post_id, $extra_qv );
+			$connected = $ctype->get_related( $post_id, $extra_qv )->posts;
 		} else {
-			$connected = $directed->get_connected( $post_id, $extra_qv );
+			$connected = $directed->get_connected( $post_id, $extra_qv, 'abstract' )->items;
 		}
 
-		if ( !$connected->have_posts() )
+		if ( empty( $connected ) )
 			return;
 
 		$title = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
