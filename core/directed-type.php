@@ -57,6 +57,17 @@ class P2P_Directed_Connection_Type {
 		return $arg[$direction];
 	}
 
+	private function abstract_query( $qv, $side, $output = 'abstract' ) {
+		$query = $side->do_query( $qv );
+
+		if ( 'raw' == $output )
+			return $query;
+
+		$class = str_replace( 'P2P_Side_', 'P2P_List_', get_class( $side ) );
+
+		return new $class( $query );
+	}
+
 	/**
 	 * Get a list of posts connected to other posts connected to a post.
 	 *
@@ -90,12 +101,7 @@ class P2P_Directed_Connection_Type {
 			'connected_items' => $item
 		) );
 
-		$query = $side->do_query( $this->get_connected_args( $args ) );
-
-		if ( 'abstract' == $output )
-			$query = $side->abstract_query( $query );
-
-		return $query;
+		return $this->abstract_query( $this->get_connected_args( $args ), $side, $output );
 	}
 
 	public function get_connected_args( $q ) {
@@ -150,7 +156,7 @@ class P2P_Directed_Connection_Type {
 
 		$qv = apply_filters( 'p2p_connectable_args', $extra_qv, $this, $item_id );
 
-		return $side->abstract_query( $side->do_query( $qv ) );
+		return $this->abstract_query( $qv, $side );
 	}
 
 	private function get_non_connectable( $item_id ) {

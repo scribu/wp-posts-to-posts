@@ -11,11 +11,6 @@ abstract class P2P_Side {
 	function get_base_qv() {
 		return $this->query_vars;
 	}
-
-	function abstract_query( $query ) {
-		$class = str_replace( 'P2P_Side_', 'P2P_List_', get_class( $this ) );
-		return new $class( $query );
-	}
 }
 
 
