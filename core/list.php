@@ -83,6 +83,13 @@ class P2P_List_Post extends P2P_List {
 
 class P2P_List_Attachment extends P2P_List_Post {
 
+	protected function render_item( $post ) {
+		$GLOBALS['post'] = $post;
+
+		setup_postdata( $post );
+
+		return html( 'a', array( 'href' => get_permalink() ), wp_get_attachment_image( $post->ID, 'thumbnail', false ) );
+	}
 }
 
 
