@@ -19,7 +19,8 @@ class P2P_Shortcodes {
 		global $post;
 
 		$attr = shortcode_atts( array(
-			'type' => ''
+			'type' => '',
+			'mode' => 'ul',
 		), $attr );
 
 		$ctype = p2p_type( $attr['type'] );
@@ -32,7 +33,16 @@ class P2P_Shortcodes {
 
 		$connected = $ctype->$method( $post, $extra_qv, 'abstract' );
 
-		return $connected->render( array( 'echo' => false ) );
+		$args = array( 'echo' => false );
+
+		if ( 'ol' == $attr['mode'] ) {
+			_p2p_append( $args, array(
+				'before_list' => '<ol>',
+				'after_list' => '</ol>',
+			) );
+		}
+
+		return $connected->render( $args );
 	}
 }
 
