@@ -44,7 +44,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		P2P_Storage::install();
 
 		foreach ( array( 'actor', 'movie', 'studio' ) as $ptype )
-			register_post_type( $ptype );
+			register_post_type( $ptype, array( 'public' => true ) );
 
 		if ( !p2p_type( 'actor_to_movie' ) ) {
 			p2p_register_connection_type( array(
@@ -254,6 +254,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEmpty( $query->posts[2]->connected );
 	}
 
+	// Test if each_connected() works correctly when 'post_type' is not explicitly set
 	function test_each_connected_post() {
 		$ctype = @p2p_register_connection_type( 'post', 'actor' );
 
@@ -262,7 +263,6 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$ctype->connect( $post_id, $actor_id );
 
-		// Test if each_connected() works correctly when 'post_type' is not explicitly set
 		$query = new WP_Query( array(
 			'post__in' => array( $post_id )
 		) );
@@ -270,6 +270,30 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$ctype->each_connected( $query );
 
 		$this->assertEquals( $query->posts[0]->connected[0]->ID, $actor_id );
+	}
+
+	// Test if each_connected() works correctly when 'post_type' => 'any'
+	function test_each_connected_any() {
+		$ctype = p2p_type( 'actor_to_movie' );
+
+		$actor_ids = $this->generate_posts( 'actor', 3 );
+		$movie_id = $this->generate_post( 'movie' );
+
+		$p2p_id_0 = $ctype->connect( $actor_ids[0], $movie_id );
+		$p2p_id_1 = $ctype->connect( $actor_ids[1], $movie_id );
+
+		$query = new WP_Query( array(
+			'post_type' => 'any',
+			'post__in' => array( $actor_ids[0], $actor_ids[1], $movie_id ),
+			'orderby' => 'ID',
+			'order' => 'ASC'
+		) );
+
+		$ctype->each_connected( $query );
+
+		$this->assertEquals( $query->posts[0]->connected[0]->p2p_id, $p2p_id_0 );
+		$this->assertEquals( $query->posts[1]->connected[0]->p2p_id, $p2p_id_1 );
+		$this->assertEquals( $query->posts[2]->connected[0]->p2p_id, $p2p_id_0 );
 	}
 
 	function test_adjacent() {

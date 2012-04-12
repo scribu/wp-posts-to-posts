@@ -145,6 +145,30 @@ class P2P_Connection_Type {
 		return false;
 	}
 
+	// Used in each_connected()
+	private function find_direction_multiple( $post_types ) {
+		$possible_directions = array();
+
+		foreach ( array( 'from', 'to' ) as $direction ) {
+			if ( 'post' == $this->object[$direction] ) {
+				foreach ( $post_types as $post_type ) {
+					if ( !$this->side[ $direction ]->item_recognize( $post_type ) ) {
+						$possible_directions[] = $direction;
+						break;
+					}
+				}
+			}
+		}
+
+		if ( empty( $possible_directions ) )
+			return false;
+
+		if ( count( $possible_directions ) > 1 )
+			return 'any';
+
+		return reset( $possible_directions );
+	}
+
 	/** Alias for get_prev() */
 	public function get_previous( $from, $to ) {
 		return $this->get_prev( $from, $to );
@@ -227,12 +251,24 @@ class P2P_Connection_Type {
 			return;
 
 		$post_type = $query->get( 'post_type' );
-		if ( empty( $post_type ) )
-			$post_type = 'post';
 
-		$directed = $this->find_direction( $post_type );
-		if ( !$directed )
+		if ( !$post_type ) {
+			$post_type = 'post';
+		} elseif ( 'any' == $post_type ) {
+			$post_type = array_unique( wp_list_pluck( $query->posts, 'post_type' ) );
+		}
+
+		if ( is_array( $post_type ) ) {
+			$direction = $this->find_direction_multiple( $post_type );
+			$extra_qv['post_type'] = 'any';
+		} else {
+			$direction = $this->find_direction( $post_type, false );
+		}
+
+		if ( !$direction )
 			return false;
+
+		$directed = $this->set_direction( $direction );
 
 		$posts = array();
 
@@ -249,7 +285,7 @@ class P2P_Connection_Type {
 		}
 		$extra_qv['nopaging'] = true;
 
-		$q = $directed->get_connected( array_keys( $posts ), $extra_qv, 'abstract' );
+		$q = $directed->get_connected( $posts, $extra_qv, 'abstract' );
 
 		foreach ( $q->items as $inner_item ) {
 			if ( $inner_item->ID == $inner_item->p2p_from ) {
