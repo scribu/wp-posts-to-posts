@@ -98,7 +98,6 @@ class P2P_Widget extends scbWidget {
 
 		$connected->render( array(
 			'before_list' => '<ul id="' . $ctype->name . '_list">',
-			'template' => 'widget-p2p-' . $ctype->name . '.php'
 		) );
 
 		echo $after_widget;
