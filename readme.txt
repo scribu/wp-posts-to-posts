@@ -53,6 +53,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 = 1.3 =
 * allow passing entire objects to get_connected(), connect() etc.
+* made get_related() work with posts-to-users connections
+* made each_connected() work with simple array of posts
+* introduced [p2p_connected] and [p2p_related] shortcodes
 
 = 1.2 =
 * added Tools -> Connection Types admin screen
