@@ -59,18 +59,15 @@ class P2P_Widget extends scbWidget {
 	}
 
 	function widget( $args, $instance ) {
-		if ( !is_singular() )
-			return;
-
 		$instance = array_merge( $this->defaults, $instance );
-
-		$post = get_queried_object();
 
 		$ctype = p2p_type( $instance['ctype'] );
 		if ( !$ctype )
 			return;
 
-		$directed = $ctype->find_direction( $post );
+		$item = get_queried_object();
+
+		$directed = $ctype->find_direction( $item );
 		if ( !$directed )
 			return;
 
@@ -82,7 +79,7 @@ class P2P_Widget extends scbWidget {
 			$method = 'get_connected';
 		}
 
-		$connected = $directed->$method( $post, $extra_qv, 'abstract' );
+		$connected = $directed->$method( $item, $extra_qv, 'abstract' );
 
 		if ( empty( $connected->items ) )
 			return;
