@@ -19,6 +19,14 @@ abstract class P2P_List {
 
 		extract( $args, EXTR_SKIP );
 
+		if ( $separator ) {
+			if ( '<ul>' == $before_list )
+				$before_list = '';
+
+			if ( '</ul>' == $after_list )
+				$after_list = '';
+		}
+
 		if ( !$echo )
 			ob_start();
 
