@@ -40,7 +40,7 @@ function _p2p_init() {
 	_p2p_load_files( "$base/core", array(
 		'storage', 'query', 'query-post', 'query-user', 'url-query',
 		'util', 'side', 'list', 'type-factory', 'type', 'directed-type',
-		'api', 'widget', 'shortcodes'
+		'api', 'extra'
 	) );
 
 	P2P_Widget::init();
