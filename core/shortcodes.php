@@ -29,12 +29,16 @@ class P2P_Shortcodes {
 			return '';
 		}
 
+		$directed = $ctype->find_direction( $post );
+		if ( !$directed )
+			return '';
+
 		$extra_qv = array(
 			'p2p:per_page' => -1,
 			'p2p:context' => 'shortcode'
 		);
 
-		$connected = $ctype->$method( $post, $extra_qv, 'abstract' );
+		$connected = $directed->$method( $post, $extra_qv, 'abstract' );
 
 		$args = array( 'echo' => false );
 
@@ -45,7 +49,7 @@ class P2P_Shortcodes {
 			) );
 		}
 
-		return $connected->render( $args );
+		return apply_filters( 'p2p_shortcode_html', $connected->render( $args ), $connected, $directed, $attr );
 	}
 }
 

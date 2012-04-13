@@ -96,9 +96,12 @@ class P2P_Widget extends scbWidget {
 		if ( ! empty( $title ) )
 			echo $before_title . $title . $after_title;
 
-		$connected->render( array(
+		$args = array(
 			'before_list' => '<ul id="' . $ctype->name . '_list">',
-		) );
+			'echo' => false
+		);
+
+		echo apply_filters( 'p2p_widget_html', $connected->render( $args ), $connected, $directed, $instance );
 
 		echo $after_widget;
 	}
