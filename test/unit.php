@@ -343,5 +343,15 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertTrue( !is_wp_error( $ctype->connect( $user, $post ) ) );
 		$this->assertEquals( 1, $ctype->disconnect( $post, $user ) );
 	}
+
+	function test_p2p_list_posts() {
+		$list = array_map( 'get_post', $this->generate_posts( 'post', 2 ) );
+
+		$GLOBALS['post'] = $list[1];
+
+		p2p_list_posts( $list, array( 'echo' => false ) );
+
+		$this->assertEquals( $GLOBALS['post'], $list[1] );
+	}
 }
 

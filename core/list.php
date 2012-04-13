@@ -64,9 +64,15 @@ class P2P_List_Post extends P2P_List {
 	}
 
 	function render( $args = array() ) {
+		if ( !in_the_loop() )
+			$_post = $GLOBALS['post'];
+
 		$r = parent::render( $args );
 
-		wp_reset_postdata();
+		if ( !in_the_loop() )
+			$GLOBALS['post'] = $_post;
+		else
+			wp_reset_postdata();
 
 		return $r;
 	}
