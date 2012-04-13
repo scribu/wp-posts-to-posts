@@ -242,27 +242,24 @@ class P2P_Connection_Type {
 	 *
 	 * Populates each of the outer querie's $post objects with a 'connected' property, containing a list of connected posts
 	 *
-	 * @param object $query WP_Query instance.
+	 * @param object|array $items WP_Query instance or list of post objects
 	 * @param string|array $extra_qv Additional query vars for the inner query.
 	 * @param string $prop_name The name of the property used to store the list of connected items on each post object.
 	 */
-	public function each_connected( $query, $extra_qv = array(), $prop_name = 'connected' ) {
-		if ( empty( $query->posts ) || !is_object( $query->posts[0] ) )
+	public function each_connected( $items, $extra_qv = array(), $prop_name = 'connected' ) {
+		if ( is_a( $items, 'WP_Query' ) )
+			$items =& $items->posts;
+
+		if ( empty( $items ) || !is_object( $items[0] ) )
 			return;
 
-		$post_type = $query->get( 'post_type' );
+		$post_types = array_unique( wp_list_pluck( $items, 'post_type' ) );
 
-		if ( !$post_type ) {
-			$post_type = 'post';
-		} elseif ( 'any' == $post_type ) {
-			$post_type = array_unique( wp_list_pluck( $query->posts, 'post_type' ) );
-		}
-
-		if ( is_array( $post_type ) ) {
-			$direction = $this->find_direction_multiple( $post_type );
+		if ( count( $post_types ) > 1 ) {
+			$direction = $this->find_direction_multiple( $post_types );
 			$extra_qv['post_type'] = 'any';
 		} else {
-			$direction = $this->find_direction( $post_type, false );
+			$direction = $this->find_direction( $post_types[0], false );
 		}
 
 		if ( !$direction )
@@ -272,7 +269,7 @@ class P2P_Connection_Type {
 
 		$posts = array();
 
-		foreach ( $query->posts as $post ) {
+		foreach ( $items as $post ) {
 			$post->$prop_name = array();
 			$posts[ $post->ID ] = $post;
 		}

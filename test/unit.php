@@ -244,6 +244,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$query = new WP_Query( array(
 			'post_type' => 'actor',
 			'post__in' => $actor_ids,
+			'orderby' => 'ID',
 			'order' => 'ASC'
 		) );
 
@@ -254,25 +255,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEmpty( $query->posts[2]->connected );
 	}
 
-	// Test if each_connected() works correctly when 'post_type' is not explicitly set
-	function test_each_connected_post() {
-		$ctype = @p2p_register_connection_type( 'post', 'actor' );
-
-		$post_id = $this->generate_post( 'post' );
-		$actor_id = $this->generate_post( 'actor' );
-
-		$ctype->connect( $post_id, $actor_id );
-
-		$query = new WP_Query( array(
-			'post__in' => array( $post_id )
-		) );
-
-		$ctype->each_connected( $query );
-
-		$this->assertEquals( $query->posts[0]->connected[0]->ID, $actor_id );
-	}
-
-	// Test if each_connected() works correctly when 'post_type' => 'any'
+	// Test if each_connected() works correctly with mixed post types
 	function test_each_connected_any() {
 		$ctype = p2p_type( 'actor_to_movie' );
 
