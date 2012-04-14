@@ -201,7 +201,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_extra_qv() {
-		$ctype = @p2p_register_connection_type( array(
+		$ctype = p2p_register_connection_type( array(
+			'name' => 'posts_to_pages',
 			'from' => 'post',
 			'to' => 'page',
 			'data' => array(
