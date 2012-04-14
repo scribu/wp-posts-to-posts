@@ -4,40 +4,6 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 	var $plugin_slug = 'p2p/posts-to-posts';
 
-	private function generate_posts( $type, $count = 20 ) {
-		global $wpdb;
-
-		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->posts WHERE post_status = 'publish'" );
-
-		$ids = array();
-
-		for ( $i = $total; $i < $total + $count; $i++ ) {
-			$ids[] = wp_insert_post(array(
-				'post_type' => $type,
-				'post_title' => "Post $i",
-				'post_status' => 'publish'
-			));
-		}
-
-		return $ids;
-	}
-
-	private function generate_post( $type = 'post' ) {
-		$posts = $this->generate_posts( $type, 1 );
-		return $posts[0];
-	}
-
-	private function generate_user() {
-		global $wpdb;
-
-		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->users" );
-
-		return wp_insert_user( array(
-			'user_login' => 'user_' . $total,
-			'user_pass' => ''
-		) );
-	}
-
 	function setUp() {
 		parent::setUp();
 
@@ -70,6 +36,40 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 				'to' => 'user',
 			) );
 		}
+	}
+
+	private function generate_posts( $type, $count = 20 ) {
+		global $wpdb;
+
+		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->posts WHERE post_status = 'publish'" );
+
+		$ids = array();
+
+		for ( $i = $total; $i < $total + $count; $i++ ) {
+			$ids[] = wp_insert_post(array(
+				'post_type' => $type,
+				'post_title' => "Post $i",
+				'post_status' => 'publish'
+			));
+		}
+
+		return $ids;
+	}
+
+	private function generate_post( $type = 'post' ) {
+		$posts = $this->generate_posts( $type, 1 );
+		return $posts[0];
+	}
+
+	private function generate_user() {
+		global $wpdb;
+
+		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->users" );
+
+		return wp_insert_user( array(
+			'user_login' => 'user_' . $total,
+			'user_pass' => ''
+		) );
 	}
 
 	function test_storage_post() {
