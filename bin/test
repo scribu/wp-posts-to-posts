@@ -7,4 +7,4 @@ if [[ '' = $wp_tests_dir ]]; then
 	exit
 fi
 
-phpunit --bootstrap $wp_tests_dir/init.php ./test/unit.php
+phpunit --bootstrap $wp_tests_dir/init.php --configuration ./test/phpunit.xml ./test/unit.php

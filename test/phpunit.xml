@@ -1,4 +1,10 @@
-<phpunit backupGlobals="false">
+<phpunit
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+>
 	<php>
 		<ini name="memory_limit" value="-1" />
 	</php>
