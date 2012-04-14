@@ -128,7 +128,7 @@ function _p2p_get_list( $args ) {
 
 	$ctype = p2p_type( $ctype );
 	if ( !$ctype ) {
-		trigger_error( sprintf( "Unregistered connection type '%s'.", $attr['type'] ), E_USER_WARNING );
+		trigger_error( sprintf( "Unregistered connection type '%s'.", $ctype ), E_USER_WARNING );
 		return '';
 	}
 
