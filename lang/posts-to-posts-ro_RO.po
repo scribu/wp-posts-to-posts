@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Posts 2 Posts\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
-"POT-Creation-Date: 2012-04-06 20:57:17+00:00\n"
-"PO-Revision-Date: 2012-04-06 23:59+0200\n"
+"POT-Creation-Date: 2012-04-15 23:11:12+00:00\n"
+"PO-Revision-Date: 2012-04-16 02:15+0200\n"
 "Last-Translator: scribu <mail@scribu.net>\n"
 "Language-Team: ROMANIAN <LL@li.org>\n"
 "Language: \n"
@@ -24,37 +24,37 @@ msgstr "(de la)"
 msgid " (to)"
 msgstr "(la)"
 
-#: admin/box.php:34
+#: admin/box.php:40
 msgid "Are you sure you want to delete all connections?"
 msgstr "Sigur vreți să ștergeți toate conexiunile?"
 
-#: admin/box.php:120
+#: admin/box.php:129
 msgid "Create connections:"
 msgstr "Creează conexiuni:"
 
-#: admin/box.php:129
+#: admin/box.php:138
 msgid "View All"
 msgstr "Vezi toate"
 
-#: admin/box.php:134
+#: admin/box.php:143
 msgid "Search"
 msgstr "Căutare"
 
-#: admin/box.php:205
+#: admin/box.php:220
 msgid "previous"
 msgstr "anterioare"
 
-#: admin/box.php:206
+#: admin/box.php:221
 msgid "next"
 msgstr "următoare"
 
-#: admin/box.php:207
+#: admin/box.php:222
 msgid "of"
 msgstr "din"
 
-#: admin/box.php:248
-msgid "Can't create connection."
-msgstr "Conexiunea nu poate fi creată."
+#: admin/box.php:261
+msgid "Can't create connection: %s"
+msgstr "Conexiunea nu poate fi creată: %s"
 
 #: admin/fields.php:13
 msgid "Create connection"
@@ -70,7 +70,7 @@ msgstr "Șterge conexiune"
 
 #: admin/tools.php:7
 msgid "Connection Types"
-msgstr "Tipuri de conexiuni:"
+msgstr "Tipuri de conexiuni"
 
 #: admin/tools.php:31
 msgid "Upgraded %d connections."
@@ -108,53 +108,53 @@ msgstr "Convertește într-un tip de conexiune înregistrat:"
 msgid "Go"
 msgstr "Go"
 
-#: core/side.php:149
-msgid "Users"
-msgstr "Utilizatori"
-
-#: core/side.php:158
-msgid "User"
-msgstr "Utilizator"
-
-#: core/side.php:159
-msgid "Search Users"
-msgstr "Caută utilizatori"
-
-#: core/side.php:160
-msgid "No users found."
-msgstr "Niciun utilizator găsit."
-
-#: core/type.php:77
-msgid "Connected %s"
-msgstr "%s conectate"
-
-#: core/widget.php:15
+#: core/extra.php:16
 msgid "Posts 2 Posts"
 msgstr "Posts 2 Posts"
 
-#: core/widget.php:16
+#: core/extra.php:17
 msgid "A list of posts connected to the current post"
 msgstr "O lista de postări conectate la postarea curentă"
 
-#: core/widget.php:37
+#: core/extra.php:37
+msgid "Title:"
+msgstr "Titlu:"
+
+#: core/extra.php:44
 msgid "Connection type:"
 msgstr "Tipul conexiunii:"
 
-#: core/widget.php:41
+#: core/extra.php:48
 msgid "Connection listing:"
-msgstr "Tipul conexiunii:"
+msgstr "Conexiuni de listat:"
 
-#: core/widget.php:47
+#: core/extra.php:54
 msgid "connected"
 msgstr "conectate"
 
-#: core/widget.php:48
+#: core/extra.php:55
 msgid "related"
 msgstr "înrudite"
 
-#: core/widget.php:73
-msgid "Related %s"
-msgstr "%s înrudite"
+#: core/side.php:129
+msgid "Users"
+msgstr "Utilizatori"
+
+#: core/side.php:138
+msgid "User"
+msgstr "Utilizator"
+
+#: core/side.php:139
+msgid "Search Users"
+msgstr "Caută utilizatori"
+
+#: core/side.php:140
+msgid "No users found."
+msgstr "Niciun utilizator găsit."
+
+#: core/type.php:88
+msgid "Connected %s"
+msgstr "%s conectate"
 
 #: scb/AdminPage.php:172
 msgid "Settings <strong>saved</strong>."
@@ -168,6 +168,9 @@ msgstr "Salvează schimbările"
 #: scb/AdminPage.php:360
 msgid "Settings"
 msgstr "Setări"
+
+#~ msgid "Related %s"
+#~ msgstr "%s înrudite"
 
 #~ msgid "Recent"
 #~ msgstr "Recente"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
-"POT-Creation-Date: 2012-04-06 20:57:17+00:00\n"
+"POT-Creation-Date: 2012-04-15 23:11:12+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,36 +20,36 @@ msgstr ""
 msgid " (to)"
 msgstr ""
 
-#: admin/box.php:34
+#: admin/box.php:40
 msgid "Are you sure you want to delete all connections?"
 msgstr ""
 
-#: admin/box.php:120
+#: admin/box.php:129
 msgid "Create connections:"
 msgstr ""
 
-#: admin/box.php:129
+#: admin/box.php:138
 msgid "View All"
 msgstr ""
 
-#: admin/box.php:134
+#: admin/box.php:143
 msgid "Search"
 msgstr ""
 
-#: admin/box.php:205
+#: admin/box.php:220
 msgid "previous"
 msgstr ""
 
-#: admin/box.php:206
+#: admin/box.php:221
 msgid "next"
 msgstr ""
 
-#: admin/box.php:207
+#: admin/box.php:222
 msgid "of"
 msgstr ""
 
-#: admin/box.php:248
-msgid "Can't create connection."
+#: admin/box.php:261
+msgid "Can't create connection: %s"
 msgstr ""
 
 #: admin/fields.php:13
@@ -106,52 +106,52 @@ msgstr ""
 msgid "Go"
 msgstr ""
 
-#: core/side.php:149
-msgid "Users"
-msgstr ""
-
-#: core/side.php:158
-msgid "User"
-msgstr ""
-
-#: core/side.php:159
-msgid "Search Users"
-msgstr ""
-
-#: core/side.php:160
-msgid "No users found."
-msgstr ""
-
-#: core/type.php:77
-msgid "Connected %s"
-msgstr ""
-
-#: core/widget.php:15
+#: core/extra.php:16
 msgid "Posts 2 Posts"
 msgstr ""
 
-#: core/widget.php:16
+#: core/extra.php:17
 msgid "A list of posts connected to the current post"
 msgstr ""
 
-#: core/widget.php:37
+#: core/extra.php:37
+msgid "Title:"
+msgstr ""
+
+#: core/extra.php:44
 msgid "Connection type:"
 msgstr ""
 
-#: core/widget.php:41
+#: core/extra.php:48
 msgid "Connection listing:"
 msgstr ""
 
-#: core/widget.php:47
+#: core/extra.php:54
 msgid "connected"
 msgstr ""
 
-#: core/widget.php:48
+#: core/extra.php:55
 msgid "related"
 msgstr ""
 
-#: core/widget.php:73
-msgid "Related %s"
+#: core/side.php:129
+msgid "Users"
+msgstr ""
+
+#: core/side.php:138
+msgid "User"
+msgstr ""
+
+#: core/side.php:139
+msgid "Search Users"
+msgstr ""
+
+#: core/side.php:140
+msgid "No users found."
+msgstr ""
+
+#: core/type.php:88
+msgid "Connected %s"
 msgstr ""
 
 #: scb/AdminPage.php:172
