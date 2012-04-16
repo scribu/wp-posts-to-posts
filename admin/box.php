@@ -320,7 +320,9 @@ class P2P_Box {
 	}
 
 	public function check_capability() {
-		return $this->ctype->get_opposite( 'side' )->check_capability();
+		$show = $this->ctype->get_opposite( 'side' )->check_capability();
+
+		return apply_filters( 'p2p_admin_box_show', $show, $GLOBALS['post'], $this->ctype );
 	}
 }
 
