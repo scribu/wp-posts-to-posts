@@ -7,19 +7,22 @@ jQuery ->
 			if not $this.val()
 				$this.val($this.attr('placeholder'))
 				$this.addClass('p2p-placeholder')
-			void
+
+			undefined
 
 		clearVal = ->
 			$this = jQuery(this)
+
 			if $this.hasClass('p2p-placeholder')
 				$this.val('')
 				$this.removeClass('p2p-placeholder')
-			void
+
+			undefined
 
 		jQuery('.p2p-search input[placeholder]')
-			.each setVal
-			.focus clearVal
-			.blur setVal
+			.each(setVal)
+			.focus(clearVal)
+			.blur(setVal)
 
 	jQuery('.p2p-box').each ->
 		$metabox = jQuery(this)
@@ -28,7 +31,7 @@ jQuery ->
 		$spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
 
 		ajax_request = (data, callback, type = 'POST') ->
-			data <<<
+			jQuery.extend data,
 				action: 'p2p_box'
 				nonce: P2PAdmin.nonce
 				p2p_type: $metabox.data('p2p_type')
@@ -41,28 +44,29 @@ jQuery ->
 				try
 					response = jQuery.parseJSON response
 					callback response
-				catch
+				catch e
 					console?.error 'Malformed response', response
 
-			jQuery.ajax(
+			jQuery.ajax {
 				type: type
 				url: ajaxurl
 				data: data
 				success: handler
-			)
+			}
 
 
 		class PostsTab
-			(selector) ->
+			constructor: (selector) ->
 				@tab = $metabox.find(selector)
 
-				@params =
+				@params = {
 					subaction: 'search'
 					s: ''
+				}
 
 				@init_pagination_data()
 
-				@tab.delegate('.p2p-prev, .p2p-next', 'click', this.~change_page)
+				@tab.delegate '.p2p-prev, .p2p-next', 'click', jQuery.proxy(this, 'change_page')
 
 			init_pagination_data: ->
 				@params.paged = @tab.find('.p2p-current').data('num') || 1
@@ -87,10 +91,10 @@ jQuery ->
 				return false
 
 			find_posts: (new_page) ->
-				if 0 < new_page <= @total_pages then
+				if 0 < new_page <= @total_pages
 					@params.paged = new_page
 
-				ajax_request @params, this.~update_rows, 'GET'
+				ajax_request @params, jQuery.proxy(this, 'update_rows'), 'GET'
 
 			update_rows: (response) ->
 				$spinner.remove()
@@ -136,10 +140,11 @@ jQuery ->
 			$self = jQuery(ev.target)
 			$td = $self.closest('td')
 
-			data =
+			data = {
 				subaction: 'clear_connections'
+			}
 
-			row_ajax_request $td, data, (response) ~>
+			row_ajax_request $td, data, (response) =>
 				$connections.hide()
 					.find('tbody').html('')
 
@@ -153,11 +158,12 @@ jQuery ->
 			$self = jQuery(ev.target)
 			$td = $self.closest('td')
 
-			data =
+			data = {
 				subaction: 'disconnect'
 				p2p_id: $self.data('p2p_id')
+			}
 
-			row_ajax_request $td, data, (response) ~>
+			row_ajax_request $td, data, (response) =>
 				$td.closest('tr').remove()
 
 				maybe_hide_table $connections
@@ -170,11 +176,12 @@ jQuery ->
 			$self = jQuery(ev.target)
 			$td = $self.closest('td')
 
-			data =
+			data = {
 				subaction: 'connect'
 				to: $self.data('post_id')
+			}
 
-			row_ajax_request $td, data, (response) ~>
+			row_ajax_request $td, data, (response) =>
 				append_connection(response)
 
 				if $metabox.data('prevent_duplicates')
@@ -204,10 +211,10 @@ jQuery ->
 			return false
 
 		$metabox
-			.delegate 'th.p2p-col-delete a', 'click', clear_connections
-			.delegate 'td.p2p-col-delete a', 'click', delete_connection
-			.delegate 'td.p2p-col-create a', 'click', create_connection
-			.delegate '.wp-tab-bar li', 'click', switch_to_tab
+			.delegate('th.p2p-col-delete a', 'click', clear_connections)
+			.delegate('td.p2p-col-delete a', 'click', delete_connection)
+			.delegate('td.p2p-col-create a', 'click', create_connection)
+			.delegate('.wp-tab-bar li', 'click', switch_to_tab)
 
 		# Make sortable
 		if $connections.find('th.p2p-col-order').length
@@ -225,24 +232,24 @@ jQuery ->
 
 		$viewAll.click ->
 			searchTab.find_posts(1)
-			false
+			return false
 
 		# Search posts
 		$searchInput = $metabox.find('.p2p-tab-search :text')
 
 		$searchInput
 			.keypress (ev) ->
-				if 13 === ev.keyCode
+				if ev.keyCode is 13 # RETURN
 					return false
 
 			.keyup (ev) ->
-				if undefined !== delayed
+				if delayed isnt undefined
 					clearTimeout(delayed)
 
 				delayed = setTimeout ->
 					searchStr = $searchInput.val()
 
-					if searchStr === searchTab.params.s
+					if searchStr is searchTab.params.s
 						return
 
 					searchTab.params.s = searchStr
@@ -264,7 +271,7 @@ jQuery ->
 
 			title = $createInput.val()
 
-			if '' === title
+			if title is ''
 				$createInput.focus()
 				return false
 
@@ -284,7 +291,7 @@ jQuery ->
 			return false
 
 		$createInput.keypress (ev) ->
-			if 13 === ev.keyCode
+			if 13 is ev.keyCode
 				$createButton.click()
 
 				return false
