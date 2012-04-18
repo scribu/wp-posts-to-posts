@@ -20,16 +20,16 @@ function _p2p_normalize( $items ) {
 }
 
 /** @internal */
-function _p2p_meta_sql_helper( $data ) {
+function _p2p_meta_sql_helper( $query ) {
 	global $wpdb;
 
-	if ( isset( $data[0] ) ) {
-		$meta_query = $data;
+	if ( isset( $query[0] ) ) {
+		$meta_query = $query;
 	}
 	else {
 		$meta_query = array();
 
-		foreach ( $data as $key => $value ) {
+		foreach ( $query as $key => $value ) {
 			$meta_query[] = compact( 'key', 'value' );
 		}
 	}
