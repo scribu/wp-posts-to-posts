@@ -8,8 +8,8 @@ abstract class P2P_Side {
 		$this->query_vars = $query_vars;
 	}
 
-	function get_base_qv() {
-		return $this->query_vars;
+	function get_base_qv( $q ) {
+		return array_merge( $this->query_vars, $q );
 	}
 }
 
@@ -28,9 +28,15 @@ class P2P_Side_Post extends P2P_Side {
 		return get_post_type_object( $this->post_type[0] );
 	}
 
-	function get_base_qv() {
-		return array_merge( $this->query_vars, array(
-			'post_type' => $this->post_type,
+	function get_base_qv( $q ) {
+		if ( isset( $q['post_type'] ) ) {
+			$common = array_intersect( $this->post_type, (array) $q['post_type'] );
+
+			if ( !$common )
+				unset( $q['post_type'] );
+		}
+
+		return array_merge( $this->query_vars, $q, array(
 			'suppress_filters' => false,
 			'ignore_sticky_posts' => true,
 		) );
@@ -115,8 +121,8 @@ class P2P_Side_Attachment extends P2P_Side_Post {
 		$this->post_type = array( 'attachment' );
 	}
 
-	function get_base_qv() {
-		return array_merge( parent::get_base_qv(), array(
+	function get_base_qv( $q ) {
+		return array_merge( parent::get_base_qv( $q ), array(
 			'post_status' => 'inherit'
 		) );
 	}

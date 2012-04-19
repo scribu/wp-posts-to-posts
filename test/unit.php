@@ -148,6 +148,30 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( 'any', $reciprocal->find_direction( 'movie', false ) );
 	}
 
+	function test_restrict_post_type() {
+		$ctype = p2p_register_connection_type( array(
+			'name' => 'movie_bizz',
+			'from' => 'user',
+			'to' => array( 'movie', 'studio' )
+		) );
+
+		$q = new WP_Query( array(
+			'post_type' => 'post',
+			'connected_type' => 'movie_bizz',
+			'connected_items' => $this->generate_user()
+		) );
+
+		$this->assertEquals( array( 'movie', 'studio' ), $q->query_vars['post_type'] );
+
+		$q = new WP_Query( array(
+			'post_type' => 'studio',
+			'connected_type' => 'movie_bizz',
+			'connected_items' => $this->generate_user()
+		) );
+
+		$this->assertEquals( 'studio', $q->query_vars['post_type'] );
+	}
+
 	function test_connection_create() {
 		$ctype = p2p_type( 'actor_to_movie' );
 
