@@ -77,7 +77,7 @@ class P2P_Debug {
 					'title' => 'Color',
 					'type' => 'checkbox',
 					'values' => array( 'white', 'red', 'green', 'blue' ),
-					'default' => array( 'green' )
+					'default' => 'green'
 				),
 			),
 			'sortable' => true,
