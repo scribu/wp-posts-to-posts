@@ -29,7 +29,7 @@ class P2P_Side_Post extends P2P_Side {
 	}
 
 	function get_base_qv( $q ) {
-		if ( isset( $q['post_type'] ) ) {
+		if ( isset( $q['post_type'] ) && 'any' != $q['post_type'] ) {
 			$common = array_intersect( $this->post_type, (array) $q['post_type'] );
 
 			if ( !$common )
