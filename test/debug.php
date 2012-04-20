@@ -58,18 +58,26 @@ class P2P_Debug {
 			'from' => 'user',
 			'title' => array( 'to' => 'Users 2 Posts' ),
 			'fields' => array(
-				'text' => 'Text',
-				'select' => array( 'type' => 'select', 'title' => 'Select', 'values' => range(1, 10) ),
+				'text' => array(
+					'title' => 'Text',
+					'default' => 'foobar'
+				),
+				'select' => array(
+					'type' => 'select',
+					'title' => 'Select',
+					'values' => range(1, 10),
+					'default' => 5
+				),
 				'single_checkbox' => array(
 					'title' => 'Ya?',
 					'type' => 'checkbox',
+					'default' => true
 				),
 				'color' => array(
 					'title' => 'Color',
 					'type' => 'checkbox',
-					'values' => array(
-						'white', 'red', 'green', 'blue'
-					)
+					'values' => array( 'white', 'red', 'green', 'blue' ),
+					'default' => array( 'green' )
 				),
 			),
 			'sortable' => true,
