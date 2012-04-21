@@ -66,18 +66,19 @@ jQuery ->
 
 				@init_pagination_data()
 
-				@tab.delegate '.p2p-prev, .p2p-next', 'click', jQuery.proxy(this, 'change_page')
+				@tab.delegate '.p2p-prev, .p2p-next', 'click', (ev) =>
+					@change_page(ev.target)
 
 			init_pagination_data: ->
 				@params.paged = @tab.find('.p2p-current').data('num') || 1
 				@total_pages = @tab.find('.p2p-total').data('num') || 1
 
-			change_page: (ev) ->
-				$navButton = jQuery(ev.target)
+			change_page: (button) ->
+				$navButton = jQuery(button)
 				new_page = @params.paged
 
 				if $navButton.hasClass('inactive')
-					return false
+					return
 
 				if $navButton.hasClass('p2p-prev')
 					new_page--
@@ -88,13 +89,13 @@ jQuery ->
 
 				@find_posts(new_page)
 
-				return false
-
 			find_posts: (new_page) ->
 				if 0 < new_page <= @total_pages
 					@params.paged = new_page
 
-				ajax_request @params, jQuery.proxy(this, 'update_rows'), 'GET'
+				ajax_request @params, (response) =>
+					@update_rows response
+				, 'GET'
 
 			update_rows: (response) ->
 				$spinner.remove()
