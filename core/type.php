@@ -267,13 +267,6 @@ class P2P_Connection_Type {
 
 		$directed = $this->set_direction( $direction );
 
-		$posts = array();
-
-		foreach ( $items as $post ) {
-			$post->$prop_name = array();
-			$posts[ $post->ID ] = $post;
-		}
-
 		// ignore pagination
 		foreach ( array( 'showposts', 'posts_per_page', 'posts_per_archive_page' ) as $disabled_qv ) {
 			if ( isset( $extra_qv[ $disabled_qv ] ) ) {
@@ -282,20 +275,9 @@ class P2P_Connection_Type {
 		}
 		$extra_qv['nopaging'] = true;
 
-		$q = $directed->get_connected( $posts, $extra_qv, 'abstract' );
+		$q = $directed->get_connected( $items, $extra_qv, 'abstract' );
 
-		foreach ( $q->items as $inner_item ) {
-			if ( $inner_item->ID == $inner_item->p2p_from ) {
-				$outer_item_id = $inner_item->p2p_to;
-			} elseif ( $inner_item->ID == $inner_item->p2p_to ) {
-				$outer_item_id = $inner_item->p2p_from;
-			} else {
-				trigger_error( "Corrupted data for item $inner_item->ID", E_USER_WARNING );
-				continue;
-			}
-
-			array_push( $posts[ $outer_item_id ]->$prop_name, $inner_item );
-		}
+		p2p_distribute_connected( $items, $q->items, $prop_name );
 	}
 
 	public function get_desc() {

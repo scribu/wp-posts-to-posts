@@ -319,3 +319,33 @@ function p2p_list_posts( $posts, $args = array() ) {
 	return $list->render( $args );
 }
 
+/**
+ * Given a list of objects and another list of connected items,
+ * distribute each connected item to it's respective counterpart.
+ *
+ * @param array List of objects
+ * @param array List of connected objects
+ * @param string Name of connected array property
+ */
+function p2p_distribute_connected( $items, $connected, $prop_name ) {
+	$indexed_list = array();
+
+	foreach ( $items as $item ) {
+		$item->$prop_name = array();
+		$indexed_list[ $item->ID ] = $item;
+	}
+
+	foreach ( $connected as $inner_item ) {
+		if ( $inner_item->ID == $inner_item->p2p_from ) {
+			$outer_item_id = $inner_item->p2p_to;
+		} elseif ( $inner_item->ID == $inner_item->p2p_to ) {
+			$outer_item_id = $inner_item->p2p_from;
+		} else {
+			trigger_error( "Corrupted data for item $inner_item->ID", E_USER_WARNING );
+			continue;
+		}
+
+		array_push( $indexed_list[ $outer_item_id ]->$prop_name, $inner_item );
+	}
+}
+
