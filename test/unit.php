@@ -299,10 +299,10 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$ctype->each_connected( $query );
 
-		$this->assertEquals( $query->posts[0]->connected[0]->p2p_id, $p2p_id_0 );
-		$this->assertEquals( $query->posts[1]->connected[0]->p2p_id, $p2p_id_1 );
-		$this->assertEquals( $query->posts[2]->connected[0]->p2p_id, $p2p_id_0 );
-		$this->assertEquals( $query->posts[2]->connected[1]->p2p_id, $p2p_id_1 );
+		$this->assertEquals( $p2p_id_0, $query->posts[0]->connected[0]->p2p_id );
+		$this->assertEquals( $p2p_id_1, $query->posts[1]->connected[0]->p2p_id );
+		$this->assertEquals( $p2p_id_0, $query->posts[2]->connected[0]->p2p_id );
+		$this->assertEquals( $p2p_id_1, $query->posts[2]->connected[1]->p2p_id );
 	}
 
 	function test_adjacent() {
