@@ -155,6 +155,6 @@ function _p2p_get_list( $args ) {
 		) );
 	}
 
-	return apply_filters( "p2p_{$context}_html", $connected->render( $args ), $connected, $directed );
+	return apply_filters( "p2p_{$context}_html", $connected->render( $args ), $connected, $directed, $mode );
 }
 
