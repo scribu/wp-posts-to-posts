@@ -2,8 +2,8 @@
 Contributors: scribu, ciobi
 Tags: connections, custom post types, relationships, many-to-many, users
 Requires at least: 3.2
-Tested up to: 3.3
-Stable tag: 1.2
+Tested up to: 3.4
+Stable tag: 1.3
 
 Efficient many-to-many connections between posts, pages, custom post types, users.
 
@@ -56,6 +56,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * made get_related() work with posts-to-users connections
 * made each_connected() work with simple array of posts
 * introduced [p2p_connected] and [p2p_related] shortcodes
+* [more info](http://scribu.net/wordpress/posts-to-posts/p2p-1-3.html)
 
 = 1.2 =
 * added Tools -> Connection Types admin screen
