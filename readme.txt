@@ -56,6 +56,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * made get_related() work with posts-to-users connections
 * made each_connected() work with simple array of posts
 * introduced [p2p_connected] and [p2p_related] shortcodes
+* allow 'default' parameter in 'fields' array
 * [more info](http://scribu.net/wordpress/posts-to-posts/p2p-1-3.html)
 
 = 1.2 =
