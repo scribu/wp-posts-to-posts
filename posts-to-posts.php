@@ -8,8 +8,6 @@ Author URI: http://scribu.net/
 Plugin URI: http://scribu.net/wordpress/posts-to-posts
 Text Domain: posts-to-posts
 Domain Path: /lang
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
 define( 'P2P_PLUGIN_VERSION', '1.3-beta' );
