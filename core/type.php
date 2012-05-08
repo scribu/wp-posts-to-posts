@@ -31,7 +31,7 @@ class P2P_Connection_Type {
 					$this->indeterminate = true;
 			}
 		} else {
-			$this->self_connections = true;
+			$args['self_connections'] = true;
 		}
 
 		$this->set_cardinality( _p2p_pluck( $args, 'cardinality' ) );
