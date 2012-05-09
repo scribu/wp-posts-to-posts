@@ -122,9 +122,11 @@ class P2P_Box_Factory {
 		if ( 'revision' == $post->post_type || defined( 'DOING_AJAX' ) )
 			return;
 
-		// Custom fields
-		if ( isset( $_POST['p2p_meta'] ) ) {
-			foreach ( $_POST['p2p_meta'] as $p2p_id => $data ) {
+		if ( isset( $_POST['p2p_connections'] ) ) {
+			// Loop through the hidden fields instead of through $_POST['p2p_meta'] because empty checkboxes send no data.
+			foreach ( $_POST['p2p_connections'] as $p2p_id ) {
+				$data = scbForms::get_value( array( 'p2p_meta', $p2p_id ), $_POST, array() );
+
 				$connection = p2p_get_connection( $p2p_id );
 
 				$fields = self::$box_args[$connection->p2p_type]->fields;

@@ -168,7 +168,7 @@
         $td = $self.closest('td');
         data = {
           subaction: 'disconnect',
-          p2p_id: $self.data('p2p_id')
+          p2p_id: $self.closest('td').find('input').val()
         };
         row_ajax_request($td, data, function(response) {
           $td.closest('tr').remove();
