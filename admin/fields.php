@@ -84,7 +84,7 @@ class P2P_Field_Generic implements P2P_Field {
 			$args['value'] = $this->data['values'];
 
 		if ( isset( $this->data['default_cb'] ) ) {
-			$this->data['default'] = call_user_func( $this->data['default_cb'], $post_id, $p2p_id );
+			$this->data['default'] = call_user_func( $this->data['default_cb'], p2p_get_connection( $p2p_id ) );
 		}
 
 		if ( isset( $this->data['default'] ) ) {
