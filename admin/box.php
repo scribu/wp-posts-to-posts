@@ -239,7 +239,9 @@ class P2P_Box {
 			'post_type' => $this->ctype->get_opposite( 'side' )->post_type[0]
 		);
 
-		$args = apply_filters( 'p2p_new_post_args', $args, $this->ctype );
+		$from = absint( $_POST['from'] );
+
+		$args = apply_filters( 'p2p_new_post_args', $args, $this->ctype, $from );
 
 		$this->safe_connect( wp_insert_post( $args ) );
 	}
