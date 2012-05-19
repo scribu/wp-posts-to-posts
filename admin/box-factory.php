@@ -129,11 +129,13 @@ class P2P_Box_Factory {
 
 				$connection = p2p_get_connection( $p2p_id );
 
-				$fields = self::$box_args[$connection->p2p_type]->fields;
+				$fields = self::$box_args[ $connection->p2p_type ]->fields;
 
 				foreach ( $fields as $key => &$field ) {
 					$field['name'] = $key;
 				}
+
+				$data = scbForms::validate_post_data( $fields, $data );
 
 				scbForms::update_meta( $fields, $data, $p2p_id, 'p2p' );
 			}
