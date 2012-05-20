@@ -81,19 +81,10 @@ class P2P_Field_Generic implements P2P_Field {
 		);
 
 		if ( isset( $this->data['values'] ) )
-			$args['value'] = $this->data['values'];
+			$args['values'] = $this->data['values'];
 
-		if ( isset( $this->data['default_cb'] ) ) {
-			$this->data['default'] = call_user_func( $this->data['default_cb'], p2p_get_connection( $p2p_id ) );
-		}
-
-		if ( isset( $this->data['default'] ) ) {
-			$args['default'] = $this->data['default'];
-			if ( 'checkbox' == $args['type'] )
-				$args['default'] = (array) $args['default'];
-		} elseif ( 'select' == $args['type'] ) {
+		if ( 'select' == $args['type'] )
 			$args['text'] = '';
-		}
 
 		return scbForms::input_from_meta( $args, $p2p_id, 'p2p' );
 	}

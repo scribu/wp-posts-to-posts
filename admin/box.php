@@ -49,7 +49,7 @@ class P2P_Box {
 			'title' => new $title_class( $this->labels->singular_name ),
 		);
 
-		foreach ( $this->args->fields as $key => $data ) {
+		foreach ( $this->ctype->fields as $key => $data ) {
 			$this->columns[ 'meta-' . $key ] = new P2P_Field_Generic( $key, $data );
 		}
 

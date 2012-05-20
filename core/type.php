@@ -40,9 +40,30 @@ class P2P_Connection_Type {
 
 		$this->title = $this->expand_title( _p2p_pluck( $args, 'title' ) );
 
+		$this->fields = $this->expand_fields( _p2p_pluck( $args, 'fields' ) );
+
 		foreach ( $args as $key => $value ) {
 			$this->$key = $value;
 		}
+	}
+
+	private function expand_fields( $fields ) {
+		foreach ( $fields as &$field_args )
+		{
+			if ( !is_array( $field_args ) )
+				$field_args = array( 'title' => $field_args );
+
+			if ( !isset( $field_args['type'] ) )
+			{
+				$field_args['type'] = isset( $field_args['values'] ) ? 'select' : 'text';
+			}
+			elseif ( 'checkbox' == $field_args['type'] && !isset( $field_args['values'] ) )
+			{
+				$field_args['values'] = array( true => ' ' );
+			}
+		}
+
+		return $fields;
 	}
 
 	private function set_cardinality( $cardinality ) {

@@ -50,17 +50,6 @@ function _p2p_append( &$arr, $values ) {
 }
 
 /** @internal */
-function _p2p_get_field_type( $args ) {
-	if ( isset( $args['type'] ) )
-		return $args['type'];
-
-	if ( isset( $args['values'] ) && is_array( $args['values'] ) )
-		return 'select';
-
-	return 'text';
-}
-
-/** @internal */
 function _p2p_first( $args ) {
 	if ( empty( $args ) )
 		return false;

@@ -22,6 +22,7 @@ class P2P_Connection_Type_Factory {
 			'to' => 'post',
 			'from_query_vars' => array(),
 			'to_query_vars' => array(),
+			'fields' => array(),
 			'data' => array(),
 			'cardinality' => 'many-to-many',
 			'prevent_duplicates' => true,
