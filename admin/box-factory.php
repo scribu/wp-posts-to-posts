@@ -41,7 +41,6 @@ class P2P_Box_Factory {
 		$box_args = (object) wp_parse_args( $box_args, array(
 			'show' => 'any',
 			'context' => 'side',
-			'fields' => array(),
 			'can_create_post' => true
 		) );
 
