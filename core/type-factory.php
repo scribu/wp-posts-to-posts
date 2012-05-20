@@ -25,7 +25,7 @@ class P2P_Connection_Type_Factory {
 			'fields' => array(),
 			'data' => array(),
 			'cardinality' => 'many-to-many',
-			'prevent_duplicates' => true,
+			'duplicate_connections' => false,
 			'self_connections' => false,
 			'sortable' => false,
 			'title' => array(),

@@ -171,7 +171,7 @@ class P2P_Directed_Connection_Type {
 			) ) );
 		}
 
-		if ( $this->prevent_duplicates ) {
+		if ( !$this->duplicate_connections ) {
 			_p2p_append( $to_exclude, $this->get_connections( array(
 				'from' => $item_id,
 				'fields' => 'object_id'
@@ -202,7 +202,7 @@ class P2P_Directed_Connection_Type {
 		if ( !$this->self_connections && $from == $to )
 			return new WP_Error( 'self_connection', 'Connection between an element and itself is not allowed.' );
 
-		if ( $this->prevent_duplicates && $this->get_p2p_id( $from, $to ) )
+		if ( !$this->duplicate_connections && $this->get_p2p_id( $from, $to ) )
 			return new WP_Error( 'duplicate_connection', 'Duplicate connections are not allowed.' );
 
 		if ( 'one' == $this->get_opposite( 'cardinality' ) && $this->connection_exists( compact( 'from' ) ) )

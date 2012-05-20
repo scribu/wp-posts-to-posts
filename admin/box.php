@@ -90,7 +90,7 @@ class P2P_Box {
 	protected function render_data_attributes() {
 		$data_attr = array(
 			'p2p_type' => $this->ctype->name,
-			'prevent_duplicates' => $this->ctype->prevent_duplicates,
+			'duplicate_connections' => $this->ctype->duplicate_connections,
 			'cardinality' => $this->ctype->get_opposite( 'cardinality' ),
 			'direction' => $this->ctype->get_direction()
 		);

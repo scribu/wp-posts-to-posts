@@ -185,7 +185,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$r = p2p_type( 'movies_to_movies' )->connect( $movie_id, $movie_id );
 		$this->assertEquals( 'self_connection', $r->get_error_code() );
 
-		// 'prevent_duplicates'
+		// 'duplicate_connections'
 		$this->assertTrue( is_wp_error( $ctype->connect( $actor_id, $movie_id ) ) );
 
 		// get connected

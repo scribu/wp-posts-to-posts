@@ -188,11 +188,11 @@
         };
         row_ajax_request($td, data, function(response) {
           append_connection(response);
-          if ($metabox.data('prevent_duplicates')) {
+          if ($metabox.data('duplicate_connections')) {
+            return $td.html($self);
+          } else {
             $td.closest('tr').remove();
             return maybe_hide_table($td.closest('table'));
-          } else {
-            return $td.html($self);
           }
         });
         return false;

@@ -185,11 +185,11 @@ jQuery ->
 			row_ajax_request $td, data, (response) =>
 				append_connection(response)
 
-				if $metabox.data('prevent_duplicates')
+				if $metabox.data('duplicate_connections')
+					$td.html $self
+				else
 					$td.closest('tr').remove()
 					maybe_hide_table $td.closest('table')
-				else
-					$td.html $self
 
 			return false
 

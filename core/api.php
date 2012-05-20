@@ -21,7 +21,7 @@
  *
  * - 'cardinality' - string How many connection can each post have: 'one-to-many', 'many-to-one' or 'many-to-many'. Default: 'many-to-many'
  *
- * - 'prevent_duplicates' - bool Whether to disallow duplicate connections between the same two posts. Default: true.
+ * - 'duplicate_connections' - bool Whether to allow more than one connection between the same two posts. Default: false.
  *
  * - 'self_connections' - bool Whether to allow a post to connect to itself. Default: false.
  *
@@ -62,6 +62,10 @@ function p2p_register_connection_type( $args ) {
 
 	if ( isset( $args['id'] ) ) {
 		$args['name'] = _p2p_pluck( $args, 'id' );
+	}
+
+	if ( isset( $args['prevent_duplicates'] ) ) {
+		$args['duplicate_connections'] = !$args['prevent_duplicates'];
 	}
 
 	if ( isset( $args['show_ui'] ) ) {
