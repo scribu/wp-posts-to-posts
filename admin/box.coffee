@@ -117,7 +117,10 @@ jQuery ->
 
 			ajax_request data, callback
 
-		maybe_hide_table = ($table) ->
+		remove_row = ($td) ->
+			$table = $td.closest('table')
+			$td.closest('tr').remove()
+
 			if not $table.find('tbody tr').length
 				$table.hide()
 
@@ -165,9 +168,7 @@ jQuery ->
 			}
 
 			row_ajax_request $td, data, (response) =>
-				$td.closest('tr').remove()
-
-				maybe_hide_table $connections
+				remove_row $td
 
 				refresh_candidates response
 
@@ -188,8 +189,7 @@ jQuery ->
 				if $metabox.data('duplicate_connections')
 					$td.html $self
 				else
-					$td.closest('tr').remove()
-					maybe_hide_table $td.closest('table')
+					remove_row $td
 
 			return false
 
