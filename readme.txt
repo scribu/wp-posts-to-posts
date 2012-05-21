@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Tags: connections, custom post types, relationships, many-to-many, users
 Requires at least: 3.2
 Tested up to: 3.4
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,13 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 5. Connection Types screen
 
 == Changelog ==
+
+= 1.3.1 =
+* sanitize connection fields values on save, preventing security exploits
+* improved connection field default value handling
+* added 'default_cb' as an optional key when defining connection fields
+* fixed parameter order for 'p2p_admin_box_show' filter
+* pass the current post ID to the 'p2p_new_post_args' filter
 
 = 1.3 =
 * allow passing entire objects to get_connected(), connect() etc.
