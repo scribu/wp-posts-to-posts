@@ -113,7 +113,7 @@ jQuery ->
 
 
 		row_ajax_request = ($td, data, callback) ->
-			$td.html $spinner.show()
+			$td.find('.p2p-icon').css 'background-image', 'url(' + P2PAdmin.spinner + ')'
 
 			ajax_request data, callback
 
@@ -141,30 +141,25 @@ jQuery ->
 			if not confirm(P2PAdmin.deleteConfirmMessage)
 				return false
 
-			$self = jQuery(ev.target)
-			$td = $self.closest('td')
+			$td = jQuery(ev.target).closest('td')
 
 			data = {
 				subaction: 'clear_connections'
 			}
 
 			row_ajax_request $td, data, (response) =>
-				$connections.hide()
-					.find('tbody').html('')
-
-				$td.html($self)
+				$connections.hide().find('tbody').html('')
 
 				refresh_candidates response
 
 			return false
 
 		delete_connection = (ev) ->
-			$self = jQuery(ev.target)
-			$td = $self.closest('td')
+			$td = jQuery(ev.target).closest('td')
 
 			data = {
 				subaction: 'disconnect'
-				p2p_id: $self.closest('td').find('input').val()
+				p2p_id: $td.find('input').val()
 			}
 
 			row_ajax_request $td, data, (response) =>
@@ -175,19 +170,18 @@ jQuery ->
 			return false
 
 		create_connection = (ev) ->
-			$self = jQuery(ev.target)
-			$td = $self.closest('td')
+			$td = jQuery(ev.target).closest('td')
 
 			data = {
 				subaction: 'connect'
-				to: $self.data('post_id')
+				to: $td.find('div').data('item-id')
 			}
 
 			row_ajax_request $td, data, (response) =>
 				append_connection(response)
 
 				if $metabox.data('duplicate_connections')
-					$td.html $self
+					$td.find('.p2p-icon').css('background-image', '')
 				else
 					remove_row $td
 
@@ -212,9 +206,9 @@ jQuery ->
 			return false
 
 		$metabox
-			.delegate('th.p2p-col-delete a', 'click', clear_connections)
-			.delegate('td.p2p-col-delete a', 'click', delete_connection)
-			.delegate('td.p2p-col-create a', 'click', create_connection)
+			.delegate('th.p2p-col-delete .p2p-icon', 'click', clear_connections)
+			.delegate('td.p2p-col-delete .p2p-icon', 'click', delete_connection)
+			.delegate('td.p2p-col-create div', 'click', create_connection)
 			.delegate('.wp-tab-bar li', 'click', switch_to_tab)
 
 		# Make sortable

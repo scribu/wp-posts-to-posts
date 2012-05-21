@@ -1,23 +1,5 @@
 <?php
 
-class P2P_Field_Create implements P2P_Field {
-
-	function get_title() {
-		// Not needed
-		return '';
-	}
-
-	function render( $p2p_id, $post_id ) {
-		$data = array(
-			'post_id' => $post_id,
-			'title' => __( 'Create connection', P2P_TEXTDOMAIN )
-		);
-
-		return P2P_Mustache::render( 'column-create', $data );
-	}
-}
-
-
 class P2P_Field_Delete implements P2P_Field {
 
 	function get_title() {
@@ -60,6 +42,7 @@ class P2P_Field_Order implements P2P_Field {
 	}
 }
 
+
 class P2P_Field_Generic implements P2P_Field {
 
 	protected $key;
@@ -91,7 +74,31 @@ class P2P_Field_Generic implements P2P_Field {
 }
 
 
-class P2P_Field_Title_Post implements P2P_Field {
+class P2P_Field_Create implements P2P_Field {
+
+	protected $title_field;
+
+	function __construct( $title_field ) {
+		$this->title_field = $title_field;
+	}
+
+	function get_title() {
+		// Not needed
+		return '';
+	}
+
+	function render( $p2p_id, $item_id ) {
+		$data = array_merge( $this->title_field->get_data( $item_id ), array(
+			'item-id' => $item_id,
+			'title-attr' => __( 'Create connection', P2P_TEXTDOMAIN )
+		) );
+
+		return P2P_Mustache::render( 'column-create', $data );
+	}
+}
+
+
+abstract class P2P_Field_Title implements P2P_Field {
 
 	protected $title;
 
@@ -103,7 +110,16 @@ class P2P_Field_Title_Post implements P2P_Field {
 		return $this->title;
 	}
 
-	function render( $p2p_id, $post_id ) {
+	function render( $p2p_id, $item_id ) {
+		return P2P_Mustache::render( 'column-title', $this->get_data( $item_id ) );
+	}
+
+	abstract function get_data( $item_id );
+}
+
+class P2P_Field_Title_Post extends P2P_Field_Title {
+
+	function get_data( $post_id ) {
 		$data = array(
 			'title-attr' => get_permalink( $post_id ),
 			'title' => get_post_field( 'post_title', $post_id ),
@@ -119,14 +135,13 @@ class P2P_Field_Title_Post implements P2P_Field {
 			}
 		}
 
-		return P2P_Mustache::render( 'column-title', $data );
+		return $data;
 	}
 }
 
+class P2P_Field_Title_Attachment extends P2P_Field_Title {
 
-class P2P_Field_Title_Attachment extends P2P_Field_Title_Post {
-
-	function render( $p2p_id, $attachment_id ) {
+	function get_data( $attachment_id ) {
 		list( $src ) = wp_get_attachment_image_src( $attachment_id, 'thumbnail', true );
 
 		$data = array(
@@ -135,21 +150,18 @@ class P2P_Field_Title_Attachment extends P2P_Field_Title_Post {
 			'url' => get_edit_post_link( $attachment_id ),
 		);
 
-		return P2P_Mustache::render( 'column-title', $data );
+		return $data;
 	}
 }
 
+class P2P_Field_Title_User extends P2P_Field_Title {
 
-class P2P_Field_Title_User extends P2P_Field_Title_Post {
-
-	function render( $p2p_id, $user_id ) {
-		$data = array(
+	function get_data( $user_id ) {
+		return array(
 			'title-attr' => '',
 			'title' => get_user_by( 'id', $user_id )->display_name,
 			'url' => $this->get_edit_url( $user_id ),
 		);
-
-		return P2P_Mustache::render( 'column-title', $data );
 	}
 
 	private function get_edit_url( $user_id ) {

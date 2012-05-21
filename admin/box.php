@@ -198,8 +198,7 @@ class P2P_Box {
 		$data = array();
 
 		$columns = array(
-			'create' => new P2P_Field_Create,
-			'title' => $this->columns['title']
+			'create' => new P2P_Field_Create( $this->columns['title'] ),
 		);
 
 		foreach ( $candidate->items as $item ) {

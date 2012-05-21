@@ -68,8 +68,8 @@ td.p2p-col-create {
 	padding: 0;
 }
 
-.p2p-col-delete a,
-.p2p-col-create a,
+.p2p-col-delete .p2p-icon,
+.p2p-col-create div,
 .p2p-col-delete img,
 .p2p-col-create img {
 	padding: 5px 6px;
@@ -89,19 +89,17 @@ td.p2p-col-create {
 	width: 100%;
 }
 
-.p2p-col-create,
 .p2p-col-delete {
 	width: 16px;
 }
 
-.p2p-col-create a,
-.p2p-col-delete a {
+.p2p-box .p2p-icon {
 	display: block;
 	height: 16px;
 	width: 16px;
+	opacity: 0.5;
 }
 
-.p2p-col-create,
 .p2p-col-delete {
 	border-right: 1px solid transparent;
 }
@@ -110,24 +108,26 @@ td.p2p-col-create {
 .p2p-col-delete:hover {
 	background-color: #f5f5f5;
 	border-right-color: #ddd;
+	cursor: pointer;
 }
 
-.p2p-col-create a,
-.p2p-col-delete a {
-	opacity: 0.5;
-}
-
-.p2p-col-create:hover a,
-.p2p-col-delete:hover a {
+.p2p-col-create:hover .p2p-icon,
+.p2p-col-delete:hover .p2p-icon {
 	opacity: 1;
 }
 
-.p2p-col-create a {
-	background: url("images/add.png") no-repeat scroll 50% 50% transparent;
+.p2p-col-delete .p2p-icon {
+	background: url("images/delete.png") no-repeat scroll 50% 50% transparent;
 }
 
-.p2p-col-delete a {
-	background: url("images/delete.png") no-repeat scroll 50% 50% transparent;
+.p2p-col-create .p2p-icon {
+	background: url("images/add.png") no-repeat scroll 50% 50% transparent;
+	float: left;
+	margin-right: 6px;
+}
+
+.p2p-box .post-state {
+	font-style: italic;
 }
 
 .p2p-col-title img {
