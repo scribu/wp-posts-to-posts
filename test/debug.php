@@ -178,8 +178,10 @@ class P2P_Debug {
 			),
 			'sortable' => 'any',
 			'prevent_duplicates' => false,
-			'context' => 'advanced',
-			'admin_box' => 'any',
+			'admin_box' => array(
+				'show' => 'any',
+				'context' => 'advanced',
+			),
 			'admin_column' => 'any',
 			'title' => array(
 				'from' => 'Played In',
