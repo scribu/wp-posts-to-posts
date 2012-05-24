@@ -1,10 +1,12 @@
 #!/bin/bash
 
-wp_tests_dir=${1-$WP_TESTS_DIR}
+if [[ $# -gt 0 ]]; then
+	WP_TESTS_DIR=$1
+fi
 
-if [[ '' = $wp_tests_dir ]]; then
+if [[ '' = $WP_TESTS_DIR ]]; then
 	echo 'usage: ./bin/test /path/to/wp-tests/'
 	exit
 fi
 
-phpunit --bootstrap $wp_tests_dir/init.php --configuration ./test/phpunit.xml ./test/unit.php
+phpunit --bootstrap ./test/bootstrap.php --configuration ./test/phpunit.xml ./test/unit.php

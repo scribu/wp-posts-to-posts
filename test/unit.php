@@ -3,8 +3,6 @@
 class P2P_Unit_Tests extends WP_UnitTestCase {
 
 	function setUp() {
-		$this->plugin_slug = basename( dirname( dirname( __FILE__ ) ) ) . '/posts-to-posts';
-
 		parent::setUp();
 
 		P2P_Storage::install();
