@@ -9,4 +9,6 @@ if [[ '' = $WP_TESTS_DIR ]]; then
 	exit
 fi
 
-phpunit --bootstrap ./test/bootstrap.php --configuration ./test/phpunit.xml ./test/unit.php
+cd ./test
+
+phpunit --bootstrap bootstrap.php --configuration phpunit.xml tests.php
