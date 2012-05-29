@@ -90,7 +90,6 @@ class P2P_Field_Create implements P2P_Field {
 	function render( $p2p_id, $item_id ) {
 		$data = array_merge( $this->title_field->get_data( $item_id ), array(
 			'item-id' => $item_id,
-			'title-attr' => __( 'Create connection', P2P_TEXTDOMAIN )
 		) );
 
 		return P2P_Mustache::render( 'column-create', $data );
