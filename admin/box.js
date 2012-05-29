@@ -111,12 +111,8 @@
         PostsTab.prototype.update_rows = function(response) {
           $spinner.remove();
           this.tab.find('button, .p2p-results, .p2p-navigation, .p2p-notice').remove();
-          if (!response.rows) {
-            return this.tab.append(jQuery('<div class="p2p-notice">').html(response.msg));
-          } else {
-            this.tab.append(response.rows);
-            return this.init_pagination_data();
-          }
+          this.tab.append(response.rows);
+          return this.init_pagination_data();
         };
 
         return PostsTab;

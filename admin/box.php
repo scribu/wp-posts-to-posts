@@ -135,7 +135,7 @@ class P2P_Box {
 		// Search tab
 		$tab_content = P2P_Mustache::render( 'tab-search', array(
 			'placeholder' => $this->labels->search_items,
-			'view-all' => __( 'View All', P2P_TEXTDOMAIN ),
+			'candidates' => $this->post_rows( $post->ID )
 		) );
 
 		$data['tabs'][] = array(
@@ -192,8 +192,9 @@ class P2P_Box {
 
 		$candidate = $this->ctype->get_connectable( $current_post_id, $extra_qv );
 
-		if ( empty( $candidate->items ) )
-			return false;
+		if ( empty( $candidate->items ) ) {
+			return html( 'div class="p2p-notice"', $this->labels->not_found );
+		}
 
 		$data = array();
 
@@ -279,27 +280,15 @@ class P2P_Box {
 	}
 
 	public function ajax_search() {
-		die( json_encode( $this->_ajax_search( $_GET ) ) );
+		$this->refresh_candidates();
 	}
 
 	private function refresh_candidates() {
-		$results = $this->_ajax_search( $_POST );
+		$rows = $this->post_rows( $_REQUEST['from'], $_REQUEST['paged'], $_REQUEST['s'] );
+
+		$results = compact( 'rows' );
 
 		die( json_encode( $results ) );
-	}
-
-	private function _ajax_search( $args ) {
-		$rows = $this->post_rows( $args['from'], $args['paged'], $args['s'] );
-
-		if ( $rows ) {
-			$results = compact( 'rows' );
-		} else {
-			$results = array(
-				'msg' => $this->labels->not_found,
-			);
-		}
-
-		return $results;
 	}
 
 	protected function can_create_post() {

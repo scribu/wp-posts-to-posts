@@ -47,6 +47,7 @@
 }
 
 .p2p-search + .p2p-results,
+.p2p-search + .p2p-notice,
 .p2p-results + .p2p-navigation {
 	margin-top: 8px;
 }
@@ -161,11 +162,6 @@ tr:hover td.p2p-col-order {
 .p2p-tab-create-post input[type="text"] {
 	width: 100%;
 	display: block;
-}
-
-#side-sortables .p2p-notice {
-	display: block;
-	margin-top: 8px;
 }
 
 /* Pagination */

@@ -102,12 +102,9 @@ jQuery ->
 
 				@tab.find('button, .p2p-results, .p2p-navigation, .p2p-notice').remove()
 
-				if not response.rows
-					@tab.append jQuery('<div class="p2p-notice">').html(response.msg)
-				else
-					@tab.append response.rows
+				@tab.append response.rows
 
-					@init_pagination_data()
+				@init_pagination_data()
 
 		searchTab = new PostsTab('.p2p-tab-search')
 
