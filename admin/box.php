@@ -295,18 +295,9 @@ class P2P_Box {
 		if ( !$this->args->can_create_post )
 			return false;
 
-		if ( 'post' != $this->ctype->get_opposite( 'object' ) )
-			return false;
-
 		$side = $this->ctype->get_opposite( 'side' );
 
-		if ( count( $side->post_type ) > 1 )
-			return false;
-
-		if ( count( $side->query_vars ) > 1 )
-			return false;
-
-		return true;
+		return $side->can_create_item();
 	}
 
 	public function check_capability() {

@@ -6,6 +6,7 @@ interface P2P_Side {
 	public function get_labels();
 
 	public function check_capability();
+	public function can_create_item();
 
 	public function get_base_qv( $q );
 	public function translate_qv( $qv );
@@ -66,6 +67,16 @@ class P2P_Side_Post implements P2P_Side {
 		return current_user_can( $this->get_ptype()->cap->edit_posts );
 	}
 
+	function can_create_item() {
+		if ( count( $this->post_type ) > 1 )
+			return false;
+
+		if ( count( $this->query_vars ) > 1 )
+			return false;
+
+		return true;
+	}
+
 	function do_query( $args ) {
 		return new WP_Query( $args );
 	}
@@ -124,6 +135,10 @@ class P2P_Side_Attachment extends P2P_Side_Post {
 		$this->post_type = array( 'attachment' );
 	}
 
+	function can_create_item() {
+		return false;
+	}
+
 	function get_base_qv( $q ) {
 		return array_merge( parent::get_base_qv( $q ), array(
 			'post_status' => 'inherit'
@@ -156,6 +171,10 @@ class P2P_Side_User implements P2P_Side {
 
 	function check_capability() {
 		return current_user_can( 'list_users' );
+	}
+
+	function can_create_item() {
+		return false;
 	}
 
 	function do_query( $args ) {
