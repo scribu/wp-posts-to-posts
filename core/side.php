@@ -5,7 +5,7 @@ interface P2P_Side {
 	public function get_desc();
 	public function get_labels();
 
-	public function check_capability();
+	public function can_edit_connections();
 	public function can_create_item();
 
 	public function get_base_qv( $q );
@@ -63,7 +63,7 @@ class P2P_Side_Post implements P2P_Side {
 		return $this->get_ptype()->labels;
 	}
 
-	function check_capability() {
+	function can_edit_connections() {
 		return current_user_can( $this->get_ptype()->cap->edit_posts );
 	}
 
@@ -169,7 +169,7 @@ class P2P_Side_User implements P2P_Side {
 		);
 	}
 
-	function check_capability() {
+	function can_edit_connections() {
 		return current_user_can( 'list_users' );
 	}
 

@@ -300,8 +300,8 @@ class P2P_Box {
 		return $side->can_create_item();
 	}
 
-	public function check_capability() {
-		$show = $this->ctype->get_opposite( 'side' )->check_capability();
+	public function can_edit_connections() {
+		$show = $this->ctype->get_opposite( 'side' )->can_edit_connections();
 
 		return apply_filters( 'p2p_admin_box_show', $show, $this->ctype, $GLOBALS['post'] );
 	}

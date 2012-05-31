@@ -72,7 +72,7 @@ class P2P_Box_Factory {
 
 				$box = new P2P_Box( $box_args, $directed );
 
-				if ( !$box->check_capability() )
+				if ( !$box->can_edit_connections() )
 					continue;
 
 				add_meta_box(
@@ -160,7 +160,7 @@ class P2P_Box_Factory {
 
 		$box = new P2P_Box( self::$box_args[$ctype->name], $directed, $post_type );
 
-		if ( !$box->check_capability() )
+		if ( !$box->can_edit_connections() )
 			die(-1);
 
 		$method = 'ajax_' . $_REQUEST['subaction'];
