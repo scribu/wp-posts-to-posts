@@ -20,21 +20,21 @@ interface P2P_Side {
 
 class P2P_Side_Post implements P2P_Side {
 
-	public $post_type = array();
-
 	function __construct( $query_vars ) {
 		$this->query_vars = $query_vars;
+	}
 
-		$this->post_type = $this->query_vars['post_type'];
+	public function first_post_type() {
+		return $this->query_vars['post_type'][0];
 	}
 
 	private function get_ptype() {
-		return get_post_type_object( $this->post_type[0] );
+		return get_post_type_object( $this->first_post_type() );
 	}
 
 	function get_base_qv( $q ) {
 		if ( isset( $q['post_type'] ) && 'any' != $q['post_type'] ) {
-			$common = array_intersect( $this->post_type, (array) $q['post_type'] );
+			$common = array_intersect( $this->query_vars['post_type'], (array) $q['post_type'] );
 
 			if ( !$common )
 				unset( $q['post_type'] );
@@ -47,7 +47,7 @@ class P2P_Side_Post implements P2P_Side {
 	}
 
 	function get_desc() {
-		return implode( ', ', array_map( array( $this, 'post_type_label' ), $this->post_type ) );
+		return implode( ', ', array_map( array( $this, 'post_type_label' ), $this->query_vars['post_type'] ) );
 	}
 
 	private function post_type_label( $post_type ) {
@@ -68,7 +68,7 @@ class P2P_Side_Post implements P2P_Side {
 	}
 
 	function can_create_item() {
-		if ( count( $this->post_type ) > 1 )
+		if ( count( $this->query_vars['post_type'] ) > 1 )
 			return false;
 
 		if ( count( $this->query_vars ) > 1 )
@@ -110,7 +110,7 @@ class P2P_Side_Post implements P2P_Side {
 		if ( !post_type_exists( $post_type ) )
 			return false;
 
-		return in_array( $post_type, $this->post_type );
+		return in_array( $post_type, $this->query_vars['post_type'] );
 	}
 
 	function item_id( $arg ) {
@@ -132,7 +132,7 @@ class P2P_Side_Attachment extends P2P_Side_Post {
 	function __construct( $query_vars ) {
 		$this->query_vars = $query_vars;
 
-		$this->post_type = array( 'attachment' );
+		$this->query_vars['post_type'] = array( 'attachment' );
 	}
 
 	function can_create_item() {

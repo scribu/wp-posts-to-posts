@@ -236,7 +236,7 @@ class P2P_Box {
 		$args = array(
 			'post_title' => $_POST['post_title'],
 			'post_author' => get_current_user_id(),
-			'post_type' => $this->ctype->get_opposite( 'side' )->post_type[0]
+			'post_type' => $this->ctype->get_opposite( 'side' )->first_post_type()
 		);
 
 		$from = absint( $_POST['from'] );
