@@ -2,7 +2,7 @@
 
 class P2P_Connection_Type {
 
-	public $indeterminate = false;
+	public $indeterminate;
 
 	public $object;
 
@@ -24,12 +24,7 @@ class P2P_Connection_Type {
 		}
 
 		if ( $this->object['from'] == $this->object['to'] ) {
-			if ( 'post' == $this->object['to'] ) {
-				$common = array_intersect( $this->side['from']->post_type, $this->side['to']->post_type );
-
-				if ( !empty( $common ) )
-					$this->indeterminate = true;
-			}
+			$this->indeterminate = $this->side['from']->is_indeterminate( $this->side['to'] );
 		} else {
 			$args['self_connections'] = true;
 		}

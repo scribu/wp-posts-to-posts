@@ -12,6 +12,8 @@ interface P2P_Side {
 	public function translate_qv( $qv );
 	public function do_query( $args );
 
+	public function is_indeterminate( $side );
+
 	public function item_recognize( $arg );
 	public function item_id( $arg );
 	public function item_title( $item );
@@ -94,6 +96,15 @@ class P2P_Side_Post implements P2P_Side {
 				$qv[$new] = _p2p_pluck( $qv, "p2p:$old" );
 
 		return $qv;
+	}
+
+	function is_indeterminate( $side ) {
+		$common = array_intersect(
+			$this->query_vars['post_type'],
+			$side->query_vars['post_type']
+		);
+
+		return !empty( $common );
 	}
 
 	function item_recognize( $arg ) {
@@ -194,6 +205,10 @@ class P2P_Side_User implements P2P_Side {
 		}
 
 		return $qv;
+	}
+
+	function is_indeterminate( $side ) {
+		return true;
 	}
 
 	function item_recognize( $arg ) {
