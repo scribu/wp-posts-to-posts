@@ -69,14 +69,6 @@ td.p2p-col-create {
 	padding: 0;
 }
 
-.p2p-col-delete .p2p-icon,
-.p2p-col-create div,
-.p2p-col-delete img,
-.p2p-col-create img {
-	padding: 5px 6px;
-	vertical-align: middle;
-}
-
 .p2p-results tr:first-child td {
 	border-top: 0;
 }
@@ -92,17 +84,24 @@ td.p2p-col-create {
 
 .p2p-col-delete {
 	width: 16px;
+	border-right: 1px solid transparent;
 }
 
-.p2p-box .p2p-icon {
+td .p2p-icon {
 	display: block;
 	height: 16px;
 	width: 16px;
 	opacity: 0.5;
 }
 
-.p2p-col-delete {
-	border-right: 1px solid transparent;
+.p2p-col-create div,
+td .p2p-icon {
+	padding: 5px 6px;
+	vertical-align: middle;
+}
+
+td.p2p-col-create .p2p-icon {
+	padding: 0;
 }
 
 .p2p-col-create:hover,
@@ -131,11 +130,11 @@ td.p2p-col-create {
 	font-style: italic;
 }
 
-.p2p-col-title img {
+.p2p-box td img {
 	display: block;
 	margin: 2px 0;
-	max-height: 32px;
-	max-width: 40px;
+	max-height: 60px;
+	max-width: 80px;
 }
 
 td.p2p-col-order {
