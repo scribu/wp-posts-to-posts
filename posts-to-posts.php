@@ -16,7 +16,7 @@ define( 'P2P_TEXTDOMAIN', 'posts-to-posts' );
 
 require dirname( __FILE__ ) . '/scb/load.php';
 
-function _p2p_init() {
+function _p2p_load() {
 	$base = dirname( __FILE__ );
 
 	load_plugin_textdomain( P2P_TEXTDOMAIN, '', basename( $base ) . '/lang' );
@@ -41,8 +41,13 @@ function _p2p_init() {
 
 	register_uninstall_hook( __FILE__, array( 'P2P_Storage', 'uninstall' ) );
 }
-scb_init( '_p2p_init' );
+scb_init( '_p2p_load' );
 
+function _p2p_init() {
+	// Safe hook for calling p2p_register_connection_type()
+	do_action( 'p2p_init' );
+}
+add_action( 'wp_loaded', '_p2p_init' );
 
 function _p2p_load_files( $dir, $files ) {
 	foreach ( $files as $file )
