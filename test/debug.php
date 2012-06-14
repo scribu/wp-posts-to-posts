@@ -3,10 +3,13 @@
 class P2P_Debug {
 
 	function init() {
-		if ( !function_exists('p2p_register_connection_type') )
-			return;
+		self::posts_to_attachments();
+		self::posts_to_users();
+		self::contacts_and_tickets();
+		self::actors_and_movies();
 
-		add_action('wp_loaded', array(__CLASS__, '_init'));
+#		self::reset_upgrade();
+
 		/* add_action('admin_notices', array(__CLASS__, 'setup_example')); */
 		/* add_action('admin_notices', array(__CLASS__, 'playground')); */
 	}
@@ -14,15 +17,6 @@ class P2P_Debug {
 	function playground() {
 		$q = p2p_type('users_to_posts')->get_connected(wp_get_current_user());
 		debug($q->request, $q->posts);
-	}
-
-	function _init() {
-		self::posts_to_attachments();
-		self::posts_to_users();
-		self::contacts_and_tickets();
-		self::actors_and_movies();
-
-#		self::reset_upgrade();
 	}
 
 	function posts_to_attachments() {
@@ -278,5 +272,5 @@ class P2P_Debug {
 	}
 }
 
-add_action( 'plugins_loaded', array( 'P2P_Debug', 'init' ), 11 );
+add_action( 'p2p_init', array( 'P2P_Debug', 'init' ), 11 );
 
