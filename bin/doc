@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docblox --title 'Posts 2 Posts Reference' #--sourcecode
+phpdoc --title 'Posts 2 Posts Reference' #--sourcecode
 
 if [ $# -gt 0 ]; then
 	cd ../p2p-pages
