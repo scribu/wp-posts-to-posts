@@ -85,6 +85,10 @@ class P2P_Tools_Page extends scbAdminPage {
 		if ( empty( $connection_counts ) ) {
 			$data['has-rows'] = false;
 			$data['no-rows'] = __( 'No connection types registered.', P2P_TEXTDOMAIN );
+			$data['no-rows2'] = sprintf(
+				__( 'To register a connection type, see <a href="%s">the wiki</a>.', P2P_TEXTDOMAIN ),
+				'https://github.com/scribu/wp-posts-to-posts/wiki/'
+			);
 		} else {
 			$data['has-rows'] = array(true);
 
