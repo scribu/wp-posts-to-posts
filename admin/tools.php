@@ -80,22 +80,31 @@ class P2P_Tools_Page extends scbAdminPage {
 			)
 		);
 
-		foreach ( $this->get_connection_counts() as $p2p_type => $count ) {
-			$row = array(
-				'p2p_type' => $p2p_type,
-				'count' => number_format_i18n( $count )
-			);
+		$connection_counts = $this->get_connection_counts();
 
-			$ctype = p2p_type( $p2p_type );
+		if ( empty( $connection_counts ) ) {
+			$data['has-rows'] = false;
+			$data['no-rows'] = __( 'No connection types registered.', P2P_TEXTDOMAIN );
+		} else {
+			$data['has-rows'] = array(true);
 
-			if ( $ctype ) {
-				$row['desc'] = $ctype->get_desc();
-			} else {
-				$row['desc'] = __( 'Convert to registered connection type:', P2P_TEXTDOMAIN ) . scbForms::form_wrap( $this->get_dropdown( $p2p_type ), $this->nonce );
-				$row['class'] = 'error';
+			foreach ( $connection_counts as $p2p_type => $count ) {
+				$row = array(
+					'p2p_type' => $p2p_type,
+					'count' => number_format_i18n( $count )
+				);
+
+				$ctype = p2p_type( $p2p_type );
+
+				if ( $ctype ) {
+					$row['desc'] = $ctype->get_desc();
+				} else {
+					$row['desc'] = __( 'Convert to registered connection type:', P2P_TEXTDOMAIN ) . scbForms::form_wrap( $this->get_dropdown( $p2p_type ), $this->nonce );
+					$row['class'] = 'error';
+				}
+
+				$data['rows'][] = $row;
 			}
-
-			$data['rows'][] = $row;
 		}
 
 		echo P2P_Mustache::render( 'connection-types', $data );

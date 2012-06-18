@@ -1,3 +1,4 @@
+{{#has-rows}}
 <table class="widefat">
 	<thead>
 		<tr>
@@ -16,3 +17,7 @@
 		{{/rows}}
 	</tbody>
 </table>
+{{/has-rows}}
+{{^has-rows}}
+	<p>{{{no-rows}}}</p>
+{{/has-rows}}
