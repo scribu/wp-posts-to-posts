@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
-"POT-Creation-Date: 2012-04-15 23:11:12+00:00\n"
+"POT-Creation-Date: 2012-06-18 17:14:52+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,11 +12,11 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: admin/box-factory.php:75
+#: admin/box-factory.php:64
 msgid " (from)"
 msgstr ""
 
-#: admin/box-factory.php:76
+#: admin/box-factory.php:65
 msgid " (to)"
 msgstr ""
 
@@ -26,10 +26,6 @@ msgstr ""
 
 #: admin/box.php:129
 msgid "Create connections:"
-msgstr ""
-
-#: admin/box.php:138
-msgid "View All"
 msgstr ""
 
 #: admin/box.php:143
@@ -48,19 +44,15 @@ msgstr ""
 msgid "of"
 msgstr ""
 
-#: admin/box.php:261
+#: admin/box.php:263
 msgid "Can't create connection: %s"
 msgstr ""
 
-#: admin/fields.php:13
-msgid "Create connection"
-msgstr ""
-
-#: admin/fields.php:25
+#: admin/fields.php:7
 msgid "Delete all connections"
 msgstr ""
 
-#: admin/fields.php:34
+#: admin/fields.php:16
 msgid "Delete connection"
 msgstr ""
 
@@ -98,11 +90,19 @@ msgstr ""
 msgid "Connections"
 msgstr ""
 
-#: admin/tools.php:94
+#: admin/tools.php:87
+msgid "No connection types registered."
+msgstr ""
+
+#: admin/tools.php:89
+msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
+msgstr ""
+
+#: admin/tools.php:106
 msgid "Convert to registered connection type:"
 msgstr ""
 
-#: admin/tools.php:129
+#: admin/tools.php:142
 msgid "Go"
 msgstr ""
 
@@ -134,23 +134,23 @@ msgstr ""
 msgid "related"
 msgstr ""
 
-#: core/side.php:129
+#: core/side.php:168
 msgid "Users"
 msgstr ""
 
-#: core/side.php:138
+#: core/side.php:177
 msgid "User"
 msgstr ""
 
-#: core/side.php:139
+#: core/side.php:178
 msgid "Search Users"
 msgstr ""
 
-#: core/side.php:140
+#: core/side.php:179
 msgid "No users found."
 msgstr ""
 
-#: core/type.php:88
+#: core/type.php:104
 msgid "Connected %s"
 msgstr ""
 
