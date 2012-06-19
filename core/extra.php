@@ -41,7 +41,8 @@ class P2P_Widget extends scbWidget {
 			'type' => 'select',
 			'name' => 'ctype',
 			'values' => $ctypes,
-			'desc' => __( 'Connection type:', P2P_TEXTDOMAIN )
+			'desc' => __( 'Connection type:', P2P_TEXTDOMAIN ),
+			'extra' => "style='width: 100%'"
 		), $instance ) );
 
 		echo html( 'p',
