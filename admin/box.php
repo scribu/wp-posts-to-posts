@@ -10,8 +10,6 @@ class P2P_Box {
 
 	private $args;
 
-	private $ptype;
-
 	private $columns;
 
 	private static $admin_box_qv = array(
