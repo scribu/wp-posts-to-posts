@@ -1,0 +1,133 @@
+# Copyright (C) 2011 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts 2 Posts 1.1.4\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
+"POT-Creation-Date: 2011-12-01 16:28:04+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2012-06-21 22:25+0200\n"
+"Last-Translator: Andrea Bersi\n"
+"Language-Team: \n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: ITALY\n"
+
+#: admin/box-factory.php:56
+msgid " (from)"
+msgstr " (da)"
+
+#: admin/box-factory.php:57
+msgid " (to)"
+msgstr " (a)"
+
+#: admin/box.php:42
+msgid "Are you sure you want to delete all connections?"
+msgstr "Confermi la rimozione di tutte le relazioni?"
+
+#: admin/box.php:115
+msgid "Create connections:"
+msgstr "Crea relazioni:"
+
+#: admin/box.php:128
+msgid "Search"
+msgstr "Cerca"
+
+#: admin/box.php:136
+msgid "View All"
+msgstr "Vedi tutti"
+
+#: admin/box.php:204
+msgid "previous"
+msgstr "precedente"
+
+#: admin/box.php:205
+msgid "next"
+msgstr "successivo"
+
+#: admin/box.php:206
+msgid "of"
+msgstr "di"
+
+#: admin/fields.php:16
+msgid "Create connection"
+msgstr "Crea relazione"
+
+#: admin/fields.php:30
+msgid "Delete all connections"
+msgstr "Cancella tutte le relazioni"
+
+#: admin/fields.php:39
+msgid "Delete connection"
+msgstr "Cancella relazione"
+
+#: scb/AdminPage.php:165
+msgid "Settings <strong>saved</strong>."
+msgstr "Impostazioni <strong>salvate</strong>"
+
+#: scb/AdminPage.php:178
+#: scb/AdminPage.php:189
+msgid "Save Changes"
+msgstr "Salva"
+
+#: scb/AdminPage.php:350
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: core/type.php:65
+msgid "Connected %s"
+msgstr "Collegato %s"
+
+#: core/widget.php:15
+msgid "Posts 2 Posts"
+msgstr "Posts 2 Posts"
+
+#: core/widget.php:16
+msgid "A list of posts connected to the current post"
+msgstr "Elenco dei contenuti collegati"
+
+#: core/widget.php:37
+msgid "Connection type:"
+msgstr "Tipo relazione:"
+
+#: core/widget.php:41
+msgid "Connection listing:"
+msgstr "Elenco relazioni:"
+
+#: core/widget.php:47
+msgid "connected"
+msgstr "connesso"
+
+#: core/widget.php:48
+msgid "related"
+msgstr "in relazione"
+
+#: core/widget.php:73
+msgid "Related %s"
+msgstr "In relazione %s"
+
+#: core/storage.php:35
+msgid "Upgraded %d connections."
+msgstr "Aggiornato %d relazioni"
+
+#: core/storage.php:38
+msgid "The Posts 2 Posts connections need to be upgraded. <a href=\"%s\">Proceed.</a>"
+msgstr "Posts 2 Posts ha un Upgrade. <a href=\"%s\">Procedi.</a>"
+
+#: core/side.php:110
+msgid "Users"
+msgstr "Utenti"
+
+#: core/side.php:115
+msgid "User"
+msgstr "Utente"
+
+#: core/side.php:116
+msgid "Search Users"
+msgstr "Cerca utenti"
+
+#: core/side.php:117
+msgid "No users found."
+msgstr "Nessun utente trovato."
+
