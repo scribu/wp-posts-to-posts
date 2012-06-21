@@ -176,7 +176,7 @@ class P2P_Query {
 		return $clauses;
 	}
 
-	private function find_direction( $ctype, $arg, $object_type ) {
+	private static function find_direction( $ctype, $arg, $object_type ) {
 		$opposite_side = self::choose_side( $object_type,
 			$ctype->object['from'],
 			$ctype->object['to']
