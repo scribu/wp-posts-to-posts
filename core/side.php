@@ -14,7 +14,9 @@ interface P2P_Side {
 
 	public function is_indeterminate( $side );
 
+	// TODO: break into separate interface
 	public function item_recognize( $arg );
+	public function item_object( $item_id );
 	public function item_id( $arg );
 	public function item_title( $item );
 }
@@ -124,6 +126,10 @@ class P2P_Side_Post implements P2P_Side {
 		return in_array( $post_type, $this->query_vars['post_type'] );
 	}
 
+	function item_object( $item_id ) {
+		return get_post( $item_id );
+	}
+
 	function item_id( $arg ) {
 		$post = get_post( $arg );
 		if ( $post )
@@ -213,6 +219,10 @@ class P2P_Side_User implements P2P_Side {
 
 	function item_recognize( $arg ) {
 		return is_a( $arg, 'WP_User' );
+	}
+
+	function item_object( $item_id ) {
+		return get_user_by( 'id', $item_id );
 	}
 
 	function item_id( $arg ) {

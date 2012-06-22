@@ -10,7 +10,7 @@ class P2P_Field_Delete implements P2P_Field {
 		return P2P_Mustache::render( 'column-delete-all', $data );
 	}
 
-	function render( $p2p_id, $post_id ) {
+	function render( $p2p_id, $item ) {
 		$data = array(
 			'p2p_id' => $p2p_id,
 			'title' => __( 'Delete connection', P2P_TEXTDOMAIN )
@@ -33,7 +33,7 @@ class P2P_Field_Order implements P2P_Field {
 		return '';
 	}
 
-	function render( $p2p_id, $post_id ) {
+	function render( $p2p_id, $item ) {
 		return html( 'input', array(
 			'type' => 'hidden',
 			'name' => "p2p_order[$this->sort_key][]",
@@ -57,7 +57,7 @@ class P2P_Field_Generic implements P2P_Field {
 		return $this->data['title'];
 	}
 
-	function render( $p2p_id, $post_id ) {
+	function render( $p2p_id, $item ) {
 		$args = array(
 			'name' => array( 'p2p_meta', $p2p_id, $this->key ),
 			'type' => $this->data['type']
@@ -87,9 +87,9 @@ class P2P_Field_Create implements P2P_Field {
 		return '';
 	}
 
-	function render( $p2p_id, $item_id ) {
-		$data = array_merge( $this->title_field->get_data( $item_id ), array(
-			'item-id' => $item_id,
+	function render( $p2p_id, $item ) {
+		$data = array_merge( $this->title_field->get_data( $item ), array(
+			'item-id' => $item->ID, // TODO: use P2P_Side->item_id()
 		) );
 
 		return P2P_Mustache::render( 'column-create', $data );
@@ -109,26 +109,24 @@ abstract class P2P_Field_Title implements P2P_Field {
 		return $this->title;
 	}
 
-	function render( $p2p_id, $item_id ) {
-		return P2P_Mustache::render( 'column-title', $this->get_data( $item_id ) );
+	function render( $p2p_id, $item ) {
+		return P2P_Mustache::render( 'column-title', $this->get_data( $item ) );
 	}
 
-	abstract function get_data( $item_id );
+	abstract function get_data( $item );
 }
 
 class P2P_Field_Title_Post extends P2P_Field_Title {
 
-	function get_data( $post_id ) {
+	function get_data( $post ) {
 		$data = array(
-			'title-attr' => get_permalink( $post_id ),
-			'title' => get_post_field( 'post_title', $post_id ),
-			'url' => get_edit_post_link( $post_id ),
+			'title-attr' => get_permalink( $post ),
+			'title' => $post->post_title,
+			'url' => get_edit_post_link( $post ),
 		);
 
-		$post_status = get_post_status( $post_id );
-
-		if ( 'publish' != $post_status ) {
-			$status_obj = get_post_status_object( $post_status );
+		if ( 'publish' != $post->post_status ) {
+			$status_obj = get_post_status_object( $post->post_status );
 			if ( $status_obj ) {
 				$data['status']['text'] = $status_obj->label;
 			}
@@ -140,13 +138,13 @@ class P2P_Field_Title_Post extends P2P_Field_Title {
 
 class P2P_Field_Title_Attachment extends P2P_Field_Title {
 
-	function get_data( $attachment_id ) {
-		list( $src ) = wp_get_attachment_image_src( $attachment_id, 'thumbnail', true );
+	function get_data( $attachment ) {
+		list( $src ) = wp_get_attachment_image_src( $attachment->ID, 'thumbnail', true );
 
 		$data = array(
-			'title-attr' => get_post_field( 'post_title', $attachment_id ),
+			'title-attr' => $attachment->post_title,
 			'title' => html( 'img', compact( 'src' ) ),
-			'url' => get_edit_post_link( $attachment_id ),
+			'url' => get_edit_post_link( $attachment ),
 		);
 
 		return $data;
@@ -155,11 +153,11 @@ class P2P_Field_Title_Attachment extends P2P_Field_Title {
 
 class P2P_Field_Title_User extends P2P_Field_Title {
 
-	function get_data( $user_id ) {
+	function get_data( $user ) {
 		return array(
 			'title-attr' => '',
-			'title' => get_user_by( 'id', $user_id )->display_name,
-			'url' => $this->get_edit_url( $user_id ),
+			'title' => $user->display_name,
+			'url' => $this->get_edit_url( $user->ID ),
 		);
 	}
 
