@@ -70,7 +70,7 @@ class P2P_Box_Factory {
 
 				$directed = $ctype->set_direction( $direction );
 
-				$box = new P2P_Box( $box_args, $directed );
+				$box = self::create_box( $box_args, $directed );
 
 				if ( !$box->can_edit_connections() )
 					continue;
@@ -87,6 +87,25 @@ class P2P_Box_Factory {
 				$box->init_scripts();
 			}
 		}
+	}
+
+	private static function create_box( $box_args, $directed ) {
+		$title_class = 'P2P_Field_Title_' . ucfirst( $directed->get_opposite( 'object' ) );
+
+		$columns = array(
+			'delete' => new P2P_Field_Delete,
+			'title' => new $title_class( $directed->get_opposite( 'labels' )->singular_name ),
+		);
+
+		foreach ( $directed->fields as $key => $data ) {
+			$columns[ 'meta-' . $key ] = new P2P_Field_Generic( $key, $data );
+		}
+
+		if ( $orderby_key = $directed->get_orderby_key() ) {
+			$columns['order'] = new P2P_Field_Order( $orderby_key );
+		}
+
+		return new P2P_Box( $box_args, $columns, $directed );
 	}
 
 	private static function get_visible_directions( $post_type, $ctype, $show_ui ) {
@@ -158,7 +177,7 @@ class P2P_Box_Factory {
 		if ( !$directed )
 			die(0);
 
-		$box = new P2P_Box( self::$box_args[$ctype->name], $directed, $post_type );
+		$box = self::create_box( self::$box_args[$ctype->name], $directed );
 
 		if ( !$box->can_edit_connections() )
 			die(-1);

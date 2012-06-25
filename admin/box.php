@@ -18,14 +18,14 @@ class P2P_Box {
 		'post_status' => 'any',
 	);
 
-	function __construct( $args, $ctype ) {
+	function __construct( $args, $columns, $ctype ) {
 		$this->args = $args;
+
+		$this->columns = $columns;
 
 		$this->ctype = $ctype;
 
 		$this->labels = $this->ctype->get_opposite( 'labels' );
-
-		$this->init_columns();
 	}
 
 	public function init_scripts() {
@@ -37,29 +37,6 @@ class P2P_Box {
 			'spinner' => admin_url( 'images/wpspin_light.gif' ),
 			'deleteConfirmMessage' => __( 'Are you sure you want to delete all connections?', P2P_TEXTDOMAIN ),
 		) );
-	}
-
-	protected function init_columns() {
-		$title_class = $this->get_column_title_class();
-
-		$this->columns = array(
-			'delete' => new P2P_Field_Delete,
-			'title' => new $title_class( $this->labels->singular_name ),
-		);
-
-		foreach ( $this->ctype->fields as $key => $data ) {
-			$this->columns[ 'meta-' . $key ] = new P2P_Field_Generic( $key, $data );
-		}
-
-		if ( $orderby_key = $this->ctype->get_orderby_key() ) {
-			$this->columns['order'] = new P2P_Field_Order( $orderby_key );
-		}
-	}
-
-	protected function get_column_title_class() {
-		$object_type = $this->ctype->get_opposite( 'object' );
-
-		return 'P2P_Field_Title_' . ucfirst( $object_type );
 	}
 
 	function render( $post ) {
