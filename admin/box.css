@@ -87,7 +87,7 @@ td.p2p-col-create {
 	border-right: 1px solid transparent;
 }
 
-td .p2p-icon {
+.p2p-icon {
 	display: block;
 	height: 16px;
 	width: 16px;
@@ -95,7 +95,7 @@ td .p2p-icon {
 }
 
 .p2p-col-create div,
-td .p2p-icon {
+.p2p-icon {
 	padding: 5px 6px;
 	vertical-align: middle;
 }
