@@ -7,7 +7,8 @@ class P2P_WP_Query {
 
 	static function init() {
 		add_action( 'parse_query', array( __CLASS__, 'parse_query' ), 20 );
-		add_filter( 'posts_clauses', array( __CLASS__, 'posts_clauses' ), 10, 2 );
+		add_filter( 'posts_clauses', array( __CLASS__, 'posts_clauses' ), 20, 2 );
+		add_filter( 'posts_request', array( __CLASS__, 'capture' ), 999, 2 );
 		add_filter( 'the_posts', array( __CLASS__, 'cache_p2p_meta' ), 20, 2 );
 	}
 
@@ -43,6 +44,17 @@ class P2P_WP_Query {
 		$wp_query->_p2p_cache = true;
 
 		return P2P_Query::alter_clauses( $clauses, $qv, "$wpdb->posts.ID" );
+	}
+
+	static function capture( $request, $wp_query ) {
+		global $wpdb;
+
+		if ( !isset( $wp_query->_p2p_capture ) )
+			return $request;
+
+		$wp_query->_p2p_sql = $request;
+
+		return '';
 	}
 
 	/**
