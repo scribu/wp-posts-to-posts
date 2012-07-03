@@ -213,13 +213,13 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertTrue( is_wp_error( $ctype->connect( $movie_ids[0], $actor_ids[1] ) ) );
 	}
 
-	function test_wp_query() {
-		$q = new WP_Query( array(
+	function test_query_direction() {
+		$p2p_q = P2P_Query::create_from_qv( array(
 			'connected_type' => 'actor_to_movie',
 			'connected_items' => $this->generate_post( 'post' )
-		) );
+		), 'post' );
 
-		$this->assertEmpty( $q->posts );
+		$this->assertTrue( is_wp_error( $p2p_q ) );
 	}
 
 	function test_extra_qv() {
