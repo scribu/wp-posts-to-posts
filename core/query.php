@@ -27,7 +27,7 @@ class P2P_Query {
 
 		if ( !isset( $q['connected_type'] ) ) {
 			if ( isset( $q['connected_items'] ) ) {
-				return new WP_Error( "Queries without 'connected_type' are no longer supported." );
+				return new WP_Error( 'no_connection_type', "Queries without 'connected_type' are no longer supported." );
 			}
 
 			return;
@@ -63,7 +63,7 @@ class P2P_Query {
 		}
 
 		if ( empty( $p2p_types ) )
-			return new WP_Error( "Coud not find direction(s)." );
+			return new WP_Error( 'no_direction', "Could not find direction(s)." );
 
 		if ( 1 == count( $p2p_types ) ) {
 			$directed = $p2p_types[0];

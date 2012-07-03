@@ -13,7 +13,7 @@ class P2P_WP_Query {
 		$p2p_q = P2P_Query::create_from_qv( $wp_query->query_vars, 'post' );
 
 		if ( is_wp_error( $p2p_q ) ) {
-			trigger_error( $p2p_q->get_error_message() );
+			trigger_error( $p2p_q->get_error_message(), E_USER_WARNING );
 
 			$wp_query->set( 'year', 2525 );
 			return;
