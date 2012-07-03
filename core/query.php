@@ -120,7 +120,7 @@ class P2P_Query {
 		}
 	}
 
-	private function do_other_query() {
+	private function do_other_query( $side ) {
 		$qv = $this->args['query'];
 
 		_p2p_append( $qv, array(
@@ -128,8 +128,6 @@ class P2P_Query {
 			'p2p:include' => _p2p_normalize( $this->args['items'] ),
 			'p2p:per_page' => -1
 		) );
-
-		$side = $this->ctypes[0]->get_current( 'side' );
 
 		return $side->capture_query( $side->get_base_qv( $side->translate_qv( $qv ) ) );
 	}
@@ -145,8 +143,6 @@ class P2P_Query {
 		$clauses['fields'] .= ", $wpdb->p2p.*";
 
 		$clauses['join'] .= " INNER JOIN $wpdb->p2p";
-
-		$search = $this->do_other_query();
 
 		$where_parts = array();
 
@@ -166,15 +162,20 @@ class P2P_Query {
 			case 'to':
 				list( $from, $to ) = $fields;
 
+				$search = $this->do_other_query( $directed->get_current( 'side' ) );
+
 				$part .= " AND $main_id_column = $wpdb->p2p.$from";
 				$part .= " AND $wpdb->p2p.$to IN ($search)";
 
 				break;
 			default:
-				$part .= " AND (
-					($main_id_column = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from IN ($search)) OR
-					($main_id_column = $wpdb->p2p.p2p_from AND $wpdb->p2p.p2p_to IN ($search))
-				)";
+				$part .= sprintf ( " AND (
+					($main_id_column = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from IN (%s)) OR
+					($main_id_column = $wpdb->p2p.p2p_from AND $wpdb->p2p.p2p_to IN (%s))
+				)",
+					$this->do_other_query( $directed->get_current( 'side' ) ),
+					$this->do_other_query( $directed->get_opposite( 'side' ) )
+				);
 			}
 
 			$where_parts[] = '(' . $part . ')';
