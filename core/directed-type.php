@@ -98,34 +98,12 @@ class P2P_Directed_Connection_Type {
 		$side = $this->get_opposite( 'side' );
 
 		$args = array_merge( $side->translate_qv( $extra_qv ), array(
+			'connected_type' => $this->name,
+			'connected_direction' => $this->direction,
 			'connected_items' => $item
 		) );
 
-		return $this->abstract_query( $this->get_connected_args( $args ), $side, $output );
-	}
-
-	public function get_connected_args( $q ) {
-		$q = wp_parse_args( $q, array(
-			'p2p:context' => false
-		) );
-
-		if ( $orderby_key = $this->get_orderby_key() ) {
-			$q = wp_parse_args( $q, array(
-				'connected_orderby' => $orderby_key,
-				'connected_order' => 'ASC',
-				'connected_order_num' => true,
-			) );
-		}
-
-		$q = array_merge( $this->get_opposite( 'side' )->get_base_qv( $q ), array(
-			'p2p_type' => array( $this->name => $this->get_direction() ),
-		) );
-
-		$q = array_merge_recursive( $q, array(
-			'connected_meta' => $this->data
-		) );
-
-		return apply_filters( 'p2p_connected_args', $q, $this, $q['connected_items'] );
+		return $this->abstract_query( $args, $side, $output );
 	}
 
 	public function get_orderby_key() {

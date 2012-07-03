@@ -47,14 +47,15 @@ class P2P_Storage {
 			if ( ! $ctype instanceof P2P_Connection_Type )
 				continue;
 
-			$args = $ctype->set_direction( 'any' )->get_connected_args( array(
+			$args = array(
+				'connected_type' => null,
+				'connected_direction' => 'any',
 				'connected_items' => 'any',
 				'cache_results' => false,
 				'post_status' => 'any',
-				'nopaging' => true
-			) );
-
-			$args['p2p_type'] = array( 0 => 'any' );
+				'nopaging' => true,
+				'suppress_filters' => false
+			);
 
 			foreach ( get_posts( $args ) as $post ) {
 				// some connections might be ambiguous, spanning multiple connection types; first one wins
