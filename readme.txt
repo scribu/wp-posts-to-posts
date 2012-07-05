@@ -53,6 +53,11 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 1.4 =
+* added 'p2p_init' hook
+* removed the 'View All' button
+* improved usability of connection candidate UI
+
 = 1.3.1 =
 * sanitize connection fields values on save, preventing security exploits
 * improved connection field default value handling
