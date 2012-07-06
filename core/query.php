@@ -94,8 +94,7 @@ class P2P_Query {
 			$qv[$key] = isset( $q["connected_$key"] ) ? $q["connected_$key"] : false;
 		}
 
-		if ( !isset( $q['connected_query'] ) )
-			$qv['query'] = array();
+		$qv['query'] = isset( $q['connected_query'] ) ? $q['connected_query'] : array();
 
 		return $qv;
 	}
