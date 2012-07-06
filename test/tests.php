@@ -213,13 +213,13 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertTrue( is_wp_error( $ctype->connect( $movie_ids[0], $actor_ids[1] ) ) );
 	}
 
-	function test_wp_query() {
-		$q = new WP_Query( array(
+	function test_query_direction() {
+		$p2p_q = P2P_Query::create_from_qv( array(
 			'connected_type' => 'actor_to_movie',
 			'connected_items' => $this->generate_post( 'post' )
-		) );
+		), 'post' );
 
-		$this->assertEmpty( $q->posts );
+		$this->assertTrue( is_wp_error( $p2p_q ) );
 	}
 
 	function test_extra_qv() {
@@ -233,26 +233,20 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 			'sortable',
 		) );
 
-		$directed = $ctype->set_direction( 'to' );
-
-		// users should be able to filter connections via additional connected meta
-		$query = $directed->get_connected( 1, array(
-			'connected_meta' => array( 'foo' => 'bar' )
-		) );
-
-		$this->assertEquals( $query->get( 'connected_meta' ), array_merge( $ctype->data, array( 'foo' => 'bar' ) ) );
-
-		// users should be able to specify a different order
-		$extra_qv = array(
+		$p2p_query = P2P_Query::create_from_qv( array(
+			'connected_type' => $ctype->name,
+			'connected_direction' => 'to',
+			'connected_meta' => array( 'foo' => 'bar' ),
 			'connected_orderby' => 'foo',
 			'connected_order' => 'desc',
-		);
+		), 'post' );
 
-		$query = $directed->get_connected( 1, $extra_qv );
+		// users should be able to filter connections via additional connected meta
+		$this->assertEquals( $p2p_query->args['meta'], array_merge( $ctype->data, array( 'foo' => 'bar' ) ) );
 
-		foreach ( $extra_qv as $key => $value ) {
-			$this->assertEquals( $value, $query->get( $key ) );
-		}
+		// users should be able to specify a different order
+		$this->assertEquals( 'foo', $p2p_query->args['orderby'] );
+		$this->assertEquals( 'desc', $p2p_query->args['order'] );
 	}
 
 	function test_each_connected() {
