@@ -240,8 +240,8 @@ class P2P_Directed_Connection_Type {
 
 	public function get_p2p_id( $from, $to ) {
 		return _p2p_first( $this->get_connections( array(
-			'from' => $from,
-			'to' => $to,
+			'from' => $this->get_current( 'side' )->item_id( $from ),
+			'to' => $this->get_opposite( 'side' )->item_id( $to ),
 			'fields' => 'p2p_id'
 		) ) );
 	}
