@@ -56,7 +56,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 	private function generate_post( $type = 'post' ) {
 		$posts = $this->generate_posts( $type, 1 );
-		return $posts[0];
+		return get_post( $posts[0] );
 	}
 
 	private function generate_user() {
@@ -64,26 +64,26 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->users" );
 
-		return wp_insert_user( array(
+		return new WP_User( wp_insert_user( array(
 			'user_login' => 'user_' . $total,
 			'user_pass' => ''
-		) );
+		) ) );
 	}
 
 	function test_storage_post() {
-		$actor_id = $this->generate_post( 'actor' );
-		$movie_id = $this->generate_post( 'movie' );
+		$actor = $this->generate_post( 'actor' );
+		$movie = $this->generate_post( 'movie' );
 
-		p2p_type( 'actor_to_movie' )->connect( $actor_id, $movie_id );
+		p2p_type( 'actor_to_movie' )->connect( $actor, $movie );
 
-		wp_delete_post( $actor_id, true );
+		wp_delete_post( $actor->ID, true );
 
-		$this->assertFalse( p2p_connection_exists( 'actor_to_movie', array( 'from' => $actor_id ) ) );
+		$this->assertFalse( p2p_connection_exists( 'actor_to_movie', array( 'from' => $actor->ID ) ) );
 	}
 
 	function test_storage_user() {
-		$post_id = $this->generate_post( 'post' );
-		$user_id = $this->generate_user();
+		$post_id = $this->generate_post( 'post' )->ID;
+		$user_id = $this->generate_user()->ID;
 
 		p2p_create_connection( 'posts_to_users', array(
 			'from' => $post_id,
@@ -173,8 +173,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	function test_connection_create() {
 		$ctype = p2p_type( 'actor_to_movie' );
 
-		$actor_id = $this->generate_post( 'actor' );
-		$movie_id = $this->generate_post( 'movie' );
+		$actor_id = $this->generate_post( 'actor' )->ID;
+		$movie_id = $this->generate_post( 'movie' )->ID;
 
 		// create connection
 		$this->assertFalse( is_wp_error( $ctype->connect( $actor_id, $movie_id ) ) );
@@ -253,10 +253,10 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$ctype = p2p_type( 'actor_to_movie' );
 
 		$actor_ids = $this->generate_posts( 'actor', 3 );
-		$movie_id = $this->generate_post( 'movie' );
+		$movie = $this->generate_post( 'movie' );
 
-		$p2p_id_0 = $ctype->connect( $actor_ids[0], $movie_id );
-		$p2p_id_1 = $ctype->connect( $actor_ids[1], $movie_id );
+		$p2p_id_0 = $ctype->connect( $actor_ids[0], $movie );
+		$p2p_id_1 = $ctype->connect( $actor_ids[1], $movie );
 
 		$query = new WP_Query( array(
 			'post_type' => 'actor',
@@ -267,7 +267,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$ctype->each_connected( $query );
 
-		$this->assertEquals( $query->posts[0]->connected[0]->ID, $movie_id );
+		$this->assertEquals( $query->posts[0]->connected[0]->ID, $movie->ID );
 		$this->assertEquals( $query->posts[1]->connected[0]->p2p_id, $p2p_id_1 );
 		$this->assertEmpty( $query->posts[2]->connected );
 	}
@@ -277,7 +277,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$ctype = p2p_type( 'actor_to_movie' );
 
 		$actor_ids = $this->generate_posts( 'actor', 3 );
-		$movie_id = $this->generate_post( 'movie' );
+		$movie_id = $this->generate_post( 'movie' )->ID;
 
 		$p2p_id_0 = $ctype->connect( $actor_ids[0], $movie_id );
 		$p2p_id_1 = $ctype->connect( $actor_ids[1], $movie_id );
@@ -300,17 +300,17 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	function test_adjacent() {
 		$ctype = p2p_type( 'actor_to_movie' );
 
-		$actor_id = $this->generate_post( 'actor' );
+		$actor = $this->generate_post( 'actor' );
 		$movie_ids = $this->generate_posts( 'movie', 3 );
 
 		$key = $ctype->set_direction( 'from' )->get_orderby_key();
 
 		foreach ( $movie_ids as $i => $movie_id ) {
-			$ctype->connect( $actor_id, $movie_id, array( $key => $i ) );
+			$ctype->connect( $actor, $movie_id, array( $key => $i ) );
 		}
 
-		$this->assertEquals( $ctype->get_prev( $movie_ids[1], $actor_id )->ID, $movie_ids[0] );
-		$this->assertEquals( $ctype->get_next( $movie_ids[1], $actor_id )->ID, $movie_ids[2] );
+		$this->assertEquals( $ctype->get_prev( $movie_ids[1], $actor )->ID, $movie_ids[0] );
+		$this->assertEquals( $ctype->get_next( $movie_ids[1], $actor )->ID, $movie_ids[2] );
 	}
 
 	function test_related() {
@@ -329,7 +329,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 	function test_posts_to_users() {
 		$post_ids = $this->generate_posts( 'post', 2 );
-		$user_id = $this->generate_user();
+		$user_id = $this->generate_user()->ID;
 
 		$ctype = p2p_type( 'posts_to_users' );
 
@@ -348,22 +348,9 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( array( $post_ids[1] ), wp_list_pluck( $related, 'ID' ) );
 	}
 
-	function test_object_passing() {
-		$post = get_post( $this->generate_post() );
-		$user = new WP_User( $this->generate_user() );
-
-		$ctype = p2p_type( 'posts_to_users' );
-
-		$this->assertEquals( 'from', $ctype->find_direction( $post, false ) );
-		$this->assertEquals( 'to', $ctype->find_direction( $user, false ) );
-
-		$this->assertTrue( !is_wp_error( $ctype->connect( $user, $post ) ) );
-		$this->assertEquals( 1, $ctype->disconnect( $post, $user ) );
-	}
-
 	function test_connected_query() {
-		$user = new WP_User( $this->generate_user() );
-		$post = get_post( $this->generate_post() );
+		$user = $this->generate_user();
+		$post = $this->generate_post();
 
 		update_post_meta( $post->ID, 'foo', 'bar' );
 
@@ -372,7 +359,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$p2p_id = $ctype->connect( $user, $post );
 
 		// another connection that shouldn't show up
-		$ctype->connect( new WP_User( $this->generate_user() ), $this->generate_post() );
+		$ctype->connect( $this->generate_user(), $this->generate_post() );
 
 		$connected = get_users( array(
 			'connected_type' => $ctype->name,
