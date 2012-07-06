@@ -363,7 +363,6 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$connected = get_users( array(
 			'connected_type' => $ctype->name,
-			'connected_items' => 'any',
 			'connected_query' => array(
 				'meta_key' => 'foo',
 				'meta_value' => 'bar'

@@ -85,15 +85,11 @@ class P2P_Query {
 	}
 
 	protected static function get_qv( $q ) {
-		$qv_list = array(
-			'items', 'meta',
-			'orderby', 'order_num', 'order'
-		);
-
-		foreach ( $qv_list as $key ) {
+		foreach ( array( 'meta', 'orderby', 'order_num', 'order' ) as $key ) {
 			$qv[$key] = isset( $q["connected_$key"] ) ? $q["connected_$key"] : false;
 		}
 
+		$qv['items'] = isset( $q['connected_items'] ) ? $q['connected_items'] : 'any';
 		$qv['query'] = isset( $q['connected_query'] ) ? $q['connected_query'] : array();
 
 		return $qv;
