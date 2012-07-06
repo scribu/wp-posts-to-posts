@@ -361,6 +361,33 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( 1, $ctype->disconnect( $post, $user ) );
 	}
 
+	function test_connected_query() {
+		$user = new WP_User( $this->generate_user() );
+		$post = get_post( $this->generate_post() );
+
+		update_post_meta( $post->ID, 'foo', 'bar' );
+
+		$ctype = p2p_type( 'posts_to_users' );
+
+		$p2p_id = $ctype->connect( $user, $post );
+
+		// another connection that shouldn't show up
+		$ctype->connect( new WP_User( $this->generate_user() ), $this->generate_post() );
+
+		$connected = get_users( array(
+			'connected_type' => $ctype->name,
+			'connected_items' => 'any',
+			'connected_query' => array(
+				'meta_key' => 'foo',
+				'meta_value' => 'bar'
+			)
+		) );
+
+		$this->assertEquals( 1, count( $connected ) );
+
+		$this->assertEquals( $p2p_id, $connected[0]->p2p_id );
+	}
+
 	function test_p2p_list_posts() {
 		$list = array_map( 'get_post', $this->generate_posts( 'post', 2 ) );
 
