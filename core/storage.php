@@ -38,37 +38,6 @@ class P2P_Storage {
 		" );
 	}
 
-	static function upgrade() {
-		global $wpdb;
-
-		$n = 0;
-
-		foreach ( P2P_Connection_Type_Factory::get_all_instances() as $p2p_type => $ctype ) {
-			if ( ! $ctype instanceof P2P_Connection_Type )
-				continue;
-
-			$args = array(
-				'connected_type' => null,
-				'connected_direction' => 'any',
-				'connected_items' => 'any',
-				'cache_results' => false,
-				'post_status' => 'any',
-				'nopaging' => true,
-				'suppress_filters' => false
-			);
-
-			foreach ( get_posts( $args ) as $post ) {
-				// some connections might be ambiguous, spanning multiple connection types; first one wins
-				if ( $post->p2p_type )
-					continue;
-
-				$n += $wpdb->update( $wpdb->p2p, compact( 'p2p_type' ), array( 'p2p_id' => $post->p2p_id ) );
-			}
-		}
-
-		return $n;
-	}
-
 	static function uninstall() {
 		scb_uninstall_table( 'p2p' );
 		scb_uninstall_table( 'p2pmeta' );
