@@ -242,11 +242,11 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		), 'post' );
 
 		// users should be able to filter connections via additional connected meta
-		$this->assertEquals( $p2p_query->args['meta'], array_merge( $ctype->data, array( 'foo' => 'bar' ) ) );
+		$this->assertEquals( $p2p_query->meta, array_merge( $ctype->data, array( 'foo' => 'bar' ) ) );
 
 		// users should be able to specify a different order
-		$this->assertEquals( 'foo', $p2p_query->args['orderby'] );
-		$this->assertEquals( 'desc', $p2p_query->args['order'] );
+		$this->assertEquals( 'foo', $p2p_query->orderby );
+		$this->assertEquals( 'desc', $p2p_query->order );
 	}
 
 	function test_each_connected() {

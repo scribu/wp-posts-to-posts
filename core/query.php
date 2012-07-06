@@ -2,6 +2,9 @@
 
 class P2P_Query {
 
+	protected $ctypes, $items, $query, $meta;
+	protected $orderby, $order, $order_num;
+
 	/**
 	 * Create instance from mixed query vars
 	 *
@@ -35,12 +38,12 @@ class P2P_Query {
 
 		$ctypes = (array) _p2p_pluck( $q, 'connected_type' );
 
-		$item = isset( $q['connected_items'] ) ? $q['connected_items'] : 'any';
-
 		if ( isset( $q['connected_direction'] ) )
 			$directions = (array) _p2p_pluck( $q, 'connected_direction' );
 		else
 			$directions = array();
+
+		$item = isset( $q['connected_items'] ) ? $q['connected_items'] : 'any';
 
 		$p2p_types = array();
 
@@ -81,23 +84,24 @@ class P2P_Query {
 			) );
 		}
 
-		return new P2P_Query( $p2p_types, self::get_qv( $q ) );
-	}
+		$p2p_q = new P2P_Query;
 
-	protected static function get_qv( $q ) {
+		$p2p_q->ctypes = $p2p_types;
+		$p2p_q->items = $item;
+
 		foreach ( array( 'meta', 'orderby', 'order_num', 'order' ) as $key ) {
-			$qv[$key] = isset( $q["connected_$key"] ) ? $q["connected_$key"] : false;
+			$p2p_q->$key = isset( $q["connected_$key"] ) ? $q["connected_$key"] : false;
 		}
 
-		$qv['items'] = isset( $q['connected_items'] ) ? $q['connected_items'] : 'any';
-		$qv['query'] = isset( $q['connected_query'] ) ? $q['connected_query'] : array();
+		$p2p_q->query = isset( $q['connected_query'] ) ? $q['connected_query'] : array();
 
-		return $qv;
+		return $p2p_q;
 	}
 
-	private function __construct( $ctypes, $args ) {
-		$this->ctypes = $ctypes;
-		$this->args = $args;
+	protected function __construct() {}
+
+	public function __get( $key ) {
+		return $this->$key;
 	}
 
 	/**
@@ -111,20 +115,18 @@ class P2P_Query {
 		$q = $this->ctypes[0]->get_opposite( 'side' )->get_base_qv( $q );
 
 		if ( 1 == count( $this->ctypes ) ) {
-			$q = apply_filters( 'p2p_connected_args', $q, $this->ctypes[0], $this->args['items'] );
+			$q = apply_filters( 'p2p_connected_args', $q, $this->ctypes[0], $this->items );
 		}
 	}
 
 	private function do_other_query( $side ) {
-		$qv = $this->args['query'];
-
-		_p2p_append( $qv, array(
+		$qv = array_merge( $this->query, array(
 			'fields' => 'ids',
 			'p2p:per_page' => -1
 		) );
 
-		if ( 'any' != $this->args['items'] )
-			$qv['p2p:include'] = _p2p_normalize( $this->args['items'] );
+		if ( 'any' != $this->items )
+			$qv['p2p:include'] = _p2p_normalize( $this->items );
 
 		return $side->capture_query( $side->get_base_qv( $side->translate_qv( $qv ) ) );
 	}
@@ -134,8 +136,6 @@ class P2P_Query {
 	 */
 	public function alter_clauses( &$clauses, $main_id_column ) {
 		global $wpdb;
-
-		$q = $this->args;
 
 		$clauses['fields'] .= ", $wpdb->p2p.*";
 
@@ -184,26 +184,26 @@ class P2P_Query {
 			$clauses['where'] .= " AND (" . implode( ' OR ', $where_parts ) . ")";
 
 		// Handle custom fields
-		if ( !empty( $q['meta'] ) ) {
-			$meta_clauses = _p2p_meta_sql_helper( $q['meta'] );
+		if ( !empty( $this->meta ) ) {
+			$meta_clauses = _p2p_meta_sql_helper( $this->meta );
 			foreach ( $meta_clauses as $key => $value ) {
 				$clauses[ $key ] .= $value;
 			}
 		}
 
 		// Handle ordering
-		if ( $q['orderby'] ) {
+		if ( $this->orderby ) {
 			$clauses['join'] .= $wpdb->prepare( "
 				LEFT JOIN $wpdb->p2pmeta AS p2pm_order ON (
 					$wpdb->p2p.p2p_id = p2pm_order.p2p_id AND p2pm_order.meta_key = %s
 				)
-			", $q['orderby'] );
+			", $this->orderby );
 
-			$order = ( 'DESC' == strtoupper( $q['order'] ) ) ? 'DESC' : 'ASC';
+			$order = ( 'DESC' == strtoupper( $this->order ) ) ? 'DESC' : 'ASC';
 
 			$field = 'meta_value';
 
-			if ( $q['order_num'] )
+			if ( $this->order_num )
 				$field .= '+0';
 
 			$clauses['orderby'] = "p2pm_order.$field $order";
