@@ -10,7 +10,7 @@
           $this.val($this.attr('placeholder'));
           $this.addClass('p2p-placeholder');
         }
-        return;
+        return void 0;
       };
       clearVal = function() {
         var $this;
@@ -19,7 +19,7 @@
           $this.val('');
           $this.removeClass('p2p-placeholder');
         }
-        return;
+        return void 0;
       };
       jQuery('.p2p-search input[placeholder]').each(setVal).focus(clearVal).blur(setVal);
     }
@@ -48,7 +48,11 @@
         handler = function(response) {
           try {
             response = jQuery.parseJSON(response);
-            return callback(response);
+            if (response.error) {
+              return alert(response.error);
+            } else {
+              return callback(response);
+            }
           } catch (e) {
             return typeof console !== "undefined" && console !== null ? console.error('Malformed response', response) : void 0;
           }
@@ -61,8 +65,6 @@
         });
       };
       PostsTab = (function() {
-
-        PostsTab.name = 'PostsTab';
 
         function PostsTab(selector) {
           var _this = this;

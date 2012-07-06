@@ -43,7 +43,11 @@ jQuery ->
 			handler = (response) ->
 				try
 					response = jQuery.parseJSON response
-					callback response
+
+					if response.error
+						alert response.error
+					else
+						callback response
 				catch e
 					console?.error 'Malformed response', response
 
