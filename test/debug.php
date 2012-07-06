@@ -50,6 +50,7 @@ class P2P_Debug {
 		p2p_register_connection_type( array(
 			'name' => 'users_to_posts',
 			'from' => 'user',
+			'cardinality' => 'one-to-one',
 			'title' => array( 'to' => 'Users 2 Posts' ),
 			'fields' => array(
 				'text' => array(

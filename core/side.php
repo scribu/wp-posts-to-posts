@@ -11,6 +11,7 @@ interface P2P_Side {
 	public function get_base_qv( $q );
 	public function translate_qv( $qv );
 	public function do_query( $args );
+	public function capture_query( $args );
 
 	public function is_indeterminate( $side );
 
@@ -85,8 +86,18 @@ class P2P_Side_Post implements P2P_Side {
 		return new WP_Query( $args );
 	}
 
+	function capture_query( $args ) {
+		$q = new WP_Query;
+		$q->_p2p_capture = true;
+
+		$q->query( $args );
+
+		return $q->_p2p_sql;
+	}
+
 	function translate_qv( $qv ) {
 		$map = array(
+			'include' => 'post__in',
 			'exclude' => 'post__not_in',
 			'search' => 's',
 			'page' => 'paged',
@@ -198,7 +209,40 @@ class P2P_Side_User implements P2P_Side {
 		return new WP_User_Query( $args );
 	}
 
+	function capture_query( $args ) {
+		$args['count_total'] = false;
+
+		$uq = new WP_User_Query;
+
+		// see http://core.trac.wordpress.org/ticket/21119
+		$uq->query_vars = wp_parse_args( $args, array(
+			'blog_id' => $GLOBALS['blog_id'],
+			'role' => '',
+			'meta_key' => '',
+			'meta_value' => '',
+			'meta_compare' => '',
+			'include' => array(),
+			'exclude' => array(),
+			'search' => '',
+			'search_columns' => array(),
+			'orderby' => 'login',
+			'order' => 'ASC',
+			'offset' => '',
+			'number' => '',
+			'count_total' => true,
+			'fields' => 'all',
+			'who' => ''
+		) );
+
+		$uq->prepare_query();
+
+		return "SELECT $uq->query_fields $uq->query_from $uq->query_where $uq->query_orderby $uq->query_limit";
+	}
+
 	function translate_qv( $qv ) {
+		if ( isset( $qv['p2p:include'] ) )
+			$qv['include'] = _p2p_pluck( $qv, 'p2p:include' );
+
 		if ( isset( $qv['p2p:exclude'] ) )
 			$qv['exclude'] = _p2p_pluck( $qv, 'p2p:exclude' );
 

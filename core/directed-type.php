@@ -98,34 +98,12 @@ class P2P_Directed_Connection_Type {
 		$side = $this->get_opposite( 'side' );
 
 		$args = array_merge( $side->translate_qv( $extra_qv ), array(
+			'connected_type' => $this->name,
+			'connected_direction' => $this->direction,
 			'connected_items' => $item
 		) );
 
-		return $this->abstract_query( $this->get_connected_args( $args ), $side, $output );
-	}
-
-	public function get_connected_args( $q ) {
-		$q = wp_parse_args( $q, array(
-			'p2p:context' => false
-		) );
-
-		if ( $orderby_key = $this->get_orderby_key() ) {
-			$q = wp_parse_args( $q, array(
-				'connected_orderby' => $orderby_key,
-				'connected_order' => 'ASC',
-				'connected_order_num' => true,
-			) );
-		}
-
-		$q = array_merge( $this->get_opposite( 'side' )->get_base_qv( $q ), array(
-			'p2p_type' => array( $this->name => $this->get_direction() ),
-		) );
-
-		$q = array_merge_recursive( $q, array(
-			'connected_meta' => $this->data
-		) );
-
-		return apply_filters( 'p2p_connected_args', $q, $this, $q['connected_items'] );
+		return $this->abstract_query( $args, $side, $output );
 	}
 
 	public function get_orderby_key() {
@@ -150,7 +128,7 @@ class P2P_Directed_Connection_Type {
 	public function get_connectable( $item_id, $extra_qv = array() ) {
 		$side = $this->get_opposite( 'side' );
 
-		$extra_qv['p2p:exclude'] = $this->get_non_connectable( $item_id );
+		$extra_qv['p2p:exclude'] = $this->get_non_connectable( $item_id, $extra_qv );
 
 		$extra_qv = $side->get_base_qv( $side->translate_qv( $extra_qv ) );
 
@@ -159,24 +137,24 @@ class P2P_Directed_Connection_Type {
 		return $this->abstract_query( $qv, $side );
 	}
 
-	private function get_non_connectable( $item_id ) {
+	private function get_non_connectable( $item_id, $extra_qv ) {
 		$to_exclude = array();
 
 		if ( $this->indeterminate && !$this->self_connections )
 			$to_exclude[] = $item_id;
 
 		if ( 'one' == $this->get_current( 'cardinality' ) ) {
-			_p2p_append( $to_exclude, $this->get_connections( array(
-				'fields' => 'object_id'
-			) ) );
+			$to_check = 'any';
+		} elseif ( !$this->duplicate_connections ) {
+			$to_check = $item_id;
+		} else {
+			return $to_exclude;
 		}
 
-		if ( !$this->duplicate_connections ) {
-			_p2p_append( $to_exclude, $this->get_connections( array(
-				'from' => $item_id,
-				'fields' => 'object_id'
-			) ) );
-		}
+		$extra_qv['fields'] = 'ids';
+		$already_connected = $this->get_connected( 'any', $extra_qv, 'abstract' )->items;
+
+		_p2p_append( $to_exclude, $already_connected );
 
 		return $to_exclude;
 	}

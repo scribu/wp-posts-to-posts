@@ -9,28 +9,16 @@ class P2P_User_Query {
 	static function pre_user_query( $query ) {
 		global $wpdb;
 
-		$q =& $query->query_vars;
+		$p2p_q = P2P_Query::create_from_qv( $query->query_vars, 'user' );
 
-		P2P_Query::expand_shortcut_qv( $q );
+		if ( is_wp_error( $p2p_q ) ) {
+			trigger_error( $p2p_q->get_error_message(), E_USER_WARNING );
 
-		if ( isset( $q['connected_items'] ) ) {
-			$item = $q['connected_items'];
-		} else {
-			$item = 'any';
-		}
-
-		$r = P2P_Query::expand_connected_type( $q, $item, 'user' );
-
-		if ( false === $r ) {
 			$query->query_where = " AND 1=0";
 			return;
 		}
 
-		// alter query
-
-		$qv = P2P_Query::get_qv( $q );
-
-		if ( !$qv )
+		if ( null === $p2p_q )
 			return;
 
 		$map = array(
@@ -45,13 +33,13 @@ class P2P_User_Query {
 		foreach ( $map as $clause => $key )
 			$clauses[$clause] = $query->$key;
 
-		$clauses = P2P_Query::alter_clauses( $clauses, $qv, "$wpdb->users.ID" );
+		$clauses = $p2p_q->alter_clauses( $clauses, "$wpdb->users.ID" );
 
 		if ( 0 !== strpos( $clauses['orderby'], 'ORDER BY ' ) )
 			$clauses['orderby'] = 'ORDER BY ' . $clauses['orderby'];
 
 		foreach ( $map as $clause => $key )
-			$query->$key = $clauses[$clause];
+			$query->$key = $clauses[ $clause ];
 	}
 }
 
