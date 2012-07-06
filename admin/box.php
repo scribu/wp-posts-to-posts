@@ -50,10 +50,10 @@ class P2P_Box {
 		$data = array(
 			'attributes' => $this->render_data_attributes(),
 			'connections' => $this->render_connections_table( $post ),
-			'create-connections' => $this->render_create_connections( $post ),
+			'create_connections' => $this->render_create_connections( $post ),
 		);
 
-		echo P2P_Mustache::render( 'box', $data );
+		echo P2P_Mustache::render( 'box.php', $data );
 	}
 
 	protected function render_data_attributes() {
@@ -94,9 +94,7 @@ class P2P_Box {
 	}
 
 	protected function render_create_connections( $post ) {
-		$data = array(
-			'label' => __( 'Create connections:', P2P_TEXTDOMAIN )
-		);
+		$data = array();
 
 		if ( 'one' == $this->ctype->get_opposite( 'cardinality' ) && !empty( $this->connected_items ) )
 			$data['hide'] = 'style="display:none"';
@@ -108,10 +106,10 @@ class P2P_Box {
 		) );
 
 		$data['tabs'][] = array(
-			'tab-id' => 'search',
-			'tab-title' => __( 'Search', P2P_TEXTDOMAIN ),
+			'tab_id' => 'search',
+			'tab_title' => __( 'Search', P2P_TEXTDOMAIN ),
 			'is-active' => array(true),
-			'tab-content' => $tab_content
+			'tab_content' => $tab_content
 		);
 
 		// Create post tab
@@ -121,9 +119,9 @@ class P2P_Box {
 			) );
 
 			$data['tabs'][] = array(
-				'tab-id' => 'create-post',
-				'tab-title' => $this->labels->new_item,
-				'tab-content' => $tab_content
+				'tab_id' => 'create-post',
+				'tab_title' => $this->labels->new_item,
+				'tab_content' => $tab_content
 			);
 		}
 

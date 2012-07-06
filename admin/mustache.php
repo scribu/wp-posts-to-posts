@@ -21,7 +21,16 @@ abstract class P2P_Mustache {
 	}
 
 	public static function render( $template, $data ) {
-		return self::$mustache->render( self::$loader[$template], $data );
+		// TEMP
+		if ( '.php' == substr( $template, -4 ) ) {
+			extract( $data );
+
+			ob_start();
+			require dirname(__FILE__) . '/templates/' . $template;
+			return ob_get_clean();
+		} else {
+			return self::$mustache->render( self::$loader[$template], $data );
+		}
 	}
 }
 
