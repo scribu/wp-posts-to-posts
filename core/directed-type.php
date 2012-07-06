@@ -184,10 +184,10 @@ class P2P_Directed_Connection_Type {
 			return new WP_Error( 'duplicate_connection', 'Duplicate connections are not allowed.' );
 
 		if ( 'one' == $this->get_opposite( 'cardinality' ) && $this->connection_exists( compact( 'from' ) ) )
-			return new WP_Error( 'cardinality_opposite', 'Cardinality problem.' );
+			return new WP_Error( 'cardinality_opposite', 'Cardinality problem (opposite).' );
 
 		if ( 'one' == $this->get_current( 'cardinality' ) && $this->connection_exists( compact( 'to' ) ) )
-			return new WP_Error( 'cardinality_current', 'Cardinality problem.' );
+			return new WP_Error( 'cardinality_current', 'Cardinality problem (current).' );
 
 		$p2p_id = $this->create_connection( array(
 			'from' => $from,
