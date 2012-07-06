@@ -169,29 +169,33 @@ class P2P_Directed_Connection_Type {
 	 * @return int|object p2p_id or WP_Error on failure
 	 */
 	public function connect( $from, $to, $meta = array() ) {
-		$from = $this->get_current( 'side' )->item_id( $from );
-		if ( !$from )
+		$from_id = $this->get_current( 'side' )->item_id( $from );
+		if ( !$from_id )
 			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
 
-		$to = $this->get_opposite( 'side' )->item_id( $to );
-		if ( !$to )
+		$to_id = $this->get_opposite( 'side' )->item_id( $to );
+		if ( !$to_id )
 			return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
 
-		if ( !$this->self_connections && $from == $to )
+		if ( !$this->self_connections && $from_id == $to_id )
 			return new WP_Error( 'self_connection', 'Connection between an element and itself is not allowed.' );
 
 		if ( !$this->duplicate_connections && $this->get_p2p_id( $from, $to ) )
 			return new WP_Error( 'duplicate_connection', 'Duplicate connections are not allowed.' );
 
-		if ( 'one' == $this->get_opposite( 'cardinality' ) && $this->connection_exists( compact( 'from' ) ) )
-			return new WP_Error( 'cardinality_opposite', 'Cardinality problem (opposite).' );
+		if ( 'one' == $this->get_opposite( 'cardinality' ) ) {
+			if ( !empty( $this->lose_direction()->get_connected( $from, array( 'p2p:per_page' => 1 ), 'abstract' )->items ) )
+				return new WP_Error( 'cardinality_opposite', 'Cardinality problem (opposite).' );
+		}
 
-		if ( 'one' == $this->get_current( 'cardinality' ) && $this->connection_exists( compact( 'to' ) ) )
-			return new WP_Error( 'cardinality_current', 'Cardinality problem (current).' );
+		if ( 'one' == $this->get_current( 'cardinality' ) ) {
+			if ( !empty( $this->lose_direction()->get_connected( $to, array( 'p2p:per_page' => 1 ), 'abstract' )->items ) )
+				return new WP_Error( 'cardinality_current', 'Cardinality problem (current).' );
+		}
 
 		$p2p_id = $this->create_connection( array(
-			'from' => $from,
-			'to' => $to,
+			'from' => $from_id,
+			'to' => $to_id,
 			'meta' => array_merge( $meta, $this->data )
 		) );
 
