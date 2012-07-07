@@ -99,7 +99,13 @@ class P2P_Column_User extends P2P_Column {
 	}
 
 	function get_admin_link( $item ) {
-		// TODO
+		$args = array(
+			'connected_type' => $this->ctype->name,
+			'connected_direction' => $this->ctype->flip_direction()->get_direction(),
+			'connected_items' => $item->ID,
+		);
+
+		return add_query_arg( $args, admin_url( 'users.php' ) );
 	}
 
 	function display_column( $content, $column, $item_id ) {
