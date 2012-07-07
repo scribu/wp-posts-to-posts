@@ -150,7 +150,7 @@ class P2P_Side_Post implements P2P_Side {
 	}
 
 	function item_title( $item ) {
-		return $item->post_title;
+		return get_the_title( $item );
 	}
 }
 

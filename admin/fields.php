@@ -121,7 +121,7 @@ class P2P_Field_Title_Post extends P2P_Field_Title {
 	function get_data( $post ) {
 		$data = array(
 			'title-attr' => get_permalink( $post ),
-			'title' => $post->post_title,
+			'title' => get_the_title( $post ),
 			'url' => get_edit_post_link( $post ),
 		);
 
