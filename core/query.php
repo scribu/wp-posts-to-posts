@@ -56,7 +56,9 @@ class P2P_Query {
 			if ( isset( $directions[$i] ) ) {
 				$directed = $ctype->set_direction( $directions[$i] );
 			} else {
-				$directed = self::find_direction( $ctype, $item, $object_type );
+				$directed = $ctype->find_direction_object( $object_type );
+				if ( !$directed )
+					$directed = $ctype->find_direction( $item );
 			}
 
 			if ( !$directed )
@@ -210,31 +212,6 @@ class P2P_Query {
 		}
 
 		return $clauses;
-	}
-
-	private static function find_direction( $ctype, $arg, $object_type ) {
-		$opposite_side = self::choose_side( $object_type,
-			$ctype->object['from'],
-			$ctype->object['to']
-		);
-
-		if ( in_array( $opposite_side, array( 'from', 'to' ) ) )
-			return $ctype->set_direction( $opposite_side );
-
-		return $ctype->find_direction( $arg );
-	}
-
-	private static function choose_side( $current, $from, $to ) {
-		if ( $from == $to && $current == $from )
-			return 'any';
-
-		if ( $current == $from )
-			return 'to';
-
-		if ( $current == $to )
-			return 'from';
-
-		return false;
 	}
 }
 

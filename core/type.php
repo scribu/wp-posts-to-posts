@@ -161,6 +161,34 @@ class P2P_Connection_Type {
 		return false;
 	}
 
+	/**
+	 * @param string An object type, such as 'post' or 'user'
+	 */
+	public function find_direction_object( $object_type ) {
+		$opposite_side = self::choose_side( $object_type,
+			$this->object['from'],
+			$this->object['to']
+		);
+
+		if ( in_array( $opposite_side, array( 'from', 'to' ) ) )
+			return $this->set_direction( $opposite_side );
+
+		return false;
+	}
+
+	private static function choose_side( $current, $from, $to ) {
+		if ( $from == $to && $current == $from )
+			return 'any';
+
+		if ( $current == $from )
+			return 'to';
+
+		if ( $current == $to )
+			return 'from';
+
+		return false;
+	}
+
 	// Used in each_connected()
 	private function find_direction_multiple( $post_types ) {
 		$possible_directions = array();

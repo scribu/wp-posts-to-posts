@@ -213,6 +213,7 @@ class P2P_Side_User implements P2P_Side {
 		$args['count_total'] = false;
 
 		$uq = new WP_User_Query;
+		$uq->_p2p_capture = true; // needed by P2P_URL_Query
 
 		// see http://core.trac.wordpress.org/ticket/21119
 		$uq->query_vars = wp_parse_args( $args, array(
