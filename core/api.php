@@ -339,6 +339,16 @@ function p2p_distribute_connected( $items, $connected, $prop_name ) {
 		$indexed_list[ $item->ID ] = $item;
 	}
 
+	$groups = p2p_triage_connected( $connected );
+
+	foreach ( $groups as $outer_item_id => $connected_items ) {
+		$indexed_list[ $outer_item_id ]->$prop_name = $connected_items;
+	}
+}
+
+function p2p_triage_connected( $connected ) {
+	$groups = array();
+
 	foreach ( $connected as $inner_item ) {
 		if ( $inner_item->ID == $inner_item->p2p_from ) {
 			$outer_item_id = $inner_item->p2p_to;
@@ -349,7 +359,9 @@ function p2p_distribute_connected( $items, $connected, $prop_name ) {
 			continue;
 		}
 
-		array_push( $indexed_list[ $outer_item_id ]->$prop_name, $inner_item );
+		$groups[ $outer_item_id ][] = $inner_item;
 	}
+
+	return $groups;
 }
 
