@@ -14,6 +14,10 @@ abstract class P2P_Column {
 		$connected = $this->ctype->get_connected( $items, $extra_qv, 'abstract' );
 
 		$this->connected = p2p_triage_connected( $connected->items );
+
+		$screen = get_current_screen();
+
+		add_filter( "manage_{$screen->id}_columns", array( $this, 'add_column' ) );
 	}
 
 	function add_column( $columns ) {

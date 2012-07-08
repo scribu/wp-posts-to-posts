@@ -66,8 +66,6 @@ class P2P_Column_Factory {
 			$column = new $class( $directed );
 
 			$column->styles();
-
-			add_filter( "manage_{$screen->id}_columns", array( $column, 'add_column' ) );
 		}
 	}
 }
