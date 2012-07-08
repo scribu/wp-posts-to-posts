@@ -10,7 +10,7 @@ class P2P_Field_Delete implements P2P_Field {
 		return P2P_Mustache::render( 'column-delete-all', $data );
 	}
 
-	function render( $p2p_id, $item ) {
+	function render( $p2p_id, $_ ) {
 		$data = array(
 			'p2p_id' => $p2p_id,
 			'title' => __( 'Delete connection', P2P_TEXTDOMAIN )
@@ -33,7 +33,7 @@ class P2P_Field_Order implements P2P_Field {
 		return '';
 	}
 
-	function render( $p2p_id, $item ) {
+	function render( $p2p_id, $_ ) {
 		return html( 'input', array(
 			'type' => 'hidden',
 			'name' => "p2p_order[$this->sort_key][]",
@@ -57,7 +57,7 @@ class P2P_Field_Generic implements P2P_Field {
 		return $this->data['title'];
 	}
 
-	function render( $p2p_id, $item ) {
+	function render( $p2p_id, $_ ) {
 		$args = array(
 			'name' => array( 'p2p_meta', $p2p_id, $this->key ),
 			'type' => $this->data['type']
