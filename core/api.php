@@ -251,6 +251,8 @@ function p2p_create_connection( $p2p_type, $args ) {
 	foreach ( $meta as $key => $value )
 		p2p_add_meta( $p2p_id, $key, $value );
 
+	do_action( 'p2p_created_connection', $p2p_id );
+
 	return $p2p_id;
 }
 
@@ -282,6 +284,8 @@ function p2p_delete_connection( $p2p_id ) {
 		return 0;
 
 	$p2p_ids = array_map( 'absint', (array) $p2p_id );
+
+	do_action( 'p2p_delete_connections', $p2p_ids );
 
 	$where = "WHERE p2p_id IN (" . implode( ',', $p2p_ids ) . ")";
 
