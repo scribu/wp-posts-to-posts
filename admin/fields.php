@@ -88,11 +88,7 @@ class P2P_Field_Create implements P2P_Field {
 	}
 
 	function render( $p2p_id, $item ) {
-		$data = array_merge( $this->title_field->get_data( $item ), array(
-			'item-id' => $item->ID, // TODO: use P2P_Side->item_id()
-		) );
-
-		return P2P_Mustache::render( 'column-create', $data );
+		return P2P_Mustache::render( 'column-create', $this->title_field->get_data( $item ) );
 	}
 }
 
@@ -123,6 +119,7 @@ class P2P_Field_Title_Post extends P2P_Field_Title {
 			'title-attr' => get_permalink( $post ),
 			'title' => get_the_title( $post ),
 			'url' => get_edit_post_link( $post ),
+			'item-id' => $post->ID, // used by P2P_Field_Create
 		);
 
 		if ( 'publish' != $post->post_status ) {
@@ -145,6 +142,7 @@ class P2P_Field_Title_Attachment extends P2P_Field_Title {
 			'title-attr' => $attachment->post_title,
 			'title' => html( 'img', compact( 'src' ) ),
 			'url' => get_edit_post_link( $attachment ),
+			'item-id' => $attachment->ID, // used by P2P_Field_Create
 		);
 
 		return $data;
@@ -158,6 +156,7 @@ class P2P_Field_Title_User extends P2P_Field_Title {
 			'title-attr' => '',
 			'title' => $user->display_name,
 			'url' => $this->get_edit_url( $user->ID ),
+			'item-id' => $user->ID, // used by P2P_Field_Create
 		);
 	}
 
