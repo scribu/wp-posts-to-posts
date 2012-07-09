@@ -209,8 +209,15 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertFalse( is_wp_error( $ctype->connect( $actor_ids[0], $movie_ids[0] ) ) );
 		$this->assertFalse( is_wp_error( $ctype->connect( $actor_ids[0], $movie_ids[1] ) ) );
 
-		$this->assertTrue( is_wp_error( $ctype->connect( $actor_ids[1], $movie_ids[0] ) ) );
-		$this->assertTrue( is_wp_error( $ctype->connect( $movie_ids[0], $actor_ids[1] ) ) );
+		$r = $ctype->connect( $actor_ids[1], $movie_ids[0] );
+
+		$this->assertTrue( is_wp_error( $r ) );
+		$this->assertEquals( 'cardinality_current', $r->get_error_code() );
+
+		$r = $ctype->connect( $movie_ids[0], $actor_ids[1] );
+
+		$this->assertTrue( is_wp_error( $r ) );
+		$this->assertEquals( 'cardinality_opposite', $r->get_error_code() );
 	}
 
 	function test_query_direction() {
