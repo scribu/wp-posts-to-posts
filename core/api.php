@@ -171,7 +171,7 @@ function _p2p_get_connections( $p2p_type, $args = array() ) {
 		if ( empty( $$key ) )
 			return array();
 
-		$value = scbUtil::array_to_sql( (array) $$key );
+		$value = scbUtil::array_to_sql( _p2p_normalize( $$key ) );
 
 		$where .= " AND p2p_$key IN ($value)";
 	}
@@ -228,8 +228,8 @@ function p2p_create_connection( $p2p_type, $args ) {
 		'meta' => array()
 	) ), EXTR_SKIP );
 
-	$from = absint( $from );
-	$to = absint( $to );
+	list( $from ) = _p2p_normalize( $from );
+	list( $to ) = _p2p_normalize( $to );
 
 	if ( !$from || !$to )
 		return false;

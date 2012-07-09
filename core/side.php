@@ -15,11 +15,7 @@ interface P2P_Side {
 
 	public function is_indeterminate( $side );
 
-	// TODO: break into separate interface
 	public function item_recognize( $arg );
-	public function item_object( $item_id );
-	public function item_id( $arg );
-	public function item_title( $item );
 }
 
 
@@ -121,36 +117,25 @@ class P2P_Side_Post implements P2P_Side {
 	}
 
 	function item_recognize( $arg ) {
-		if ( is_object( $arg ) ) {
-			if ( !isset( $arg->post_type ) )
-				return false;
-			$post_type = $arg->post_type;
-		} elseif ( $post_id = (int) $arg ) {
-			$post_type = get_post_type( $post_id );
-		} else {
-			$post_type = $arg;
-		}
+		if ( is_a( $arg, 'P2P_Item_Post' ) )
+			return $arg;
 
+		$post = get_post( $arg );
+
+		if ( !is_object( $post ) )
+			return false;
+
+		if ( !$this->recognize_post_type( $post->post_type ) )
+			return false;
+
+		return new P2P_Item_Post( $post );
+	}
+
+	public function recognize_post_type( $post_type ) {
 		if ( !post_type_exists( $post_type ) )
 			return false;
 
 		return in_array( $post_type, $this->query_vars['post_type'] );
-	}
-
-	function item_object( $item_id ) {
-		return get_post( $item_id );
-	}
-
-	function item_id( $arg ) {
-		$post = get_post( $arg );
-		if ( $post )
-			return $post->ID;
-
-		return false;
-	}
-
-	function item_title( $item ) {
-		return get_the_title( $item );
 	}
 }
 
@@ -262,31 +247,21 @@ class P2P_Side_User implements P2P_Side {
 		return true;
 	}
 
-	function item_recognize( $arg ) {
-		return is_a( $arg, 'WP_User' );
-	}
-
-	function item_object( $item_id ) {
-		return get_user_by( 'id', $item_id );
-	}
-
-	function item_id( $arg ) {
-		if ( $this->item_recognize( $arg ) )
-			return $arg->ID;
-
-		$user = get_user_by( 'id', $arg );
-		if ( $user )
-			return $user->ID;
-
-		return false;
-	}
-
-	function item_title( $item ) {
-		return $item->display_name;
-	}
-
 	function get_base_qv( $q ) {
 		return array_merge( $this->query_vars, $q );
+	}
+
+	function item_recognize( $arg ) {
+		if ( is_a( $arg, 'P2P_Item_User' ) )
+			return $arg;
+
+		if ( !is_a( $arg, 'WP_User' ) ) {
+			$arg = get_user_by( 'id', $arg );
+			if ( !$arg )
+				return false;
+		}
+
+		return new P2P_Item_User( $arg );
 	}
 }
 

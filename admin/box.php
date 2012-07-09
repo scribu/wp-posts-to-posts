@@ -240,10 +240,10 @@ class P2P_Box {
 				)
 			);
 		} else {
-			$item = $this->ctype->get_opposite('side')->item_object( $to );
+			$item = $this->ctype->get_opposite('side')->item_recognize( $to );
 
 			$r = array(
-				'row' => $this->connection_row( $p2p_id, $item, true )
+				'row' => $this->connection_row( $p2p_id, $item->get_object(), true )
 			);
 		}
 

@@ -109,18 +109,19 @@ class P2P_Box_Factory {
 	}
 
 	private static function get_visible_directions( $post_type, $ctype, $show_ui ) {
-		$direction = $ctype->find_direction( $post_type, false );
-		if ( !$direction )
-			return array();
+		$directions = array();
 
-		if ( $ctype->indeterminate && !$ctype->reciprocal ) {
-			return _p2p_expand_direction( $show_ui );
+		foreach ( _p2p_expand_direction( $show_ui ) as $direction ) {
+			$side = $ctype->side[ $direction ];
+
+			if ( !method_exists( $side, 'recognize_post_type' ) )
+				continue;
+
+			if ( $side->recognize_post_type( $post_type ) )
+				$directions[] = $direction;
 		}
 
-		if ( 'any' == $show_ui || $direction == $show_ui )
-			return array( $direction );
-
-		return array();
+		return $directions;
 	}
 
 	/**

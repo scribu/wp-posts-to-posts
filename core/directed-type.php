@@ -169,15 +169,15 @@ class P2P_Directed_Connection_Type {
 	 * @return int|object p2p_id or WP_Error on failure
 	 */
 	public function connect( $from, $to, $meta = array() ) {
-		$from_id = $this->get_current( 'side' )->item_id( $from );
-		if ( !$from_id )
+		$from = $this->get_current( 'side' )->item_recognize( $from );
+		if ( !$from )
 			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
 
-		$to_id = $this->get_opposite( 'side' )->item_id( $to );
-		if ( !$to_id )
+		$to = $this->get_opposite( 'side' )->item_recognize( $to );
+		if ( !$to )
 			return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
 
-		if ( !$this->self_connections && $from_id == $to_id )
+		if ( !$this->self_connections && $from->get_id() == $to->get_id() )
 			return new WP_Error( 'self_connection', 'Connection between an element and itself is not allowed.' );
 
 		if ( !$this->duplicate_connections && $this->get_p2p_id( $from, $to ) )
@@ -194,8 +194,8 @@ class P2P_Directed_Connection_Type {
 		}
 
 		$p2p_id = $this->create_connection( array(
-			'from' => $from_id,
-			'to' => $to_id,
+			'from' => $from,
+			'to' => $to,
 			'meta' => array_merge( $meta, $this->data )
 		) );
 
@@ -229,12 +229,12 @@ class P2P_Directed_Connection_Type {
 	 * @return int|object count or WP_Error on failure
 	 */
 	public function disconnect( $from, $to ) {
-		$from = $this->get_current( 'side' )->item_id( $from );
+		$from = $this->get_current( 'side' )->item_recognize( $from );
 		if ( !$from )
 			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
 
 		if ( 'any' != $to ) {
-			$to = $this->get_opposite( 'side' )->item_id( $to );
+			$to = $this->get_opposite( 'side' )->item_recognize( $to );
 			if ( !$to )
 				return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
 		}
@@ -244,8 +244,8 @@ class P2P_Directed_Connection_Type {
 
 	public function get_p2p_id( $from, $to ) {
 		return _p2p_first( $this->get_connections( array(
-			'from' => $this->get_current( 'side' )->item_id( $from ),
-			'to' => $this->get_opposite( 'side' )->item_id( $to ),
+			'from' => $from,
+			'to' => $to,
 			'fields' => 'p2p_id'
 		) ) );
 	}

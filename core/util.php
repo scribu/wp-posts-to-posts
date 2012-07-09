@@ -13,8 +13,12 @@ function _p2p_normalize( $items ) {
 	if ( !is_array( $items ) )
 		$items = array( $items );
 
-	if ( is_object( reset( $items ) ) )
-		$items = wp_list_pluck( $items, 'ID' );
+	foreach ( $items as &$item ) {
+		if ( is_a( $item, 'P2P_Item' ) )
+			$item = $item->get_id();
+		elseif ( is_object( $item ) )
+			$item = $item->ID;
+	}
 
 	return $items;
 }

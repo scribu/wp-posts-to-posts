@@ -25,9 +25,6 @@ class P2P_Widget extends scbWidget {
 		$ctypes = array();
 
 		foreach ( P2P_Connection_Type_Factory::get_all_instances() as $p2p_type => $ctype ) {
-			if ( ! $ctype instanceof P2P_Connection_Type )
-				continue;
-
 			$ctypes[ $p2p_type ] = $ctype->get_desc();
 		}
 
