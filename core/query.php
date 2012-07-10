@@ -56,9 +56,7 @@ class P2P_Query {
 			if ( isset( $directions[$i] ) ) {
 				$directed = $ctype->set_direction( $directions[$i] );
 			} else {
-				$directed = $ctype->find_direction_object( $object_type );
-				if ( !$directed )
-					$directed = $ctype->find_direction( $item );
+				$directed = $ctype->find_direction( $item, true, $object_type );
 			}
 
 			if ( !$directed )

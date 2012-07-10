@@ -141,15 +141,26 @@ class P2P_Connection_Type {
 	 *
 	 * @param mixed A post type, object or object id.
 	 * @param bool Whether to return an instance of P2P_Directed_Connection_Type or just the direction
+	 * @param string An object type, such as 'post' or 'user'
 	 *
 	 * @return bool|object|string False on failure, P2P_Directed_Connection_Type instance or direction on success.
 	 */
-	public function find_direction( $arg, $instantiate = true ) {
+	public function find_direction( $arg, $instantiate = true, $object_type = null ) {
 		if ( is_array( $arg ) )
 			$arg = reset( $arg );
 
+		$opposite_side = self::choose_side( $object_type,
+			$this->object['from'],
+			$this->object['to']
+		);
+
+		if ( in_array( $opposite_side, array( 'from', 'to' ) ) )
+			return $this->set_direction( $opposite_side, $instantiate );
+
 		foreach ( array( 'from', 'to' ) as $direction ) {
-			if ( !$this->side[ $direction ]->item_recognize( $arg ) )
+			$item = $this->side[ $direction ]->item_recognize( $arg );
+
+			if ( !$item )
 				continue;
 
 			if ( $this->indeterminate )
@@ -157,21 +168,6 @@ class P2P_Connection_Type {
 
 			return $this->set_direction( $direction, $instantiate );
 		}
-
-		return false;
-	}
-
-	/**
-	 * @param string An object type, such as 'post' or 'user'
-	 */
-	public function find_direction_object( $object_type ) {
-		$opposite_side = self::choose_side( $object_type,
-			$this->object['from'],
-			$this->object['to']
-		);
-
-		if ( in_array( $opposite_side, array( 'from', 'to' ) ) )
-			return $this->set_direction( $opposite_side );
 
 		return false;
 	}

@@ -50,9 +50,7 @@ class P2P_Column_Factory {
 		foreach ( self::$column_args as $p2p_type => $column_args ) {
 			$ctype = p2p_type( $p2p_type );
 
-			$directed = $ctype->find_direction_object( $object_type );
-			if ( !$directed )
-				$directed = $ctype->find_direction( $screen->post_type );
+			$directed = $ctype->find_direction( $screen->post_type, true, $object_type );
 
 			if ( !$directed )
 				continue;
