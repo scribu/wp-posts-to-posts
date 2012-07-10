@@ -184,12 +184,12 @@ class P2P_Directed_Connection_Type {
 			return new WP_Error( 'duplicate_connection', 'Duplicate connections are not allowed.' );
 
 		if ( 'one' == $this->get_opposite( 'cardinality' ) ) {
-			if ( !empty( $this->lose_direction()->get_connected( $from, array( 'p2p:per_page' => 1 ), 'abstract' )->items ) )
+			if ( $this->has_connections( $from ) )
 				return new WP_Error( 'cardinality_opposite', 'Cardinality problem (opposite).' );
 		}
 
 		if ( 'one' == $this->get_current( 'cardinality' ) ) {
-			if ( !empty( $this->lose_direction()->get_connected( $to, array( 'p2p:per_page' => 1 ), 'abstract' )->items ) )
+			if ( $this->has_connections( $to ) )
 				return new WP_Error( 'cardinality_current', 'Cardinality problem (current).' );
 		}
 
@@ -208,6 +208,12 @@ class P2P_Directed_Connection_Type {
 		}
 
 		return $p2p_id;
+	}
+
+	protected function has_connections( $item ) {
+		$connections = $this->lose_direction()->get_connected( $item, array( 'p2p:per_page' => 1 ), 'abstract' );
+
+		return !empty( $connections->items );
 	}
 
 	protected function get_default( $args, $p2p_id ) {
