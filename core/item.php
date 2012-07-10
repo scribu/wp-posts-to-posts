@@ -12,16 +12,15 @@ abstract class P2P_Item {
 		return $this->item;
 	}
 
-	abstract function get_id();
+	function get_id() {
+		return $this->item->ID;
+	}
+
 	abstract function get_title();
 }
 
 
 class P2P_Item_Post extends P2P_Item {
-
-	function get_id() {
-		return $this->item->ID;
-	}
 
 	function get_title() {
 		return get_the_title( $this->item );
@@ -30,10 +29,6 @@ class P2P_Item_Post extends P2P_Item {
 
 
 class P2P_Item_User extends P2P_Item {
-
-	function get_id() {
-		return $this->item->ID;
-	}
 
 	function get_title() {
 		return $item->display_name;
