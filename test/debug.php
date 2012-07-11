@@ -15,8 +15,25 @@ class P2P_Debug {
 	}
 
 	function playground() {
-		$q = p2p_type('users_to_posts')->get_connected(wp_get_current_user());
-		debug($q->request, $q->posts);
+
+	}
+
+	private function generate_posts( $type, $count = 20 ) {
+		global $wpdb;
+
+		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->posts WHERE post_status = 'publish'" );
+
+		$ids = array();
+
+		for ( $i = $total; $i < $total + $count; $i++ ) {
+			$ids[] = wp_insert_post(array(
+				'post_type' => $type,
+				'post_title' => "Post $i",
+				'post_status' => 'publish'
+			));
+		}
+
+		return $ids;
 	}
 
 	function posts_to_attachments() {
