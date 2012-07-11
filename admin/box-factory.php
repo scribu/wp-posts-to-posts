@@ -56,16 +56,19 @@ class P2P_Box_Factory {
 		foreach ( self::$box_args as $p2p_type => $box_args ) {
 			$ctype = p2p_type( $p2p_type );
 
-			$dir = self::get_visible_directions( $post_type, $ctype, $box_args->show );
+			$directions = array_intersect(
+				_p2p_expand_direction( $box_args->show ),
+				$ctype->find_direction_from_post_type( $post_type )
+			);
 
 			$title = $ctype->title;
 
-			if ( count( $dir ) > 1 && $title['from'] == $title['to'] ) {
+			if ( count( $directions ) > 1 && $title['from'] == $title['to'] ) {
 				$title['from'] .= __( ' (from)', P2P_TEXTDOMAIN );
 				$title['to']   .= __( ' (to)', P2P_TEXTDOMAIN );
 			}
 
-			foreach ( $dir as $direction ) {
+			foreach ( $directions as $direction ) {
 				$key = ( 'to' == $direction ) ? 'to' : 'from';
 
 				$directed = $ctype->set_direction( $direction );
@@ -106,22 +109,6 @@ class P2P_Box_Factory {
 		}
 
 		return new P2P_Box( $box_args, $columns, $directed );
-	}
-
-	private static function get_visible_directions( $post_type, $ctype, $show_ui ) {
-		$directions = array();
-
-		foreach ( _p2p_expand_direction( $show_ui ) as $direction ) {
-			$side = $ctype->side[ $direction ];
-
-			if ( !method_exists( $side, 'recognize_post_type' ) )
-				continue;
-
-			if ( $side->recognize_post_type( $post_type ) )
-				$directions[] = $direction;
-		}
-
-		return $directions;
 	}
 
 	/**

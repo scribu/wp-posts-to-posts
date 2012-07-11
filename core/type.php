@@ -186,8 +186,7 @@ class P2P_Connection_Type {
 		return false;
 	}
 
-	// Used in each_connected()
-	private function find_direction_multiple( $post_types ) {
+	public function find_direction_from_post_type( $post_types ) {
 		$possible_directions = array();
 
 		foreach ( array( 'from', 'to' ) as $direction ) {
@@ -196,7 +195,7 @@ class P2P_Connection_Type {
 			if ( !method_exists( $side, 'recognize_post_type' ) )
 				continue;
 
-			foreach ( $post_types as $post_type ) {
+			foreach ( (array) $post_types as $post_type ) {
 				if ( $side->recognize_post_type( $post_type ) ) {
 					$possible_directions[] = $direction;
 					break;
@@ -204,13 +203,7 @@ class P2P_Connection_Type {
 			}
 		}
 
-		if ( empty( $possible_directions ) )
-			return false;
-
-		if ( count( $possible_directions ) > 1 )
-			return 'any';
-
-		return reset( $possible_directions );
+		return $possible_directions;
 	}
 
 	/** Alias for get_prev() */
@@ -299,11 +292,11 @@ class P2P_Connection_Type {
 
 		$post_types = array_unique( wp_list_pluck( $items, 'post_type' ) );
 
-		$direction = $this->find_direction_multiple( $post_types );
-
 		if ( count( $post_types ) > 1 ) {
 			$extra_qv['post_type'] = 'any';
 		}
+
+		$direction = _p2p_compress_direction( $this->find_direction_from_post_type( $post_types ) );
 
 		if ( !$direction )
 			return false;

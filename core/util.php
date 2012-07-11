@@ -9,6 +9,17 @@ function _p2p_expand_direction( $direction ) {
 }
 
 /** @internal */
+function _p2p_compress_direction( $directions ) {
+	if ( empty( $directions ) )
+		return false;
+
+	if ( count( $directions ) > 1 )
+		return 'any';
+
+	return reset( $directions );
+}
+
+/** @internal */
 function _p2p_normalize( $items ) {
 	if ( !is_array( $items ) )
 		$items = array( $items );
