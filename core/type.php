@@ -191,12 +191,15 @@ class P2P_Connection_Type {
 		$possible_directions = array();
 
 		foreach ( array( 'from', 'to' ) as $direction ) {
-			if ( 'post' == $this->object[$direction] ) {
-				foreach ( $post_types as $post_type ) {
-					if ( !$this->side[ $direction ]->item_recognize( $post_type ) ) {
-						$possible_directions[] = $direction;
-						break;
-					}
+			$side = $this->side[ $direction ];
+
+			if ( !method_exists( $side, 'recognize_post_type' ) )
+				continue;
+
+			foreach ( $post_types as $post_type ) {
+				if ( $side->recognize_post_type( $post_type ) ) {
+					$possible_directions[] = $direction;
+					break;
 				}
 			}
 		}
@@ -296,11 +299,10 @@ class P2P_Connection_Type {
 
 		$post_types = array_unique( wp_list_pluck( $items, 'post_type' ) );
 
+		$direction = $this->find_direction_multiple( $post_types );
+
 		if ( count( $post_types ) > 1 ) {
-			$direction = $this->find_direction_multiple( $post_types );
 			$extra_qv['post_type'] = 'any';
-		} else {
-			$direction = $this->find_direction( $post_types[0], false );
 		}
 
 		if ( !$direction )
