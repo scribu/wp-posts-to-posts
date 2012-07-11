@@ -57,6 +57,8 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 * added 'p2p_init' hook
 * removed the 'View All' button
 * improved usability of connection candidate UI
+* fixed issues related to auto-drafts
+* show columns on the admin user list screen
 
 = 1.3.1 =
 * sanitize connection fields values on save, preventing security exploits
