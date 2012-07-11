@@ -24,6 +24,9 @@ abstract class P2P_Side {
 		if ( is_a( $arg, $class ) )
 			return $arg;
 
+		if ( is_a( $arg, 'P2P_Item' ) )
+			return false;
+
 		$raw_item = $this->recognize( $arg );
 		if ( !$raw_item )
 			return false;
@@ -130,6 +133,26 @@ class P2P_Side_Post extends P2P_Side {
 		);
 
 		return !empty( $common );
+	}
+
+	function item_recognize( $arg ) {
+		$class = $this->item_type;
+
+		if ( is_a( $arg, $class ) ) {
+			if ( !$this->recognize_post_type( $arg->post_type ) )
+				return false;
+
+			return $arg;
+		}
+
+		if ( is_a( $arg, 'P2P_Item' ) )
+			return false;
+
+		$raw_item = $this->recognize( $arg );
+		if ( !$raw_item )
+			return false;
+
+		return new $class( $raw_item );
 	}
 
 	protected function recognize( $arg ) {
