@@ -24,6 +24,15 @@ function _p2p_normalize( $items ) {
 }
 
 /** @internal */
+function _p2p_wrap( $items, $class ) {
+	foreach ( $items as &$item ) {
+		$item = new $class( $item );
+	}
+
+	return $items;
+}
+
+/** @internal */
 function _p2p_meta_sql_helper( $query ) {
 	global $wpdb;
 

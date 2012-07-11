@@ -43,14 +43,12 @@ abstract class P2P_Column {
 		if ( $this->ctype->name != $column )
 			return;
 
-		$side = $this->ctype->get_opposite( 'side' );
-
 		if ( !isset( $this->connected[ $item_id ] ) )
 			return;
 
 		$out = '<ul>';
 		foreach ( $this->connected[ $item_id ] as $item ) {
-			$out .= html( 'li', html_link( $this->get_admin_link( $item ), $side->item_title( $item ) ) );
+			$out .= html( 'li', html_link( $this->get_admin_link( $item ), $item->get_title() ) );
 		}
 		$out .= '</ul>';
 
@@ -79,7 +77,7 @@ class P2P_Column_Post extends P2P_Column {
 		$args = array(
 			'connected_type' => $this->ctype->name,
 			'connected_direction' => $this->ctype->flip_direction()->get_direction(),
-			'connected_items' => $item->ID,
+			'connected_items' => $item->get_id(),
 			'post_type' => get_current_screen()->post_type
 		);
 
@@ -106,7 +104,7 @@ class P2P_Column_User extends P2P_Column {
 		$args = array(
 			'connected_type' => $this->ctype->name,
 			'connected_direction' => $this->ctype->flip_direction()->get_direction(),
-			'connected_items' => $item->ID,
+			'connected_items' => $item->get_id(),
 		);
 
 		return add_query_arg( $args, admin_url( 'users.php' ) );

@@ -110,6 +110,7 @@ class P2P_Connection_Type {
 	}
 
 	public function __call( $method, $args ) {
+		// TODO: make find_direction() return the normalized item and pass that along
 		$directed = $this->find_direction( $args[0] );
 		if ( !$directed ) {
 			trigger_error( sprintf( "Can't determine direction for '%s' type.", $this->name ), E_USER_WARNING );

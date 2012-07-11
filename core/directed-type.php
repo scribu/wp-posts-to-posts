@@ -123,30 +123,32 @@ class P2P_Directed_Connection_Type {
 	/**
 	 * Get a list of items that could be connected to a given item.
 	 *
-	 * @param int $post_id A post id.
+	 * @param mixed $arg The item to find connection candidates for.
 	 */
-	public function get_connectable( $item_id, $extra_qv = array() ) {
+	public function get_connectable( $arg, $extra_qv = array() ) {
 		$side = $this->get_opposite( 'side' );
 
-		$extra_qv['p2p:exclude'] = $this->get_non_connectable( $item_id, $extra_qv );
+		$item = $this->get_current( 'side' )->item_recognize( $arg );
+
+		$extra_qv['p2p:exclude'] = $this->get_non_connectable( $item, $extra_qv );
 
 		$extra_qv = $side->get_base_qv( $side->translate_qv( $extra_qv ) );
 
-		$qv = apply_filters( 'p2p_connectable_args', $extra_qv, $this, $item_id );
+		$qv = apply_filters( 'p2p_connectable_args', $extra_qv, $this, $item->get_object() );
 
 		return $this->abstract_query( $qv, $side );
 	}
 
-	private function get_non_connectable( $item_id, $extra_qv ) {
+	private function get_non_connectable( $item, $extra_qv ) {
 		$to_exclude = array();
 
 		if ( $this->indeterminate && !$this->self_connections )
-			$to_exclude[] = $item_id;
+			$to_exclude[] = $item->get_id();
 
 		if ( 'one' == $this->get_current( 'cardinality' ) ) {
 			$to_check = 'any';
 		} elseif ( !$this->duplicate_connections ) {
-			$to_check = $item_id;
+			$to_check = $item;
 		} else {
 			return $to_exclude;
 		}
@@ -211,7 +213,9 @@ class P2P_Directed_Connection_Type {
 	}
 
 	protected function has_connections( $item ) {
-		$connections = $this->lose_direction()->get_connected( $item, array( 'p2p:per_page' => 1 ), 'abstract' );
+		$extra_qv = array( 'p2p:per_page' => 1 );
+
+		$connections = $this->lose_direction()->get_connected( $item, $extra_qv, 'abstract' );
 
 		return !empty( $connections->items );
 	}

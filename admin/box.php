@@ -243,7 +243,7 @@ class P2P_Box {
 			$item = $this->ctype->get_opposite('side')->item_recognize( $to );
 
 			$r = array(
-				'row' => $this->connection_row( $p2p_id, $item->get_object(), true )
+				'row' => $this->connection_row( $p2p_id, $item, true )
 			);
 		}
 

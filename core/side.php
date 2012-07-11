@@ -155,6 +155,8 @@ class P2P_Side_Post extends P2P_Side {
 
 class P2P_Side_Attachment extends P2P_Side_Post {
 
+	protected $item_type = 'P2P_Item_Attachment';
+
 	function __construct( $query_vars ) {
 		$this->query_vars = $query_vars;
 
