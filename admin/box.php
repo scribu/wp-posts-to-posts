@@ -282,17 +282,5 @@ class P2P_Box {
 
 		return $side->can_create_item();
 	}
-
-	public function can_edit_connections() {
-		$show = $this->ctype->get_opposite( 'side' )->can_edit_connections();
-
-		if ( defined( 'DOING_AJAX' ) ) {
-			$post = get_post( $_REQUEST['from'] );
-		} else {
-			$post = $GLOBALS['post'];
-		}
-
-		return apply_filters( 'p2p_admin_box_show', $show, $this->ctype, $post );
-	}
 }
 

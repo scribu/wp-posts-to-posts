@@ -73,10 +73,10 @@ class P2P_Box_Factory {
 
 				$directed = $ctype->set_direction( $direction );
 
-				$box = self::create_box( $box_args, $directed );
-
-				if ( !$box->can_edit_connections() )
+				if ( !self::show_box( $directed, $GLOBALS['post'] ) )
 					continue;
+
+				$box = self::create_box( $box_args, $directed );
 
 				add_meta_box(
 					"p2p-{$direction}-{$ctype->name}",
@@ -90,6 +90,12 @@ class P2P_Box_Factory {
 				$box->init_scripts();
 			}
 		}
+	}
+
+	private static function show_box( $directed, $post ) {
+		$show = $directed->get_opposite( 'side' )->can_edit_connections();
+
+		return apply_filters( 'p2p_admin_box_show', $show, $directed, $post );
 	}
 
 	private static function create_box( $box_args, $directed ) {
@@ -157,18 +163,18 @@ class P2P_Box_Factory {
 		if ( !$ctype || !isset( self::$box_args[$ctype->name] ) )
 			die(0);
 
-		$post_type = get_post_type( $_REQUEST['from'] );
-		if ( !$post_type )
-			die(0);
-
 		$directed = $ctype->set_direction( $_REQUEST['direction'] );
 		if ( !$directed )
 			die(0);
 
-		$box = self::create_box( self::$box_args[$ctype->name], $directed );
+		$post = get_post( $_REQUEST['from'] );
+		if ( !$post )
+			die(0);
 
-		if ( !$box->can_edit_connections() )
+		if ( !self::show_box( $directed, $post ) )
 			die(-1);
+
+		$box = self::create_box( self::$box_args[$ctype->name], $directed );
 
 		$method = 'ajax_' . $_REQUEST['subaction'];
 
