@@ -221,10 +221,12 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_query_direction() {
-		$p2p_q = P2P_Query::create_from_qv( array(
+		$qv = array(
 			'connected_type' => 'actor_to_movie',
 			'connected_items' => self::generate_post( 'post' )
-		), 'post' );
+		);
+
+		$p2p_q = P2P_Query::create_from_qv( $qv, 'post' );
 
 		$this->assertTrue( is_wp_error( $p2p_q ) );
 	}
@@ -237,16 +239,25 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 			'data' => array(
 				'type' => 'strong'
 			),
-			'sortable',
+			'sortable' => true,
+			'from_query_vars' => array(
+				'post_status' => 'publish',
+				'connected_order' => 'asc',
+			)
 		) );
 
-		$p2p_query = P2P_Query::create_from_qv( array(
+		$qv = array(
 			'connected_type' => $ctype->name,
 			'connected_direction' => 'to',
 			'connected_meta' => array( 'foo' => 'bar' ),
 			'connected_orderby' => 'foo',
 			'connected_order' => 'desc',
-		), 'post' );
+		);
+
+		$p2p_query = P2P_Query::create_from_qv( $qv, 'post' );
+
+		// 'to_query_vars' should automatically be added
+		$this->assertEquals( 'publish', $qv['post_status'] );
 
 		// users should be able to filter connections via additional connected meta
 		$this->assertEquals( $p2p_query->meta, array_merge( $ctype->data, array( 'foo' => 'bar' ) ) );
