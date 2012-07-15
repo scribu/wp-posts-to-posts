@@ -14,7 +14,7 @@ class P2P_Query {
 	 * - WP_Error instance if the query is invalid
 	 * - P2P_Query instance on success
 	 */
-	public static function create_from_qv( $q, $object_type ) {
+	public static function create_from_qv( &$q, $object_type ) {
 		$shortcuts = array(
 			'connected' => 'any',
 			'connected_to' => 'to',
@@ -82,6 +82,10 @@ class P2P_Query {
 			$q = array_merge_recursive( $q, array(
 				'connected_meta' => $directed->data
 			) );
+
+			$q = $directed->get_opposite( 'side' )->get_base_qv( $q );
+
+			$q = apply_filters( 'p2p_connected_args', $q, $directed, $item );
 		}
 
 		$p2p_q = new P2P_Query;
@@ -102,21 +106,6 @@ class P2P_Query {
 
 	public function __get( $key ) {
 		return $this->$key;
-	}
-
-	/**
-	 * For high-level query modifications
-	 */
-	public function alter_qv( &$q ) {
-		$q = wp_parse_args( $q, array(
-			'p2p:context' => false
-		) );
-
-		$q = $this->ctypes[0]->get_opposite( 'side' )->get_base_qv( $q );
-
-		if ( 1 == count( $this->ctypes ) ) {
-			$q = apply_filters( 'p2p_connected_args', $q, $this->ctypes[0], $this->items );
-		}
 	}
 
 	private function do_other_query( $side ) {
