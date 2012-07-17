@@ -153,6 +153,15 @@ class P2P_Connection_Type {
 		if ( in_array( $opposite_side, array( 'from', 'to' ) ) )
 			return $this->set_direction( $opposite_side, $instantiate );
 
+		$direction = $this->item_to_direction( $arg );
+
+		if ( $direction )
+			return $this->set_direction( $direction, $instantiate );
+
+		return false;
+	}
+
+	public function item_to_direction( $arg ) {
 		foreach ( array( 'from', 'to' ) as $direction ) {
 			$item = $this->side[ $direction ]->item_recognize( $arg );
 
@@ -162,10 +171,8 @@ class P2P_Connection_Type {
 			if ( $this->indeterminate )
 				$direction = $this->reciprocal ? 'any' : 'from';
 
-			return $this->set_direction( $direction, $instantiate );
+			return $direction;
 		}
-
-		return false;
 	}
 
 	public function object_type_to_direction( $current ) {
