@@ -55,7 +55,7 @@ class P2P_Column_Factory {
 			if ( !$direction )
 				continue;
 
-			$directed = $ctype->set_direction( $direction )->flip_direction();
+			$directed = $ctype->set_direction( $direction );
 
 			if ( !( 'any' == $column_args || $directed->get_direction() == $column_args ) )
 				continue;
