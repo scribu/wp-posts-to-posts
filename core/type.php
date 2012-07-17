@@ -191,7 +191,7 @@ class P2P_Connection_Type {
 		return false;
 	}
 
-	public function directions_from_post_type( $post_types ) {
+	public function direction_from_post_type( $post_types ) {
 		$possible_directions = array();
 
 		foreach ( array( 'from', 'to' ) as $direction ) {
@@ -208,7 +208,7 @@ class P2P_Connection_Type {
 			}
 		}
 
-		return $possible_directions;
+		return _p2p_compress_direction( $possible_directions );
 	}
 
 	/** Alias for get_prev() */
@@ -301,8 +301,7 @@ class P2P_Connection_Type {
 			$extra_qv['post_type'] = 'any';
 		}
 
-		$direction = _p2p_compress_direction( $this->directions_from_post_type( $post_types ) );
-
+		$direction = $this->direction_from_post_type( $post_types );
 		if ( !$direction )
 			return false;
 

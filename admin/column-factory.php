@@ -54,7 +54,7 @@ class P2P_Column_Factory {
 			if ( $direction && 'any' != $direction ) {
 				$direction = _p2p_flip_direction( $direction );
 			} else {
-				$direction = _p2p_compress_direction( $ctype->directions_from_post_type( $screen->post_type ) );
+				$direction = $ctype->direction_from_post_type( $screen->post_type );
 			}
 
 			if ( !$direction )
