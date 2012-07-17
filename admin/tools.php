@@ -1,6 +1,7 @@
 <?php
+namespace P2P;
 
-class P2P_Tools_Page extends scbAdminPage {
+class Tools_Page extends scbAdminPage {
 
 	function setup() {
 		$this->args = array(
@@ -18,12 +19,12 @@ class P2P_Tools_Page extends scbAdminPage {
 
 		$current_ver = get_option( 'p2p_storage' );
 
-		if ( $current_ver == P2P_Storage::$version )
+		if ( $current_ver == Storage::$version )
 			return;
 
-		P2P_Storage::install();
+		Storage::install();
 
-		update_option( 'p2p_storage', P2P_Storage::$version );
+		update_option( 'p2p_storage', Storage::$version );
 	}
 
 	function form_handler() {
@@ -98,7 +99,7 @@ class P2P_Tools_Page extends scbAdminPage {
 			}
 		}
 
-		echo P2P_Mustache::render( 'connection-types', $data );
+		echo Mustache::render( 'connection-types', $data );
 	}
 
 	private function get_connection_counts() {
@@ -112,7 +113,7 @@ class P2P_Tools_Page extends scbAdminPage {
 
 		$counts = scb_list_fold( $counts, 'p2p_type', 'count' );
 
-		foreach ( P2P_Connection_Type_Factory::get_all_instances() as $p2p_type => $ctype ) {
+		foreach ( Connection_Type_Factory::get_all_instances() as $p2p_type => $ctype ) {
 			if ( !isset( $counts[ $p2p_type ] ) )
 				$counts[ $p2p_type ] = 0;
 		}
@@ -125,13 +126,11 @@ class P2P_Tools_Page extends scbAdminPage {
 	private function get_dropdown( $p2p_type ) {
 		$data = array(
 			'old_p2p_type' => $p2p_type,
-			'options' => array_keys( P2P_Connection_Type_Factory::get_all_instances() ),
+			'options' => array_keys( Connection_Type_Factory::get_all_instances() ),
 			'button_text' => __( 'Go', P2P_TEXTDOMAIN )
 		);
 
-		return P2P_Mustache::render( 'connection-types-form', $data );
+		return Mustache::render( 'connection-types-form', $data );
 	}
 }
-
-new P2P_Tools_Page;
 

@@ -1,6 +1,7 @@
 <?php
+namespace P2P;
 
-class P2P_Connection_Type_Factory {
+class Connection_Type_Factory {
 
 	private static $instances = array();
 
@@ -72,7 +73,7 @@ class P2P_Connection_Type_Factory {
 
 		$args = apply_filters( 'p2p_connection_type_args', $args );
 
-		$ctype = new P2P_Connection_Type( $args );
+		$ctype = new Connection_Type( $args );
 
 		if ( isset( self::$instances[ $ctype->name ] ) ) {
 			trigger_error( "Connection type '$ctype->name' is already defined.", E_USER_NOTICE );

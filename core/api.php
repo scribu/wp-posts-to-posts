@@ -41,7 +41,7 @@
  *
  * @param array $args
  *
- * @return bool|object False on failure, P2P_Connection_Type instance on success.
+ * @return bool|object False on failure, P2P\Connection_Type instance on success.
  */
 function p2p_register_connection_type( $args ) {
 	if ( !did_action('init') ) {
@@ -77,7 +77,7 @@ function p2p_register_connection_type( $args ) {
 			$args['admin_box']['context'] = _p2p_pluck( $args, 'context' );
 	}
 
-	return P2P_Connection_Type_Factory::register( $args );
+	return P2P\Connection_Type_Factory::register( $args );
 }
 
 /**
@@ -85,10 +85,10 @@ function p2p_register_connection_type( $args ) {
  *
  * @param string $p2p_type
  *
- * @return bool|object False if connection type not found, P2P_Connection_Type instance on success.
+ * @return bool|object False if connection type not found, P2P\Connection_Type instance on success.
  */
 function p2p_type( $p2p_type ) {
-	return P2P_Connection_Type_Factory::get_instance( $p2p_type );
+	return P2P\Connection_Type_Factory::get_instance( $p2p_type );
 }
 
 /**
@@ -314,14 +314,14 @@ function p2p_delete_meta( $p2p_id, $key, $value = '' ) {
 /**
  * List some items.
  *
- * @param object|array A P2P_List instance, a WP_Query instance, or a list of post objects
+ * @param object|array A P2P\List instance, a WP_Query instance, or a list of post objects
  * @param array $args (optional)
  */
 function p2p_list_posts( $posts, $args = array() ) {
-	if ( is_a( $posts, 'P2P_List' ) ) {
+	if ( is_a( $posts, 'P2P\List' ) ) {
 		$list = $posts;
 	} else {
-		$list = new P2P_List_Post( $posts );
+		$list = new P2P\List_Post( $posts );
 	}
 
 	return $list->render( $args );

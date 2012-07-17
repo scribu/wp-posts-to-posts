@@ -1,6 +1,7 @@
 <?php
+namespace P2P;
 
-abstract class P2P_Item {
+abstract class Item {
 
 	protected $item;
 
@@ -25,7 +26,7 @@ abstract class P2P_Item {
 }
 
 
-class P2P_Item_Post extends P2P_Item {
+class Item_Post extends Item {
 
 	function get_title() {
 		return get_the_title( $this->item );
@@ -41,7 +42,7 @@ class P2P_Item_Post extends P2P_Item {
 }
 
 
-class P2P_Item_Attachment extends P2P_Item_Post {
+class Item_Attachment extends Item_Post {
 
 	function get_title() {
 		return wp_get_attachment_image( $this->item->ID, 'thumbnail', false );
@@ -49,7 +50,7 @@ class P2P_Item_Attachment extends P2P_Item_Post {
 }
 
 
-class P2P_Item_User extends P2P_Item {
+class Item_User extends Item {
 
 	function get_title() {
 		return $this->item->display_name;

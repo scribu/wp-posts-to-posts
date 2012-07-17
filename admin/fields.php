@@ -1,13 +1,14 @@
 <?php
+namespace P2P;
 
-class P2P_Field_Delete implements P2P_Field {
+class Field_Delete implements Field {
 
 	function get_title() {
 		$data = array(
 			'title' => __( 'Delete all connections', P2P_TEXTDOMAIN )
 		);
 
-		return P2P_Mustache::render( 'column-delete-all', $data );
+		return Mustache::render( 'column-delete-all', $data );
 	}
 
 	function render( $p2p_id, $_ ) {
@@ -16,12 +17,12 @@ class P2P_Field_Delete implements P2P_Field {
 			'title' => __( 'Delete connection', P2P_TEXTDOMAIN )
 		);
 
-		return P2P_Mustache::render( 'column-delete', $data );
+		return Mustache::render( 'column-delete', $data );
 	}
 }
 
 
-class P2P_Field_Order implements P2P_Field {
+class Field_Order implements Field {
 
 	protected $sort_key;
 
@@ -43,7 +44,7 @@ class P2P_Field_Order implements P2P_Field {
 }
 
 
-class P2P_Field_Generic implements P2P_Field {
+class Field_Generic implements Field {
 
 	protected $key;
 	protected $data;
@@ -74,7 +75,7 @@ class P2P_Field_Generic implements P2P_Field {
 }
 
 
-class P2P_Field_Create implements P2P_Field {
+class Field_Create implements Field {
 
 	protected $title_field;
 
@@ -93,12 +94,12 @@ class P2P_Field_Create implements P2P_Field {
 			'item-id' => $item->get_id(),
 		) );
 
-		return P2P_Mustache::render( 'column-create', $data );
+		return Mustache::render( 'column-create', $data );
 	}
 }
 
 
-abstract class P2P_Field_Title implements P2P_Field {
+abstract class Field_Title implements Field {
 
 	protected $title;
 
@@ -116,13 +117,13 @@ abstract class P2P_Field_Title implements P2P_Field {
 			'url' => $item->get_editlink(),
 		) );
 
-		return P2P_Mustache::render( 'column-title', $data );
+		return Mustache::render( 'column-title', $data );
 	}
 
 	abstract function get_data( $item );
 }
 
-class P2P_Field_Title_Post extends P2P_Field_Title {
+class Field_Title_Post extends Field_Title {
 
 	function get_data( $item ) {
 		$data = array(
@@ -142,7 +143,7 @@ class P2P_Field_Title_Post extends P2P_Field_Title {
 	}
 }
 
-class P2P_Field_Title_Attachment extends P2P_Field_Title {
+class Field_Title_Attachment extends Field_Title {
 
 	function get_data( $item ) {
 		$data = array(
@@ -153,7 +154,7 @@ class P2P_Field_Title_Attachment extends P2P_Field_Title {
 	}
 }
 
-class P2P_Field_Title_User extends P2P_Field_Title {
+class Field_Title_User extends Field_Title {
 
 	function get_data( $user ) {
 		return array(

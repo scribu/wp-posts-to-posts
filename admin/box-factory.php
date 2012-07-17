@@ -1,8 +1,9 @@
 <?php
+namespace P2P;
 
 define( 'P2P_BOX_NONCE', 'p2p-box' );
 
-class P2P_Box_Factory {
+class Box_Factory {
 
 	private static $box_args = array();
 
@@ -99,22 +100,22 @@ class P2P_Box_Factory {
 	}
 
 	private static function create_box( $box_args, $directed ) {
-		$title_class = 'P2P_Field_Title_' . ucfirst( $directed->get_opposite( 'object' ) );
+		$title_class = __NAMESPACE__ . '\Field_Title_' . ucfirst( $directed->get_opposite( 'object' ) );
 
 		$columns = array(
-			'delete' => new P2P_Field_Delete,
+			'delete' => new Field_Delete,
 			'title' => new $title_class( $directed->get_opposite( 'labels' )->singular_name ),
 		);
 
 		foreach ( $directed->fields as $key => $data ) {
-			$columns[ 'meta-' . $key ] = new P2P_Field_Generic( $key, $data );
+			$columns[ 'meta-' . $key ] = new Field_Generic( $key, $data );
 		}
 
 		if ( $orderby_key = $directed->get_orderby_key() ) {
-			$columns['order'] = new P2P_Field_Order( $orderby_key );
+			$columns['order'] = new Field_Order( $orderby_key );
 		}
 
-		return new P2P_Box( $box_args, $columns, $directed );
+		return new Box( $box_args, $columns, $directed );
 	}
 
 	/**
@@ -181,6 +182,4 @@ class P2P_Box_Factory {
 		$box->$method();
 	}
 }
-
-P2P_Box_Factory::init();
 

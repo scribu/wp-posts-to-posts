@@ -1,6 +1,7 @@
 <?php
+namespace P2P;
 
-abstract class P2P_List {
+abstract class Item_List {
 
 	public $items;
 	public $current_page = 1;
@@ -11,7 +12,7 @@ abstract class P2P_List {
 			// Don't wrap when we just have a list of ids
 			$this->items = $items;
 		} else {
-			$class = str_replace( 'P2P_List', 'P2P_Item', get_class( $this ) );
+			$class = str_replace( 'Item_List', 'Item', get_class( $this ) );
 			$this->items = _p2p_wrap( $items, $class );
 		}
 	}
@@ -66,7 +67,7 @@ abstract class P2P_List {
 }
 
 
-class P2P_List_Post extends P2P_List {
+class Item_List_Post extends Item_List {
 
 	function __construct( $wp_query ) {
 		if ( is_array( $wp_query ) ) {
@@ -82,10 +83,10 @@ class P2P_List_Post extends P2P_List {
 }
 
 
-class P2P_List_Attachment extends P2P_List_Post {}
+class Item_List_Attachment extends Item_List_Post {}
 
 
-class P2P_List_User extends P2P_List {
+class Item_List_User extends Item_List {
 
 	function __construct( $query ) {
 		$qv = $query->query_vars;

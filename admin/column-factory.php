@@ -1,6 +1,7 @@
 <?php
+namespace P2P;
 
-class P2P_Column_Factory {
+class Column_Factory {
 
 	private static $column_args = array();
 
@@ -60,13 +61,11 @@ class P2P_Column_Factory {
 			if ( !( 'any' == $column_args || $directed->get_direction() == $column_args ) )
 				continue;
 
-			$class = 'P2P_Column_' . ucfirst( $object_type );
+			$class = __NAMESPACE__ . '\Column_' . ucfirst( $object_type );
 			$column = new $class( $directed );
 
 			$column->styles();
 		}
 	}
 }
-
-P2P_Column_Factory::init();
 

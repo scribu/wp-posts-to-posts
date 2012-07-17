@@ -25,7 +25,7 @@ function _p2p_normalize( $items ) {
 		$items = array( $items );
 
 	foreach ( $items as &$item ) {
-		if ( is_a( $item, 'P2P_Item' ) )
+		if ( is_a( $item, 'P2P\Item' ) )
 			$item = $item->get_id();
 		elseif ( is_object( $item ) )
 			$item = $item->ID;

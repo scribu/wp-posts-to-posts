@@ -1,6 +1,7 @@
 <?php
+namespace P2P;
 
-class P2P_Directed_Connection_Type {
+class Directed_Connection_Type {
 
 	protected $ctype;
 	protected $direction;
@@ -63,7 +64,7 @@ class P2P_Directed_Connection_Type {
 		if ( 'raw' == $output )
 			return $query;
 
-		$class = str_replace( 'P2P_Side_', 'P2P_List_', get_class( $side ) );
+		$class = str_replace( 'Side_', 'Item_List_', get_class( $side ) );
 
 		return new $class( $query );
 	}

@@ -1,11 +1,12 @@
 <?php
+namespace P2P;
 
-interface P2P_Field {
+interface Field {
 	function get_title();
 	function render( $p2p_id, $item );
 }
 
-class P2P_Box {
+class Box {
 	private $ctype;
 
 	private $args;
@@ -53,7 +54,7 @@ class P2P_Box {
 			'create-connections' => $this->render_create_connections( $post ),
 		);
 
-		echo P2P_Mustache::render( 'box', $data );
+		echo Mustache::render( 'box', $data );
 	}
 
 	protected function render_data_attributes() {
@@ -106,7 +107,7 @@ class P2P_Box {
 		}
 
 		// Search tab
-		$tab_content = P2P_Mustache::render( 'tab-search', array(
+		$tab_content = Mustache::render( 'tab-search', array(
 			'placeholder' => $this->labels->search_items,
 			'candidates' => $this->post_rows( $post->ID )
 		) );
@@ -120,7 +121,7 @@ class P2P_Box {
 
 		// Create post tab
 		if ( $this->can_create_post() ) {
-			$tab_content = P2P_Mustache::render( 'tab-create-post', array(
+			$tab_content = Mustache::render( 'tab-create-post', array(
 				'title' => $this->labels->add_new_item
 			) );
 
@@ -153,7 +154,7 @@ class P2P_Box {
 		if ( !$render )
 			return $data;
 
-		return P2P_Mustache::render( 'table-row', $data );
+		return Mustache::render( 'table-row', $data );
 	}
 
 	protected function post_rows( $current_post_id, $page = 1, $search = '' ) {
@@ -172,7 +173,7 @@ class P2P_Box {
 		$data = array();
 
 		$columns = array(
-			'create' => new P2P_Field_Create( $this->columns['title'] ),
+			'create' => new Field_Create( $this->columns['title'] ),
 		);
 
 		foreach ( $candidate->items as $item ) {
@@ -196,7 +197,7 @@ class P2P_Box {
 			);
 		}
 
-		return P2P_Mustache::render( 'tab-list', $data );
+		return Mustache::render( 'tab-list', $data );
 	}
 
 

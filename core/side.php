@@ -1,6 +1,7 @@
 <?php
+namespace P2P;
 
-abstract class P2P_Side {
+abstract class Side {
 
 	abstract function get_title();
 	abstract function get_desc();
@@ -19,12 +20,12 @@ abstract class P2P_Side {
 	protected $item_type;
 
 	function item_recognize( $arg ) {
-		$class = $this->item_type;
+		$class = __NAMESPACE__ . '\\' . $this->item_type;
 
 		if ( is_a( $arg, $class ) )
 			return $arg;
 
-		if ( is_a( $arg, 'P2P_Item' ) )
+		if ( is_a( $arg, 'Item' ) )
 			return false;
 
 		$raw_item = $this->recognize( $arg );
@@ -36,9 +37,9 @@ abstract class P2P_Side {
 }
 
 
-class P2P_Side_Post extends P2P_Side {
+class Side_Post extends Side {
 
-	protected $item_type = 'P2P_Item_Post';
+	protected $item_type = 'Item_Post';
 
 	function __construct( $query_vars ) {
 		$this->query_vars = $query_vars;
@@ -98,11 +99,11 @@ class P2P_Side_Post extends P2P_Side {
 	}
 
 	function do_query( $args ) {
-		return new WP_Query( $args );
+		return new \WP_Query( $args );
 	}
 
 	function capture_query( $args ) {
-		$q = new WP_Query;
+		$q = new \WP_Query;
 		$q->_p2p_capture = true;
 
 		$q->query( $args );
@@ -136,7 +137,7 @@ class P2P_Side_Post extends P2P_Side {
 	}
 
 	function item_recognize( $arg ) {
-		$class = $this->item_type;
+		$class = __NAMESPACE__ . '\\' . $this->item_type;
 
 		if ( is_a( $arg, $class ) ) {
 			if ( !$this->recognize_post_type( $arg->post_type ) )
@@ -145,7 +146,7 @@ class P2P_Side_Post extends P2P_Side {
 			return $arg;
 		}
 
-		if ( is_a( $arg, 'P2P_Item' ) )
+		if ( is_a( $arg, 'Item' ) )
 			return false;
 
 		$raw_item = $this->recognize( $arg );
@@ -176,9 +177,9 @@ class P2P_Side_Post extends P2P_Side {
 }
 
 
-class P2P_Side_Attachment extends P2P_Side_Post {
+class Side_Attachment extends Side_Post {
 
-	protected $item_type = 'P2P_Item_Attachment';
+	protected $item_type = 'Item_Attachment';
 
 	function __construct( $query_vars ) {
 		$this->query_vars = $query_vars;
@@ -198,9 +199,9 @@ class P2P_Side_Attachment extends P2P_Side_Post {
 }
 
 
-class P2P_Side_User extends P2P_Side {
+class Side_User extends Side {
 
-	protected $item_type = 'P2P_Item_User';
+	protected $item_type = 'Item_User';
 
 	function __construct( $query_vars ) {
 		$this->query_vars = $query_vars;
@@ -231,13 +232,13 @@ class P2P_Side_User extends P2P_Side {
 	}
 
 	function do_query( $args ) {
-		return new WP_User_Query( $args );
+		return new \WP_User_Query( $args );
 	}
 
 	function capture_query( $args ) {
 		$args['count_total'] = false;
 
-		$uq = new WP_User_Query;
+		$uq = new \WP_User_Query;
 		$uq->_p2p_capture = true; // needed by P2P_URL_Query
 
 		// see http://core.trac.wordpress.org/ticket/21119

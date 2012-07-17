@@ -1,6 +1,7 @@
 <?php
+namespace P2P;
 
-class P2P_WP_Query {
+class WP_Query {
 
 	static function init() {
 		add_action( 'parse_query', array( __CLASS__, 'parse_query' ), 20 );
@@ -10,7 +11,7 @@ class P2P_WP_Query {
 	}
 
 	static function parse_query( $wp_query ) {
-		$p2p_q = P2P_Query::create_from_qv( $wp_query->query_vars, 'post' );
+		$p2p_q = Query::create_from_qv( $wp_query->query_vars, 'post' );
 
 		if ( is_wp_error( $p2p_q ) ) {
 			trigger_error( $p2p_q->get_error_message(), E_USER_WARNING );
@@ -58,6 +59,4 @@ class P2P_WP_Query {
 		return $the_posts;
 	}
 }
-
-P2P_WP_Query::init();
 

@@ -1,6 +1,7 @@
 <?php
+namespace P2P;
 
-class P2P_Connection_Type {
+class Connection_Type {
 
 	public $indeterminate;
 
@@ -18,7 +19,7 @@ class P2P_Connection_Type {
 		foreach ( array( 'from', 'to' ) as $direction ) {
 			$this->object[ $direction ] = _p2p_pluck( $args, $direction . '_object' );
 
-			$class = 'P2P_Side_' . ucfirst( $this->object[ $direction ] );
+			$class = __NAMESPACE__ . '\Side_' . ucfirst( $this->object[ $direction ] );
 
 			$this->side[ $direction ] = new $class( _p2p_pluck( $args, $direction . '_query_vars' ) );
 		}
@@ -125,14 +126,14 @@ class P2P_Connection_Type {
 	 *
 	 * @param string $direction Can be 'from', 'to' or 'any'.
 	 *
-	 * @return object P2P_Directed_Connection_Type instance
+	 * @return object Directed_Connection_Type instance
 	 */
 	public function set_direction( $direction, $instantiate = true ) {
 		if ( !in_array( $direction, array( 'from', 'to', 'any' ) ) )
 			return false;
 
 		if ( $instantiate )
-			return new P2P_Directed_Connection_Type( $this, $direction );
+			return new Directed_Connection_Type( $this, $direction );
 
 		return $direction;
 	}
@@ -141,10 +142,10 @@ class P2P_Connection_Type {
 	 * Attempt to guess direction based on a parameter.
 	 *
 	 * @param mixed A post type, object or object id.
-	 * @param bool Whether to return an instance of P2P_Directed_Connection_Type or just the direction
+	 * @param bool Whether to return an instance of Directed_Connection_Type or just the direction
 	 * @param string An object type, such as 'post' or 'user'
 	 *
-	 * @return bool|object|string False on failure, P2P_Directed_Connection_Type instance or direction on success.
+	 * @return bool|object|string False on failure, Directed_Connection_Type instance or direction on success.
 	 */
 	public function find_direction( $arg, $instantiate = true, $object_type = null ) {
 		if ( is_array( $arg ) )

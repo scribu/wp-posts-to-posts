@@ -27,8 +27,14 @@ function _p2p_load() {
 		'api', 'extra'
 	) );
 
-	P2P_Widget::init();
-	P2P_Shortcodes::init();
+	P2P\Storage::init();
+
+	P2P\WP_Query::init();
+	P2P\User_Query::init();
+	P2P\URL_Query::init();
+
+	P2P\Widget::init();
+	P2P\Shortcodes::init();
 
 	if ( is_admin() ) {
 		_p2p_load_files( "$base/admin", array(
@@ -37,11 +43,17 @@ function _p2p_load() {
 			'column-factory', 'column',
 			'tools'
 		) );
+
+		P2P\Mustache::init();
+		P2P\Box_Factory::init();
+		P2P\Column_Factory::init();
+
+		new P2P\Tools_Page;
 	}
 
-	register_uninstall_hook( __FILE__, array( 'P2P_Storage', 'uninstall' ) );
+	register_uninstall_hook( __FILE__, array( 'P2P\Storage', 'uninstall' ) );
 }
-scb_init( '_p2p_load' );
+_p2p_load();
 
 function _p2p_init() {
 	// Safe hook for calling p2p_register_connection_type()

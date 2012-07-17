@@ -1,9 +1,10 @@
 <?php
+namespace P2P;
 
 /**
  * @internal
  */
-abstract class P2P_Mustache {
+abstract class Mustache {
 
 	private static $loader;
 	private static $mustache;
@@ -15,15 +16,13 @@ abstract class P2P_Mustache {
 		if ( !class_exists( 'MustacheLoader' ) )
 			require dirname(__FILE__) . '/../mustache/MustacheLoader.php';
 
-		self::$loader = new MustacheLoader( dirname(__FILE__) . '/templates', 'html' );
+		self::$loader = new \MustacheLoader( dirname(__FILE__) . '/templates', 'html' );
 
-		self::$mustache = new Mustache( null, null, self::$loader );
+		self::$mustache = new \Mustache( null, null, self::$loader );
 	}
 
 	public static function render( $template, $data ) {
 		return self::$mustache->render( self::$loader[$template], $data );
 	}
 }
-
-P2P_Mustache::init();
 

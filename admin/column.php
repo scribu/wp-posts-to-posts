@@ -1,6 +1,7 @@
 <?php
+namespace P2P;
 
-abstract class P2P_Column {
+abstract class Column {
 
 	protected $ctype;
 
@@ -57,7 +58,7 @@ abstract class P2P_Column {
 }
 
 
-class P2P_Column_Post extends P2P_Column {
+class Column_Post extends Column {
 
 	function __construct( $directed ) {
 		global $wp_query;
@@ -90,7 +91,7 @@ class P2P_Column_Post extends P2P_Column {
 }
 
 
-class P2P_Column_User extends P2P_Column {
+class Column_User extends Column {
 
 	function __construct( $directed ) {
 		global $wp_list_table;

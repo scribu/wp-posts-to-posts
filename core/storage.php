@@ -1,9 +1,10 @@
 <?php
+namespace P2P;
 
 /**
  * Handles various db-related tasks
  */
-class P2P_Storage {
+class Storage {
 
 	static $version = 4;
 
@@ -59,6 +60,4 @@ class P2P_Storage {
 		}
 	}
 }
-
-P2P_Storage::init();
 

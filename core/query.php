@@ -1,6 +1,7 @@
 <?php
+namespace P2P;
 
-class P2P_Query {
+class Query {
 
 	protected $ctypes, $items, $query, $meta;
 	protected $orderby, $order, $order_num;
@@ -12,7 +13,7 @@ class P2P_Query {
 	 * @return:
 	 * - null means ignore current query
 	 * - WP_Error instance if the query is invalid
-	 * - P2P_Query instance on success
+	 * - Query instance on success
 	 */
 	public static function create_from_qv( &$q, $object_type ) {
 		$shortcuts = array(
@@ -88,7 +89,7 @@ class P2P_Query {
 			$q = apply_filters( 'p2p_connected_args', $q, $directed, $item );
 		}
 
-		$p2p_q = new P2P_Query;
+		$p2p_q = new Query;
 
 		$p2p_q->ctypes = $p2p_types;
 		$p2p_q->items = $item;
