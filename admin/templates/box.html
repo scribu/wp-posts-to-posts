@@ -19,20 +19,23 @@
 
 	{{#create-connections}}
 	<div class="p2p-create-connections" {{{hide}}}>
-		<p><strong>{{{label}}}</strong></p>
-		{{#show-tab-headers}}
-		<ul class="wp-tab-bar clearfix">
-			{{#tabs}}
-			<li {{#is-active}}class="wp-tab-active"{{/is-active}} data-ref=".p2p-tab-{{tab-id}}"><a href="#">{{{tab-title}}}</a></li>
-			{{/tabs}}
-		</ul>
-		{{/show-tab-headers}}
+		<p class="p2p-toggle-tabs"><a href="#">+ {{{label}}}</a></p>
 
-		{{#tabs}}
-		<div class="p2p-tab-{{tab-id}} tabs-panel">
-			{{{tab-content}}}
+		<div class="p2p-create-connections-tabs" style="display: none">
+			{{#show-tab-headers}}
+			<ul class="wp-tab-bar clearfix">
+				{{#tabs}}
+				<li {{#is-active}}class="wp-tab-active"{{/is-active}} data-ref=".p2p-tab-{{tab-id}}"><a href="#">{{{tab-title}}}</a></li>
+				{{/tabs}}
+			</ul>
+			{{/show-tab-headers}}
+
+			{{#tabs}}
+			<div class="p2p-tab-{{tab-id}} tabs-panel">
+				{{{tab-content}}}
+			</div>
+			{{/tabs}}
 		</div>
-		{{/tabs}}
 	</div>
 	{{/create-connections}}
 </div>

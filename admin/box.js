@@ -24,7 +24,7 @@
       jQuery('.p2p-search input[placeholder]').each(setVal).focus(clearVal).blur(setVal);
     }
     return jQuery('.p2p-box').each(function() {
-      var $connections, $createButton, $createInput, $metabox, $searchInput, $spinner, $viewAll, PostsTab, ajax_request, append_connection, clear_connections, create_connection, delete_connection, refresh_candidates, remove_row, row_ajax_request, searchTab, switch_to_tab;
+      var $connections, $createButton, $createInput, $metabox, $searchInput, $spinner, $viewAll, PostsTab, ajax_request, append_connection, clear_connections, create_connection, delete_connection, refresh_candidates, remove_row, row_ajax_request, searchTab, switch_to_tab, toggle_tabs;
       $metabox = jQuery(this);
       $connections = $metabox.find('.p2p-connections');
       $spinner = jQuery('<img>', {
@@ -191,6 +191,10 @@
         });
         return false;
       };
+      toggle_tabs = function(ev) {
+        $metabox.find('.p2p-create-connections-tabs').toggle();
+        return false;
+      };
       switch_to_tab = function() {
         var $tab;
         $tab = jQuery(this);
@@ -199,7 +203,7 @@
         $metabox.find('.tabs-panel').hide().end().find($tab.data('ref')).show().find(':text').focus();
         return false;
       };
-      $metabox.delegate('th.p2p-col-delete .p2p-icon', 'click', clear_connections).delegate('td.p2p-col-delete .p2p-icon', 'click', delete_connection).delegate('td.p2p-col-create div', 'click', create_connection).delegate('.wp-tab-bar li', 'click', switch_to_tab);
+      $metabox.delegate('th.p2p-col-delete .p2p-icon', 'click', clear_connections).delegate('td.p2p-col-delete .p2p-icon', 'click', delete_connection).delegate('td.p2p-col-create div', 'click', create_connection).delegate('.p2p-toggle-tabs', 'click', toggle_tabs).delegate('.wp-tab-bar li', 'click', switch_to_tab);
       if ($connections.find('th.p2p-col-order').length) {
         $connections.find('tbody').sortable({
           handle: 'td.p2p-col-order',

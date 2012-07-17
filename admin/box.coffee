@@ -188,6 +188,11 @@ jQuery ->
 
 			return false
 
+		toggle_tabs = (ev) ->
+			$metabox.find('.p2p-create-connections-tabs').toggle()
+
+			return false
+
 		switch_to_tab = ->
 			$tab = jQuery(this)
 
@@ -210,6 +215,7 @@ jQuery ->
 			.delegate('th.p2p-col-delete .p2p-icon', 'click', clear_connections)
 			.delegate('td.p2p-col-delete .p2p-icon', 'click', delete_connection)
 			.delegate('td.p2p-col-create div', 'click', create_connection)
+			.delegate('.p2p-toggle-tabs', 'click', toggle_tabs)
 			.delegate('.wp-tab-bar li', 'click', switch_to_tab)
 
 		# Make sortable

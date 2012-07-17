@@ -2,12 +2,12 @@
 	color: #AAA;
 }
 
-.p2p-box a {
+.p2p-box td a {
 	text-decoration: none;
 }
 
-.p2p-create-connections p {
-	margin-bottom: .5em;
+.p2p-toggle-tabs {
+	font-weight: bold;
 }
 
 /* Tabs */
