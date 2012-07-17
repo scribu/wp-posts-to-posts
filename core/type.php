@@ -75,14 +75,12 @@ class P2P_Connection_Type {
 
 	private function set_labels( &$args ) {
 		foreach ( array( 'from', 'to' ) as $key ) {
-			$labels = _p2p_pluck( $args, $key . '_labels' );
+			$labels = $this->side[ $key ]->get_labels();
+			$labels['create'] = __( 'Create connections:', P2P_TEXTDOMAIN );
 
-			if ( empty( $labels ) )
-				$labels = $this->side[ $key ]->get_labels();
-			else
-				$labels = (object) $labels;
+			_p2p_append( $labels, (array) _p2p_pluck( $args, $key . '_labels' ) );
 
-			$this->labels[ $key ] = $labels;
+			$this->labels[ $key ] = (object) $labels;
 		}
 	}
 

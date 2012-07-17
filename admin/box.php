@@ -94,15 +94,13 @@ class P2P_Box {
 	}
 
 	protected function render_create_connections( $post ) {
-		$data = array();
+		$data = array(
+			'label' => $this->labels->create,
+		);
 
 		if ( 'one' == $this->ctype->get_opposite( 'cardinality' ) ) {
-			$data['label'] = __( 'Create connection:', P2P_TEXTDOMAIN );
-
 			if ( !empty( $this->connected_items ) )
 				$data['hide'] = 'style="display:none"';
-		} else {
-			$data['label'] = __( 'Create connections:', P2P_TEXTDOMAIN );
 		}
 
 		// Search tab

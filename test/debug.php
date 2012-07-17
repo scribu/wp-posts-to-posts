@@ -215,7 +215,7 @@ class P2P_Debug {
 				'singular_name' => 'Double',
 				'search_items' => 'Search doubles',
 				'not_found' => 'No doubles found'
-			)
+			),
 		) );
 
 		p2p_register_connection_type( array(
@@ -224,7 +224,10 @@ class P2P_Debug {
 			'to' => 'actor',
 			'reciprocal' => true,
 			'title' => 'Friends with',
-			'data' => array( 'type' => 'friends' )
+			'data' => array( 'type' => 'friends' ),
+			'from_labels' => array(
+				'create' => __( 'CONNECT YO' )
+			)
 		) );
 	}
 
