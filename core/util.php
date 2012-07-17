@@ -20,6 +20,17 @@ function _p2p_compress_direction( $directions ) {
 }
 
 /** @internal */
+function _p2p_flip_direction( $direction ) {
+	$map = array(
+		'from' => 'to',
+		'to' => 'from',
+		'any' => 'any',
+	);
+
+	return $map[ $direction ];
+}
+
+/** @internal */
 function _p2p_normalize( $items ) {
 	if ( !is_array( $items ) )
 		$items = array( $items );

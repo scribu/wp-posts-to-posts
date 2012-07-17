@@ -31,12 +31,7 @@ class P2P_Directed_Connection_Type {
 	}
 
 	public function flip_direction() {
-		if ( 'any' == $this->direction )
-			return $this;
-
-		$direction = ( 'to' == $this->direction ) ? 'from' : 'to';
-
-		return $this->set_direction( $direction );
+		return $this->set_direction( _p2p_flip_direction( $this->direction ) );
 	}
 
 	public function get_opposite( $key ) {

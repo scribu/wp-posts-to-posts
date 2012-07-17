@@ -148,10 +148,7 @@ class P2P_Connection_Type {
 		if ( is_array( $arg ) )
 			$arg = reset( $arg );
 
-		$opposite_side = self::choose_side( $object_type,
-			$this->object['from'],
-			$this->object['to']
-		);
+		$opposite_side = $this->object_type_to_direction( $object_type );
 
 		if ( in_array( $opposite_side, array( 'from', 'to' ) ) )
 			return $this->set_direction( $opposite_side, $instantiate );
@@ -171,7 +168,10 @@ class P2P_Connection_Type {
 		return false;
 	}
 
-	private static function choose_side( $current, $from, $to ) {
+	public function object_type_to_direction( $current ) {
+		$from = $this->object['from'];
+		$to = $this->object['to'];
+
 		if ( $from == $to && $current == $from )
 			return 'any';
 
@@ -184,7 +184,7 @@ class P2P_Connection_Type {
 		return false;
 	}
 
-	public function find_direction_from_post_type( $post_types ) {
+	public function post_type_to_directions( $post_types ) {
 		$possible_directions = array();
 
 		foreach ( array( 'from', 'to' ) as $direction ) {
@@ -294,7 +294,7 @@ class P2P_Connection_Type {
 			$extra_qv['post_type'] = 'any';
 		}
 
-		$direction = _p2p_compress_direction( $this->find_direction_from_post_type( $post_types ) );
+		$direction = _p2p_compress_direction( $this->post_type_to_directions( $post_types ) );
 
 		if ( !$direction )
 			return false;

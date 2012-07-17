@@ -50,7 +50,12 @@ class P2P_Column_Factory {
 		foreach ( self::$column_args as $p2p_type => $column_args ) {
 			$ctype = p2p_type( $p2p_type );
 
-			$direction = _p2p_compress_direction( $ctype->find_direction_from_post_type( $screen->post_type ) );
+			$direction = $ctype->object_type_to_direction( $object_type );
+			if ( $direction && 'any' != $direction ) {
+				$direction = _p2p_flip_direction( $direction );
+			} else {
+				$direction = _p2p_compress_direction( $ctype->post_type_to_directions( $screen->post_type ) );
+			}
 
 			if ( !$direction )
 				continue;
