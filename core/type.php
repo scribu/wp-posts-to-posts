@@ -108,6 +108,11 @@ class P2P_Connection_Type {
 	}
 
 	public function __call( $method, $args ) {
+		if ( ! method_exists( 'P2P_Directed_Connection_Type', $method ) ) {
+			trigger_error( "Method '$method' does not exist.", E_USER_ERROR );
+			return;
+		}
+
 		// TODO: make find_direction() return the normalized item and pass that along
 		$directed = $this->find_direction( $args[0] );
 		if ( !$directed ) {
