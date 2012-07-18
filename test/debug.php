@@ -15,7 +15,22 @@ class P2P_Debug {
 	}
 
 	function playground() {
+		global $wpdb;
 
+		$actors = $wpdb->get_col( "SELECT ID FROM $wpdb->posts WHERE post_type = 'actor' ORDER BY RAND() LIMIT 200" );
+
+		foreach ( $actors as $actor ) {
+			$movies = $wpdb->get_col( "SELECT ID FROM $wpdb->posts WHERE post_type = 'movie' ORDER BY RAND() DESC LIMIT 100" );
+
+			foreach ( $movies as $movie ) {
+				$r = p2p_create_connection( 'actor_movie', array(
+					'from' => $actor,
+					'to' => $movie
+				) );
+
+				debug($r);
+			}
+		}
 	}
 
 	private function generate_posts( $type, $count = 20 ) {
