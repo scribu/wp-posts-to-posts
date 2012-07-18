@@ -148,10 +148,14 @@ class P2P_Connection_Type {
 		if ( is_array( $arg ) )
 			$arg = reset( $arg );
 
-		$opposite_side = $this->direction_from_object_type( $object_type );
+		if ( $object_type ) {
+			$direction = $this->direction_from_object_type( $object_type );
+			if ( !$direction )
+				return false;
 
-		if ( in_array( $opposite_side, array( 'from', 'to' ) ) )
-			return $this->set_direction( $opposite_side, $instantiate );
+			if ( in_array( $direction, array( 'from', 'to' ) ) )
+				return $this->set_direction( $direction, $instantiate );
+		}
 
 		$direction = $this->direction_from_item( $arg );
 
