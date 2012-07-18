@@ -100,6 +100,24 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertTrue( strlen( $ctype->name ) > 0 );
 	}
 
+	function test_direction_types_normal() {
+		$normal = p2p_type( 'actor_to_movie' );
+
+		$this->assertEquals( 'from', $normal->direction_from_types( 'post', 'actor' ) );
+		$this->assertEquals( 'to', $normal->direction_from_types( 'post', 'movie' ) );
+
+		$this->assertFalse( $normal->direction_from_types( 'post', 'page' ) );
+	}
+
+	function test_direction_types_user() {
+		$ctypes = p2p_type( 'posts_to_users' );
+
+		$this->assertEquals( 'from', $ctypes->direction_from_types( 'post', 'post' ) );
+		$this->assertEquals( 'to', $ctypes->direction_from_types( 'user' ) );
+
+		$this->assertFalse( $ctypes->direction_from_types( 'post', 'page' ) );
+	}
+
 	function test_direction_normal() {
 		$normal = p2p_type( 'actor_to_movie' );
 

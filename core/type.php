@@ -200,24 +200,33 @@ class P2P_Connection_Type {
 		return false;
 	}
 
-	public function direction_from_post_type( $post_types ) {
+	public function direction_from_types( $object_type, $post_types = null ) {
 		$possible_directions = array();
 
 		foreach ( array( 'from', 'to' ) as $direction ) {
-			$side = $this->side[ $direction ];
-
-			if ( !method_exists( $side, 'recognize_post_type' ) )
-				continue;
-
-			foreach ( (array) $post_types as $post_type ) {
-				if ( $side->recognize_post_type( $post_type ) ) {
-					$possible_directions[] = $direction;
-					break;
-				}
-			}
+			if ( $this->_type_check( $direction, $object_type, $post_types ) )
+				$possible_directions[] = $direction;
 		}
 
 		return _p2p_compress_direction( $possible_directions );
+	}
+
+	private function _type_check( $direction, $object_type, $post_types ) {
+		if ( $object_type != $this->object[ $direction ] )
+			return false;
+
+		$side = $this->side[ $direction ];
+
+		if ( !method_exists( $side, 'recognize_post_type' ) )
+			return true;
+
+		foreach ( (array) $post_types as $post_type ) {
+			if ( $side->recognize_post_type( $post_type ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/** Alias for get_prev() */
@@ -310,7 +319,7 @@ class P2P_Connection_Type {
 			$extra_qv['post_type'] = 'any';
 		}
 
-		$direction = $this->direction_from_post_type( $post_types );
+		$direction = $this->direction_from_types( 'post', $post_types );
 		if ( !$direction )
 			return false;
 
