@@ -100,7 +100,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertTrue( strlen( $ctype->name ) > 0 );
 	}
 
-	function test_direction() {
+	function test_direction_normal() {
 		$normal = p2p_type( 'actor_to_movie' );
 
 		$this->assertEquals( $normal, $normal->set_direction( 'to' )->set_direction( 'from' )->lose_direction() );
@@ -108,8 +108,9 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( 'from', $normal->find_direction( self::generate_post( 'actor' ), false ) );
 		$this->assertEquals( 'to', $normal->find_direction( self::generate_post( 'movie' ), false ) );
 		$this->assertFalse( $normal->find_direction( self::generate_post( 'post' ) ) );
+	}
 
-		// 'from' array
+	function test_direction_array_from() {
 		$ctype = @p2p_register_connection_type( array( 'actor', 'movie' ), 'studio' );
 		$this->assertFalse( $ctype->indeterminate );
 
@@ -118,8 +119,9 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( 'to', $ctype->find_direction( self::generate_post( 'studio' ), false ) );
 
 		$this->assertFalse( $ctype->find_direction( self::generate_post( 'post' )  ) );
+	}
 
-		// 'to' array
+	function test_direction_array_to() {
 		$ctype = @p2p_register_connection_type( 'actor', array( 'movie', 'studio' ) );
 		$this->assertFalse( $ctype->indeterminate );
 
@@ -128,15 +130,18 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( 'to', $ctype->find_direction( self::generate_post( 'studio' ), false ) );
 
 		$this->assertFalse( $ctype->find_direction( self::generate_post( 'post' ) ) );
+	}
 
-		// indeterminate
+	function test_direction_indeterminate() {
 		$indeterminate = p2p_type( 'movies_to_movies' );
+
 		$this->assertTrue( $indeterminate->indeterminate );
 
 		$this->assertFalse( $indeterminate->find_direction( self::generate_post( 'post' ) ) );
 		$this->assertEquals( 'from', $indeterminate->find_direction( self::generate_post( 'movie' ), false ) );
+	}
 
-		// reciprocal
+	function test_direction_reciprocal() {
 		$reciprocal = @p2p_register_connection_type( array(
 			'from' => 'movie',
 			'to' => 'movie',
