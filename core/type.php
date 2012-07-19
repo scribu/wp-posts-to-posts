@@ -201,14 +201,17 @@ class P2P_Connection_Type {
 	}
 
 	public function direction_from_types( $object_type, $post_types = null ) {
-		$possible_directions = array();
-
 		foreach ( array( 'from', 'to' ) as $direction ) {
-			if ( $this->_type_check( $direction, $object_type, $post_types ) )
-				$possible_directions[] = $direction;
+			if ( !$this->_type_check( $direction, $object_type, $post_types ) )
+				continue;
+
+			if ( $this->indeterminate )
+				$direction = $this->reciprocal ? 'any' : 'from';
+
+			return $direction;
 		}
 
-		return _p2p_compress_direction( $possible_directions );
+		return false;
 	}
 
 	private function _type_check( $direction, $object_type, $post_types ) {

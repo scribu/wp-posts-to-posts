@@ -56,10 +56,24 @@ class P2P_Box_Factory {
 		foreach ( self::$box_args as $p2p_type => $box_args ) {
 			$ctype = p2p_type( $p2p_type );
 
-			$directions = array_intersect(
-				_p2p_expand_direction( $box_args->show ),
-				_p2p_expand_direction( $ctype->direction_from_types( 'post', $post_type ) )
-			);
+			$direction = $ctype->direction_from_types( 'post', $post_type );
+			if ( !$direction )
+				continue;
+
+			if ( $ctype->indeterminate )
+				$direction = 'any';
+
+			if ( $ctype->reciprocal ) {
+				if ( $box_args->show )
+					$directions = array( 'any' );
+				else
+					$directions = array();
+			} else {
+				$directions = array_intersect(
+					_p2p_expand_direction( $box_args->show ),
+					_p2p_expand_direction( $direction )
+				);
+			}
 
 			$title = $ctype->title;
 
