@@ -11,4 +11,6 @@ fi
 
 rm -rf /tmp/p2p-coverage
 
-phpunit --bootstrap $wp_tests_dir/init.php --configuration ./test/phpunit.xml --coverage-html /tmp/p2p-coverage ./test/unit.php
+cd ./test
+
+phpunit --bootstrap bootstrap.php --configuration phpunit.xml --coverage-html /tmp/p2p-coverage tests.php
