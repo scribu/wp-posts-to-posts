@@ -11,25 +11,43 @@ class P2P_Debug {
 #		self::reset_upgrade();
 
 		/* add_action('admin_notices', array(__CLASS__, 'setup_example')); */
-		/* add_action('admin_notices', array(__CLASS__, 'playground')); */
+		/* add_action('admin_notices', array(new P2P_Debug, 'playground')); */
 	}
 
 	function playground() {
-		global $wpdb;
+		p2p_register_connection_type( array(
+			'name' => 'actor_to_movie',
+			'from' => 'actor',
+			'to' => 'movie',
+			'sortable' => true
+		) );
 
-		$actors = $wpdb->get_col( "SELECT ID FROM $wpdb->posts WHERE post_type = 'actor' ORDER BY RAND() LIMIT 200" );
+		$ctype = p2p_type( 'actor_to_movie' );
 
-		foreach ( $actors as $actor ) {
-			$movies = $wpdb->get_col( "SELECT ID FROM $wpdb->posts WHERE post_type = 'movie' ORDER BY RAND() DESC LIMIT 100" );
+		$actor_ids = self::generate_posts( 'actor', 3 );
+		list( $movie_id ) = self::generate_posts( 'movie', 1 );
 
-			foreach ( $movies as $movie ) {
-				$r = p2p_create_connection( 'actor_movie', array(
-					'from' => $actor,
-					'to' => $movie
-				) );
+		$p2p_id_0 = $ctype->connect( $actor_ids[0], $movie_id );
+		$p2p_id_1 = $ctype->connect( $actor_ids[1], $movie_id );
 
-				debug($r);
-			}
+		$query = new WP_Query( array(
+			'post_type' => 'any',
+			'post__in' => array( $actor_ids[0], $actor_ids[1], $movie_id ),
+			'orderby' => 'ID',
+			'order' => 'ASC'
+		) );
+
+		$ctype->each_connected( $query );
+
+		$this->assertEquals( $p2p_id_0, $query->posts[0]->connected[0]->p2p_id );
+		$this->assertEquals( $p2p_id_1, $query->posts[1]->connected[0]->p2p_id );
+		$this->assertEquals( $p2p_id_0, $query->posts[2]->connected[0]->p2p_id );
+		$this->assertEquals( $p2p_id_1, $query->posts[2]->connected[1]->p2p_id );
+	}
+
+	function assertEquals( $a, $b ) {
+		if ( $a != $b ) {
+			trigger_error( "$a != $b", E_USER_WARNING );
 		}
 	}
 
