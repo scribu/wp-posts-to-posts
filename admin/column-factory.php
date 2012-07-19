@@ -50,19 +50,16 @@ class P2P_Column_Factory {
 		foreach ( self::$column_args as $p2p_type => $column_args ) {
 			$ctype = p2p_type( $p2p_type );
 
-			$direction = $ctype->direction_from_types( $object_type, $screen->post_type );
-			if ( !$direction )
-				continue;
+			$directions = P2P_Factory::filter( $ctype, $object_type, $screen->post_type, $column_args );
 
-			$directed = $ctype->set_direction( $direction );
+			foreach ( $directions as $direction ) {
+				$directed = $ctype->set_direction( $direction );
 
-			if ( !( 'any' == $column_args || $directed->get_direction() == $column_args ) )
-				continue;
+				$class = 'P2P_Column_' . ucfirst( $object_type );
+				$column = new $class( $directed );
 
-			$class = 'P2P_Column_' . ucfirst( $object_type );
-			$column = new $class( $directed );
-
-			$column->styles();
+				$column->styles();
+			}
 		}
 	}
 }

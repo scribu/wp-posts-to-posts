@@ -56,27 +56,11 @@ class P2P_Box_Factory {
 		foreach ( self::$box_args as $p2p_type => $box_args ) {
 			$ctype = p2p_type( $p2p_type );
 
-			$direction = $ctype->direction_from_types( 'post', $post_type );
-			if ( !$direction )
-				continue;
-
-			if ( $ctype->indeterminate )
-				$direction = 'any';
-
-			if ( $ctype->reciprocal ) {
-				if ( $box_args->show )
-					$directions = array( 'any' );
-				else
-					$directions = array();
-			} else {
-				$directions = array_intersect(
-					_p2p_expand_direction( $box_args->show ),
-					_p2p_expand_direction( $direction )
-				);
-			}
+			$directions = P2P_Factory::filter( $ctype, 'post', $post_type, $box_args->show );
 
 			$title = $ctype->title;
 
+			// TODO: apply to admin columns too
 			if ( count( $directions ) > 1 && $title['from'] == $title['to'] ) {
 				$title['from'] .= __( ' (from)', P2P_TEXTDOMAIN );
 				$title['to']   .= __( ' (to)', P2P_TEXTDOMAIN );
