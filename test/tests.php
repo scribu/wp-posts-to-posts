@@ -100,15 +100,6 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertTrue( strlen( $ctype->name ) > 0 );
 	}
 
-	function test_direction_types_normal() {
-		$normal = p2p_type( 'actor_to_movie' );
-
-		$this->assertEquals( 'from', $normal->direction_from_types( 'post', 'actor' ) );
-		$this->assertEquals( 'to', $normal->direction_from_types( 'post', 'movie' ) );
-
-		$this->assertFalse( $normal->direction_from_types( 'post', 'page' ) );
-	}
-
 	function test_direction_types_user() {
 		$ctypes = p2p_type( 'posts_to_users' );
 
@@ -126,6 +117,15 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( 'from', $normal->find_direction( self::generate_post( 'actor' ), false ) );
 		$this->assertEquals( 'to', $normal->find_direction( self::generate_post( 'movie' ), false ) );
 		$this->assertFalse( $normal->find_direction( self::generate_post( 'post' ) ) );
+	}
+
+	function test_direction_types_normal() {
+		$normal = p2p_type( 'actor_to_movie' );
+
+		$this->assertEquals( 'from', $normal->direction_from_types( 'post', 'actor' ) );
+		$this->assertEquals( 'to', $normal->direction_from_types( 'post', 'movie' ) );
+
+		$this->assertFalse( $normal->direction_from_types( 'post', 'page' ) );
 	}
 
 	function test_direction_array_from() {
@@ -159,6 +159,13 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( 'from', $indeterminate->find_direction( self::generate_post( 'movie' ), false ) );
 	}
 
+	function test_direction_types_indeterminate() {
+		$indeterminate = p2p_type( 'movies_to_movies' );
+
+		$this->assertFalse( $indeterminate->direction_from_types( 'post' ) );
+		$this->assertEquals( 'from', $indeterminate->direction_from_types( 'post', 'movie' ) );
+	}
+
 	function test_direction_reciprocal() {
 		$reciprocal = @p2p_register_connection_type( array(
 			'from' => 'movie',
@@ -167,6 +174,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		) );
 
 		$this->assertEquals( 'any', $reciprocal->find_direction( self::generate_post( 'movie' ), false ) );
+		$this->assertEquals( 'any', $reciprocal->direction_from_types( 'post', 'movie' ) );
 	}
 
 	function test_restrict_post_type() {
