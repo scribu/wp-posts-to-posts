@@ -9,7 +9,10 @@ abstract class P2P_Column {
 	function __construct( $directed, $items ) {
 		$this->ctype = $directed;
 
-		$extra_qv = array( 'p2p:context' => 'admin_column' );
+		$extra_qv = array(
+			'p2p:per_page' => -1,
+			'p2p:context' => 'admin_column'
+		);
 
 		$connected = $this->ctype->get_connected( $items, $extra_qv, 'abstract' );
 
