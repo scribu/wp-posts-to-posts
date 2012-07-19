@@ -24,7 +24,12 @@ abstract class P2P_Column {
 	}
 
 	function add_column( $columns ) {
-		$columns[ $this->ctype->name ] = $this->ctype->get_current( 'title' );
+		$this->column_id = sprintf( 'p2p-%s-%s',
+			$this->ctype->get_direction(),
+			$this->ctype->name
+		);
+
+		$columns[ $this->column_id ] = $this->ctype->get_current( 'title' );
 
 		return $columns;
 	}
@@ -43,7 +48,7 @@ abstract class P2P_Column {
 	abstract function get_admin_link( $item );
 
 	protected function render_column( $column, $item_id ) {
-		if ( $this->ctype->name != $column )
+		if ( $this->column_id != $column )
 			return;
 
 		if ( !isset( $this->connected[ $item_id ] ) )
