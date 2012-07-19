@@ -2,19 +2,17 @@
 
 define( 'P2P_BOX_NONCE', 'p2p-box' );
 
-class P2P_Box_Factory {
+class P2P_Box_Factory extends P2P_Factory {
 
-	private static $box_args = array();
+	function __construct() {
+		add_filter( 'p2p_connection_type_args', array( $this, 'filter_ctypes' ) );
 
-	static function init() {
-		add_filter( 'p2p_connection_type_args', array( __CLASS__, 'filter_args' ) );
-
-		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
-		add_action( 'save_post', array( __CLASS__, 'save_post' ), 10, 2 );
-		add_action( 'wp_ajax_p2p_box', array( __CLASS__, 'wp_ajax_p2p_box' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
+		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
+		add_action( 'wp_ajax_p2p_box', array( $this, 'wp_ajax_p2p_box' ) );
 	}
 
-	static function filter_args( $args ) {
+	function filter_ctypes( $args ) {
 		if ( isset( $args['admin_box'] ) ) {
 			$box_args = _p2p_pluck( $args, 'admin_box' );
 			if ( !is_array( $box_args ) )
@@ -29,65 +27,37 @@ class P2P_Box_Factory {
 			}
 		}
 
-		self::register( $args['name'], $box_args );
-
-		return $args;
-	}
-
-	static function register( $p2p_type, $box_args ) {
-		if ( isset( self::$box_args[$p2p_type] ) )
-			return false;
-
-		$box_args = (object) wp_parse_args( $box_args, array(
+		$box_args = wp_parse_args( $box_args, array(
 			'show' => 'any',
 			'context' => 'side',
 			'can_create_post' => true
 		) );
 
-		if ( !$box_args->show )
-			return false;
+		$this->register( $args['name'], $box_args );
 
-		self::$box_args[$p2p_type] = $box_args;
-
-		return true;
+		return $args;
 	}
 
-	static function add_meta_boxes( $post_type ) {
-		foreach ( self::$box_args as $p2p_type => $box_args ) {
-			$ctype = p2p_type( $p2p_type );
+	function add_meta_boxes( $post_type ) {
+		$this->filter( 'post', $post_type );
+	}
 
-			$directions = P2P_Factory::filter( $ctype, 'post', $post_type, $box_args->show );
+	function add_item( $directed, $object_type, $post_type, $title ) {
+		if ( !self::show_box( $directed, $GLOBALS['post'] ) )
+			continue;
 
-			$title = $ctype->title;
+		$box = $this->create_box( $directed );
 
-			// TODO: apply to admin columns too
-			if ( count( $directions ) > 1 && $title['from'] == $title['to'] ) {
-				$title['from'] .= __( ' (from)', P2P_TEXTDOMAIN );
-				$title['to']   .= __( ' (to)', P2P_TEXTDOMAIN );
-			}
+		add_meta_box(
+			sprintf( 'p2p-%s-%s', $directed->get_direction(), $directed->name ),
+			$title,
+			array( $box, 'render' ),
+			$post_type,
+			$this->queue[ $directed->name ]->context,
+			'default'
+		);
 
-			foreach ( $directions as $direction ) {
-				$key = ( 'to' == $direction ) ? 'to' : 'from';
-
-				$directed = $ctype->set_direction( $direction );
-
-				if ( !self::show_box( $directed, $GLOBALS['post'] ) )
-					continue;
-
-				$box = self::create_box( $box_args, $directed );
-
-				add_meta_box(
-					"p2p-{$direction}-{$ctype->name}",
-					$title[$key],
-					array( $box, 'render' ),
-					$post_type,
-					$box_args->context,
-					'default'
-				);
-
-				$box->init_scripts();
-			}
-		}
+		$box->init_scripts();
 	}
 
 	private static function show_box( $directed, $post ) {
@@ -96,7 +66,9 @@ class P2P_Box_Factory {
 		return apply_filters( 'p2p_admin_box_show', $show, $directed, $post );
 	}
 
-	private static function create_box( $box_args, $directed ) {
+	private function create_box( $directed ) {
+		$box_args = $this->queue[ $directed->name ];
+
 		$title_class = 'P2P_Field_Title_' . ucfirst( $directed->get_opposite( 'object' ) );
 
 		$columns = array(
@@ -118,7 +90,7 @@ class P2P_Box_Factory {
 	/**
 	 * Collect metadata from all boxes.
 	 */
-	static function save_post( $post_id, $post ) {
+	function save_post( $post_id, $post ) {
 		if ( 'revision' == $post->post_type || defined( 'DOING_AJAX' ) )
 			return;
 
@@ -154,11 +126,11 @@ class P2P_Box_Factory {
 	/**
 	 * Controller for all box ajax requests.
 	 */
-	static function wp_ajax_p2p_box() {
+	function wp_ajax_p2p_box() {
 		check_ajax_referer( P2P_BOX_NONCE, 'nonce' );
 
 		$ctype = p2p_type( $_REQUEST['p2p_type'] );
-		if ( !$ctype || !isset( self::$box_args[$ctype->name] ) )
+		if ( !$ctype || !isset( $this->queue[$ctype->name] ) )
 			die(0);
 
 		$directed = $ctype->set_direction( $_REQUEST['direction'] );
@@ -172,7 +144,7 @@ class P2P_Box_Factory {
 		if ( !self::show_box( $directed, $post ) )
 			die(-1);
 
-		$box = self::create_box( self::$box_args[$ctype->name], $directed );
+		$box = $this->create_box( $directed );
 
 		$method = 'ajax_' . $_REQUEST['subaction'];
 
@@ -180,5 +152,5 @@ class P2P_Box_Factory {
 	}
 }
 
-P2P_Box_Factory::init();
+new P2P_Box_Factory;
 

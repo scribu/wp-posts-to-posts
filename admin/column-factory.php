@@ -1,40 +1,32 @@
 <?php
 
-class P2P_Column_Factory {
+class P2P_Column_Factory extends P2P_Factory {
 
-	private static $column_args = array();
+	function __construct() {
+		add_filter( 'p2p_connection_type_args', array( $this, 'filter_ctypes' ) );
 
-	static function init() {
-		add_filter( 'p2p_connection_type_args', array( __CLASS__, 'filter_args' ) );
-
-		add_action( 'admin_print_styles', array( __CLASS__, 'add_columns' ) );
+		add_action( 'admin_print_styles', array( $this, 'add_columns' ) );
 	}
 
-	static function filter_args( $args ) {
+	function filter_ctypes( $args ) {
 		if ( isset( $args['admin_column'] ) ) {
 			$column_args = _p2p_pluck( $args, 'admin_column' );
+			if ( !is_array( $column_args ) )
+				$column_args = array( 'show' => $column_args );
 		} else {
-			$column_args = false;
+			$column_args = array();
 		}
 
-		self::register( $args['name'], $column_args );
+		$column_args = wp_parse_args( $column_args, array(
+			'show' => false,
+		) );
+
+		$this->register( $args['name'], $column_args );
 
 		return $args;
 	}
 
-	static function register( $p2p_type, $column_args ) {
-		if ( isset( self::$column_args[$p2p_type] ) )
-			return false;
-
-		if ( !$column_args )
-			return false;
-
-		self::$column_args[$p2p_type] = $column_args;
-
-		return true;
-	}
-
-	static function add_columns() {
+	function add_columns() {
 		$screen = get_current_screen();
 
 		$screen_map = array(
@@ -47,22 +39,16 @@ class P2P_Column_Factory {
 
 		$object_type = $screen_map[ $screen->base ];
 
-		foreach ( self::$column_args as $p2p_type => $column_args ) {
-			$ctype = p2p_type( $p2p_type );
+		$this->filter( $object_type, $screen->post_type );
+	}
 
-			$directions = P2P_Factory::filter( $ctype, $object_type, $screen->post_type, $column_args );
+	function add_item( $directed, $object_type, $post_type, $title ) {
+		$class = 'P2P_Column_' . ucfirst( $object_type );
+		$column = new $class( $directed );
 
-			foreach ( $directions as $direction ) {
-				$directed = $ctype->set_direction( $direction );
-
-				$class = 'P2P_Column_' . ucfirst( $object_type );
-				$column = new $class( $directed );
-
-				$column->styles();
-			}
-		}
+		$column->styles();
 	}
 }
 
-P2P_Column_Factory::init();
+new P2P_Column_Factory;
 
