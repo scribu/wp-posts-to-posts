@@ -229,13 +229,6 @@ jQuery ->
 					return ui
 			}
 
-		# View all posts
-		$viewAll = $metabox.find('.p2p-tab-search button')
-
-		$viewAll.click ->
-			searchTab.find_posts(1)
-			return false
-
 		# Search posts
 		$searchInput = $metabox.find('.p2p-tab-search :text')
 
