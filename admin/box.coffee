@@ -139,8 +139,10 @@ jQuery ->
 
 
 		clear_connections = (ev) ->
+			ev.preventDefault()
+
 			if not confirm(P2PAdmin.deleteConfirmMessage)
-				return false
+				return
 
 			$td = jQuery(ev.target).closest('td')
 
@@ -153,9 +155,11 @@ jQuery ->
 
 				refresh_candidates response
 
-			return false
+			null
 
 		delete_connection = (ev) ->
+			ev.preventDefault()
+
 			$td = jQuery(ev.target).closest('td')
 
 			data = {
@@ -168,9 +172,11 @@ jQuery ->
 
 				refresh_candidates response
 
-			return false
+			null
 
 		create_connection = (ev) ->
+			ev.preventDefault()
+
 			$td = jQuery(ev.target).closest('td')
 
 			data = {
@@ -186,14 +192,18 @@ jQuery ->
 				else
 					remove_row $td
 
-			return false
+			null
 
 		toggle_tabs = (ev) ->
+			ev.preventDefault()
+
 			$metabox.find('.p2p-create-connections-tabs').toggle()
 
-			return false
+			null
 
-		switch_to_tab = ->
+		switch_to_tab = (ev) ->
+			ev.preventDefault()
+
 			$tab = jQuery(this)
 
 			# Set active tab
@@ -208,8 +218,6 @@ jQuery ->
 				.find( $tab.data('ref') )
 					.show()
 					.find(':text').focus()
-
-			return false
 
 		$metabox
 			.delegate('th.p2p-col-delete .p2p-icon', 'click', clear_connections)
@@ -235,7 +243,9 @@ jQuery ->
 		$searchInput
 			.keypress (ev) ->
 				if ev.keyCode is 13 # RETURN
-					return false
+					ev.preventDefault()
+
+				null
 
 			.keyup (ev) ->
 				if delayed isnt undefined
@@ -254,21 +264,25 @@ jQuery ->
 					searchTab.find_posts(1)
 				, 400
 
+				null
+
 		# Post creation
 		$createButton = $metabox.find('.p2p-tab-create-post button')
 		$createInput = $metabox.find('.p2p-tab-create-post :text')
 
-		$createButton.click ->
+		$createButton.click (ev) ->
+			ev.preventDefault()
+
 			$button = jQuery(this)
 
 			if $button.hasClass('inactive')
-				return false
+				return
 
 			title = $createInput.val()
 
 			if title is ''
 				$createInput.focus()
-				return false
+				return
 
 			$button.addClass('inactive')
 
@@ -283,11 +297,12 @@ jQuery ->
 
 				$button.removeClass('inactive')
 
-			return false
+			null
 
 		$createInput.keypress (ev) ->
 			if 13 is ev.keyCode
 				$createButton.click()
 
-				return false
+				ev.preventDefault()
 
+			null

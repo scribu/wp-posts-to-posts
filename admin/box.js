@@ -24,7 +24,7 @@
       jQuery('.p2p-search input[placeholder]').each(setVal).focus(clearVal).blur(setVal);
     }
     return jQuery('.p2p-box').each(function() {
-      var $connections, $createButton, $createInput, $metabox, $searchInput, $spinner, $viewAll, PostsTab, ajax_request, append_connection, clear_connections, create_connection, delete_connection, refresh_candidates, remove_row, row_ajax_request, searchTab, switch_to_tab, toggle_tabs;
+      var $connections, $createButton, $createInput, $metabox, $searchInput, $spinner, PostsTab, ajax_request, append_connection, clear_connections, create_connection, delete_connection, refresh_candidates, remove_row, row_ajax_request, searchTab, switch_to_tab, toggle_tabs;
       $metabox = jQuery(this);
       $connections = $metabox.find('.p2p-connections');
       $spinner = jQuery('<img>', {
@@ -146,8 +146,9 @@
       clear_connections = function(ev) {
         var $td, data,
           _this = this;
+        ev.preventDefault();
         if (!confirm(P2PAdmin.deleteConfirmMessage)) {
-          return false;
+          return;
         }
         $td = jQuery(ev.target).closest('td');
         data = {
@@ -157,11 +158,12 @@
           $connections.hide().find('tbody').html('');
           return refresh_candidates(response);
         });
-        return false;
+        return null;
       };
       delete_connection = function(ev) {
         var $td, data,
           _this = this;
+        ev.preventDefault();
         $td = jQuery(ev.target).closest('td');
         data = {
           subaction: 'disconnect',
@@ -171,11 +173,12 @@
           remove_row($td);
           return refresh_candidates(response);
         });
-        return false;
+        return null;
       };
       create_connection = function(ev) {
         var $td, data,
           _this = this;
+        ev.preventDefault();
         $td = jQuery(ev.target).closest('td');
         data = {
           subaction: 'connect',
@@ -189,19 +192,20 @@
             return remove_row($td);
           }
         });
-        return false;
+        return null;
       };
       toggle_tabs = function(ev) {
+        ev.preventDefault();
         $metabox.find('.p2p-create-connections-tabs').toggle();
-        return false;
+        return null;
       };
-      switch_to_tab = function() {
+      switch_to_tab = function(ev) {
         var $tab;
+        ev.preventDefault();
         $tab = jQuery(this);
         $metabox.find('.wp-tab-bar li').removeClass('wp-tab-active');
         $tab.addClass('wp-tab-active');
-        $metabox.find('.tabs-panel').hide().end().find($tab.data('ref')).show().find(':text').focus();
-        return false;
+        return $metabox.find('.tabs-panel').hide().end().find($tab.data('ref')).show().find(':text').focus();
       };
       $metabox.delegate('th.p2p-col-delete .p2p-icon', 'click', clear_connections).delegate('td.p2p-col-delete .p2p-icon', 'click', delete_connection).delegate('td.p2p-col-create div', 'click', create_connection).delegate('.p2p-toggle-tabs', 'click', toggle_tabs).delegate('.wp-tab-bar li', 'click', switch_to_tab);
       if ($connections.find('th.p2p-col-order').length) {
@@ -217,22 +221,18 @@
           }
         });
       }
-      $viewAll = $metabox.find('.p2p-tab-search button');
-      $viewAll.click(function() {
-        searchTab.find_posts(1);
-        return false;
-      });
       $searchInput = $metabox.find('.p2p-tab-search :text');
       $searchInput.keypress(function(ev) {
         if (ev.keyCode === 13) {
-          return false;
+          ev.preventDefault();
         }
+        return null;
       }).keyup(function(ev) {
         var delayed;
         if (delayed !== void 0) {
           clearTimeout(delayed);
         }
-        return delayed = setTimeout(function() {
+        delayed = setTimeout(function() {
           var searchStr;
           searchStr = $searchInput.val();
           if (searchStr === searchTab.params.s) {
@@ -242,19 +242,21 @@
           $spinner.insertAfter($searchInput).show();
           return searchTab.find_posts(1);
         }, 400);
+        return null;
       });
       $createButton = $metabox.find('.p2p-tab-create-post button');
       $createInput = $metabox.find('.p2p-tab-create-post :text');
-      $createButton.click(function() {
+      $createButton.click(function(ev) {
         var $button, data, title;
+        ev.preventDefault();
         $button = jQuery(this);
         if ($button.hasClass('inactive')) {
-          return false;
+          return;
         }
         title = $createInput.val();
         if (title === '') {
           $createInput.focus();
-          return false;
+          return;
         }
         $button.addClass('inactive');
         data = {
@@ -266,13 +268,14 @@
           $createInput.val('');
           return $button.removeClass('inactive');
         });
-        return false;
+        return null;
       });
       return $createInput.keypress(function(ev) {
         if (13 === ev.keyCode) {
           $createButton.click();
-          return false;
+          ev.preventDefault();
         }
+        return null;
       });
     });
   });
