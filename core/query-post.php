@@ -1,6 +1,6 @@
 <?php
 
-class P2P_WP_Query {
+class P2P_Post_Query {
 
 	static function init() {
 		add_action( 'parse_query', array( __CLASS__, 'parse_query' ), 20 );
@@ -59,5 +59,5 @@ class P2P_WP_Query {
 	}
 }
 
-P2P_WP_Query::init();
+P2P_Post_Query::init();
 
