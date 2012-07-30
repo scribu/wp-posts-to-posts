@@ -1,7 +1,7 @@
 === Posts 2 Posts ===
 Contributors: scribu, ciobi
 Tags: connections, custom post types, relationships, many-to-many, users
-Requires at least: 3.2
+Requires at least: 3.4
 Tested up to: 3.4
 Stable tag: 1.3.1
 License: GPLv2 or later
