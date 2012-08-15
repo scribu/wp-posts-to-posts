@@ -19,7 +19,7 @@ class P2P_Debug {
 			'name' => 'actor_to_movie',
 			'from' => 'actor',
 			'to' => 'movie',
-			'sortable' => true
+			'sortable' => true,
 		) );
 
 		$ctype = p2p_type( 'actor_to_movie' );
@@ -226,6 +226,7 @@ class P2P_Debug {
 			'admin_box' => array(
 				'show' => 'any',
 				'context' => 'advanced',
+				'priority' => 'high'
 			),
 			'admin_column' => 'any',
 			'title' => array(
