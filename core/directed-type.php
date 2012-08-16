@@ -149,7 +149,7 @@ class P2P_Directed_Connection_Type {
 		}
 
 		$extra_qv['fields'] = 'ids';
-		$already_connected = $this->get_connected( 'any', $extra_qv, 'abstract' )->items;
+		$already_connected = $this->get_connected( $to_check, $extra_qv, 'abstract' )->items;
 
 		_p2p_append( $to_exclude, $already_connected );
 

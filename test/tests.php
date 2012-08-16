@@ -423,6 +423,34 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( $p2p_id, $connected[0]->p2p_id );
 	}
 
+	function test_get_connectable() {
+		$post = self::generate_posts( 'post', 2 );
+		$page = self::generate_posts( 'page', 2 );
+
+		$ctype = p2p_register_connection_type( array(
+			'name' => __FUNCTION__,
+			'from' => 'post',
+			'to' => 'page',
+		) );
+
+		$compare_ids = function( $id_list, $collection ) {
+			$resulting_ids = wp_list_pluck( $collection->items, 'ID' );
+
+			sort( $id_list );
+			sort( $resulting_ids );
+
+			return $id_list == $resulting_ids;
+		};
+
+		$ctype->connect( $post[0], $page[0] );
+
+		$candidate = $ctype->get_connectable( $post[0] );
+		$this->assertTrue( $compare_ids( array( $page[1] ), $candidate ) );
+
+		$candidate = $ctype->get_connectable( $post[1] );
+		$this->assertTrue( $compare_ids( $page, $candidate ) );
+	}
+
 	function test_p2p_list_posts() {
 		$list = array_map( 'get_post', self::generate_posts( 'post', 2 ) );
 
