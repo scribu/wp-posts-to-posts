@@ -261,7 +261,8 @@ class P2P_Debug {
 			'data' => array( 'type' => 'friends' ),
 			'from_labels' => array(
 				'create' => __( 'CONNECT YO' )
-			)
+			),
+			'admin_column' => 'any'
 		) );
 	}
 
