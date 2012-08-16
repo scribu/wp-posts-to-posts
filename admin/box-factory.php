@@ -45,7 +45,7 @@ class P2P_Box_Factory extends P2P_Factory {
 
 	function add_item( $directed, $object_type, $post_type, $title ) {
 		if ( !self::show_box( $directed, $GLOBALS['post'] ) )
-			continue;
+			return;
 
 		$box = $this->create_box( $directed );
 		$box_args = $this->queue[ $directed->name ];
