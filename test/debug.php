@@ -274,7 +274,8 @@ class P2P_Debug {
 			'Jude Law' => array( 'Sherlock Holmes' ),
 			'Brad Pitt' => array( '7 Years In Tibet', 'Fight Club' ),
 			'Natalie Portman' => array( 'Black Swan', 'Thor' ),
-			'Charlize Theron' => array()
+			'Matt Damon' => array( 'The Talented Mr. Ripley' ),
+			'Charlize Theron' => array(),
 		);
 
 		foreach ( $data as $actor_name => $movies ) {
