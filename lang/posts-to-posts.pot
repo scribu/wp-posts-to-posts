@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
-"POT-Creation-Date: 2012-06-18 17:14:52+00:00\n"
+"POT-Creation-Date: 2012-08-17 07:40:29+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,40 +12,36 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: admin/box-factory.php:64
-msgid " (from)"
-msgstr ""
-
-#: admin/box-factory.php:65
-msgid " (to)"
-msgstr ""
-
-#: admin/box.php:40
+#: admin/box.php:38
 msgid "Are you sure you want to delete all connections?"
 msgstr ""
 
-#: admin/box.php:129
-msgid "Create connections:"
-msgstr ""
-
-#: admin/box.php:143
+#: admin/box.php:114
 msgid "Search"
 msgstr ""
 
-#: admin/box.php:220
+#: admin/box.php:191
 msgid "previous"
 msgstr ""
 
-#: admin/box.php:221
+#: admin/box.php:192
 msgid "next"
 msgstr ""
 
-#: admin/box.php:222
+#: admin/box.php:193
 msgid "of"
 msgstr ""
 
-#: admin/box.php:263
+#: admin/box.php:236
 msgid "Can't create connection: %s"
+msgstr ""
+
+#: admin/factory.php:30
+msgid " (from)"
+msgstr ""
+
+#: admin/factory.php:31
+msgid " (to)"
 msgstr ""
 
 #: admin/fields.php:7
@@ -60,49 +56,39 @@ msgstr ""
 msgid "Connection Types"
 msgstr ""
 
-#: admin/tools.php:31
-msgid "Upgraded %d connections."
-msgstr ""
-
-#: admin/tools.php:34
-msgid ""
-"The Posts 2 Posts connections need to be upgraded. <a href=\"%s\">Proceed.</"
-"a>"
-msgstr ""
-
-#: admin/tools.php:54
+#: admin/tools.php:41
 msgid "<em>%s</em> is not a registered connection type."
 msgstr ""
 
-#: admin/tools.php:63
+#: admin/tools.php:50
 msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
 msgstr ""
 
-#: admin/tools.php:77
+#: admin/tools.php:64
 msgid "Name"
 msgstr ""
 
-#: admin/tools.php:78
+#: admin/tools.php:65
 msgid "Information"
 msgstr ""
 
-#: admin/tools.php:79
+#: admin/tools.php:66
 msgid "Connections"
 msgstr ""
 
-#: admin/tools.php:87
+#: admin/tools.php:74
 msgid "No connection types registered."
 msgstr ""
 
-#: admin/tools.php:89
+#: admin/tools.php:76
 msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
 msgstr ""
 
-#: admin/tools.php:106
+#: admin/tools.php:93
 msgid "Convert to registered connection type:"
 msgstr ""
 
-#: admin/tools.php:142
+#: admin/tools.php:129
 msgid "Go"
 msgstr ""
 
@@ -114,43 +100,47 @@ msgstr ""
 msgid "A list of posts connected to the current post"
 msgstr ""
 
-#: core/extra.php:37
+#: core/extra.php:34
 msgid "Title:"
 msgstr ""
 
-#: core/extra.php:44
+#: core/extra.php:41
 msgid "Connection type:"
 msgstr ""
 
-#: core/extra.php:48
+#: core/extra.php:46
 msgid "Connection listing:"
 msgstr ""
 
-#: core/extra.php:54
+#: core/extra.php:52
 msgid "connected"
 msgstr ""
 
-#: core/extra.php:55
+#: core/extra.php:53
 msgid "related"
 msgstr ""
 
-#: core/side.php:168
+#: core/side.php:210
 msgid "Users"
 msgstr ""
 
-#: core/side.php:177
+#: core/side.php:219
 msgid "User"
 msgstr ""
 
-#: core/side.php:178
+#: core/side.php:220
 msgid "Search Users"
 msgstr ""
 
-#: core/side.php:179
+#: core/side.php:221
 msgid "No users found."
 msgstr ""
 
-#: core/type.php:104
+#: core/type.php:79
+msgid "Create connections"
+msgstr ""
+
+#: core/type.php:102
 msgid "Connected %s"
 msgstr ""
 
@@ -162,6 +152,6 @@ msgstr ""
 msgid "Save Changes"
 msgstr ""
 
-#: scb/AdminPage.php:360
+#: scb/AdminPage.php:346
 msgid "Settings"
 msgstr ""
