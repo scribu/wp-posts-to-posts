@@ -1,5 +1,9 @@
 <?php
 
+add_action( 'p2p_init', array( 'P2P_Debug', 'init' ), 11 );
+add_filter( 'p2p_connection_type_args', array( 'P2P_Debug', 'register_missing_post_types' ) );
+
+
 class P2P_Debug {
 
 	function init() {
@@ -69,6 +73,24 @@ class P2P_Debug {
 		return $ids;
 	}
 
+	static function register_missing_post_types( $connection_type ) {
+		foreach ( array( 'from', 'to' ) as $direction ) {
+			if ( 'post' == $connection_type[ $direction . '_object' ] ) {
+				foreach ( $connection_type[ $direction . '_query_vars' ]['post_type'] as $ptype ) {
+					if ( !post_type_exists( $ptype ) ) {
+						register_post_type( $ptype, array(
+							'label' => ucfirst( $ptype ) . 's',
+							'public' => true,
+							'supports' => array( 'title' )
+						) );
+					}
+				}
+			}
+		}
+
+		return $connection_type;
+	}
+
 	function posts_to_attachments() {
 		p2p_register_connection_type( array(
 			'name' => 'posts_to_attachments',
@@ -130,18 +152,6 @@ class P2P_Debug {
 	}
 
 	function contacts_and_tickets() {
-		register_post_type( 'ticket', array(
-			'label' => 'Tickets',
-			'public' => true,
-			'supports' => array( 'title' )
-		) );
-
-		register_post_type( 'contact', array(
-			'label' => 'Contacts',
-			'public' => true,
-			'supports' => array( 'title' )
-		) );
-
 		$types = array(
 			'bug' => 'Bug',
 			'feature' => 'Feature'
@@ -328,6 +338,4 @@ class P2P_Debug {
 		die;
 	}
 }
-
-add_action( 'p2p_init', array( 'P2P_Debug', 'init' ), 11 );
 
