@@ -260,7 +260,7 @@ class P2P_Debug {
 			'title' => 'Friends with',
 			'data' => array( 'type' => 'friends' ),
 			'from_labels' => array(
-				'create' => __( 'CONNECT YO' )
+				'create' => 'CONNECT YO'
 			),
 			'admin_column' => 'any'
 		) );
