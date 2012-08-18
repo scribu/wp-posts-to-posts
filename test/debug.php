@@ -79,7 +79,7 @@ class P2P_Debug {
 				foreach ( $connection_type[ $direction . '_query_vars' ]['post_type'] as $ptype ) {
 					if ( !post_type_exists( $ptype ) ) {
 						register_post_type( $ptype, array(
-							'label' => ucfirst( $ptype ) . 's',
+							'label' => ucfirst( $ptype ),
 							'public' => true,
 							'supports' => array( 'title' )
 						) );
