@@ -124,6 +124,8 @@ class P2P_Directed_Connection_Type {
 		$side = $this->get_opposite( 'side' );
 
 		$item = $this->get_current( 'side' )->item_recognize( $arg );
+		if ( !$item )
+			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
 
 		$extra_qv['p2p:exclude'] = $this->get_non_connectable( $item, $extra_qv );
 
