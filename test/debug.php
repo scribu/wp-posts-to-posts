@@ -78,17 +78,21 @@ class P2P_Debug {
 			if ( 'post' == $connection_type[ $direction . '_object' ] ) {
 				foreach ( $connection_type[ $direction . '_query_vars' ]['post_type'] as $ptype ) {
 					if ( !post_type_exists( $ptype ) ) {
-						register_post_type( $ptype, array(
-							'label' => ucfirst( $ptype ),
-							'public' => true,
-							'supports' => array( 'title' )
-						) );
+						self::quick_post_type( $ptype );
 					}
 				}
 			}
 		}
 
 		return $connection_type;
+	}
+
+	protected static function quick_post_type( $slug ) {
+		register_post_type( $slug, array(
+			'label' => ucfirst( $slug ),
+			'public' => true,
+			'supports' => array( 'title' )
+		) );
 	}
 
 	function posts_to_attachments() {
