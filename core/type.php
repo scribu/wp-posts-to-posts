@@ -348,9 +348,8 @@ class P2P_Connection_Type {
 		foreach ( array( 'from', 'to' ) as $direction ) {
 			if ( 'post' == $this->object[$direction] ) {
 				foreach ( $post_types as $post_type ) {
-					if ( !$this->side[ $direction ]->item_recognize( $post_type ) ) {
+					if ( $this->side[ $direction ]->recognize_post_type( $post_type ) ) {
 						$possible_directions[] = $direction;
-						break;
 					}
 				}
 			}
