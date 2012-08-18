@@ -298,6 +298,18 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( 'desc', $p2p_query->order );
 	}
 
+	function test_not_each_connected() {
+		$actor_ids = self::generate_posts( 'actor', 3 );
+
+		$query = new WP_Query( array(
+			'post_type' => 'actor',
+		) );
+
+		p2p_type( 'movies_to_movies' )->each_connected( $query );
+
+		$this->assertFalse( isset( $query->posts[0]->connected ) );
+	}
+
 	function test_each_connected() {
 		$ctype = p2p_type( 'actor_to_movie' );
 
@@ -317,6 +329,29 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$ctype->each_connected( $query );
 
 		$this->assertEquals( $query->posts[0]->connected[0]->ID, $movie->ID );
+		$this->assertEquals( $query->posts[1]->connected[0]->p2p_id, $p2p_id_1 );
+		$this->assertEmpty( $query->posts[2]->connected );
+	}
+
+	function test_each_connected_users() {
+		$ctype = p2p_type( 'posts_to_users' );
+
+		$post_ids = self::generate_posts( 'post', 3 );
+		$user = self::generate_user();
+
+		$p2p_id_0 = $ctype->connect( $post_ids[0], $user );
+		$p2p_id_1 = $ctype->connect( $post_ids[1], $user );
+
+		$query = new WP_Query( array(
+			'post_type' => 'post',
+			'post__in' => $post_ids,
+			'orderby' => 'ID',
+			'order' => 'ASC'
+		) );
+
+		$ctype->each_connected( $query );
+
+		$this->assertEquals( $query->posts[0]->connected[0]->ID, $user->ID );
 		$this->assertEquals( $query->posts[1]->connected[0]->p2p_id, $p2p_id_1 );
 		$this->assertEmpty( $query->posts[2]->connected );
 	}
