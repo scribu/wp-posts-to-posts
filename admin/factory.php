@@ -46,15 +46,16 @@ abstract class P2P_Factory {
 		if ( !$direction )
 			return array();
 
-		if ( $ctype->indeterminate )
-			$direction = 'any';
-
 		if ( $ctype->indeterminate && $ctype->reciprocal ) {
 			if ( $show_ui )
 				$directions = array( 'any' );
 			else
 				$directions = array();
 		} else {
+			if ( $ctype->indeterminate ) {
+				$direction = 'any';
+			}
+
 			$directions = array_intersect(
 				_p2p_expand_direction( $show_ui ),
 				_p2p_expand_direction( $direction )
