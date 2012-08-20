@@ -49,7 +49,7 @@ abstract class P2P_Factory {
 		if ( $ctype->indeterminate )
 			$direction = 'any';
 
-		if ( $ctype->reciprocal ) {
+		if ( $ctype->indeterminate && $ctype->reciprocal ) {
 			if ( $show_ui )
 				$directions = array( 'any' );
 			else
