@@ -1,37 +1,25 @@
 # Translation of the WordPress plugin Posts 2 Posts 0.7-beta by scribu.
 # Copyright (C) 2011 scribu
 # This file is distributed under the same license as the Posts 2 Posts package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+# Translators:
+# Michael Wassmer <mike@mwm-webdesign.com>, 2011.
+# ms-studio <code@ms-studio.net>, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Posts 2 Posts 0.7-beta\n"
+"Project-Id-Version: Posts 2 Posts\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-to-posts\n"
 "POT-Creation-Date: 2011-03-30 21:56+0300\n"
-"PO-Revision-Date: 2011-05-16 21:57+0100\n"
-"Last-Translator: Michael Wassmer <mike@mwm-webdesign.com>\n"
+"PO-Revision-Date: 2012-08-20 18:21+0100\n"
+"Last-Translator: ms-studio <code@ms-studio.net>\n"
 "Language-Team: \n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: scb/AdminPage.php:164
-msgid "Settings <strong>saved</strong>."
-msgstr "Réglages <strong>Enregistrés</strong>"
-
-#: scb/AdminPage.php:176
-#: scb/AdminPage.php:186
-msgid "Save Changes"
-msgstr "Enregistrer Modifications"
-
-#: scb/AdminPage.php:368
-msgid "Settings"
-msgstr "Réglages"
-
-#: ui/boxes.php:88
-msgid "Create connections:"
-msgstr "Créer une connexion:"
+#: admin/box.php:114
+msgid "Search"
+msgstr "Recherche"
 
 #: ui/boxes.php:108
 msgid "Previous"
@@ -45,22 +33,35 @@ msgstr "sur"
 msgid "Next"
 msgstr "Suivant"
 
+#: scb/AdminPage.php:164
+msgid "Settings <strong>saved</strong>."
+msgstr "Réglages <strong>Enregistrés</strong>"
+
+#: scb/AdminPage.php:176 scb/AdminPage.php:186
+msgid "Save Changes"
+msgstr "Enregistrer Modifications"
+
+#: scb/AdminPage.php:368
+msgid "Settings"
+msgstr "Réglages"
+
+#: ui/boxes.php:88
+msgid "Create connections:"
+msgstr "Créer une connexion:"
+
 #: ui/boxes.php:114
 msgid "Recent"
 msgstr "Récent"
 
-#: ui/boxes.php:174
-#: ui/boxes.php:175
+#: ui/boxes.php:174 ui/boxes.php:175
 msgid "Create connection"
-msgstr "Créer connexion"
+msgstr "Nouvelle connexion"
 
-#: ui/boxes.php:182
-#: ui/boxes.php:183
+#: ui/boxes.php:182 ui/boxes.php:183
 msgid "Delete connection"
-msgstr "Supprimer connexion"
+msgstr "Supprimer la connexion"
 
-#: ui/boxes.php:189
-#: ui/boxes.php:190
+#: ui/boxes.php:189 ui/boxes.php:190
 msgid "Delete all connections"
 msgstr "Supprimer toutes les connexions"
 
@@ -77,19 +78,103 @@ msgstr "Etes-vous sûr de vouloir supprimer toutes les connexions?"
 msgid "Posts 2 Posts"
 msgstr "Posts 2 Posts"
 
-#. Plugin URI of the plugin/theme
-msgid "http://scribu.net/wordpress/posts-to-posts"
-msgstr "http://scribu.net/wordpress/posts-to-posts"
-
 #. Description of the plugin/theme
 msgid "Create many-to-many relationships between all types of posts"
 msgstr "Créer des relations multiples entre tous types d’articles et de pages"
 
-#. Author of the plugin/theme
-msgid "scribu"
-msgstr "scribu"
+#: admin/box.php:236
+msgid "Can't create connection: %s"
+msgstr "Impossible de créer la connexion: %s"
 
-#. Author URI of the plugin/theme
-msgid "http://scribu.net/"
-msgstr "http://scribu.net/"
+#: admin/factory.php:30
+msgid " (from)"
+msgstr " (de)"
 
+#: admin/factory.php:31
+msgid " (to)"
+msgstr " (à)"
+
+#: admin/tools.php:7
+msgid "Connection Types"
+msgstr "Types de Connexion"
+
+#: admin/tools.php:41
+msgid "<em>%s</em> is not a registered connection type."
+msgstr "<em>%s</em> n'est pas un type de connexion enregistré."
+
+#: admin/tools.php:50
+msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
+msgstr "%1$s connexions converties de <em>%2$s</em> à <em>%3$s</em>."
+
+#: admin/tools.php:64
+msgid "Name"
+msgstr "Nom"
+
+#: admin/tools.php:65
+msgid "Information"
+msgstr "Information"
+
+#: admin/tools.php:66
+msgid "Connections"
+msgstr "Connexions"
+
+#: admin/tools.php:74
+msgid "No connection types registered."
+msgstr "Aucun type de connexion enregistré."
+
+#: admin/tools.php:76
+msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
+msgstr ""
+"Pour enregistrer un type de connexion, consulter <a href=\"%s\">le wiki</a>."
+
+#: admin/tools.php:93
+msgid "Convert to registered connection type:"
+msgstr "Convertir en type de connexion:"
+
+#: admin/tools.php:129
+msgid "Go"
+msgstr "Go"
+
+#: core/extra.php:17
+msgid "A list of posts connected to the current post"
+msgstr "Une liste d'articles connectés à l'article courant"
+
+#: core/extra.php:34
+msgid "Title:"
+msgstr "Titre:"
+
+#: core/extra.php:41
+msgid "Connection type:"
+msgstr "Type de connexion:"
+
+#: core/extra.php:46
+msgid "Connection listing:"
+msgstr "Liste de connexions:"
+
+#: core/extra.php:52
+msgid "connected"
+msgstr "relié"
+
+#: core/extra.php:53
+msgid "related"
+msgstr "lié"
+
+#: core/side.php:210
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: core/side.php:219
+msgid "User"
+msgstr "Utilisateur"
+
+#: core/side.php:220
+msgid "Search Users"
+msgstr "Rechercher les utilisateurs"
+
+#: core/side.php:221
+msgid "No users found."
+msgstr "Aucun utilisateur trouvé."
+
+#: core/type.php:79
+msgid "Create connections"
+msgstr "Nouvelle connexion"
