@@ -182,6 +182,8 @@ class P2P_Connection_Type {
 
 			return $direction;
 		}
+
+		return false;
 	}
 
 	public function direction_from_object_type( $current ) {
@@ -359,10 +361,7 @@ class P2P_Connection_Type {
 			$$key = $this->side[ $key ]->get_desc();
 		}
 
-		if ( $this->indeterminate )
-			$arrow = '&harr;';
-		else
-			$arrow = '&rarr;';
+		$arrow = $this->indeterminate ? '&harr;' : '&rarr;';
 
 		$label = "$from $arrow $to";
 
