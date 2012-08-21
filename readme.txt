@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Tags: connections, custom post types, relationships, many-to-many, users
 Requires at least: 3.4
 Tested up to: 3.4
-Stable tag: 1.4
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,10 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 5. Connection Types screen
 
 == Changelog ==
+
+= 1.4.1 =
+* fixed errors in admin box
+* fixed each_connected()
 
 = 1.4 =
 * added 'p2p_init' hook
