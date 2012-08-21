@@ -53,35 +53,27 @@ class P2P_Post_Query {
 		return '';
 	}
 
+	/**
+	 * Combines the p2p connection fields with the rest of the post fields
+	 */
 	static function posts_results( $posts, $wp_query ) {
-		global $wpdb;
-		
-		if ( !isset( $wp_query->_p2p_query ) || empty($posts) )
+		if ( !isset( $wp_query->_p2p_query ) || empty( $posts ) )
 			return $posts;
-		
-		// Get posts IDs for get contents
-		$_posts = array();
-		foreach( $posts as $post ) {
-			$_posts[] = $post->ID;
+
+		_prime_post_caches(
+			wp_list_pluck( $posts, 'ID' ),
+			$wp_query->query_vars['update_post_term_cache'],
+			$wp_query->query_vars['update_post_meta_cache']
+		);
+
+		foreach ( $posts as $post ) {
+			$fields = get_post( $post->ID, ARRAY_A );
+
+			foreach ( $fields as $key => $value )
+				$post->$key = $value;
 		}
-		
-		// setup posts data
-		_prime_post_caches( $_posts, $wp_query->query_vars['update_post_term_cache'], $wp_query->query_vars['update_post_meta_cache'] );
-		$_posts = array_map( 'get_post', $_posts );
-		
-		// Put ID on key
-		foreach( $_posts as $key => $_post ) {
-			unset($_posts[$key]);
-			$_posts[$_post->ID] = $_post;
-		}
-		
-		// Merge datas
-		$wp_query->posts = array();
-		foreach( $posts as $post ) {
-			$wp_query->posts[] = (object) array_merge((array) $_posts[$post->ID], (array) $post);
-		}
-		
-		return $wp_query->posts;
+
+		return $posts;
 	}
 
 	/**
