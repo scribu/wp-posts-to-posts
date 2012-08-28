@@ -1,8 +1,8 @@
 <?php
 
-add_action( 'p2p_init', array( 'P2P_Debug', 'init' ), 11 );
-add_filter( 'p2p_connection_type_args', array( 'P2P_Debug', 'register_missing_post_types' ) );
+require __DIR__ . '/utils.php';
 
+add_action( 'p2p_init', array( 'P2P_Debug', 'init' ), 11 );
 
 class P2P_Debug {
 
@@ -12,10 +12,42 @@ class P2P_Debug {
 		self::contacts_and_tickets();
 		self::actors_and_movies();
 
-#		self::reset_upgrade();
-
 		/* add_action('admin_notices', array(__CLASS__, 'setup_example')); */
 		/* add_action('admin_notices', array(new P2P_Debug, 'playground')); */
+
+p2p_register_connection_type( array(
+                        'name' => 'videos_to_lecons',
+                        'from' => 'video',
+                        'to' => 'lecon',
+                        'reciprocal' => true, // the relation has no hierarchy
+                ) );
+
+p2p_register_connection_type( array(
+                'name' => 'lecons_to_chapitres',
+                'from' => 'lecon',
+                'to' => 'chapitre',
+                'reciprocal' => true, // the relation has no hierarchy
+                'sortable' => 'any',
+        ) );
+
+p2p_register_connection_type( array(
+                'name' => 'formations_to_chapitres',
+                'from' => 'formation',
+                'to' => 'chapitre',
+                'reciprocal' => true, // the relation has no hierarchy
+                'sortable' => 'any'
+        ) );
+
+
+
+// TEMPLATE CODE
+/* $formation = get_post(); */
+
+$chapitres = new WP_Query(array (
+  'connected_type' => 'formations_to_chapitres',
+  'connected_items' => get_queried_object(),
+  'nopaging' => true,
+));
 	}
 
 	function playground() {
@@ -73,42 +105,12 @@ class P2P_Debug {
 		return $ids;
 	}
 
-	static function register_missing_post_types( $connection_type ) {
-		foreach ( array( 'from', 'to' ) as $direction ) {
-			if ( 'post' == $connection_type[ $direction . '_object' ] ) {
-				foreach ( $connection_type[ $direction . '_query_vars' ]['post_type'] as $ptype ) {
-					if ( !post_type_exists( $ptype ) ) {
-						self::quick_post_type( $ptype );
-					}
-				}
-			}
-		}
-
-		return $connection_type;
-	}
-
-	protected static function quick_post_type( $slug ) {
-		register_post_type( $slug, array(
-			'label' => ucfirst( $slug ),
-			'public' => true,
-			'supports' => array( 'title' )
-		) );
-	}
-
 	function posts_to_attachments() {
 		p2p_register_connection_type( array(
 			'name' => 'posts_to_attachments',
 			'from' => 'post',
 			'to' => 'attachment'
 		) );
-	}
-
-	function reset_upgrade() {
-		global $wpdb;
-
-		$wpdb->query( "UPDATE $wpdb->p2p SET p2p_type = ''" );
-
-		update_option( 'p2p_storage', 3 );
 	}
 
 	function posts_to_users() {
@@ -293,53 +295,14 @@ class P2P_Debug {
 		);
 
 		foreach ( $data as $actor_name => $movies ) {
-			$actor_id = self::make_post( 'actor',  $actor_name );
+			$actor_id = _p2p_quick_post( 'actor',  $actor_name );
 
 			foreach ( $movies as $movie_title ) {
-				$movie_id = self::make_post( 'movie', $movie_title );
+				$movie_id = _p2p_quick_post( 'movie', $movie_title );
 
 				$ctype->connect( $actor_id, $movie_id );
 			}
 		}
-	}
-
-	private function make_post( $type, $title ) {
-		return wp_insert_post( array(
-			'post_type' => $type,
-			'post_title' => $title,
-			'post_status' => 'publish'
-		) );
-	}
-
-	private function walk( $posts, $level = 0 ) {
-		if ( !isset( $_GET['p2p_debug'] ) )
-			return;
-
-		if ( 0 == $level )
-			echo "<pre>\n";
-
-		foreach ( $posts as $post ) {
-			echo str_repeat( "\t", $level ) . "$post->ID: $post->post_title\n";
-
-			self::walk( (array) @$post->connected, $level+1 );
-		}
-
-		if ( 0 == $level )
-			echo "</pre>\n";
-	}
-
-	function debug() {
-		global $wpdb;
-
-		$rows = $wpdb->get_results("SELECT * FROM $wpdb->p2p");
-
-		foreach ( $rows as $row ) {
-			echo html_link( get_edit_post_link( $row->p2p_from ), $row->p2p_from ) . ' -> ';
-			echo html_link( get_edit_post_link( $row->p2p_to ), $row->p2p_to );
-			echo '<br>';
-		}
-
-		die;
 	}
 }
 
