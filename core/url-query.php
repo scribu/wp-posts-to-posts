@@ -24,7 +24,7 @@ class P2P_URL_Query {
 			return;
 
 		// Restrict to users screen
-		if ( 'users' != get_current_screen()->id )
+		if ( get_current_screen() && 'users' != get_current_screen()->id )
 			return;
 
 		// Don't overwrite capturing query
