@@ -79,16 +79,14 @@ function _p2p_generate_user() {
 }
 
 function _p2p_walk( $posts, $level = 0 ) {
-	if ( !isset( $_GET['p2p_debug'] ) )
-		return;
-
 	if ( 0 == $level )
 		echo "<pre>\n";
 
 	foreach ( $posts as $post ) {
 		echo str_repeat( "\t", $level ) . "$post->ID: $post->post_title\n";
 
-		_p2p_walk( (array) @$post->connected, $level+1 );
+		if ( isset( $post->connected ) )
+			_p2p_walk( $post->connected, $level+1 );
 	}
 
 	if ( 0 == $level )
