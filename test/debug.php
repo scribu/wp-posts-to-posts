@@ -1,6 +1,9 @@
 <?php
 
-require __DIR__ . '/utils.php';
+require_once __DIR__ . '/utils.php';
+
+if ( defined( 'WP_CLI' ) )
+	require_once __DIR__ . '/command.php';
 
 add_action( 'p2p_init', array( 'P2P_Debug', 'init' ), 11 );
 
@@ -12,97 +15,41 @@ class P2P_Debug {
 		self::contacts_and_tickets();
 		self::actors_and_movies();
 
-		/* add_action('admin_notices', array(__CLASS__, 'setup_example')); */
-		/* add_action('admin_notices', array(new P2P_Debug, 'playground')); */
+		p2p_register_connection_type( array(
+			'name' => 'videos_to_lecons',
+			'from' => 'video',
+			'to' => 'lecon',
+			'reciprocal' => true, // the relation has no hierarchy
+		) );
 
-p2p_register_connection_type( array(
-                        'name' => 'videos_to_lecons',
-                        'from' => 'video',
-                        'to' => 'lecon',
-                        'reciprocal' => true, // the relation has no hierarchy
-                ) );
+		p2p_register_connection_type( array(
+			'name' => 'lecons_to_chapitres',
+			'from' => 'lecon',
+			'to' => 'chapitre',
+			'reciprocal' => true, // the relation has no hierarchy
+			'sortable' => 'any',
+		) );
 
-p2p_register_connection_type( array(
-                'name' => 'lecons_to_chapitres',
-                'from' => 'lecon',
-                'to' => 'chapitre',
-                'reciprocal' => true, // the relation has no hierarchy
-                'sortable' => 'any',
-        ) );
+		p2p_register_connection_type( array(
+			'name' => 'formations_to_chapitres',
+			'from' => 'formation',
+			'to' => 'chapitre',
+			'reciprocal' => true, // the relation has no hierarchy
+			'sortable' => 'any'
+		) );
 
-p2p_register_connection_type( array(
-                'name' => 'formations_to_chapitres',
-                'from' => 'formation',
-                'to' => 'chapitre',
-                'reciprocal' => true, // the relation has no hierarchy
-                'sortable' => 'any'
-        ) );
-
-
-
-// TEMPLATE CODE
-/* $formation = get_post(); */
-
-$chapitres = new WP_Query(array (
-  'connected_type' => 'formations_to_chapitres',
-  'connected_items' => get_queried_object(),
-  'nopaging' => true,
-));
+		add_action('admin_notices', array(new P2P_Debug, 'playground'));
 	}
 
 	function playground() {
-		p2p_register_connection_type( array(
-			'name' => 'actor_to_movie',
-			'from' => 'actor',
-			'to' => 'movie',
-			'sortable' => true,
-		) );
+		// TEMPLATE CODE
+		$formation = get_post();
 
-		$ctype = p2p_type( 'actor_to_movie' );
-
-		$actor_ids = self::generate_posts( 'actor', 3 );
-		list( $movie_id ) = self::generate_posts( 'movie', 1 );
-
-		$p2p_id_0 = $ctype->connect( $actor_ids[0], $movie_id );
-		$p2p_id_1 = $ctype->connect( $actor_ids[1], $movie_id );
-
-		$query = new WP_Query( array(
-			'post_type' => 'any',
-			'post__in' => array( $actor_ids[0], $actor_ids[1], $movie_id ),
-			'orderby' => 'ID',
-			'order' => 'ASC'
-		) );
-
-		$ctype->each_connected( $query );
-
-		$this->assertEquals( $p2p_id_0, $query->posts[0]->connected[0]->p2p_id );
-		$this->assertEquals( $p2p_id_1, $query->posts[1]->connected[0]->p2p_id );
-		$this->assertEquals( $p2p_id_0, $query->posts[2]->connected[0]->p2p_id );
-		$this->assertEquals( $p2p_id_1, $query->posts[2]->connected[1]->p2p_id );
-	}
-
-	function assertEquals( $a, $b ) {
-		if ( $a != $b ) {
-			trigger_error( "$a != $b", E_USER_WARNING );
-		}
-	}
-
-	private function generate_posts( $type, $count = 20 ) {
-		global $wpdb;
-
-		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->posts WHERE post_status = 'publish'" );
-
-		$ids = array();
-
-		for ( $i = $total; $i < $total + $count; $i++ ) {
-			$ids[] = wp_insert_post(array(
-				'post_type' => $type,
-				'post_title' => "Post $i",
-				'post_status' => 'publish'
-			));
-		}
-
-		return $ids;
+		$chapitres = new WP_Query(array (
+			'connected_type' => 'formations_to_chapitres',
+			'connected_items' => $formation,
+			'nopaging' => true,
+		));
 	}
 
 	function posts_to_attachments() {
@@ -280,29 +227,6 @@ $chapitres = new WP_Query(array (
 			),
 			'admin_column' => 'any'
 		) );
-	}
-
-	function setup_example() {
-		$ctype = p2p_type( 'actor_movie' );
-
-		$data = array(
-			'Nicholas Cage' => array( 'Lord Of War', 'Adaptation' ),
-			'Jude Law' => array( 'Sherlock Holmes' ),
-			'Brad Pitt' => array( '7 Years In Tibet', 'Fight Club' ),
-			'Natalie Portman' => array( 'Black Swan', 'Thor' ),
-			'Matt Damon' => array( 'The Talented Mr. Ripley' ),
-			'Charlize Theron' => array(),
-		);
-
-		foreach ( $data as $actor_name => $movies ) {
-			$actor_id = _p2p_quick_post( 'actor',  $actor_name );
-
-			foreach ( $movies as $movie_title ) {
-				$movie_id = _p2p_quick_post( 'movie', $movie_title );
-
-				$ctype->connect( $actor_id, $movie_id );
-			}
-		}
 	}
 }
 
