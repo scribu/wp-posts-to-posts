@@ -5,6 +5,8 @@ WP_CLI::add_command( 'p2p', 'P2P_CLI_Command' );
 class P2P_CLI_Command extends WP_CLI_Command {
 
 	function create_connections( $args ) {
+		$n = 10;
+
 		if ( empty( $args ) ) {
 			WP_CLI::line( "usage: wp p2p " . __FUNCTION__ . " <connection-type>" );
 			exit;
@@ -16,33 +18,29 @@ class P2P_CLI_Command extends WP_CLI_Command {
 		if ( !$ctype )
 			WP_CLI::error( "'$connection_type' is not a registered connection type." );
 
-		$generators = array(
-			'post' => '_p2p_generate_post',
-			'user' => '_p2p_generate_user'
-		);
+		$directed = $ctype->set_direction( 'from' );
 
-		$n = 10;
+		$side = $directed->get_current( 'side' );
 
-		$candidates = array();
+		$extra_qv = array( 'p2p:per_page' => $n );
+		$extra_qv = $side->get_base_qv( $side->translate_qv( $extra_qv ) );
 
-		foreach ( array( 'from', 'to' ) as $end ) {
-			if ( 'post' == $ctype->object[ $end ] ) {
-				$candidates[ $end ] = _p2p_generate_posts( $ctype->side[ $end ]->first_post_type(), $n );
-			} else {
-				$candidates[ $end ] = _p2p_generate_users( $n );
-			}
-		}
+		$candidate = $directed->get_connectable( 'any', array(), 'abstract' );
 
 		$count = 0;
 
-		foreach ( $candidates['from'] as $i => $from ) {
-			$start = $i % 3;
+		foreach ( $candidate->items as $from ) {
+			$eligible = $ctype->get_connectable( $from, array(
+				'p2p:per_page' => rand( 0, 5 )
+			), 'abstract' );
 
-			$m = rand( 0, $n ) - $start;
+			foreach ( $eligible->items as $to ) {
+				$r = $ctype->connect( $from, $to );
 
-			for ( $j = 0; $j < $m; $j++ ) {
-				$ctype->connect( $from, $candidates['to'][ $j + $start ] );
-				$count++;
+				if ( is_wp_error( $r ) )
+					WP_CLI::warning( $r );
+				else
+					$count++;
 			}
 		}
 

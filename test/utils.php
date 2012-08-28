@@ -30,54 +30,6 @@ function _p2p_generate_post_type( $slug ) {
 	) );
 }
 
-function _p2p_generate_posts( $type, $count = 20 ) {
-	global $wpdb;
-
-	$counts = wp_count_posts( $type );
-	$total = $counts->publish;
-
-	$posts = array();
-
-	$title = get_post_type_object( $type )->labels->singular_name;
-
-	for ( $i = $total; $i < $total + $count; $i++ ) {
-		$posts[] = get_post( wp_insert_post( array(
-			'post_type' => $type,
-			'post_title' => $title . ' ' . $i,
-			'post_status' => 'publish'
-		) ) );
-	}
-
-	return $posts;
-}
-
-function _p2p_generate_post( $type = 'post' ) {
-	$posts = _p2p_generate_posts( $type, 1 );
-	return $posts[0];
-}
-
-function _p2p_generate_users( $count = 20 ) {
-	global $wpdb;
-
-	$total = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->users" );
-
-	$users = array();
-
-	for ( $i = $total; $i < $total + $count; $i++ ) {
-		$users[] = new WP_User( wp_insert_user( array(
-			'user_login' => 'user_' . $total,
-			'user_pass' => '',
-		) ) );
-	}
-
-	return $users;
-}
-
-function _p2p_generate_user() {
-	$users = _p2p_generate_users( 1 );
-	return $users[0];
-}
-
 function _p2p_walk( $posts, $level = 0 ) {
 	if ( 0 == $level )
 		echo "<pre>\n";
