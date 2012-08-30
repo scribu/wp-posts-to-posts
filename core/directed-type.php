@@ -120,7 +120,7 @@ class P2P_Directed_Connection_Type {
 	 *
 	 * @param mixed $arg The item to find connection candidates for.
 	 */
-	public function get_connectable( $arg, $extra_qv = array() ) {
+	public function get_connectable( $arg, $extra_qv = array(), $output = 'abstract' ) {
 		$side = $this->get_opposite( 'side' );
 
 		$item = $this->get_current( 'side' )->item_recognize( $arg );
@@ -131,7 +131,7 @@ class P2P_Directed_Connection_Type {
 
 		$qv = apply_filters( 'p2p_connectable_args', $extra_qv, $this, $item->get_object() );
 
-		return $this->abstract_query( $qv, $side );
+		return $this->abstract_query( $qv, $side, $output );
 	}
 
 	private function get_non_connectable( $item, $extra_qv ) {
