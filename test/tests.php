@@ -297,6 +297,10 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( $query->posts[0]->connected[0]->ID, $movie->ID );
 		$this->assertEquals( $query->posts[1]->connected[0]->p2p_id, $p2p_id_1 );
 		$this->assertEmpty( $query->posts[2]->connected );
+
+		// Test that connected posts have real properties
+		$properties = get_object_vars( $query->posts[0]->connected[0] );
+		$this->assertTrue( isset( $properties['post_type'] ) );
 	}
 
 	function test_each_connected_users() {

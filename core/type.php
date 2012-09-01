@@ -353,7 +353,11 @@ class P2P_Connection_Type {
 
 		$q = $directed->get_connected( $items, $extra_qv, 'abstract' );
 
-		p2p_distribute_connected( $items, $q->items, $prop_name );
+		$raw_connected = array();
+		foreach ( $q->items as $item )
+			$raw_connected[] = $item->get_object();
+
+		p2p_distribute_connected( $items, $raw_connected, $prop_name );
 	}
 
 	public function get_desc() {
