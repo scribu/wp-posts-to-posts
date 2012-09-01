@@ -438,7 +438,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 			'to' => 'page',
 		) );
 
-		$compare_ids = function( $id_list, $collection ) {
+		$compare_ids = function( $id_list, $candidate ) use ( $ctype ) {
+			$collection = $ctype->get_connectable( $candidate, array(), 'abstract' );
 			$resulting_ids = wp_list_pluck( $collection->items, 'ID' );
 
 			sort( $id_list );
@@ -449,11 +450,9 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$ctype->connect( $post[0], $page[0] );
 
-		$candidate = $ctype->get_connectable( $post[0] );
-		$this->assertTrue( $compare_ids( array( $page[1] ), $candidate ) );
+		$this->assertTrue( $compare_ids( array( $page[1] ), $post[0] ) );
 
-		$candidate = $ctype->get_connectable( $post[1] );
-		$this->assertTrue( $compare_ids( $page, $candidate ) );
+		$this->assertTrue( $compare_ids( $page, $post[1] ) );
 	}
 
 	function test_p2p_list_posts() {

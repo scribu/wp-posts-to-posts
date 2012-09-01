@@ -161,7 +161,7 @@ class P2P_Box {
 			'p2p:per_page' => 5
 		) );
 
-		$candidate = $this->ctype->get_connectable( $current_post_id, $extra_qv );
+		$candidate = $this->ctype->get_connectable( $current_post_id, $extra_qv, 'abstract' );
 
 		if ( empty( $candidate->items ) ) {
 			return html( 'div class="p2p-notice"', $this->labels->not_found );
