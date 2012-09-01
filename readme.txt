@@ -53,6 +53,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 1.4.2 =
+* fixed each_connected() returning wrapped objects
+
 = 1.4.1 =
 * fixed errors in admin box
 * fixed each_connected()
