@@ -1,18 +1,17 @@
 <?php
 
-abstract class P2P_List {
+class P2P_List {
 
 	public $items;
 	public $current_page = 1;
 	public $total_pages = 0;
 
-	function __construct( $items ) {
+	function __construct( $items, $item_type ) {
 		if ( is_numeric( reset( $items ) ) ) {
 			// Don't wrap when we just have a list of ids
 			$this->items = $items;
 		} else {
-			$class = str_replace( 'P2P_List', 'P2P_Item', get_class( $this ) );
-			$this->items = _p2p_wrap( $items, $class );
+			$this->items = _p2p_wrap( $items, $item_type );
 		}
 	}
 
@@ -62,40 +61,6 @@ abstract class P2P_List {
 
 	protected function render_item( $item ) {
 		return html_link( $item->get_permalink(), $item->get_title() );
-	}
-}
-
-
-class P2P_List_Post extends P2P_List {
-
-	function __construct( $wp_query ) {
-		if ( is_array( $wp_query ) ) {
-			$items = $wp_query;
-		} else {
-			$items = $wp_query->posts;
-			$this->current_page = max( 1, $wp_query->get('paged') );
-			$this->total_pages = $wp_query->max_num_pages;
-		}
-
-		parent::__construct( $items );
-	}
-}
-
-
-class P2P_List_Attachment extends P2P_List_Post {}
-
-
-class P2P_List_User extends P2P_List {
-
-	function __construct( $query ) {
-		$qv = $query->query_vars;
-
-		if ( isset( $qv['p2p:page'] ) ) {
-			$this->current_page = $qv['p2p:page'];
-			$this->total_pages = ceil( $query->get_total() / $qv['p2p:per_page'] );
-		}
-
-		parent::__construct( $query->get_results() );
 	}
 }
 

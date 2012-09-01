@@ -12,6 +12,7 @@ abstract class P2P_Side {
 	abstract function get_base_qv( $q );
 	abstract function translate_qv( $qv );
 	abstract function do_query( $args );
+	abstract function get_list( $query );
 	abstract function capture_query( $args );
 
 	abstract function is_indeterminate( $side );
@@ -99,6 +100,15 @@ class P2P_Side_Post extends P2P_Side {
 
 	function do_query( $args ) {
 		return new WP_Query( $args );
+	}
+
+	function get_list( $wp_query ) {
+		$list = new P2P_List( $wp_query->posts, $this->item_type );
+
+		$list->current_page = max( 1, $wp_query->get('paged') );
+		$list->total_pages = $wp_query->max_num_pages;
+
+		return $list;
 	}
 
 	function capture_query( $args ) {
@@ -234,6 +244,18 @@ class P2P_Side_User extends P2P_Side {
 		return new WP_User_Query( $args );
 	}
 
+	function get_list( $query ) {
+		$list = new P2P_List( $query->get_results(), $this->item_type );
+
+		$qv = $query->query_vars;
+
+		if ( isset( $qv['p2p:page'] ) ) {
+			$list->current_page = $qv['p2p:page'];
+			$list->total_pages = ceil( $query->get_total() / $qv['p2p:per_page'] );
+		}
+
+		return $list;
+	}
 	function capture_query( $args ) {
 		$args['count_total'] = false;
 

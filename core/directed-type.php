@@ -66,9 +66,7 @@ class P2P_Directed_Connection_Type {
 		if ( 'raw' == $output )
 			return $query;
 
-		$class = str_replace( 'P2P_Side_', 'P2P_List_', get_class( $side ) );
-
-		return new $class( $query );
+		return $side->get_list( $query );
 	}
 
 	protected function recognize( $item, $which = 'current' ) {

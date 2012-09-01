@@ -321,7 +321,7 @@ function p2p_list_posts( $posts, $args = array() ) {
 	if ( is_a( $posts, 'P2P_List' ) ) {
 		$list = $posts;
 	} else {
-		$list = new P2P_List_Post( $posts );
+		$list = new P2P_List( $posts, 'P2P_Item_Post' );
 	}
 
 	return $list->render( $args );
