@@ -455,6 +455,19 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertTrue( $compare_ids( $page, $post[1] ) );
 	}
 
+	function test_connect_indeterminate() {
+		$ctype = @p2p_register_connection_type( array(
+			'from' => 'actor',
+			'to' => array( 'actor', 'movie' ),
+			'reciprocal' => true,
+		) );
+
+		$this->assertInternalType( 'int', $ctype->connect(
+			$this->generate_post( 'movie' ),
+			$this->generate_post( 'actor' )
+		) );
+	}
+
 	function test_p2p_list_posts() {
 		$list = array_map( 'get_post', $this->generate_posts( 'post', 2 ) );
 
