@@ -14,42 +14,6 @@ class P2P_Debug {
 		self::posts_to_users();
 		self::contacts_and_tickets();
 		self::actors_and_movies();
-
-		p2p_register_connection_type( array(
-			'name' => 'videos_to_lecons',
-			'from' => 'video',
-			'to' => 'lecon',
-			'reciprocal' => true, // the relation has no hierarchy
-		) );
-
-		p2p_register_connection_type( array(
-			'name' => 'lecons_to_chapitres',
-			'from' => 'lecon',
-			'to' => 'chapitre',
-			'reciprocal' => true, // the relation has no hierarchy
-			'sortable' => 'any',
-		) );
-
-		p2p_register_connection_type( array(
-			'name' => 'formations_to_chapitres',
-			'from' => 'formation',
-			'to' => 'chapitre',
-			'reciprocal' => true, // the relation has no hierarchy
-			'sortable' => 'any'
-		) );
-
-		add_action('admin_notices', array(new P2P_Debug, 'playground'));
-	}
-
-	function playground() {
-		// TEMPLATE CODE
-		$formation = get_post();
-
-		$chapitres = new WP_Query(array (
-			'connected_type' => 'formations_to_chapitres',
-			'connected_items' => $formation,
-			'nopaging' => true,
-		));
 	}
 
 	function posts_to_attachments() {
