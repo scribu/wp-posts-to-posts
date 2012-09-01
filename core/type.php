@@ -134,8 +134,12 @@ class P2P_Connection_Type {
 		if ( !in_array( $direction, array( 'from', 'to', 'any' ) ) )
 			return false;
 
-		if ( $instantiate )
+		if ( $instantiate ) {
+			if ( $this->indeterminate )
+				return new P2P_Indeterminate_Connection_Type( $this );
+
 			return new P2P_Directed_Connection_Type( $this, $direction );
+		}
 
 		return $direction;
 	}

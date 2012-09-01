@@ -143,11 +143,8 @@ class P2P_Directed_Connection_Type {
 		return $this->abstract_query( $qv, $side, $output );
 	}
 
-	private function get_non_connectable( $item, $extra_qv ) {
+	protected function get_non_connectable( $item, $extra_qv ) {
 		$to_exclude = array();
-
-		if ( $this->indeterminate && !$this->self_connections )
-			$to_exclude[] = $item->get_id();
 
 		if ( 'one' == $this->get( 'current', 'cardinality' ) ) {
 			$to_check = 'any';
@@ -165,6 +162,18 @@ class P2P_Directed_Connection_Type {
 		return $to_exclude;
 	}
 
+	private function _check_params( $from, $to ) {
+		$from = $this->recognize( $from, 'current' );
+		if ( !$from )
+			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
+
+		$to = $this->recognize( $to, 'opposite' );
+		if ( !$to )
+			return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
+
+		return compact( 'from', 'to' );
+	}
+
 	/**
 	 * Connect two items.
 	 *
@@ -175,13 +184,11 @@ class P2P_Directed_Connection_Type {
 	 * @return int|object p2p_id or WP_Error on failure
 	 */
 	public function connect( $from, $to, $meta = array() ) {
-		$from = $this->recognize( $from, 'current' );
-		if ( !$from )
-			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
+		$r = $this->_check_params( $from, $to );
+		if ( is_wp_error( $r ) )
+			return $r;
 
-		$to = $this->recognize( $to, 'opposite' );
-		if ( !$to )
-			return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
+		extract( $r );
 
 		if ( !$this->self_connections && $from->get_id() == $to->get_id() )
 			return new WP_Error( 'self_connection', 'Connection between an element and itself is not allowed.' );
@@ -243,17 +250,11 @@ class P2P_Directed_Connection_Type {
 	 * @return int|object count or WP_Error on failure
 	 */
 	public function disconnect( $from, $to ) {
-		$from = $this->recognize( $from, 'current' );
-		if ( !$from )
-			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
+		$r = $this->_check_params( $from, $to );
+		if ( is_wp_error( $r ) )
+			return $r;
 
-		if ( 'any' != $to ) {
-			$to = $this->recognize( $to, 'opposite' );
-			if ( !$to )
-				return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
-		}
-
-		return $this->delete_connections( compact( 'from', 'to' ) );
+		return $this->delete_connections( $r );
 	}
 
 	public function get_p2p_id( $from, $to ) {

@@ -23,7 +23,8 @@ function _p2p_load() {
 
 	_p2p_load_files( "$base/core", array(
 		'storage', 'query', 'query-post', 'query-user', 'url-query',
-		'util', 'item', 'list', 'side', 'type-factory', 'type', 'directed-type',
+		'util', 'item', 'list', 'side',
+		'type-factory', 'type', 'directed-type', 'indeterminate-type',
 		'api', 'extra'
 	) );
 
