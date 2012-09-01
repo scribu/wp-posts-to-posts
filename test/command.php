@@ -20,7 +20,7 @@ class P2P_CLI_Command extends WP_CLI_Command {
 
 		$directed = $ctype->set_direction( 'from' );
 
-		$side = $directed->get_current( 'side' );
+		$side = $directed->get( 'current', 'side' );
 
 		$extra_qv = array( 'p2p:per_page' => $n );
 		$extra_qv = $side->get_base_qv( $side->translate_qv( $extra_qv ) );

@@ -63,7 +63,7 @@ class P2P_Box_Factory extends P2P_Factory {
 	}
 
 	private static function show_box( $directed, $post ) {
-		$show = $directed->get_opposite( 'side' )->can_edit_connections();
+		$show = $directed->get( 'opposite', 'side' )->can_edit_connections();
 
 		return apply_filters( 'p2p_admin_box_show', $show, $directed, $post );
 	}
@@ -71,11 +71,11 @@ class P2P_Box_Factory extends P2P_Factory {
 	private function create_box( $directed ) {
 		$box_args = $this->queue[ $directed->name ];
 
-		$title_class = 'P2P_Field_Title_' . ucfirst( $directed->get_opposite( 'object' ) );
+		$title_class = 'P2P_Field_Title_' . ucfirst( $directed->get( 'opposite', 'object' ) );
 
 		$columns = array(
 			'delete' => new P2P_Field_Delete,
-			'title' => new $title_class( $directed->get_opposite( 'labels' )->singular_name ),
+			'title' => new $title_class( $directed->get( 'opposite', 'labels' )->singular_name ),
 		);
 
 		foreach ( $directed->fields as $key => $data ) {

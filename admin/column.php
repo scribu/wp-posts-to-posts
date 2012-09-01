@@ -29,7 +29,7 @@ abstract class P2P_Column {
 			$this->ctype->name
 		);
 
-		$columns[ $this->column_id ] = $this->ctype->get_current( 'title' );
+		$columns[ $this->column_id ] = $this->ctype->get( 'current', 'title' );
 
 		return $columns;
 	}

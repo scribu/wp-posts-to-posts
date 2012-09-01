@@ -25,7 +25,7 @@ class P2P_Box {
 
 		$this->ctype = $ctype;
 
-		$this->labels = $this->ctype->get_opposite( 'labels' );
+		$this->labels = $this->ctype->get( 'opposite', 'labels' );
 	}
 
 	public function init_scripts() {
@@ -60,7 +60,7 @@ class P2P_Box {
 		$data_attr = array(
 			'p2p_type' => $this->ctype->name,
 			'duplicate_connections' => $this->ctype->duplicate_connections,
-			'cardinality' => $this->ctype->get_opposite( 'cardinality' ),
+			'cardinality' => $this->ctype->get( 'opposite', 'cardinality' ),
 			'direction' => $this->ctype->get_direction()
 		);
 
@@ -98,7 +98,7 @@ class P2P_Box {
 			'label' => $this->labels->create,
 		);
 
-		if ( 'one' == $this->ctype->get_opposite( 'cardinality' ) ) {
+		if ( 'one' == $this->ctype->get( 'opposite', 'cardinality' ) ) {
 			if ( !empty( $this->connected_items ) )
 				$data['hide'] = 'style="display:none"';
 		}
@@ -207,7 +207,7 @@ class P2P_Box {
 		$args = array(
 			'post_title' => $_POST['post_title'],
 			'post_author' => get_current_user_id(),
-			'post_type' => $this->ctype->get_opposite( 'side' )->first_post_type()
+			'post_type' => $this->ctype->get( 'opposite', 'side' )->first_post_type()
 		);
 
 		$from = absint( $_POST['from'] );
@@ -238,7 +238,7 @@ class P2P_Box {
 				)
 			);
 		} else {
-			$item = $this->ctype->get_opposite('side')->item_recognize( $to );
+			$item = $this->ctype->get( 'opposite','side')->item_recognize( $to );
 
 			$r = array(
 				'row' => $this->connection_row( $p2p_id, $item, true )
@@ -276,7 +276,7 @@ class P2P_Box {
 		if ( !$this->args->can_create_post )
 			return false;
 
-		$side = $this->ctype->get_opposite( 'side' );
+		$side = $this->ctype->get( 'opposite', 'side' );
 
 		return $side->can_create_item();
 	}

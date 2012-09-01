@@ -34,22 +34,27 @@ class P2P_Directed_Connection_Type {
 		return $this->set_direction( _p2p_flip_direction( $this->direction ) );
 	}
 
-	public function get_opposite( $key ) {
-		$direction = ( 'to' == $this->direction ) ? 'from' : 'to';
+	public function get( $side, $key ) {
+		switch ( $side ) {
+		case 'current':
+			$map = array(
+				'to' => 'to',
+				'from' => 'from',
+				'any' => 'from'
+			);
+			break;
+		case 'opposite':
+			$map = array(
+				'to' => 'from',
+				'from' => 'to',
+				'any' => 'to'
+			);
+			break;
+		}
 
-		return $this->get_arg( $key, $direction );
-	}
-
-	public function get_current( $key ) {
-		$direction = ( 'to' == $this->direction ) ? 'to' : 'from';
-
-		return $this->get_arg( $key, $direction );
-	}
-
-	private function get_arg( $key, $direction ) {
 		$arg = $this->ctype->$key;
 
-		return $arg[$direction];
+		return $arg[ $map[ $this->direction ] ];
 	}
 
 	private function abstract_query( $qv, $side, $output = 'abstract' ) {
@@ -61,6 +66,10 @@ class P2P_Directed_Connection_Type {
 		$class = str_replace( 'P2P_Side_', 'P2P_List_', get_class( $side ) );
 
 		return new $class( $query );
+	}
+
+	protected function recognize( $item, $side = 'current' ) {
+		return $this->get( $side, 'side' )->item_recognize( $item );
 	}
 
 	/**
@@ -90,7 +99,7 @@ class P2P_Directed_Connection_Type {
 	 * @return object
 	 */
 	public function get_connected( $item, $extra_qv = array(), $output = 'raw' ) {
-		$side = $this->get_opposite( 'side' );
+		$side = $this->get( 'opposite', 'side' );
 
 		$args = array_merge( $side->translate_qv( $extra_qv ), array(
 			'connected_type' => $this->name,
@@ -121,9 +130,9 @@ class P2P_Directed_Connection_Type {
 	 * @param mixed $arg The item to find connection candidates for.
 	 */
 	public function get_connectable( $arg, $extra_qv = array(), $output = 'raw' ) {
-		$side = $this->get_opposite( 'side' );
+		$side = $this->get( 'opposite', 'side' );
 
-		$item = $this->get_current( 'side' )->item_recognize( $arg );
+		$item = $this->recognize( $arg );
 
 		$extra_qv['p2p:exclude'] = $this->get_non_connectable( $item, $extra_qv );
 
@@ -140,7 +149,7 @@ class P2P_Directed_Connection_Type {
 		if ( $this->indeterminate && !$this->self_connections )
 			$to_exclude[] = $item->get_id();
 
-		if ( 'one' == $this->get_current( 'cardinality' ) ) {
+		if ( 'one' == $this->get( 'current', 'cardinality' ) ) {
 			$to_check = 'any';
 		} elseif ( !$this->duplicate_connections ) {
 			$to_check = $item;
@@ -166,11 +175,11 @@ class P2P_Directed_Connection_Type {
 	 * @return int|object p2p_id or WP_Error on failure
 	 */
 	public function connect( $from, $to, $meta = array() ) {
-		$from = $this->get_current( 'side' )->item_recognize( $from );
+		$from = $this->recognize( $from, 'current' );
 		if ( !$from )
 			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
 
-		$to = $this->get_opposite( 'side' )->item_recognize( $to );
+		$to = $this->recognize( $to, 'opposite' );
 		if ( !$to )
 			return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
 
@@ -180,12 +189,12 @@ class P2P_Directed_Connection_Type {
 		if ( !$this->duplicate_connections && $this->get_p2p_id( $from, $to ) )
 			return new WP_Error( 'duplicate_connection', 'Duplicate connections are not allowed.' );
 
-		if ( 'one' == $this->get_opposite( 'cardinality' ) ) {
+		if ( 'one' == $this->get( 'opposite', 'cardinality' ) ) {
 			if ( $this->has_connections( $from ) )
 				return new WP_Error( 'cardinality_opposite', 'Cardinality problem (opposite).' );
 		}
 
-		if ( 'one' == $this->get_current( 'cardinality' ) ) {
+		if ( 'one' == $this->get( 'current', 'cardinality' ) ) {
 			if ( $this->has_connections( $to ) )
 				return new WP_Error( 'cardinality_current', 'Cardinality problem (current).' );
 		}
@@ -234,12 +243,12 @@ class P2P_Directed_Connection_Type {
 	 * @return int|object count or WP_Error on failure
 	 */
 	public function disconnect( $from, $to ) {
-		$from = $this->get_current( 'side' )->item_recognize( $from );
+		$from = $this->recognize( $from, 'current' );
 		if ( !$from )
 			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
 
 		if ( 'any' != $to ) {
-			$to = $this->get_opposite( 'side' )->item_recognize( $to );
+			$to = $this->recognize( $to, 'opposite' );
 			if ( !$to )
 				return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
 		}
