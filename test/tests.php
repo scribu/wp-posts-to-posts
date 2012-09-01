@@ -469,6 +469,9 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( $actor->ID, $candidates->posts[0]->ID );
 
 		$this->assertInternalType( 'int', $ctype->connect( $movie, $actor ) );
+
+		$this->assertNotEmpty( $ctype->get_connected( $movie, array(), 'abstract' )->items );
+		$this->assertNotEmpty( $ctype->get_connected( $actor, array(), 'abstract' )->items );
 	}
 
 	function test_p2p_list_posts() {

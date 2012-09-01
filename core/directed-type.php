@@ -57,7 +57,10 @@ class P2P_Directed_Connection_Type {
 		return $arg[ $map[ $this->direction ] ];
 	}
 
-	private function abstract_query( $qv, $side, $output = 'abstract' ) {
+	private function abstract_query( $qv, $which, $output = 'abstract' ) {
+		$side = $this->get( $which, 'side' );
+
+		$qv = $this->get_final_qv( $qv, $which );
 		$query = $side->do_query( $qv );
 
 		if ( 'raw' == $output )
@@ -68,8 +71,14 @@ class P2P_Directed_Connection_Type {
 		return new $class( $query );
 	}
 
-	protected function recognize( $item, $side = 'current' ) {
-		return $this->get( $side, 'side' )->item_recognize( $item );
+	protected function recognize( $item, $which = 'current' ) {
+		return $this->get( $which, 'side' )->item_recognize( $item );
+	}
+
+	public function get_final_qv( $q, $which = 'current' ) {
+		$side = $this->get( $which, 'side' );
+
+		return $side->get_base_qv( $side->translate_qv( $q ) );
 	}
 
 	/**
@@ -99,15 +108,13 @@ class P2P_Directed_Connection_Type {
 	 * @return object
 	 */
 	public function get_connected( $item, $extra_qv = array(), $output = 'raw' ) {
-		$side = $this->get( 'opposite', 'side' );
-
-		$args = array_merge( $side->translate_qv( $extra_qv ), array(
+		$args = array_merge( $extra_qv, array(
 			'connected_type' => $this->name,
 			'connected_direction' => $this->direction,
 			'connected_items' => $item
 		) );
 
-		return $this->abstract_query( $args, $side, $output );
+		return $this->abstract_query( $args, 'opposite', $output );
 	}
 
 	public function get_orderby_key() {
@@ -136,11 +143,9 @@ class P2P_Directed_Connection_Type {
 
 		$extra_qv['p2p:exclude'] = $this->get_non_connectable( $item, $extra_qv );
 
-		$extra_qv = $side->get_base_qv( $side->translate_qv( $extra_qv ) );
-
 		$qv = apply_filters( 'p2p_connectable_args', $extra_qv, $this, $item->get_object() );
 
-		return $this->abstract_query( $qv, $side, $output );
+		return $this->abstract_query( $qv, 'opposite', $output );
 	}
 
 	protected function get_non_connectable( $item, $extra_qv ) {

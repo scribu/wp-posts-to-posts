@@ -23,9 +23,8 @@ class P2P_CLI_Command extends WP_CLI_Command {
 		$side = $directed->get( 'current', 'side' );
 
 		$extra_qv = array( 'p2p:per_page' => $n );
-		$extra_qv = $side->get_base_qv( $side->translate_qv( $extra_qv ) );
 
-		$candidate = $directed->get_connectable( 'any', array(), 'abstract' );
+		$candidate = $directed->get_connectable( 'any', $extra_qv, 'abstract' );
 
 		$count = 0;
 

@@ -83,7 +83,7 @@ class P2P_Query {
 				'connected_meta' => $directed->data
 			) );
 
-			$q = $directed->get( 'opposite', 'side' )->get_base_qv( $q );
+			$q = $directed->get_final_qv( $q, 'opposite' );
 
 			$q = apply_filters( 'p2p_connected_args', $q, $directed, $item );
 		}
@@ -108,7 +108,9 @@ class P2P_Query {
 		return $this->$key;
 	}
 
-	private function do_other_query( $side ) {
+	private function do_other_query( $directed, $which ) {
+		$side = $directed->get( $which, 'side' );
+
 		$qv = array_merge( $this->query, array(
 			'fields' => 'ids',
 			'p2p:per_page' => -1
@@ -117,7 +119,9 @@ class P2P_Query {
 		if ( 'any' != $this->items )
 			$qv['p2p:include'] = _p2p_normalize( $this->items );
 
-		return $side->capture_query( $side->get_base_qv( $side->translate_qv( $qv ) ) );
+		$qv = $directed->get_final_qv( $qv, $which );
+
+		return $side->capture_query( $qv );
 	}
 
 	/**
@@ -148,7 +152,7 @@ class P2P_Query {
 			case 'to':
 				list( $from, $to ) = $fields;
 
-				$search = $this->do_other_query( $directed->get( 'current', 'side' ) );
+				$search = $this->do_other_query( $directed, 'current' );
 
 				$part .= " AND $main_id_column = $wpdb->p2p.$from";
 				$part .= " AND $wpdb->p2p.$to IN ($search)";
@@ -159,8 +163,8 @@ class P2P_Query {
 					($main_id_column = $wpdb->p2p.p2p_to AND $wpdb->p2p.p2p_from IN (%s)) OR
 					($main_id_column = $wpdb->p2p.p2p_from AND $wpdb->p2p.p2p_to IN (%s))
 				)",
-					$this->do_other_query( $directed->get( 'current', 'side' ) ),
-					$this->do_other_query( $directed->get( 'opposite', 'side' ) )
+					$this->do_other_query( $directed, 'current' ),
+					$this->do_other_query( $directed, 'opposite' )
 				);
 			}
 
