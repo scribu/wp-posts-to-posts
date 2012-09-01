@@ -8,8 +8,16 @@ abstract class P2P_Item {
 		$this->item = $item;
 	}
 
+	function __isset( $key ) {
+		return isset( $this->item->$key );
+	}
+
 	function __get( $key ) {
 		return $this->item->$key;
+	}
+
+	function __set( $key, $value ) {
+		$this->item->$key = $value;
 	}
 
 	function get_object() {
