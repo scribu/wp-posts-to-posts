@@ -1,0 +1,159 @@
+# Translation of 1.4.1 in Dutch
+# This file is distributed under the same license as the 1.4.1 package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2012-09-07 15:36+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: 1.4.1\n"
+"POT-Creation-Date: \n"
+"Last-Translator: Remco Tolsma <remco@pronamic.nl>\n"
+"Language-Team: \n"
+
+#: admin/box.php:38
+msgid "Are you sure you want to delete all connections?"
+msgstr "Weet je zeker dat je alle verbindingen wilt verwijderen?"
+
+#: admin/box.php:114
+msgid "Search"
+msgstr "Zoeken"
+
+#: admin/box.php:191
+msgid "previous"
+msgstr "vorige"
+
+#: admin/box.php:192
+msgid "next"
+msgstr "volgende"
+
+#: admin/box.php:193
+msgid "of"
+msgstr "of"
+
+#: admin/box.php:236
+msgid "Can't create connection: %s"
+msgstr "Kan verbinding niet maken: %s"
+
+#: admin/factory.php:30
+msgid " (from)"
+msgstr "(van)"
+
+#: admin/factory.php:31
+msgid " (to)"
+msgstr "(naar)"
+
+#: admin/fields.php:7
+msgid "Delete all connections"
+msgstr "Verwijder alle verbindingen"
+
+#: admin/fields.php:16
+msgid "Delete connection"
+msgstr "Verwijder verbinding"
+
+#: admin/tools.php:7
+msgid "Connection Types"
+msgstr "Verbindingstypen"
+
+#: admin/tools.php:41
+msgid "<em>%s</em> is not a registered connection type."
+msgstr "<em>%s</em> is niet een geregistreerde verbindingstype."
+
+#: admin/tools.php:50
+msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
+msgstr "%1$s verbindingen omgezet van <em>%2$s</em> naar <em>%3$s</em>."
+
+#: admin/tools.php:64
+msgid "Name"
+msgstr "Naam"
+
+#: admin/tools.php:65
+msgid "Information"
+msgstr "Informatie"
+
+#: admin/tools.php:66
+msgid "Connections"
+msgstr "Verbindingen"
+
+#: admin/tools.php:74
+msgid "No connection types registered."
+msgstr "Geen verbindingstypen geregistreerd."
+
+#: admin/tools.php:76
+msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
+msgstr ""
+"Bekijk <a href=\"%s\">de wiki</a> om een verbindingstype te registeren."
+
+#: admin/tools.php:93
+msgid "Convert to registered connection type:"
+msgstr "Omzetten naar geregistreerde verbindingstype:"
+
+#: admin/tools.php:129
+msgid "Go"
+msgstr "Go"
+
+#: core/extra.php:16
+msgid "Posts 2 Posts"
+msgstr "Posts 2 Posts"
+
+#: core/extra.php:17
+msgid "A list of posts connected to the current post"
+msgstr "Een lijst van berichten verbonden aan het huidige bericht."
+
+#: core/extra.php:34
+msgid "Title:"
+msgstr "Titel:"
+
+#: core/extra.php:41
+msgid "Connection type:"
+msgstr "Verbindingstype:"
+
+#: core/extra.php:46
+msgid "Connection listing:"
+msgstr "Verbinding lijst:"
+
+#: core/extra.php:52
+msgid "connected"
+msgstr "verbonden"
+
+#: core/extra.php:53
+msgid "related"
+msgstr "gerelateerd"
+
+#: core/side.php:220
+msgid "Users"
+msgstr "Gebruikers"
+
+#: core/side.php:229
+msgid "User"
+msgstr "Gebruiker"
+
+#: core/side.php:230
+msgid "Search Users"
+msgstr "Gebruikers zoeken"
+
+#: core/side.php:231
+msgid "No users found."
+msgstr "Geen gebruikers gevonden."
+
+#: core/type.php:79
+msgid "Create connections"
+msgstr "Verbindingen maken"
+
+#: core/type.php:102
+msgid "Connected %s"
+msgstr "Verbonden %s"
+
+#: scb/AdminPage.php:172
+msgid "Settings <strong>saved</strong>."
+msgstr "Instellingen <strong>opgeslagen</strong>."
+
+#: scb/AdminPage.php:185 scb/AdminPage.php:196
+msgid "Save Changes"
+msgstr "Wijzigingen opslaan"
+
+#: scb/AdminPage.php:346
+msgid "Settings"
+msgstr "Instellingen"
