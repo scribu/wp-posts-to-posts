@@ -457,6 +457,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 	function test_connect_indeterminate() {
 		$ctype = @p2p_register_connection_type( array(
+			'name' => 'reciprocal',
 			'from' => 'actor',
 			'to' => array( 'actor', 'movie' ),
 			'reciprocal' => true,
@@ -472,6 +473,30 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$this->assertNotEmpty( $ctype->get_connected( $movie, array(), 'abstract' )->items );
 		$this->assertNotEmpty( $ctype->get_connected( $actor, array(), 'abstract' )->items );
+	}
+
+	function test_non_reciprocal() {
+		$ctype = @p2p_register_connection_type( array(
+			'name' => 'non_reciprocal',
+			'from' => 'actor',
+			'to' => 'actor',
+			'reciprocal' => false,
+			'cardinality' => 'one-to-many',
+		) );
+
+		$actors = $this->generate_posts( 'actor', 4 );
+
+		$candidates = $ctype->get_connectable( $actors[0] );
+		$this->assertEquals( $actors[1], $candidates->posts[0]->ID );
+
+		$this->assertInternalType( 'int', $ctype->connect( $actors[1], $actors[2] ) );
+		$this->assertInternalType( 'int', $ctype->connect( $actors[0], $actors[1] ) );
+
+		$directed = $ctype->set_direction( 'from' );
+		$this->assertNotEmpty( $directed->get_connected( 'any', array(), 'abstract' )->items );
+
+		$directed = $ctype->set_direction( 'to' );
+		$this->assertNotEmpty( $directed->get_connected( 'any', array(), 'abstract' )->items );
 	}
 
 	function test_p2p_list_posts() {
