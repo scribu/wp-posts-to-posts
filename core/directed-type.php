@@ -165,14 +165,18 @@ class P2P_Directed_Connection_Type {
 		return $to_exclude;
 	}
 
-	private function _check_params( $from, $to ) {
-		$from = $this->recognize( $from, 'current' );
+	private function _check_params( $from_arg, $to_arg ) {
+		$from = $this->recognize( $from_arg, 'current' );
 		if ( !$from )
 			return new WP_Error( 'first_parameter', 'Invalid first parameter.' );
 
-		$to = $this->recognize( $to, 'opposite' );
-		if ( !$to )
-			return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
+		if ( 'any' == $to_arg ) {
+			$to = 'any';
+		} else {
+			$to = $this->recognize( $to_arg, 'opposite' );
+			if ( !$to )
+				return new WP_Error( 'second_parameter', 'Invalid second parameter.' );
+		}
 
 		return compact( 'from', 'to' );
 	}
