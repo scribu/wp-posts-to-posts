@@ -20,14 +20,14 @@ class P2P_URL_Query {
 
 	// Add the query vars to the global user query (on the user admin screen)
 	static function user_query( $query ) {
-		if ( defined( 'DOING_AJAX' ) )
+		if ( !function_exists( 'get_current_screen' ) )
 			return;
 
-		// Restrict to users screen
-		if ( 'users' != get_current_screen()->id )
+		$current_screen = get_current_screen();
+
+		if ( $current_screen && 'users' != $current_screen->id )
 			return;
 
-		// Don't overwrite capturing query
 		if ( isset( $query->_p2p_capture ) )
 			return;
 
