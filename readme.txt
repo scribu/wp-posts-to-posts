@@ -55,6 +55,10 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 = 1.4.2 =
 * fixed each_connected() returning wrapped objects
+* fixed issue with user queries and get_current_screen()
+* fixed "Delete all connections" button
+* fixed bugs with reciprocal and non-reciprocal indeterminate connection types
+* added Dutch translation
 
 = 1.4.1 =
 * fixed errors in admin box
