@@ -205,7 +205,7 @@ class P2P_Directed_Connection_Type {
 		}
 
 		if ( 'one' == $this->get( 'current', 'cardinality' ) ) {
-			if ( $this->has_connections( $to ) )
+			if ( $this->flip_direction()->has_connections( $to ) )
 				return new WP_Error( 'cardinality_current', 'Cardinality problem (current).' );
 		}
 
@@ -229,7 +229,7 @@ class P2P_Directed_Connection_Type {
 	protected function has_connections( $item ) {
 		$extra_qv = array( 'p2p:per_page' => 1 );
 
-		$connections = $this->lose_direction()->get_connected( $item, $extra_qv, 'abstract' );
+		$connections = $this->get_connected( $item, $extra_qv, 'abstract' );
 
 		return !empty( $connections->items );
 	}
