@@ -14,3 +14,5 @@ rm -rf /tmp/p2p-coverage
 cd ./test
 
 phpunit --bootstrap bootstrap.php --configuration phpunit.xml --coverage-html /tmp/p2p-coverage tests.php
+
+x-www-browser /tmp/p2p-coverage/index.html
