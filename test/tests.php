@@ -16,6 +16,18 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		self::assertThat( $args, $constraint );
 	}
 
+	protected function assertIdsMatch( $id_list, $candidate, $ctype ) {
+		$collection = $ctype->get_connectable( $candidate, array(), 'abstract' );
+		$resulting_ids = wp_list_pluck( $collection->items, 'ID' );
+
+		sort( $id_list );
+		sort( $resulting_ids );
+
+		$constraint = new PHPUnit_Framework_Constraint_IsEqual( $id_list );
+
+		self::assertThat( $resulting_ids, $constraint );
+	}
+
 	function setUp() {
 		parent::setUp();
 
@@ -446,21 +458,11 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 			'to' => 'page',
 		) );
 
-		$compare_ids = function( $id_list, $candidate ) use ( $ctype ) {
-			$collection = $ctype->get_connectable( $candidate, array(), 'abstract' );
-			$resulting_ids = wp_list_pluck( $collection->items, 'ID' );
-
-			sort( $id_list );
-			sort( $resulting_ids );
-
-			return $id_list == $resulting_ids;
-		};
-
 		$ctype->connect( $post[0], $page[0] );
 
-		$this->assertTrue( $compare_ids( array( $page[1] ), $post[0] ) );
+		$this->assertIdsMatch( array( $page[1] ), $post[0], $ctype );
 
-		$this->assertTrue( $compare_ids( $page, $post[1] ) );
+		$this->assertIdsMatch( $page, $post[1], $ctype );
 	}
 
 	function test_connect_indeterminate() {
