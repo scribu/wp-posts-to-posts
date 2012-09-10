@@ -1,6 +1,20 @@
 <?php
 
+require __DIR__ . '/constraints.php';
+
 class P2P_Unit_Tests extends WP_UnitTestCase {
+
+	protected function assertConnectionDoesntExist( $ctype, $args ) {
+		$cb = function( $args ) use ( $ctype ) {
+			return !p2p_connection_exists( $ctype, $args );
+		};
+
+		$desc = sprintf( "'%s' connection doesn't exist", $ctype );
+
+		$constraint = new P2P_Constraint( $desc, $cb );
+
+		self::assertThat( $args, $constraint );
+	}
 
 	function setUp() {
 		parent::setUp();
@@ -44,7 +58,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		wp_delete_post( $actor->ID, true );
 
-		$this->assertFalse( p2p_connection_exists( 'actor_to_movie', array( 'from' => $actor->ID ) ) );
+		$this->assertConnectionDoesntExist( 'actor_to_movie', array( 'from' => $actor->ID ) );
 	}
 
 	function test_storage_user() {
@@ -58,7 +72,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		wp_delete_user( $user_id, true );
 
-		$this->assertFalse( p2p_connection_exists( 'posts_to_users', array( 'from' => $post_id ) ) );
+		$this->assertConnectionDoesntExist( 'posts_to_users', array( 'from' => $post_id ) );
 	}
 
 	function test_annonymous_ctypes() {
