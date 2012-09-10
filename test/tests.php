@@ -190,12 +190,11 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		// create connection
 		$this->assertFalse( is_wp_error( $ctype->connect( $actor_id, $movie_id ) ) );
 
-		// 'self_connections'
 		$r = p2p_type( 'movies_to_movies' )->connect( $movie_id, $movie_id );
 		$this->assertEquals( 'self_connection', $r->get_error_code() );
 
-		// 'duplicate_connections'
-		$this->assertTrue( is_wp_error( $ctype->connect( $actor_id, $movie_id ) ) );
+		$r = $ctype->connect( $actor_id, $movie_id );
+		$this->assertEquals( 'duplicate_connection', $r->get_error_code() );
 
 		// get connected
 		$this->assertEquals( array( $movie_id ), $ctype->get_connected( $actor_id, array( 'fields' => 'ids' ) )->posts );
@@ -221,13 +220,9 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertFalse( is_wp_error( $ctype->connect( $actor_ids[0], $movie_ids[1] ) ) );
 
 		$r = $ctype->connect( $actor_ids[1], $movie_ids[0] );
-
-		$this->assertTrue( is_wp_error( $r ) );
 		$this->assertEquals( 'cardinality_current', $r->get_error_code() );
 
 		$r = $ctype->connect( $movie_ids[0], $actor_ids[1] );
-
-		$this->assertTrue( is_wp_error( $r ) );
 		$this->assertEquals( 'cardinality_opposite', $r->get_error_code() );
 	}
 
@@ -237,9 +232,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 			'connected_items' => $this->generate_post( 'post' )
 		);
 
-		$p2p_q = P2P_Query::create_from_qv( $qv, 'post' );
-
-		$this->assertTrue( is_wp_error( $p2p_q ) );
+		$r = P2P_Query::create_from_qv( $qv, 'post' );
+		$this->assertEquals( 'no_direction', $r->get_error_code() );
 	}
 
 	function test_extra_qv() {
