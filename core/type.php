@@ -6,8 +6,6 @@ class P2P_Connection_Type {
 
 	protected $arrow = '&rarr;';
 
-	public $indeterminate;
-
 	public $side;
 
 	public $cardinality;
