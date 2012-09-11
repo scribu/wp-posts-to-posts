@@ -7,11 +7,23 @@ class P2P_Indeterminate_Connection_Type extends P2P_Connection_Type {
 	protected $arrow = '&harr;';
 
 	protected function choose_direction( $direction ) {
-		return $this->reciprocal ? 'any' : 'from';
+		return 'from';
 	}
 
 	function is_reciprocal() {
-		return $this->reciprocal;
+		return false;
+	}
+}
+
+
+class P2P_Reciprocal_Connection_Type extends P2P_Indeterminate_Connection_Type {
+
+	protected function choose_direction( $direction ) {
+		return 'any';
+	}
+
+	function is_reciprocal() {
+		return true;
 	}
 }
 

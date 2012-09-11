@@ -62,7 +62,10 @@ class P2P_Connection_Type_Factory {
 		$sides = self::create_sides( $args );
 
 		if ( $sides['from']->is_same_type( $sides['to'] ) && $sides['from']->is_indeterminate( $sides['to'] ) ) {
-			$class = 'P2P_Indeterminate_Connection_Type';
+			if ( $args['reciprocal'] )
+				$class = 'P2P_Reciprocal_Connection_Type';
+			else
+				$class = 'P2P_Indeterminate_Connection_Type';
 		} else {
 			$class = 'P2P_Connection_Type';
 		}
