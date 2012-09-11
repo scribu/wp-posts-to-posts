@@ -48,11 +48,7 @@ class P2P_Connection_Type_Factory {
 		}
 
 		if ( !$args['name'] ) {
-			$args['name'] = md5( serialize( array_values( wp_array_slice_assoc( $args, array(
-				'from_object', 'to_object',
-				'from_query_vars', 'to_query_vars',
-				'data'
-			) ) ) ) );
+			$args['name'] = self::generate_name( $args );
 		}
 
 		$args = apply_filters( 'p2p_connection_type_args', $args );
@@ -70,6 +66,16 @@ class P2P_Connection_Type_Factory {
 		self::$instances[ $ctype->name ] = $ctype;
 
 		return $ctype;
+	}
+
+	private static function generate_name( $args ) {
+		$vals = array_values( wp_array_slice_assoc( $args, array(
+			'from_object', 'to_object',
+			'from_query_vars', 'to_query_vars',
+			'data'
+		) ) );
+
+		return md5( serialize( $vals ) );
 	}
 
 	private static function create_sides( &$args ) {
