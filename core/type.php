@@ -17,11 +17,7 @@ class P2P_Connection_Type {
 	public function __construct( $args ) {
 		$this->set_sides( $args );
 
-		if ( $this->object['from'] == $this->object['to'] ) {
-			$this->indeterminate = $this->side['from']->is_indeterminate( $this->side['to'] );
-		} else {
-			$args['self_connections'] = true;
-		}
+		$this->set_indeterminate( $args );
 
 		$this->set_cardinality( _p2p_pluck( $args, 'cardinality' ) );
 
@@ -43,6 +39,14 @@ class P2P_Connection_Type {
 			$class = 'P2P_Side_' . ucfirst( $this->object[ $direction ] );
 
 			$this->side[ $direction ] = new $class( _p2p_pluck( $args, $direction . '_query_vars' ) );
+		}
+	}
+
+	private function set_indeterminate( &$args ) {
+		if ( $this->object['from'] == $this->object['to'] ) {
+			$this->indeterminate = $this->side['from']->is_indeterminate( $this->side['to'] );
+		} else {
+			$args['self_connections'] = true;
 		}
 	}
 
