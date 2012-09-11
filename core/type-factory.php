@@ -59,7 +59,9 @@ class P2P_Connection_Type_Factory {
 
 		$args = apply_filters( 'p2p_connection_type_args', $args );
 
-		$ctype = new P2P_Connection_Type( $args );
+		$sides = self::create_sides( $args );
+
+		$ctype = new P2P_Connection_Type( $sides, $args );
 
 		if ( isset( self::$instances[ $ctype->name ] ) ) {
 			trigger_error( "Connection type '$ctype->name' is already defined.", E_USER_NOTICE );
@@ -68,6 +70,20 @@ class P2P_Connection_Type_Factory {
 		self::$instances[ $ctype->name ] = $ctype;
 
 		return $ctype;
+	}
+
+	private static function create_sides( &$args ) {
+		$sides = array();
+
+		foreach ( array( 'from', 'to' ) as $direction ) {
+			$object_type = _p2p_pluck( $args, $direction . '_object' );
+
+			$class = 'P2P_Side_' . ucfirst( $object_type );
+
+			$sides[ $direction ] = new $class( _p2p_pluck( $args, $direction . '_query_vars' ) );
+		}
+
+		return $sides;
 	}
 
 	public static function get_all_instances() {
