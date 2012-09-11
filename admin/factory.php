@@ -46,24 +46,7 @@ abstract class P2P_Factory {
 		if ( !$direction )
 			return array();
 
-		// TODO: split into P2P_Connection_Type classes
-		if ( $ctype->is_reciprocal() ) {
-			if ( $show_ui )
-				$directions = array( 'any' );
-			else
-				$directions = array();
-		} else {
-			if ( $ctype instanceof P2P_Indeterminate_Connection_Type ) {
-				$direction = 'any';
-			}
-
-			$directions = array_intersect(
-				_p2p_expand_direction( $show_ui ),
-				_p2p_expand_direction( $direction )
-			);
-		}
-
-		return $directions;
+		return $ctype->_directions_for_admin( $direction, $show_ui );
 	}
 
 	abstract function add_item( $directed, $object_type, $post_type, $title );

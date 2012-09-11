@@ -34,8 +34,11 @@ class P2P_Connection_Type {
 		}
 	}
 
-	function is_reciprocal() {
-		return false;
+	function _directions_for_admin( $direction, $show_ui ) {
+		return array_intersect(
+			_p2p_expand_direction( $show_ui ),
+			_p2p_expand_direction( $direction )
+		);
 	}
 
 	private function set_self_connections( &$args ) {
