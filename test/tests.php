@@ -200,7 +200,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$movie_id = $this->generate_post( 'movie' )->ID;
 
 		// create connection
-		$this->assertFalse( is_wp_error( $ctype->connect( $actor_id, $movie_id ) ) );
+		$this->assertInternalType( 'int', $ctype->connect( $actor_id, $movie_id ) );
 
 		$r = p2p_type( 'movies_to_movies' )->connect( $movie_id, $movie_id );
 		$this->assertEquals( 'self_connection', $r->get_error_code() );
@@ -228,8 +228,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$actor_ids = $this->generate_posts( 'actor', 2 );
 		$movie_ids = $this->generate_posts( 'movie', 2 );
 
-		$this->assertFalse( is_wp_error( $ctype->connect( $actor_ids[0], $movie_ids[0] ) ) );
-		$this->assertFalse( is_wp_error( $ctype->connect( $actor_ids[0], $movie_ids[1] ) ) );
+		$this->assertInternalType( 'int', $ctype->connect( $actor_ids[0], $movie_ids[0] ) );
+		$this->assertInternalType( 'int', $ctype->connect( $actor_ids[0], $movie_ids[1] ) );
 
 		$r = $ctype->connect( $actor_ids[1], $movie_ids[0] );
 		$this->assertEquals( 'cardinality_current', $r->get_error_code() );
