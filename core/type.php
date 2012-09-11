@@ -4,8 +4,6 @@ class P2P_Connection_Type {
 
 	public $indeterminate;
 
-	public $object;
-
 	public $side;
 
 	public $cardinality;
@@ -34,17 +32,20 @@ class P2P_Connection_Type {
 
 	private function set_sides( &$args ) {
 		foreach ( array( 'from', 'to' ) as $direction ) {
-			$this->object[ $direction ] = _p2p_pluck( $args, $direction . '_object' );
+			$object_type = _p2p_pluck( $args, $direction . '_object' );
 
-			$class = 'P2P_Side_' . ucfirst( $this->object[ $direction ] );
+			$class = 'P2P_Side_' . ucfirst( $object_type );
 
 			$this->side[ $direction ] = new $class( _p2p_pluck( $args, $direction . '_query_vars' ) );
 		}
 	}
 
 	private function set_indeterminate( &$args ) {
-		if ( $this->object['from'] == $this->object['to'] ) {
-			$this->indeterminate = $this->side['from']->is_indeterminate( $this->side['to'] );
+		$from_side = $this->side['from'];
+		$to_side = $this->side['to'];
+
+		if ( $from_side->get_object_type() == $to_side->get_object_type() ) {
+			$this->indeterminate = $from_side->is_indeterminate( $to_side );
 		} else {
 			$args['self_connections'] = true;
 		}
@@ -202,8 +203,8 @@ class P2P_Connection_Type {
 	}
 
 	public function direction_from_object_type( $current ) {
-		$from = $this->object['from'];
-		$to = $this->object['to'];
+		$from = $this->side['from']->get_object_type();
+		$to = $this->side['to']->get_object_type();
 
 		if ( $from == $to && $current == $from )
 			return 'any';
@@ -229,7 +230,7 @@ class P2P_Connection_Type {
 	}
 
 	private function _type_check( $direction, $object_type, $post_types ) {
-		if ( $object_type != $this->object[ $direction ] )
+		if ( $object_type != $this->side[ $direction ]->get_object_type() )
 			return false;
 
 		$side = $this->side[ $direction ];
@@ -339,9 +340,11 @@ class P2P_Connection_Type {
 		$possible_directions = array();
 
 		foreach ( array( 'from', 'to' ) as $direction ) {
-			if ( 'post' == $this->object[$direction] ) {
+			$side = $this->side[ $direction ];
+
+			if ( 'post' == $side->get_object_type() ) {
 				foreach ( $post_types as $post_type ) {
-					if ( $this->side[ $direction ]->recognize_post_type( $post_type ) ) {
+					if ( $side->recognize_post_type( $post_type ) ) {
 						$possible_directions[] = $direction;
 					}
 				}

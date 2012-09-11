@@ -2,6 +2,8 @@
 
 abstract class P2P_Side {
 
+	abstract function get_object_type();
+
 	abstract function get_title();
 	abstract function get_desc();
 	abstract function get_labels();
@@ -43,6 +45,10 @@ class P2P_Side_Post extends P2P_Side {
 
 	function __construct( $query_vars ) {
 		$this->query_vars = $query_vars;
+	}
+
+	public function get_object_type() {
+		return 'post';
 	}
 
 	public function first_post_type() {
@@ -214,6 +220,10 @@ class P2P_Side_User extends P2P_Side {
 
 	function __construct( $query_vars ) {
 		$this->query_vars = $query_vars;
+	}
+
+	function get_object_type() {
+		return 'user';
 	}
 
 	function get_desc() {
