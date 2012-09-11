@@ -485,8 +485,11 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$this->assertInternalType( 'int', $ctype->connect( $movie, $actor ) );
 
-		$this->assertNotEmpty( $ctype->get_connected( $movie, array(), 'abstract' )->items );
-		$this->assertNotEmpty( $ctype->get_connected( $actor, array(), 'abstract' )->items );
+		$collection = $ctype->get_connected( $movie, array(), 'abstract' );
+		$this->assertIdsMatch( array( $actor->ID ), $collection );
+
+		$collection = $ctype->get_connected( $actor, array(), 'abstract' );
+		$this->assertIdsMatch( array( $movie->ID ), $collection );
 	}
 
 	function test_non_reciprocal() {
@@ -507,10 +510,12 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertInternalType( 'int', $ctype->connect( $actors[0], $actors[1] ) );
 
 		$directed = $ctype->set_direction( 'from' );
-		$this->assertNotEmpty( $directed->get_connected( 'any', array(), 'abstract' )->items );
+		$collection = $directed->get_connected( 'any', array(), 'abstract' );
+		$this->assertIdsMatch( array( $actors[1], $actors[2] ), $collection );
 
 		$directed = $ctype->set_direction( 'to' );
-		$this->assertNotEmpty( $directed->get_connected( 'any', array(), 'abstract' )->items );
+		$collection = $directed->get_connected( 'any', array(), 'abstract' );
+		$this->assertIdsMatch( array( $actors[0], $actors[1] ), $collection );
 	}
 
 	function test_p2p_list_posts() {
