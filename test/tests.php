@@ -16,8 +16,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		self::assertThat( $args, $constraint );
 	}
 
-	protected function assertIdsMatch( $id_list, $candidate, $ctype ) {
-		$collection = $ctype->get_connectable( $candidate, array(), 'abstract' );
+	protected function assertIdsMatch( $id_list, $collection ) {
 		$resulting_ids = wp_list_pluck( $collection->items, 'ID' );
 
 		sort( $id_list );
@@ -460,9 +459,11 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$ctype->connect( $post[0], $page[0] );
 
-		$this->assertIdsMatch( array( $page[1] ), $post[0], $ctype );
+		$collection = $ctype->get_connectable( $post[0], array(), 'abstract' );
+		$this->assertIdsMatch( array( $page[1] ), $collection );
 
-		$this->assertIdsMatch( $page, $post[1], $ctype );
+		$collection = $ctype->get_connectable( $post[1], array(), 'abstract' );
+		$this->assertIdsMatch( $page, $collection );
 	}
 
 	function test_connect_indeterminate() {
@@ -476,8 +477,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$movie = $this->generate_post( 'movie' );
 		$actor = $this->generate_post( 'actor' );
 
-		$candidates = $ctype->get_connectable( $movie );
-		$this->assertEquals( $actor->ID, $candidates->posts[0]->ID );
+		$collection = $ctype->get_connectable( $movie, array(), 'abstract' );
+		$this->assertIdsMatch( array( $actor->ID ), $collection );
 
 		$this->assertInternalType( 'int', $ctype->connect( $movie, $actor ) );
 
@@ -496,8 +497,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$actors = $this->generate_posts( 'actor', 4 );
 
-		$candidates = $ctype->get_connectable( $actors[0] );
-		$this->assertEquals( $actors[1], $candidates->posts[0]->ID );
+		$collection = $ctype->get_connectable( $actors[0], array(), 'abstract' );
+		$this->assertIdsMatch( array_diff( $actors, array( $actors[0] ) ), $collection );
 
 		$this->assertInternalType( 'int', $ctype->connect( $actors[1], $actors[2] ) );
 		$this->assertInternalType( 'int', $ctype->connect( $actors[0], $actors[1] ) );
