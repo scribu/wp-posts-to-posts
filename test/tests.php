@@ -208,8 +208,11 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( 'duplicate_connection', $r->get_error_code() );
 
 		// get connected
-		$this->assertEquals( array( $movie_id ), $ctype->get_connected( $actor_id, array( 'fields' => 'ids' ) )->posts );
-		$this->assertEquals( array( $actor_id ), $ctype->get_connected( $movie_id, array( 'fields' => 'ids' ) )->posts );
+		$collection = $ctype->get_connected( $actor_id, array(), 'abstract' );
+		$this->assertIdsMatch( array( $movie_id ), $collection );
+
+		$collection = $ctype->get_connected( $movie_id, array(), 'abstract' );
+		$this->assertIdsMatch( array( $actor_id ), $collection );
 
 		// delete connection
 		$ctype->disconnect( $actor_id, $movie_id );
