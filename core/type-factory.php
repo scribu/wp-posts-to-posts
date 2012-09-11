@@ -59,17 +59,7 @@ class P2P_Connection_Type_Factory {
 
 		$sides = self::create_sides( $args );
 
-		$reciprocal = _p2p_pluck( $args, 'reciprocal' );
-
-		if ( $sides['from']->is_same_type( $sides['to'] ) &&
-		     $sides['from']->is_indeterminate( $sides['to'] ) ) {
-			if ( $reciprocal )
-				$class = 'P2P_Reciprocal_Connection_Type';
-			else
-				$class = 'P2P_Indeterminate_Connection_Type';
-		} else {
-			$class = 'P2P_Connection_Type';
-		}
+		$class = self::get_ctype_class( $sides, _p2p_pluck( $args, 'reciprocal' ) );
 
 		$ctype = new $class( $sides, $args );
 
@@ -94,6 +84,20 @@ class P2P_Connection_Type_Factory {
 		}
 
 		return $sides;
+	}
+
+	private static function get_ctype_class( $sides, $reciprocal ) {
+		if ( $sides['from']->is_same_type( $sides['to'] ) &&
+		     $sides['from']->is_indeterminate( $sides['to'] ) ) {
+			if ( $reciprocal )
+				$class = 'P2P_Reciprocal_Connection_Type';
+			else
+				$class = 'P2P_Indeterminate_Connection_Type';
+		} else {
+			$class = 'P2P_Connection_Type';
+		}
+
+		return $class;
 	}
 
 	public static function get_all_instances() {
