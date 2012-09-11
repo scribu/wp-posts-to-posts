@@ -183,7 +183,7 @@ class P2P_Connection_Type {
 		return $direction;
 	}
 
-	public function direction_from_item( $arg ) {
+	protected function direction_from_item( $arg ) {
 		foreach ( array( 'from', 'to' ) as $direction ) {
 			$item = $this->side[ $direction ]->item_recognize( $arg );
 
@@ -196,7 +196,7 @@ class P2P_Connection_Type {
 		return false;
 	}
 
-	public function direction_from_object_type( $current ) {
+	protected function direction_from_object_type( $current ) {
 		$from = $this->side['from']->get_object_type();
 		$to = $this->side['to']->get_object_type();
 
