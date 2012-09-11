@@ -23,8 +23,12 @@ class P2P_Indeterminate_Connection_Type extends P2P_Directed_Connection_Type {
 		$other_qv = $this->get( 'opposite', 'side' )->get_base_qv( $q );
 
 		// need to be inclusive
-		if ( isset( $other_qv['post_type'] ) )
-			_p2p_append( $args['post_type'], $other_qv['post_type'] );
+		if ( isset( $other_qv['post_type'] ) ) {
+			$args['post_type'] = array_unique( array_merge(
+				(array) $args['post_type'],
+				(array) $other_qv['post_type']
+			) );
+		}
 
 		return $args;
 	}
