@@ -2,6 +2,9 @@
 
 /** @internal */
 function _p2p_expand_direction( $direction ) {
+	if ( !$direction )
+		return array();
+
 	if ( 'any' == $direction )
 		return array( 'from', 'to' );
 	else
