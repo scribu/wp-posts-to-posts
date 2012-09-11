@@ -15,13 +15,7 @@ class P2P_Connection_Type {
 	public $labels;
 
 	public function __construct( $args ) {
-		foreach ( array( 'from', 'to' ) as $direction ) {
-			$this->object[ $direction ] = _p2p_pluck( $args, $direction . '_object' );
-
-			$class = 'P2P_Side_' . ucfirst( $this->object[ $direction ] );
-
-			$this->side[ $direction ] = new $class( _p2p_pluck( $args, $direction . '_query_vars' ) );
-		}
+		$this->set_sides( $args );
 
 		if ( $this->object['from'] == $this->object['to'] ) {
 			$this->indeterminate = $this->side['from']->is_indeterminate( $this->side['to'] );
@@ -39,6 +33,16 @@ class P2P_Connection_Type {
 
 		foreach ( $args as $key => $value ) {
 			$this->$key = $value;
+		}
+	}
+
+	private function set_sides( &$args ) {
+		foreach ( array( 'from', 'to' ) as $direction ) {
+			$this->object[ $direction ] = _p2p_pluck( $args, $direction . '_object' );
+
+			$class = 'P2P_Side_' . ucfirst( $this->object[ $direction ] );
+
+			$this->side[ $direction ] = new $class( _p2p_pluck( $args, $direction . '_query_vars' ) );
 		}
 	}
 
