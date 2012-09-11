@@ -21,6 +21,10 @@ abstract class P2P_Side {
 
 	protected $item_type;
 
+	final function is_same_type( $side ) {
+		return $this->get_object_type() == $side->get_object_type();
+	}
+
 	function item_recognize( $arg ) {
 		$class = $this->item_type;
 

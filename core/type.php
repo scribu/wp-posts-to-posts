@@ -35,7 +35,7 @@ class P2P_Connection_Type {
 		$from_side = $this->side['from'];
 		$to_side = $this->side['to'];
 
-		if ( $from_side->get_object_type() == $to_side->get_object_type() ) {
+		if ( $from_side->is_same_type( $to_side ) ) {
 			$this->indeterminate = $from_side->is_indeterminate( $to_side );
 		}
 	}
@@ -44,7 +44,7 @@ class P2P_Connection_Type {
 		$from_side = $this->side['from'];
 		$to_side = $this->side['to'];
 
-		if ( $from_side->get_object_type() != $to_side->get_object_type() ) {
+		if ( !$from_side->is_same_type( $to_side ) ) {
 			$args['self_connections'] = true;
 		}
 	}
