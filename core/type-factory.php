@@ -34,8 +34,6 @@ class P2P_Connection_Type_Factory {
 			'reciprocal' => false,
 		) );
 
-		$sides = array();
-
 		foreach ( array( 'from', 'to' ) as $direction ) {
 			$object = _p2p_pluck( $args, $direction );
 
@@ -63,7 +61,8 @@ class P2P_Connection_Type_Factory {
 
 		$reciprocal = _p2p_pluck( $args, 'reciprocal' );
 
-		if ( $sides['from']->is_same_type( $sides['to'] ) && $sides['from']->is_indeterminate( $sides['to'] ) ) {
+		if ( $sides['from']->is_same_type( $sides['to'] ) &&
+		     $sides['from']->is_indeterminate( $sides['to'] ) ) {
 			if ( $reciprocal )
 				$class = 'P2P_Reciprocal_Connection_Type';
 			else
