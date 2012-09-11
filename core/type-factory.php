@@ -61,7 +61,13 @@ class P2P_Connection_Type_Factory {
 
 		$sides = self::create_sides( $args );
 
-		$ctype = new P2P_Connection_Type( $sides, $args );
+		if ( $sides['from']->is_same_type( $sides['to'] ) && $sides['from']->is_indeterminate( $sides['to'] ) ) {
+			$class = 'P2P_Indeterminate_Connection_Type';
+		} else {
+			$class = 'P2P_Connection_Type';
+		}
+
+		$ctype = new $class( $sides, $args );
 
 		if ( isset( self::$instances[ $ctype->name ] ) ) {
 			trigger_error( "Connection type '$ctype->name' is already defined.", E_USER_NOTICE );

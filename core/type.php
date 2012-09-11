@@ -2,6 +2,10 @@
 
 class P2P_Connection_Type {
 
+	protected $directed_class = 'P2P_Directed_Connection_Type';
+
+	protected $arrow = '&rarr;';
+
 	public $indeterminate;
 
 	public $side;
@@ -15,7 +19,6 @@ class P2P_Connection_Type {
 	public function __construct( $sides, $args ) {
 		$this->side = $sides;
 
-		$this->set_indeterminate( $args );
 		$this->set_self_connections( $args );
 
 		$this->set_cardinality( _p2p_pluck( $args, 'cardinality' ) );
@@ -31,13 +34,8 @@ class P2P_Connection_Type {
 		}
 	}
 
-	private function set_indeterminate( &$args ) {
-		$from_side = $this->side['from'];
-		$to_side = $this->side['to'];
-
-		if ( $from_side->is_same_type( $to_side ) ) {
-			$this->indeterminate = $from_side->is_indeterminate( $to_side );
-		}
+	function is_reciprocal() {
+		return false;
 	}
 
 	private function set_self_connections( &$args ) {
@@ -142,7 +140,7 @@ class P2P_Connection_Type {
 			return false;
 
 		if ( $instantiate ) {
-			$class = $this->indeterminate ? 'P2P_Indeterminate_Directed_Connection_Type' : 'P2P_Directed_Connection_Type';
+			$class = $this->directed_class;
 
 			return new $class( $this, $direction );
 		}
@@ -181,9 +179,6 @@ class P2P_Connection_Type {
 	}
 
 	protected function choose_direction( $direction ) {
-		if ( $this->indeterminate )
-			return $this->reciprocal ? 'any' : 'from';
-
 		return $direction;
 	}
 
@@ -378,9 +373,7 @@ class P2P_Connection_Type {
 			$$key = $this->side[ $key ]->get_desc();
 		}
 
-		$arrow = $this->indeterminate ? '&harr;' : '&rarr;';
-
-		$label = "$from $arrow $to";
+		$label = "$from {$this->arrow} $to";
 
 		$title = $this->title[ 'from' ];
 

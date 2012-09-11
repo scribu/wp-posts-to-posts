@@ -46,13 +46,14 @@ abstract class P2P_Factory {
 		if ( !$direction )
 			return array();
 
-		if ( $ctype->indeterminate && $ctype->reciprocal ) {
+		// TODO: split into P2P_Connection_Type classes
+		if ( $ctype->is_reciprocal() ) {
 			if ( $show_ui )
 				$directions = array( 'any' );
 			else
 				$directions = array();
 		} else {
-			if ( $ctype->indeterminate ) {
+			if ( $ctype instanceof P2P_Indeterminate_Connection_Type ) {
 				$direction = 'any';
 			}
 

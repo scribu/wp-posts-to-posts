@@ -121,7 +121,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 	function test_direction_array_from() {
 		$ctype = @p2p_register_connection_type( array( 'actor', 'movie' ), 'studio' );
-		$this->assertFalse( $ctype->indeterminate );
+		$this->assertEquals( 'P2P_Connection_Type', get_class( $ctype ) );
 
 		$this->assertEquals( 'from', $ctype->find_direction( $this->generate_post( 'actor' ), false ) );
 		$this->assertEquals( 'from', $ctype->find_direction( $this->generate_post( 'movie' ), false ) );
@@ -132,7 +132,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 	function test_direction_array_to() {
 		$ctype = @p2p_register_connection_type( 'actor', array( 'movie', 'studio' ) );
-		$this->assertFalse( $ctype->indeterminate );
+		$this->assertEquals( 'P2P_Connection_Type', get_class( $ctype ) );
 
 		$this->assertEquals( 'from', $ctype->find_direction( $this->generate_post( 'actor' ), false ) );
 		$this->assertEquals( 'to', $ctype->find_direction( $this->generate_post( 'movie' ), false ) );
@@ -143,8 +143,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 	function test_direction_indeterminate() {
 		$indeterminate = p2p_type( 'movies_to_movies' );
-
-		$this->assertTrue( $indeterminate->indeterminate );
+		$this->assertEquals( 'P2P_Indeterminate_Connection_Type', get_class( $indeterminate ) );
 
 		$this->assertFalse( $indeterminate->find_direction( $this->generate_post( 'post' ) ) );
 		$this->assertEquals( 'from', $indeterminate->find_direction( $this->generate_post( 'movie' ), false ) );
