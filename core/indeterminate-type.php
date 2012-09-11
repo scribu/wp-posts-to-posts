@@ -1,6 +1,6 @@
 <?php
 
-class P2P_Indeterminate_Connection_Type extends P2P_Directed_Connection_Type {
+class P2P_Indeterminate_Directed_Connection_Type extends P2P_Directed_Connection_Type {
 
 	protected function recognize( $arg ) {
 		foreach ( array( 'current', 'opposite' ) as $side ) {

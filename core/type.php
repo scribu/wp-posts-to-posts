@@ -144,7 +144,7 @@ class P2P_Connection_Type {
 			return false;
 
 		if ( $instantiate ) {
-			$class = $this->indeterminate ? 'P2P_Indeterminate_Connection_Type' : 'P2P_Directed_Connection_Type';
+			$class = $this->indeterminate ? 'P2P_Indeterminate_Directed_Connection_Type' : 'P2P_Directed_Connection_Type';
 
 			return new $class( $this, $direction );
 		}
