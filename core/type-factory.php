@@ -34,26 +34,17 @@ class P2P_Connection_Type_Factory {
 			'reciprocal' => false,
 		) );
 
+		$sides = array();
+
 		foreach ( array( 'from', 'to' ) as $direction ) {
-			$object = _p2p_pluck( $args, $direction );
-
-			if ( 'user' == $object )
-				$args[ $direction . '_object' ] = 'user';
-			elseif ( 'attachment' == $object )
-				$args[ $direction . '_object' ] = 'attachment';
-
-			if ( 'post' == $args[ $direction . '_object' ] ) {
-				$args[ $direction . '_query_vars' ]['post_type'] = (array) $object;
-			}
+			$sides[ $direction ] = self::create_side( $args, $direction );
 		}
 
 		if ( !$args['name'] ) {
-			$args['name'] = self::generate_name( $args );
+			$args['name'] = self::generate_name( $sides, $args );
 		}
 
-		$args = apply_filters( 'p2p_connection_type_args', $args );
-
-		$sides = self::create_sides( $args );
+		$args = apply_filters( 'p2p_connection_type_args', $args, $sides );
 
 		$class = self::get_ctype_class( $sides, _p2p_pluck( $args, 'reciprocal' ) );
 
@@ -68,28 +59,34 @@ class P2P_Connection_Type_Factory {
 		return $ctype;
 	}
 
-	private static function generate_name( $args ) {
-		$vals = array_values( wp_array_slice_assoc( $args, array(
-			'from_object', 'to_object',
-			'from_query_vars', 'to_query_vars',
-			'data'
-		) ) );
+	private static function create_side( &$args, $direction ) {
+		$object = _p2p_pluck( $args, $direction );
 
-		return md5( serialize( $vals ) );
+		if ( in_array( $object, array( 'user', 'attachment' ) ) )
+			$object_type = $object;
+		else
+			$object_type = 'post';
+
+		$query_vars = _p2p_pluck( $args, $direction . '_query_vars' );
+
+		if ( 'post' == $object_type )
+			$query_vars['post_type'] = (array) $object;
+
+		$class = 'P2P_Side_' . ucfirst( $object_type );
+
+		return new $class( $query_vars );
 	}
 
-	private static function create_sides( &$args ) {
-		$sides = array();
+	private static function generate_name( $sides, $args ) {
+		$vals = array(
+			$sides['from']->get_object_type(),
+			$sides['to']->get_object_type(),
+			$sides['from']->query_vars,
+			$sides['to']->query_vars,
+			$args['data']
+		);
 
-		foreach ( array( 'from', 'to' ) as $direction ) {
-			$object_type = _p2p_pluck( $args, $direction . '_object' );
-
-			$class = 'P2P_Side_' . ucfirst( $object_type );
-
-			$sides[ $direction ] = new $class( _p2p_pluck( $args, $direction . '_query_vars' ) );
-		}
-
-		return $sides;
+		return md5( serialize( $vals ) );
 	}
 
 	private static function get_ctype_class( $sides, $reciprocal ) {
