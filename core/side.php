@@ -14,8 +14,8 @@ abstract class P2P_Side {
 	abstract function get_base_qv( $q );
 	abstract function translate_qv( $qv );
 	abstract function do_query( $args );
-	abstract function get_list( $query );
 	abstract function capture_query( $args );
+	abstract function get_list( $query );
 
 	abstract function is_indeterminate( $side );
 
@@ -108,28 +108,6 @@ class P2P_Side_Post extends P2P_Side {
 		return true;
 	}
 
-	function do_query( $args ) {
-		return new WP_Query( $args );
-	}
-
-	function get_list( $wp_query ) {
-		$list = new P2P_List( $wp_query->posts, $this->item_type );
-
-		$list->current_page = max( 1, $wp_query->get('paged') );
-		$list->total_pages = $wp_query->max_num_pages;
-
-		return $list;
-	}
-
-	function capture_query( $args ) {
-		$q = new WP_Query;
-		$q->_p2p_capture = true;
-
-		$q->query( $args );
-
-		return $q->_p2p_sql;
-	}
-
 	function translate_qv( $qv ) {
 		$map = array(
 			'include' => 'post__in',
@@ -144,6 +122,28 @@ class P2P_Side_Post extends P2P_Side {
 				$qv[$new] = _p2p_pluck( $qv, "p2p:$old" );
 
 		return $qv;
+	}
+
+	function do_query( $args ) {
+		return new WP_Query( $args );
+	}
+
+	function capture_query( $args ) {
+		$q = new WP_Query;
+		$q->_p2p_capture = true;
+
+		$q->query( $args );
+
+		return $q->_p2p_sql;
+	}
+
+	function get_list( $wp_query ) {
+		$list = new P2P_List( $wp_query->posts, $this->item_type );
+
+		$list->current_page = max( 1, $wp_query->get('paged') );
+		$list->total_pages = $wp_query->max_num_pages;
+
+		return $list;
 	}
 
 	function is_indeterminate( $side ) {
@@ -254,22 +254,28 @@ class P2P_Side_User extends P2P_Side {
 		return false;
 	}
 
+	function translate_qv( $qv ) {
+		if ( isset( $qv['p2p:include'] ) )
+			$qv['include'] = _p2p_pluck( $qv, 'p2p:include' );
+
+		if ( isset( $qv['p2p:exclude'] ) )
+			$qv['exclude'] = _p2p_pluck( $qv, 'p2p:exclude' );
+
+		if ( isset( $qv['p2p:search'] ) && $qv['p2p:search'] )
+			$qv['search'] = '*' . _p2p_pluck( $qv, 'p2p:search' ) . '*';
+
+		if ( isset( $qv['p2p:page'] ) && $qv['p2p:page'] > 0 ) {
+			$qv['number'] = $qv['p2p:per_page'];
+			$qv['offset'] = $qv['p2p:per_page'] * ( $qv['p2p:page'] - 1 );
+		}
+
+		return $qv;
+	}
+
 	function do_query( $args ) {
 		return new WP_User_Query( $args );
 	}
 
-	function get_list( $query ) {
-		$list = new P2P_List( $query->get_results(), $this->item_type );
-
-		$qv = $query->query_vars;
-
-		if ( isset( $qv['p2p:page'] ) ) {
-			$list->current_page = $qv['p2p:page'];
-			$list->total_pages = ceil( $query->get_total() / $qv['p2p:per_page'] );
-		}
-
-		return $list;
-	}
 	function capture_query( $args ) {
 		$args['count_total'] = false;
 
@@ -301,22 +307,17 @@ class P2P_Side_User extends P2P_Side {
 		return "SELECT $uq->query_fields $uq->query_from $uq->query_where $uq->query_orderby $uq->query_limit";
 	}
 
-	function translate_qv( $qv ) {
-		if ( isset( $qv['p2p:include'] ) )
-			$qv['include'] = _p2p_pluck( $qv, 'p2p:include' );
+	function get_list( $query ) {
+		$list = new P2P_List( $query->get_results(), $this->item_type );
 
-		if ( isset( $qv['p2p:exclude'] ) )
-			$qv['exclude'] = _p2p_pluck( $qv, 'p2p:exclude' );
+		$qv = $query->query_vars;
 
-		if ( isset( $qv['p2p:search'] ) && $qv['p2p:search'] )
-			$qv['search'] = '*' . _p2p_pluck( $qv, 'p2p:search' ) . '*';
-
-		if ( isset( $qv['p2p:page'] ) && $qv['p2p:page'] > 0 ) {
-			$qv['number'] = $qv['p2p:per_page'];
-			$qv['offset'] = $qv['p2p:per_page'] * ( $qv['p2p:page'] - 1 );
+		if ( isset( $qv['p2p:page'] ) ) {
+			$list->current_page = $qv['p2p:page'];
+			$list->total_pages = ceil( $query->get_total() / $qv['p2p:per_page'] );
 		}
 
-		return $qv;
+		return $list;
 	}
 
 	function is_indeterminate( $side ) {
