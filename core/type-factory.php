@@ -5,15 +5,6 @@ class P2P_Connection_Type_Factory {
 	private static $instances = array();
 
 	public static function register( $args ) {
-		if ( isset( $args['name'] ) ) {
-			if ( strlen( $args['name'] ) > 44 ) {
-				trigger_error( sprintf( "Connection name '%s' is longer than 44 characters.", $args['name'] ), E_USER_WARNING );
-				return false;
-			}
-		} else {
-			trigger_error( "Connection types without a 'name' parameter are deprecated.", E_USER_WARNING );
-		}
-
 		$args = wp_parse_args( $args, array(
 			'name' => false,
 			'from_object' => 'post',
@@ -34,6 +25,11 @@ class P2P_Connection_Type_Factory {
 			'reciprocal' => false,
 		) );
 
+		if ( strlen( $args['name'] ) > 44 ) {
+			trigger_error( sprintf( "Connection name '%s' is longer than 44 characters.", $args['name'] ), E_USER_WARNING );
+			return false;
+		}
+
 		$sides = array();
 
 		foreach ( array( 'from', 'to' ) as $direction ) {
@@ -41,7 +37,12 @@ class P2P_Connection_Type_Factory {
 		}
 
 		if ( !$args['name'] ) {
+			trigger_error( "Connection types without a 'name' parameter are deprecated.", E_USER_WARNING );
 			$args['name'] = self::generate_name( $sides, $args );
+		}
+
+		if ( isset( self::$instances[ $args['name'] ] ) ) {
+			trigger_error( sprintf( "Connection type '%s' is already defined.", $args['name'] ), E_USER_NOTICE );
 		}
 
 		$args = apply_filters( 'p2p_connection_type_args', $args, $sides );
@@ -49,10 +50,6 @@ class P2P_Connection_Type_Factory {
 		$class = self::get_ctype_class( $sides, _p2p_pluck( $args, 'reciprocal' ) );
 
 		$ctype = new $class( $sides, $args );
-
-		if ( isset( self::$instances[ $ctype->name ] ) ) {
-			trigger_error( "Connection type '$ctype->name' is already defined.", E_USER_NOTICE );
-		}
 
 		self::$instances[ $ctype->name ] = $ctype;
 
