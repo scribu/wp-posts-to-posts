@@ -35,26 +35,22 @@ class P2P_Directed_Connection_Type {
 	}
 
 	public function get( $side, $key ) {
-		switch ( $side ) {
-		case 'current':
-			$map = array(
+		static $map = array(
+			'current' => array(
 				'to' => 'to',
 				'from' => 'from',
 				'any' => 'from'
-			);
-			break;
-		case 'opposite':
-			$map = array(
+			),
+			'opposite' => array(
 				'to' => 'from',
 				'from' => 'to',
 				'any' => 'to'
-			);
-			break;
-		}
+			)
+		);
 
 		$arg = $this->ctype->$key;
 
-		return $arg[ $map[ $this->direction ] ];
+		return $arg[ $map[ $side ][ $this->direction ] ];
 	}
 
 	private function abstract_query( $qv, $which, $output = 'abstract' ) {
