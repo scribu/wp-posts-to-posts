@@ -25,18 +25,15 @@ abstract class P2P_Side {
 		return $this->get_object_type() == $side->get_object_type();
 	}
 
-	function item_recognize( $arg ) {
-		$class = $this->item_type;
+	abstract function item_recognize( $arg );
+	abstract protected function recognize( $arg );
 
-		if ( is_a( $arg, $class ) )
-			return $arg;
-
-		if ( is_a( $arg, 'P2P_Item' ) )
-			return false;
-
+	protected function _recognize_and_wrap( $arg ) {
 		$raw_item = $this->recognize( $arg );
 		if ( !$raw_item )
 			return false;
+
+		$class = $this->item_type;
 
 		return new $class( $raw_item );
 	}
@@ -168,11 +165,7 @@ class P2P_Side_Post extends P2P_Side {
 		if ( is_a( $arg, 'P2P_Item' ) )
 			return false;
 
-		$raw_item = $this->recognize( $arg );
-		if ( !$raw_item )
-			return false;
-
-		return new $class( $raw_item );
+		return $this->_recognize_and_wrap( $arg );
 	}
 
 	protected function recognize( $arg ) {
@@ -326,6 +319,18 @@ class P2P_Side_User extends P2P_Side {
 
 	function get_base_qv( $q ) {
 		return array_merge( $this->query_vars, $q );
+	}
+
+	function item_recognize( $arg ) {
+		$class = $this->item_type;
+
+		if ( is_a( $arg, $class ) )
+			return $arg;
+
+		if ( is_a( $arg, 'P2P_Item' ) )
+			return false;
+
+		return $this->_recognize_and_wrap( $arg );
 	}
 
 	protected function recognize( $arg ) {
