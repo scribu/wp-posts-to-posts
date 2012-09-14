@@ -15,7 +15,7 @@ env:
     - WP_VERSION=3.2.1 WP_MULTISITE=1
 
 before_script:
-    - wget https://raw.github.com/benbalter/wordpress-plugin-tests/setup/setup.sh
+    - wget https://raw.github.com/scribu/wordpress-plugin-tests/setup/setup.sh
     - sh setup.sh
     - cd ../tests
 
