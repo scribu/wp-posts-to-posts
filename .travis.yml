@@ -1,22 +1,22 @@
 language: php
 
 php:
-  - 5.3
-  - 5.4
-  
+    - 5.3
+    - 5.4
+
 env:
- - WP_VERSION=master WP_MULTISITE=0
- - WP_VERSION=3.4.1 WP_MULTISITE=0
- - WP_VERSION=3.3.2 WP_MULTISITE=0
- - WP_VERSION=3.2.1 WP_MULTISITE=0 
- - WP_VERSION=master WP_MULTISITE=1
- - WP_VERSION=3.4.1 WP_MULTISITE=1
- - WP_VERSION=3.3.2 WP_MULTISITE=1 
- - WP_VERSION=3.2.1 WP_MULTISITE=1
+    - WP_VERSION=master WP_MULTISITE=0
+    - WP_VERSION=3.4.1 WP_MULTISITE=0
+    - WP_VERSION=3.3.2 WP_MULTISITE=0
+    - WP_VERSION=3.2.1 WP_MULTISITE=0 
+    - WP_VERSION=master WP_MULTISITE=1
+    - WP_VERSION=3.4.1 WP_MULTISITE=1
+    - WP_VERSION=3.3.2 WP_MULTISITE=1 
+    - WP_VERSION=3.2.1 WP_MULTISITE=1
 
 before_script:
-  - wget https://raw.github.com/benbalter/wordpress-plugin-tests/setup/setup.sh
-  - sh setup.sh
-  - cd ../tests
-    
-script: phpunit All
+    - wget https://raw.github.com/benbalter/wordpress-plugin-tests/setup/setup.sh
+    - sh setup.sh
+    - cd ../tests
+
+script: phpunit test_core.php
