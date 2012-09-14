@@ -13,6 +13,6 @@ rm -rf /tmp/p2p-coverage
 
 cd ./tests
 
-phpunit --bootstrap bootstrap.php --configuration phpunit.xml --coverage-html /tmp/p2p-coverage tests.php
+phpunit --bootstrap bootstrap.php --configuration phpunit.xml --coverage-html /tmp/p2p-coverage test_core.php
 
 x-www-browser /tmp/p2p-coverage/index.html
