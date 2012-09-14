@@ -11,4 +11,4 @@ fi
 
 cd ./tests
 
-phpunit --bootstrap bootstrap.php --configuration phpunit.xml test_core.php
+phpunit test_core.php
