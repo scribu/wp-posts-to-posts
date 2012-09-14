@@ -11,7 +11,7 @@ fi
 
 rm -rf /tmp/p2p-coverage
 
-cd ./test
+cd ./tests
 
 phpunit --bootstrap bootstrap.php --configuration phpunit.xml --coverage-html /tmp/p2p-coverage tests.php
 
