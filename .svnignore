@@ -1,8 +1,9 @@
 admin/box.coffee
 
 bin
-test
+tests
 docblox.dist.xml
+.travis.yml
 
 mustache/examples
 mustache/test
