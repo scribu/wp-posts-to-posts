@@ -7,4 +7,4 @@ if [ $# -lt 1 ]; then
 	exit
 fi
 
-ln -s $(pwd -P)/test/debug.php $(wp --path=$1 eval 'echo WP_CONTENT_DIR;')/mu-plugins/p2p-debug.php
+ln -s $(pwd -P)/debug.php $(wp --path=$1 eval 'echo WP_CONTENT_DIR;')/mu-plugins/p2p-debug.php

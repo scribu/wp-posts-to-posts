@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/utils.php';
+require_once __DIR__ . '/debug-utils.php';
 
 if ( defined( 'WP_CLI' ) )
 	require_once __DIR__ . '/command.php';
