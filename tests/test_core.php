@@ -28,9 +28,9 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function setUp() {
-		parent::setUp();
+		P2P_Storage::install(); // call before $this->start_transaction()
 
-		P2P_Storage::install();
+		parent::setUp();
 
 		foreach ( array( 'actor', 'movie', 'studio' ) as $ptype )
 			register_post_type( $ptype, array( 'public' => true ) );
