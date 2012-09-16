@@ -321,6 +321,9 @@ function p2p_list_posts( $posts, $args = array() ) {
 	if ( is_a( $posts, 'P2P_List' ) ) {
 		$list = $posts;
 	} else {
+		if ( is_a( $posts, 'WP_Query' ) )
+			$posts = $posts->posts;
+
 		$list = new P2P_List( $posts, 'P2P_Item_Post' );
 	}
 
