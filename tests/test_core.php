@@ -527,6 +527,33 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( $GLOBALS['post'], $list[1] );
 	}
 
+	function test_any() {
+		$ctype = p2p_type( 'posts_to_users' );
+
+		$posts = $this->factory->post->create_many( 2 );
+		$users = $this->factory->user->create_many( 2 );
+
+		$candidate_posts = $ctype->set_direction( 'to' )->get_connectable( 'any', array(), 'abstract' );
+		$this->assertIdsMatch( $posts, $candidate_posts );
+
+		$candidate_users = $ctype->set_direction( 'from' )->get_connectable( 'any', array(), 'abstract' );
+		$this->assertIdsMatch( array_merge( $users, array( 1 ) ), $candidate_users );
+
+		$ctype->connect( $posts[0], $users[0] );
+		$ctype->connect( $posts[0], $users[1] );
+
+		$r = $ctype->connect( $posts[0], 'any' );
+		$this->assertEquals( 'second_parameter', $r->get_error_code() );
+
+		$connected_users = $ctype->set_direction( 'from' )->get_connected( 'any', array(), 'abstract' );
+		$this->assertIdsMatch( $users, $connected_users );
+
+		$this->assertEquals( 2, $ctype->disconnect( get_post( $posts[0] ), 'any' ) );
+
+		$connected_users = $ctype->set_direction( 'from' )->get_connected( 'any', array(), 'abstract' );
+		$this->assertEmpty( $connected_users->items );
+	}
+
 	private function generate_posts( $type, $count ) {
 		return $this->factory->post->create_many( $count, array(
 			'post_type' => $type

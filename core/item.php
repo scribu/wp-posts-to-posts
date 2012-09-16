@@ -33,6 +33,24 @@ abstract class P2P_Item {
 }
 
 
+class P2P_Item_Any extends P2P_Item {
+
+	function __construct() {}
+
+	function get_permalink() {}
+
+	function get_title() {}
+
+	function get_object() {
+		return 'any';
+	}
+
+	function get_id() {
+		return false;
+	}
+}
+
+
 class P2P_Item_Post extends P2P_Item {
 
 	function get_title() {
