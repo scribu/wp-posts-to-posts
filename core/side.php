@@ -2,6 +2,8 @@
 
 abstract class P2P_Side {
 
+	protected $item_type;
+
 	abstract function get_object_type();
 
 	abstract function get_title();
@@ -18,8 +20,6 @@ abstract class P2P_Side {
 	abstract function get_list( $query );
 
 	abstract function is_indeterminate( $side );
-
-	protected $item_type;
 
 	final function is_same_type( $side ) {
 		return $this->get_object_type() == $side->get_object_type();
