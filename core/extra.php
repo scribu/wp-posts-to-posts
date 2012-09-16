@@ -141,17 +141,30 @@ function _p2p_get_list( $args ) {
 
 	$connected = $directed->$method( $item, $extra_qv, 'abstract' );
 
-	$args = array(
-		'before_list' => '<ul id="' . $ctype->name . '_list">',
-		'echo' => false
-	);
+	switch ( $mode ) {
+	case 'inline':
+		$args = array(
+			'separator' => ', '
+		);
+		break;
 
-	if ( 'ol' == $mode ) {
-		_p2p_append( $args, array(
+	case 'ol':
+		$args = array(
 			'before_list' => '<ol id="' . $ctype->name . '_list">',
 			'after_list' => '</ol>',
-		) );
+		);
+		break;
+
+	case 'ul':
+	default:
+		$args = array(
+			'before_list' => '<ul id="' . $ctype->name . '_list">',
+			'after_list' => '</ul>',
+		);
+		break;
 	}
+
+	$args['echo'] = false;
 
 	return apply_filters( "p2p_{$context}_html", $connected->render( $args ), $connected, $directed, $mode );
 }
