@@ -517,7 +517,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertIdsMatch( array( $actors[0], $actors[1] ), $collection );
 	}
 
-	function test_p2p_list_posts() {
+	function test_p2p_list_posts_global() {
 		$list = array_map( 'get_post', $this->generate_posts( 'post', 2 ) );
 
 		$GLOBALS['post'] = $list[1];
@@ -525,6 +525,19 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		p2p_list_posts( $list, array( 'echo' => false ) );
 
 		$this->assertEquals( $GLOBALS['post'], $list[1] );
+	}
+
+	function test_p2p_list_posts_separator() {
+		$actor = $this->generate_post( 'actor' );
+		$movie = $this->generate_post( 'movie' );
+
+		$ctype = p2p_type( 'actor_to_movie' );
+
+		$ctype->connect( $actor, $movie );
+
+		$connected = $ctype->get_connected( $movie );
+
+		p2p_list_posts( $connected, array( 'separator' => ', ', 'echo' => false ) );
 	}
 
 	function test_any() {
