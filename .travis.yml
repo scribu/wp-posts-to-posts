@@ -16,7 +16,7 @@ before_install:
     - git submodule update --init --recursive
 
 before_script:
-    - wget https://raw.github.com/scribu/wordpress-plugin-tests/setup/setup.sh
+    - wget -nv https://raw.github.com/scribu/wordpress-plugin-tests/setup/setup.sh
     - source setup.sh
 
 script: phpunit test_core.php
