@@ -44,7 +44,7 @@ class P2P_List {
 		if ( $separator ) {
 			$list = array();
 			foreach ( $this->items as $item ) {
-				$list[] = $this->render_item( $item->get_object() );
+				$list[] = $this->render_item( $item );
 			}
 			echo implode( $separator, $list );
 		} else {
