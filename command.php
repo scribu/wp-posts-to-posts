@@ -4,6 +4,12 @@ WP_CLI::add_command( 'p2p', 'P2P_CLI_Command' );
 
 class P2P_CLI_Command extends WP_CLI_Command {
 
+	function connection_types() {
+		foreach ( P2P_Connection_Type_Factory::get_all_instances() as $p2p_type => $ctype ) {
+			WP_CLI::line( $p2p_type );
+		}
+	}
+
 	function create_connections( $args ) {
 		$n = 10;
 
