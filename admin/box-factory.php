@@ -71,9 +71,8 @@ class P2P_Box_Factory extends P2P_Factory {
 	private function create_box( $directed ) {
 		$box_args = $this->queue[ $directed->name ];
 
-		$side = $directed->get( 'opposite', 'side' );
-
-		$title_class = 'P2P_Field_Title_' . ucfirst( $side->get_object_type() );
+		$title_class = str_replace( 'P2P_Side_', 'P2P_Field_Title_',
+			get_class( $directed->get( 'opposite', 'side' ) ) );
 
 		$columns = array(
 			'delete' => new P2P_Field_Delete,
