@@ -33,6 +33,6 @@ coffee -c admin
 The plugin comes with a few unit tests.
 
 1. Install [PHPUnit](https://github.com/sebastianbergmann/phpunit/).
-2. Install the WP testing suite: [nb/wordpress-tests](https://github.com/nb/wordpress-tests)
+2. Install the WP testing suite: http://make.wordpress.org/core/handbook/automated-testing/
 3. [Install the scbFramework](https://github.com/scribu/wp-scb-framework/wiki) in the mu-plugins dir.
-4. Run `./bin/test /path-to-nb-wordpress-tests-dir/`
+4. Run `./bin/test /path/to/wp-tests
