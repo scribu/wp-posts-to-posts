@@ -1,0 +1,3076 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts 2 Posts\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-09-19 09:29+0100\n"
+"PO-Revision-Date: 2012-09-19 09:29+0100\n"
+"Last-Translator: Remco Tolsma <remco@pronamic.nl>\n"
+"Language-Team: Pronamic <info@pronamic.nl>\n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;__ngettext:1,2;__withdesc;_ewithdesc;_c;"
+"_n_noop:1,2;__ngettext_noop:1,2;_x:2c,1;_nc:1,2;esc_attr_e;esc_html_e;"
+"esc_attr__;_nx:4c,1,2;_nx_noop:4c,1,2;esc_html_x:2c,1;esc_html__;_ex:2c,1\n"
+"X-Poedit-Basepath: ../\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 1.5.3\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: admin/tools.php:7
+msgid "Connection Types"
+msgstr ""
+
+#: admin/tools.php:41
+#, php-format
+msgid "<em>%s</em> is not a registered connection type."
+msgstr ""
+
+#: admin/tools.php:50
+#, php-format
+msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
+msgstr ""
+
+#: admin/tools.php:64
+msgid "Name"
+msgstr ""
+
+#: admin/tools.php:65
+msgid "Information"
+msgstr ""
+
+#: admin/tools.php:66
+msgid "Connections"
+msgstr ""
+
+#: admin/tools.php:74
+msgid "No connection types registered."
+msgstr ""
+
+#: admin/tools.php:76
+#, php-format
+msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
+msgstr ""
+
+#: admin/tools.php:93
+msgid "Convert to registered connection type:"
+msgstr ""
+
+#: admin/tools.php:129
+msgid "Go"
+msgstr ""
+
+#: admin/box.php:38
+msgid "Are you sure you want to delete all connections?"
+msgstr ""
+
+#: admin/box.php:114
+msgid "Search"
+msgstr ""
+
+#: admin/box.php:191
+msgid "previous"
+msgstr ""
+
+#: admin/box.php:192
+msgid "next"
+msgstr ""
+
+#: admin/box.php:193
+msgid "of"
+msgstr ""
+
+#: admin/factory.php:30
+msgid " (from)"
+msgstr ""
+
+#: admin/factory.php:31
+msgid " (to)"
+msgstr ""
+
+#: admin/fields.php:7
+msgid "Delete all connections"
+msgstr ""
+
+#: admin/fields.php:16
+msgid "Delete connection"
+msgstr ""
+
+#: core/type.php:85
+msgid "Create connections"
+msgstr ""
+
+#: core/type.php:108
+#, php-format
+msgid "Connected %s"
+msgstr ""
+
+#: core/side.php:224
+msgid "Users"
+msgstr ""
+
+#: core/side.php:233
+msgid "User"
+msgstr ""
+
+#: core/side.php:234
+msgid "Search Users"
+msgstr ""
+
+#: core/side.php:235
+msgid "No users found."
+msgstr ""
+
+#: core/extra.php:16
+msgid "Posts 2 Posts"
+msgstr ""
+
+#: core/extra.php:17
+msgid "A list of posts connected to the current post"
+msgstr ""
+
+#: core/extra.php:34
+msgid "Title:"
+msgstr ""
+
+#: core/extra.php:41
+msgid "Connection type:"
+msgstr ""
+
+#: core/extra.php:46
+msgid "Connection listing:"
+msgstr ""
+
+#: core/extra.php:52
+msgid "connected"
+msgstr ""
+
+#: core/extra.php:53
+msgid "related"
+msgstr ""
+
+#: scb/AdminPage.php:172
+msgid "Settings <strong>saved</strong>."
+msgstr ""
+
+#: scb/AdminPage.php:185 scb/AdminPage.php:196
+msgid "Save Changes"
+msgstr ""
+
+#: scb/AdminPage.php:346
+msgid "Settings"
+msgstr ""
+
+#~ msgid "Thumbnail"
+#~ msgstr "Miniatuur"
+
+#, fuzzy
+#~ msgid "Thumbnail - Centered"
+#~ msgstr "Miniatuur"
+
+#, fuzzy
+#~ msgid "Medium"
+#~ msgstr "Premium"
+
+#, fuzzy
+#~ msgid "Required form fields"
+#~ msgstr "Verplichte velden zijn gemarkeerd als %s"
+
+#, fuzzy
+#~ msgid "Other"
+#~ msgstr "meter"
+
+#, fuzzy
+#~ msgid "Date"
+#~ msgstr "datum"
+
+#, fuzzy
+#~ msgid "Form Id"
+#~ msgstr "Formulier"
+
+#, fuzzy
+#~ msgid "Form Title"
+#~ msgstr "Titel"
+
+#, fuzzy
+#~ msgid "Post Id"
+#~ msgstr "Berichten"
+
+#, fuzzy
+#~ msgid "User Display Name"
+#~ msgstr "Weergavenaam"
+
+#, fuzzy
+#~ msgid "User Email"
+#~ msgstr "Gebruikersnaam of e-mailadres:"
+
+#, fuzzy
+#~ msgid "User Login"
+#~ msgstr "Inloggen"
+
+#, fuzzy
+#~ msgid "Allowable form fields"
+#~ msgstr "Verplichte velden zijn gemarkeerd als %s"
+
+#, fuzzy
+#~ msgid "Order"
+#~ msgstr "Beoordeling"
+
+#, fuzzy
+#~ msgid "Total"
+#~ msgstr "Portaal"
+
+#, fuzzy
+#~ msgid "Product"
+#~ msgstr "Project"
+
+#, fuzzy
+#~ msgid "Price"
+#~ msgstr "Artikelen"
+
+#, fuzzy
+#~ msgid "Total:"
+#~ msgstr "Titel"
+
+#~ msgid "%1$s at %2$s"
+#~ msgstr "%1$s op %2$s"
+
+#, fuzzy
+#~ msgid "Number"
+#~ msgstr "Aantal slaapplaatsen"
+
+#, fuzzy
+#~ msgid "Section Break"
+#~ msgstr "Sectie 1"
+
+#, fuzzy
+#~ msgid "Time"
+#~ msgstr "Titel"
+
+#~ msgid "Address"
+#~ msgstr "Adres"
+
+#~ msgid "Website"
+#~ msgstr "Website"
+
+#, fuzzy
+#~ msgid "Email"
+#~ msgstr "E-mailadres"
+
+#~ msgid "Password"
+#~ msgstr "Wachtwoord"
+
+#, fuzzy
+#~ msgid "List"
+#~ msgstr "Achternaam"
+
+#, fuzzy
+#~ msgid "Tags"
+#~ msgstr "Pagina's: %s"
+
+#, fuzzy
+#~ msgid "Category"
+#~ msgstr "Categorie:"
+
+#, fuzzy
+#~ msgid "Option"
+#~ msgstr "Acties"
+
+#, fuzzy
+#~ msgid "Shipping"
+#~ msgstr "Schepen in"
+
+#, fuzzy
+#~ msgid "Algeria"
+#~ msgstr "Agenda"
+
+#, fuzzy
+#~ msgid "Andorra"
+#~ msgstr "Agenda"
+
+#, fuzzy
+#~ msgid "Argentina"
+#~ msgstr "Agenda"
+
+#, fuzzy
+#~ msgid "Armenia"
+#~ msgstr "Agenda"
+
+#, fuzzy
+#~ msgid "Austria"
+#~ msgstr "Auteur"
+
+#, fuzzy
+#~ msgid "Chile"
+#~ msgstr "Dossiers"
+
+#, fuzzy
+#~ msgid "Cuba"
+#~ msgstr "Clubnaam"
+
+#, fuzzy
+#~ msgid "France"
+#~ msgstr "relevantie"
+
+#, fuzzy
+#~ msgid "Greece"
+#~ msgstr "relevantie"
+
+#, fuzzy
+#~ msgid "Greenland"
+#~ msgstr "Beoordeling"
+
+#, fuzzy
+#~ msgid "Grenada"
+#~ msgstr "Beoordeling"
+
+#, fuzzy
+#~ msgid "Guam"
+#~ msgstr "Wedstrijd"
+
+#, fuzzy
+#~ msgid "North Korea"
+#~ msgstr "Meest gelezen"
+
+#, fuzzy
+#~ msgid "South Korea"
+#~ msgstr "Meest gelezen"
+
+#, fuzzy
+#~ msgid "Lesotho"
+#~ msgstr "Lengte"
+
+#, fuzzy
+#~ msgid "Monaco"
+#~ msgstr "Contact"
+
+#, fuzzy
+#~ msgid "New Zealand"
+#~ msgstr "Nieuwe vacature"
+
+#, fuzzy
+#~ msgid "Palestine"
+#~ msgstr "Realisatie"
+
+#, fuzzy
+#~ msgid "Portugal"
+#~ msgstr "Portaal"
+
+#, fuzzy
+#~ msgid "Seychelles"
+#~ msgstr "Zoek leeftijden"
+
+#, fuzzy
+#~ msgid "Suriname"
+#~ msgstr "Gebruikersnaam"
+
+#, fuzzy
+#~ msgid "Togo"
+#~ msgstr "Uitloggen"
+
+#, fuzzy
+#~ msgid "Uganda"
+#~ msgstr "Agenda"
+
+#, fuzzy
+#~ msgid "Vatican City"
+#~ msgstr "Vacature"
+
+#, fuzzy
+#~ msgid "RUSSIA"
+#~ msgstr "RSS"
+
+#, fuzzy
+#~ msgid "Maine"
+#~ msgstr "Vakblad"
+
+#, fuzzy
+#~ msgid "Montana"
+#~ msgstr "Maand:"
+
+#, fuzzy
+#~ msgid "New Hampshire"
+#~ msgstr "Nieuwe wedstrijd"
+
+#, fuzzy
+#~ msgid "New Jersey"
+#~ msgstr "Nieuwe oefenstof"
+
+#, fuzzy
+#~ msgid "New Mexico"
+#~ msgstr "Nieuwe bijeenkomst"
+
+#, fuzzy
+#~ msgid "New York"
+#~ msgstr "Nieuw wachtwoord"
+
+#, fuzzy
+#~ msgid "Oregon"
+#~ msgstr "Regio"
+
+#, fuzzy
+#~ msgid "Texas"
+#~ msgstr "Teasers"
+
+#, fuzzy
+#~ msgid "Alberta"
+#~ msgstr "slaapplaatsen"
+
+#, fuzzy
+#~ msgid "Nova Scotia"
+#~ msgstr "Geen secties"
+
+#, fuzzy
+#~ msgid "Quebec"
+#~ msgstr "Onderwerp"
+
+#, fuzzy
+#~ msgid "Month"
+#~ msgstr "Maand:"
+
+#, fuzzy
+#~ msgid "Year"
+#~ msgstr "Zoeken"
+
+#, fuzzy
+#~ msgid "Enter Email"
+#~ msgstr "Gebruikersnaam of e-mailadres:"
+
+#, fuzzy
+#~ msgid "delete"
+#~ msgstr "wijzig / verwijder"
+
+#, fuzzy
+#~ msgid "File"
+#~ msgstr "Dossiers"
+
+#, fuzzy
+#~ msgid "Caption"
+#~ msgstr "Reactie"
+
+#, fuzzy
+#~ msgid "Description"
+#~ msgstr "Projectgegevens"
+
+#, fuzzy
+#~ msgid "Enter Password"
+#~ msgstr "Nieuw wachtwoord"
+
+#, fuzzy
+#~ msgid "Confirm Password"
+#~ msgstr "Wachtwoord"
+
+#, fuzzy
+#~ msgid "Prefix"
+#~ msgstr "Premium"
+
+#, fuzzy
+#~ msgid "First"
+#~ msgstr "Voornaam"
+
+#, fuzzy
+#~ msgid "Last"
+#~ msgstr "Achternaam"
+
+#, fuzzy
+#~ msgid "State"
+#~ msgstr "Status"
+
+#, fuzzy
+#~ msgid "Street Address"
+#~ msgstr "Adres"
+
+#, fuzzy
+#~ msgid "Address Line 2"
+#~ msgstr "Adres"
+
+#~ msgid "City"
+#~ msgstr "Plaats"
+
+#~ msgid "Country"
+#~ msgstr "Land"
+
+#, fuzzy
+#~ msgid "Delete file"
+#~ msgstr "Verwijder bericht"
+
+#, fuzzy
+#~ msgid "Card Number"
+#~ msgstr "Aantal slaapplaatsen"
+
+#, fuzzy
+#~ msgid "Expiration Date"
+#~ msgstr "Oefenwedstrijd"
+
+#, fuzzy
+#~ msgid "Cardholder Name"
+#~ msgstr "Aantal slaapplaatsen"
+
+#, fuzzy
+#~ msgid "Add a row"
+#~ msgstr "Nieuwe toevoegen"
+
+#, fuzzy
+#~ msgid "Postal Code"
+#~ msgstr "Plaats reactie"
+
+#, fuzzy
+#~ msgid "View user profile"
+#~ msgstr "Oefenstof bekijken"
+
+#, fuzzy
+#~ msgid "Edit Post"
+#~ msgstr "Project bewerken"
+
+#, fuzzy
+#~ msgid "Payment Status"
+#~ msgstr "Status"
+
+#, fuzzy
+#~ msgid "Payment Date"
+#~ msgstr "Speeldatum"
+
+#, fuzzy
+#~ msgid "Start Date"
+#~ msgstr "Begindatum:"
+
+#, fuzzy
+#~ msgid "Subscriber Id"
+#~ msgstr "Abonneenummer"
+
+#, fuzzy
+#~ msgid "Payment Amount"
+#~ msgstr "Pagina niet gevonden"
+
+#, fuzzy
+#~ msgid "Delete Permanently"
+#~ msgstr "Verwijder bericht"
+
+#, fuzzy
+#~ msgid "Restore"
+#~ msgstr "Gerelateerd"
+
+#, fuzzy
+#~ msgid "Mark as Spam"
+#~ msgstr "Meest gelezen"
+
+#~ msgid "Edit"
+#~ msgstr "Bewerken"
+
+#, fuzzy
+#~ msgid "Update"
+#~ msgstr "Update classificatie"
+
+#, fuzzy
+#~ msgid "Notifications"
+#~ msgstr "Geen secties"
+
+#, fuzzy
+#~ msgid "Admin Notification"
+#~ msgstr "Geen secties"
+
+#, fuzzy
+#~ msgid "User Notification"
+#~ msgstr "Geen secties"
+
+#, fuzzy
+#~ msgid "Send To"
+#~ msgstr "Gebruikersnaam of e-mailadres:"
+
+#, fuzzy
+#~ msgid "Resend Notifications"
+#~ msgstr "Geen secties"
+
+#, fuzzy
+#~ msgid "Print"
+#~ msgstr "Artikelen"
+
+#, fuzzy
+#~ msgid "Notes"
+#~ msgstr "Nieuws"
+
+#, fuzzy
+#~ msgid "Entry Updated."
+#~ msgstr "Einddatum:"
+
+#~ msgid "Details"
+#~ msgstr "Details"
+
+#, fuzzy
+#~ msgid " Bulk action"
+#~ msgstr "Reactie"
+
+#, fuzzy
+#~ msgid "Delete"
+#~ msgstr "Verwijder bericht"
+
+#, fuzzy
+#~ msgid "Add Note"
+#~ msgstr "Nieuwe toevoegen"
+
+#~ msgid "Subject:"
+#~ msgstr "Onderwerp:"
+
+#, fuzzy
+#~ msgid "Entry deleted."
+#~ msgstr "Einddatum:"
+
+#, fuzzy
+#~ msgid "%d entries"
+#~ msgstr "Interviews"
+
+#, fuzzy
+#~ msgid "1 entry"
+#~ msgstr "1 Reactie"
+
+#, fuzzy
+#~ msgid "%s deleted."
+#~ msgstr "wijzig / verwijder"
+
+#, fuzzy
+#~ msgid "%s marked as read."
+#~ msgstr "Meest gelezen"
+
+#, fuzzy
+#~ msgid "%s marked as unread."
+#~ msgstr "Meest gelezen"
+
+#, fuzzy
+#~ msgid "%s starred."
+#~ msgstr "Straat"
+
+#, fuzzy
+#~ msgid "%s unstarred."
+#~ msgstr "Straat"
+
+#, fuzzy
+#~ msgid "&laquo;"
+#~ msgstr "&larr;"
+
+#, fuzzy
+#~ msgid "&raquo;"
+#~ msgstr "Uitloggen &raquo;"
+
+#, fuzzy
+#~ msgid "Print Entries"
+#~ msgstr "Interview bekijken"
+
+#, fuzzy
+#~ msgid "entry"
+#~ msgstr "Land"
+
+#, fuzzy
+#~ msgid "entries"
+#~ msgstr "Interviews"
+
+#, fuzzy
+#~ msgid "Entry List"
+#~ msgstr "Interviews"
+
+#, fuzzy
+#~ msgid "Entries"
+#~ msgstr "Interviews"
+
+#~ msgid "All"
+#~ msgstr "Alles"
+
+#, fuzzy
+#~ msgid "Starred"
+#~ msgstr "Straat"
+
+#, fuzzy
+#~ msgid "Trash"
+#~ msgstr "Pagina's: %s"
+
+#, fuzzy
+#~ msgid "Search Entries:"
+#~ msgstr "Zoek evenementen"
+
+#, fuzzy
+#~ msgid "Bulk action"
+#~ msgstr "Reactie"
+
+#, fuzzy
+#~ msgid "Mark as Unread"
+#~ msgstr "Meest gelezen"
+
+#, fuzzy
+#~ msgid "Delete All Spam"
+#~ msgstr "Verwijder bericht"
+
+#, fuzzy
+#~ msgid "Select Columns"
+#~ msgstr "Rubrieken"
+
+#, fuzzy
+#~ msgid "View this entry"
+#~ msgstr "Bekijk evenement"
+
+#, fuzzy
+#~ msgid "View"
+#~ msgstr "Bekijk schip"
+
+#, fuzzy
+#~ msgid "Restore this entry"
+#~ msgstr "Verwijder bericht"
+
+#, fuzzy
+#~ msgid "Delete this entry permanently"
+#~ msgstr "Verwijder bericht"
+
+#, fuzzy
+#~ msgid "Mark read"
+#~ msgstr "Meest gelezen"
+
+#, fuzzy
+#~ msgid "Mark unread"
+#~ msgstr "Meest gelezen"
+
+#, fuzzy
+#~ msgid "Import Forms"
+#~ msgstr "Importeer informatie"
+
+#, fuzzy
+#~ msgid "forms"
+#~ msgstr "Formulier"
+
+#, fuzzy
+#~ msgid "form"
+#~ msgstr "Formulier"
+
+#~ msgid "Import"
+#~ msgstr "Importeer"
+
+#, fuzzy
+#~ msgid "Select Forms"
+#~ msgstr "Verwijder bericht"
+
+#, fuzzy
+#~ msgid "Start"
+#~ msgstr "Status"
+
+#, fuzzy
+#~ msgid "Entry Date"
+#~ msgstr "Einddatum:"
+
+#, fuzzy
+#~ msgid "User Agent"
+#~ msgstr "Inloggen"
+
+#, fuzzy
+#~ msgid "Select a format"
+#~ msgstr "Verwijder bericht"
+
+#, fuzzy
+#~ msgid "Enter a value"
+#~ msgstr "Einddatum:"
+
+#, fuzzy
+#~ msgid "Untitled Form"
+#~ msgstr "Titel"
+
+#, fuzzy
+#~ msgid "Submit"
+#~ msgstr "Sub titel:"
+
+#, fuzzy
+#~ msgid " hide values"
+#~ msgstr "Einddatum:"
+
+#, fuzzy
+#~ msgid "New Form"
+#~ msgstr "Formulier"
+
+#, fuzzy
+#~ msgid "Form Settings"
+#~ msgstr "Geen secties"
+
+#, fuzzy
+#~ msgid "Form ID"
+#~ msgstr "Formulier"
+
+#, fuzzy
+#~ msgid "Properties"
+#~ msgstr "Projecten"
+
+#, fuzzy
+#~ msgid "Label Placement"
+#~ msgstr "Plaats een reactie"
+
+#, fuzzy
+#~ msgid "Description Placement"
+#~ msgstr "Projectgegevens"
+
+#, fuzzy
+#~ msgid "Above inputs"
+#~ msgstr "Over %s"
+
+#, fuzzy
+#~ msgid "CSS Class Name"
+#~ msgstr "Nieuwe classificatie naam"
+
+#, fuzzy
+#~ msgid "Number of Entries"
+#~ msgstr "Aantal personen"
+
+#, fuzzy
+#~ msgid "total entries"
+#~ msgstr "Land"
+
+#, fuzzy
+#~ msgid "per month"
+#~ msgstr "Alle maanden"
+
+#, fuzzy
+#~ msgid "Start Date/Time"
+#~ msgstr "Aanvangstijd:"
+
+#, fuzzy
+#~ msgid "End Date/Time"
+#~ msgstr "Einddatum:"
+
+#, fuzzy
+#~ msgid "Enable animation"
+#~ msgstr "Juridische navigatie"
+
+#, fuzzy
+#~ msgid "Confirmation Message"
+#~ msgstr "Bouwschade"
+
+#, fuzzy
+#~ msgid "Page"
+#~ msgstr "Pagina's: %s"
+
+#, fuzzy
+#~ msgid "Redirect"
+#~ msgstr "wijzigen"
+
+#, fuzzy
+#~ msgid "Select a page"
+#~ msgstr "Project categorie"
+
+#, fuzzy
+#~ msgid "Edit Last Page"
+#~ msgstr "Fase bewerken"
+
+#, fuzzy
+#~ msgid "Steps"
+#~ msgstr "Schepen"
+
+#, fuzzy
+#~ msgid "Style"
+#~ msgstr "Titel"
+
+#, fuzzy
+#~ msgid "Gray"
+#~ msgstr "Beoordeling"
+
+#, fuzzy
+#~ msgid "Green"
+#~ msgstr "Beoordeling"
+
+#, fuzzy
+#~ msgid "Red"
+#~ msgstr "Gerelateerd"
+
+#, fuzzy
+#~ msgid "Page Names"
+#~ msgstr "Nieuwe fase naam"
+
+#, fuzzy
+#~ msgid "Completion Text"
+#~ msgstr "Voltooid"
+
+#, fuzzy
+#~ msgid "Continue editing this form"
+#~ msgstr "Lees verder &rarr;"
+
+#, fuzzy
+#~ msgid "Continue Editing this Form"
+#~ msgstr "Lees verder &rarr;"
+
+#, fuzzy
+#~ msgid "Return to Form List"
+#~ msgstr "Ga terug naar %s"
+
+#, fuzzy
+#~ msgid "Single Product"
+#~ msgstr "Bekijk project"
+
+#, fuzzy
+#~ msgid "Calculation"
+#~ msgstr "Bereken route"
+
+#, fuzzy
+#~ msgid "Content"
+#~ msgstr "Content type"
+
+#, fuzzy
+#~ msgid "Type"
+#~ msgstr "Types"
+
+#, fuzzy
+#~ msgid "Size"
+#~ msgstr "Formaat:"
+
+#, fuzzy
+#~ msgid "Small"
+#~ msgstr "Alles"
+
+#, fuzzy
+#~ msgid "White"
+#~ msgstr "Website"
+
+#, fuzzy
+#~ msgid "Existing"
+#~ msgstr "Bewerk bijeenkomsten"
+
+#, fuzzy
+#~ msgid "New"
+#~ msgstr "Nieuws"
+
+#, fuzzy
+#~ msgid "Post Status"
+#~ msgstr "Status"
+
+#, fuzzy
+#~ msgid "Draft"
+#~ msgstr "datum"
+
+#, fuzzy
+#~ msgid "Post Format"
+#~ msgstr "Inlogformulier"
+
+#, fuzzy
+#~ msgid "Post Category"
+#~ msgstr "Project categorie"
+
+#, fuzzy
+#~ msgid "All Categories"
+#~ msgstr "Categorieën"
+
+#, fuzzy
+#~ msgid "Select Categories"
+#~ msgstr "Project categorieën"
+
+#, fuzzy
+#~ msgid "Display placeholder"
+#~ msgstr "Weergavenaam"
+
+#, fuzzy
+#~ msgid "Address Type"
+#~ msgstr "Adres"
+
+#, fuzzy
+#~ msgid "Default Country"
+#~ msgstr "Land"
+
+#, fuzzy
+#~ msgid "Normal"
+#~ msgstr "Portaal"
+
+#, fuzzy
+#~ msgid "Simple"
+#~ msgstr "Schip"
+
+#, fuzzy
+#~ msgid "Date Input Type"
+#~ msgstr "Content type"
+
+#, fuzzy
+#~ msgid "No Icon"
+#~ msgstr "Geen secties"
+
+#, fuzzy
+#~ msgid "Enable multiple columns"
+#~ msgstr "Juridische navigatie"
+
+#, fuzzy
+#~ msgid "Time Format"
+#~ msgstr "Inlogformulier"
+
+#, fuzzy
+#~ msgid "Phone Format"
+#~ msgstr "Inlogformulier"
+
+#, fuzzy
+#~ msgid "Label"
+#~ msgstr "Leeftijd"
+
+#, fuzzy
+#~ msgid "Countries"
+#~ msgstr "Land"
+
+#, fuzzy
+#~ msgid "Continents"
+#~ msgstr "Reacties"
+
+#, fuzzy
+#~ msgid "Gender"
+#~ msgstr "Kop"
+
+#, fuzzy
+#~ msgid "Age"
+#~ msgstr "Agenda"
+
+#, fuzzy
+#~ msgid "Marital Status"
+#~ msgstr "Status"
+
+#, fuzzy
+#~ msgid "Homemaker"
+#~ msgstr "Kop"
+
+#, fuzzy
+#~ msgid "Retired"
+#~ msgstr "Gerelateerd"
+
+#, fuzzy
+#~ msgid "Student"
+#~ msgstr "Straat"
+
+#, fuzzy
+#~ msgid "Job Type"
+#~ msgstr "Types"
+
+#, fuzzy
+#~ msgid "Part-Time"
+#~ msgstr "Aanvangstijd:"
+
+#, fuzzy
+#~ msgid "Contract"
+#~ msgstr "Contact"
+
+#, fuzzy
+#~ msgid "Intern"
+#~ msgstr "Interviews"
+
+#~ msgid "Industry"
+#~ msgstr "Industrie"
+
+#, fuzzy
+#~ msgid "Construction/Facilities"
+#~ msgstr "Bouwfouten"
+
+#, fuzzy
+#~ msgid "Engineering"
+#~ msgstr "Bewerk bijeenkomsten"
+
+#, fuzzy
+#~ msgid "Internet"
+#~ msgstr "Interviews"
+
+#, fuzzy
+#~ msgid "Job Search Aids"
+#~ msgstr "Regio's zoeken"
+
+#, fuzzy
+#~ msgid "Legal"
+#~ msgstr "Leeftijd"
+
+#, fuzzy
+#~ msgid "Marketing"
+#~ msgstr "Bijeenkomst"
+
+#, fuzzy
+#~ msgid "Real Estate"
+#~ msgstr "Gerelateerd"
+
+#, fuzzy
+#~ msgid "Retail"
+#~ msgstr "Details"
+
+#, fuzzy
+#~ msgid "Sales"
+#~ msgstr "Zeilschip"
+
+#, fuzzy
+#~ msgid "Telecommunications"
+#~ msgstr "Accomodaties"
+
+#, fuzzy
+#~ msgid "Education"
+#~ msgstr "Locatie:"
+
+#, fuzzy
+#~ msgid "March"
+#~ msgstr "Zoeken"
+
+#, fuzzy
+#~ msgid "April"
+#~ msgstr "Artikelen"
+
+#, fuzzy
+#~ msgid "September"
+#~ msgstr "Onthoud mij"
+
+#, fuzzy
+#~ msgid "December"
+#~ msgstr "Onthoud mij"
+
+#, fuzzy
+#~ msgid "1-6 months"
+#~ msgstr "Alle maanden"
+
+#, fuzzy
+#~ msgid "Satisfaction"
+#~ msgstr "Realisatie"
+
+#, fuzzy
+#~ msgid "Importance"
+#~ msgstr "Importeer"
+
+#, fuzzy
+#~ msgid "Very Important"
+#~ msgstr "Importeer"
+
+#, fuzzy
+#~ msgid "Important"
+#~ msgstr "Importeer"
+
+#, fuzzy
+#~ msgid "Not Important"
+#~ msgstr "Importeer"
+
+#, fuzzy
+#~ msgid "Agreement"
+#~ msgstr "Advertentie"
+
+#, fuzzy
+#~ msgid "Insert Choices"
+#~ msgstr "Voornaam"
+
+#, fuzzy
+#~ msgid "Enter name"
+#~ msgstr "Einddatum:"
+
+#, fuzzy
+#~ msgid "enter name"
+#~ msgstr "Interviews"
+
+#, fuzzy
+#~ msgid "Short"
+#~ msgstr "Haven"
+
+#, fuzzy
+#~ msgid "Strong"
+#~ msgstr "Rubriek"
+
+#, fuzzy
+#~ msgid "Number Format"
+#~ msgstr "Formulier"
+
+#, fuzzy
+#~ msgid "Standard"
+#~ msgstr "Straat"
+
+#, fuzzy
+#~ msgid "Custom Mask Instructions"
+#~ msgstr "Bouwfouten"
+
+#, fuzzy
+#~ msgid "Usage"
+#~ msgstr "Gebruikersnaam"
+
+#, fuzzy
+#~ msgid "Examples"
+#~ msgstr "Zeilschip"
+
+#, fuzzy
+#~ msgid "Social Security Number"
+#~ msgstr "Abonneenummers"
+
+#, fuzzy
+#~ msgid "Course Code"
+#~ msgstr "Plaats reactie"
+
+#, fuzzy
+#~ msgid "Select a Mask"
+#~ msgstr "Project categorie"
+
+#, fuzzy
+#~ msgid "Enable Calculation"
+#~ msgstr "Juridische navigatie"
+
+#, fuzzy
+#~ msgid "Formula"
+#~ msgstr "Formulier"
+
+#, fuzzy
+#~ msgid "Rounding"
+#~ msgstr "Route"
+
+#, fuzzy
+#~ msgid "Rules"
+#~ msgstr "Dossiers"
+
+#, fuzzy
+#~ msgid "Required"
+#~ msgstr "(verplicht)"
+
+#, fuzzy
+#~ msgid "No Duplicates"
+#~ msgstr "Regio's"
+
+#, fuzzy
+#~ msgid "Portuguese"
+#~ msgstr "Havens"
+
+#, fuzzy
+#~ msgid "Spanish"
+#~ msgstr "Zeilschip"
+
+#, fuzzy
+#~ msgid "Delete Icon URL"
+#~ msgstr "Verwijder bericht"
+
+#, fuzzy
+#~ msgid "Enable Password Input"
+#~ msgstr "Nieuw wachtwoord"
+
+#, fuzzy
+#~ msgid "Everyone"
+#~ msgstr "Evenement"
+
+#, fuzzy
+#~ msgid "Post Fields"
+#~ msgstr "Berichten"
+
+#, fuzzy
+#~ msgid "Delete Form"
+#~ msgstr "Verwijder bericht"
+
+#, fuzzy
+#~ msgid "Update Form"
+#~ msgstr "Update accessoire"
+
+#, fuzzy
+#~ msgid "Save Form"
+#~ msgstr "Formulier"
+
+#, fuzzy
+#~ msgid "Preview"
+#~ msgstr "Overzicht"
+
+#, fuzzy
+#~ msgid "Sorry. You must be logged in to view this form."
+#~ msgstr "Je moet ingelogd zijn om je profiel te bekijken."
+
+#, fuzzy
+#~ msgid "Previous Page"
+#~ msgstr "Registreren pagina"
+
+#, fuzzy
+#~ msgid ""
+#~ "Your password does not meet the required strength. <br/>Hint: To make it "
+#~ "stronger, use upper and lower case letters, numbers and symbols like ! "
+#~ "\" ? $ % ^ & )."
+#~ msgstr ""
+#~ "Hint: Het wachtwoord moet minimaal 7 karakters lang zijn. Om het "
+#~ "wachtwoord sterker te maken kun je gebruik maken van hoofd- en kleine "
+#~ "letters, nummers en symbolen zoals  ! \" ? $ % ^ &amp; )."
+
+#, fuzzy
+#~ msgid "Next Page"
+#~ msgstr "Registreren pagina"
+
+#, fuzzy
+#~ msgid "Field ID"
+#~ msgstr "Type schip"
+
+#, fuzzy
+#~ msgid "Step"
+#~ msgstr "Straat"
+
+#, fuzzy
+#~ msgid "Active"
+#~ msgstr "Archieven"
+
+#, fuzzy
+#~ msgid "Edit Forms"
+#~ msgstr "Registratieformulier"
+
+#, fuzzy
+#~ msgid "Add New"
+#~ msgstr "Nieuwe toevoegen"
+
+#, fuzzy
+#~ msgid "Reset Views"
+#~ msgstr "Recent nieuws"
+
+#, fuzzy
+#~ msgid "Views"
+#~ msgstr "nieuws"
+
+#, fuzzy
+#~ msgid "Update Available"
+#~ msgstr "Update magazine"
+
+#, fuzzy
+#~ msgid "Forms"
+#~ msgstr "Formulier"
+
+#, fuzzy
+#~ msgid "Import/Export"
+#~ msgstr "Importeer"
+
+#, fuzzy
+#~ msgid "Updates"
+#~ msgstr "Update classificatie"
+
+#, fuzzy
+#~ msgid "Insert A Form"
+#~ msgstr "Registratieformulier"
+
+#, fuzzy
+#~ msgid "Display form title"
+#~ msgstr "Weergavenaam"
+
+#, fuzzy
+#~ msgid "View All Entries"
+#~ msgstr "Bekijk alle interviews"
+
+#, fuzzy
+#~ msgid "Last Entry: %s"
+#~ msgstr "Update evenement categorie"
+
+#, fuzzy
+#~ msgid "View All Forms"
+#~ msgstr "Bekijk alle interviews"
+
+#, fuzzy
+#~ msgid "Dismiss"
+#~ msgstr "Regio's"
+
+#, fuzzy
+#~ msgid "Please enter name."
+#~ msgstr "Bovenliggende fase:"
+
+#~ msgid "Completed"
+#~ msgstr "Voltooid"
+
+#, fuzzy
+#~ msgid "Close"
+#~ msgstr "Classificaties"
+
+#, fuzzy
+#~ msgid "Select a category"
+#~ msgstr "Project categorie"
+
+#, fuzzy
+#~ msgid "Parameter Name:"
+#~ msgstr "Bovenliggende fase:"
+
+#, fuzzy
+#~ msgid "Untitled"
+#~ msgstr "Titel"
+
+#, fuzzy
+#~ msgid "First Choice"
+#~ msgstr "Voornaam"
+
+#, fuzzy
+#~ msgid "Card Type"
+#~ msgstr "Types"
+
+#, fuzzy
+#~ msgid "Post Title"
+#~ msgstr "Titel"
+
+#, fuzzy
+#~ msgid "Post Tags"
+#~ msgstr "Berichten"
+
+#, fuzzy
+#~ msgid "Post Custom Field"
+#~ msgstr "Plaats reactie"
+
+#, fuzzy
+#~ msgid "Post Image"
+#~ msgstr "Plaats reactie"
+
+#, fuzzy
+#~ msgid "Product Name"
+#~ msgstr "Publicatie naam"
+
+#, fuzzy
+#~ msgid "Second Option"
+#~ msgstr "Rubriek"
+
+#, fuzzy
+#~ msgid "Donation"
+#~ msgstr "Locatie:"
+
+#, fuzzy
+#~ msgid "Hide"
+#~ msgstr "Kop"
+
+#, fuzzy
+#~ msgid "contains"
+#~ msgstr "Maand:"
+
+#, fuzzy
+#~ msgid "add another choice"
+#~ msgstr "Update classificatie"
+
+#, fuzzy
+#~ msgid "User IP Address"
+#~ msgstr "Adres"
+
+#, fuzzy
+#~ msgid "Enter value"
+#~ msgstr "Einddatum:"
+
+#, fuzzy
+#~ msgid "Send To Email"
+#~ msgstr "Gebruikersnaam of e-mailadres:"
+
+#, fuzzy
+#~ msgid "Routing"
+#~ msgstr "Route"
+
+#, fuzzy
+#~ msgid "From Name"
+#~ msgstr "Voornaam"
+
+#, fuzzy
+#~ msgid "From Email"
+#~ msgstr "E-mailadres"
+
+#~ msgid "Subject"
+#~ msgstr "Onderwerp"
+
+#, fuzzy
+#~ msgid "Save Settings"
+#~ msgstr "Bijeenkomsten"
+
+#, fuzzy
+#~ msgid "Notification Updated."
+#~ msgstr "Publicatiedatum"
+
+#, fuzzy
+#~ msgid "Print Preview"
+#~ msgstr "Overzicht"
+
+#, fuzzy
+#~ msgid "Active Columns"
+#~ msgstr "Acties"
+
+#, fuzzy
+#~ msgid "Reply To Address"
+#~ msgstr "Adres"
+
+#, fuzzy
+#~ msgid "Form Description"
+#~ msgstr "Projectgegevens"
+
+#, fuzzy
+#~ msgid "Form Button Image"
+#~ msgstr "Bouwschade"
+
+#, fuzzy
+#~ msgid "Form CSS Class Name"
+#~ msgstr "Nieuwe classificatie naam"
+
+#, fuzzy
+#~ msgid "Field type"
+#~ msgstr "Type schip"
+
+#, fuzzy
+#~ msgid "Hide Country"
+#~ msgstr "Land"
+
+#, fuzzy
+#~ msgid "Field Description"
+#~ msgstr "Projectgegevens"
+
+#, fuzzy
+#~ msgid "Required Field"
+#~ msgstr "Verplichte velden zijn gemarkeerd als %s"
+
+#, fuzzy
+#~ msgid "Number Range"
+#~ msgstr "Aantal slaapplaatsen"
+
+#, fuzzy
+#~ msgid "\"Other\" Choice"
+#~ msgstr "Update classificatie"
+
+#, fuzzy
+#~ msgid "Post Author"
+#~ msgstr "Auteur"
+
+#, fuzzy
+#~ msgid "Post Content Template"
+#~ msgstr "Content type"
+
+#, fuzzy
+#~ msgid "Override Notifications"
+#~ msgstr "Geen secties"
+
+#, fuzzy
+#~ msgid "Contact Us"
+#~ msgstr "Contact"
+
+#, fuzzy
+#~ msgid "Form Name"
+#~ msgstr "Voornaam"
+
+#, fuzzy
+#~ msgid "Unread Entries"
+#~ msgstr "Bekijk alle interviews"
+
+#, fuzzy
+#~ msgid "View Unread Entries"
+#~ msgstr "Bekijk alle interviews"
+
+#, fuzzy
+#~ msgid "Edit Entry"
+#~ msgstr "Evenement bewerken"
+
+#, fuzzy
+#~ msgid "Bulk action "
+#~ msgstr "Publicatie ID"
+
+#, fuzzy
+#~ msgid "Preview Form"
+#~ msgstr "Registratieformulier"
+
+#, fuzzy
+#~ msgid "Add Fields"
+#~ msgstr "Nieuwe classificatie toevoegen"
+
+#, fuzzy
+#~ msgid "Edit this form"
+#~ msgstr "Bewerk rubriek"
+
+#~ msgid "Nothing Found"
+#~ msgstr "Niet gevonden"
+
+#~ msgid ""
+#~ "Sorry, but nothing matched your search criteria. Please try again with "
+#~ "some different keywords."
+#~ msgstr ""
+#~ "Sorry, de gegeven zoekopdracht gaf geen resultaten. Probeer alstublieft "
+#~ "opnieuw met andere zoekwoorden."
+
+#~ msgid "Search Results for: %s"
+#~ msgstr "Zoekresultaten voor: %s"
+
+#~ msgid "%d-%d of <strong>%d</strong> searched for: <strong>%s</strong>"
+#~ msgstr "%d-%d of <strong>%d</strong> gezocht op: <strong>%s</strong>"
+
+#~ msgid "ordered by %s | %s"
+#~ msgstr "gesorteerd op %s | %s"
+
+#~ msgid ""
+#~ "This post is password protected. Enter the password to view any comments."
+#~ msgstr ""
+#~ "Dit bericht is afgeschermd met een wachtwoord. Voer het wachtwoord in "
+#~ "reacties te bekijken."
+
+#~ msgid "One Response"
+#~ msgid_plural "%1$s Responses"
+#~ msgstr[0] "Eén reactie"
+#~ msgstr[1] "%1$s reacties"
+
+#~ msgid "<span class=\"meta-nav\">&larr;</span> Older Comments"
+#~ msgstr "<span class=\"meta-nav\">&larr;</span> Oudere reacties"
+
+#~ msgid "Newer Comments <span class=\"meta-nav\">&rarr;</span>"
+#~ msgstr "Nieuwere reacties <span class=\"meta-nav\">&rarr;</span>"
+
+#~ msgid "Daily Archives: <span>%s</span>"
+#~ msgstr "Dag archief: <span>%s</span>"
+
+#~ msgid "Monthly Archives: <span>%s</span>"
+#~ msgstr "Maand archief: <span>%s</span>"
+
+#~ msgid "Yearly Archives: <span>%s</span>"
+#~ msgstr "Jaar archief: <span>%s</span>"
+
+#~ msgid "View all posts with an video"
+#~ msgstr "Bekijk hier artikelen met een video"
+
+#~ msgid "Blog Archives"
+#~ msgstr "Archief"
+
+#~ msgid "Actual"
+#~ msgstr "Actueel"
+
+#~ msgid ""
+#~ "The page you are looking for might have been removed, the name of the "
+#~ "page may have changed, or is temporarily unavailable."
+#~ msgstr ""
+#~ "De pagina die u zoekt is misschien verwijderd, de naam van de pagina kan "
+#~ "zijn gewijzigd of de pagina is tijdelijk niet beschikbaar."
+
+#~ msgid "Try refreshing the page or try again later."
+#~ msgstr "Probeer de paginga te vernieuwen of probeer het later opnieuw."
+
+#~ msgid "Return to the previous page to try another link."
+#~ msgstr "Ga terug naar de vorige pagina om een andere koppeling te proberen."
+
+#~ msgid ""
+#~ "Open the <a href=\"%s\">homepage</a> and see if there are links to the "
+#~ "required information."
+#~ msgstr ""
+#~ "Open de <a href=\"%s\">homepage</a> en kijk of er koppelingen zijn naar "
+#~ "de gewenste informatie."
+
+#~ msgid ""
+#~ "Visit the <a title=\"Sitemap\" href=\"%s\">sitemap</ a> and search for "
+#~ "products within groups and subgroups."
+#~ msgstr ""
+#~ "Ga naar de <a title=\"Sitemap\" href=\"%s\">sitemap</a> en zoek daar "
+#~ "binnen hoofdgroepen en subgroepen naar producten."
+
+#~ msgid "Enter a new search request."
+#~ msgstr "Voer hieronder een nieuwe zoekactie uit."
+
+#~ msgid "We apologize for the inconvenience."
+#~ msgstr "Onze excuses voor het ongemak."
+
+#~ msgid "Most recent projects"
+#~ msgstr "Meest recente bouwprojecten"
+
+#~ msgid "All events"
+#~ msgstr "Alle evenementen"
+
+#~ msgid "Eisma Bouwmedia"
+#~ msgstr "Eisma Bouwmedia"
+
+#~ msgid "Not Found"
+#~ msgstr "Niet gevonden"
+
+#~ msgid ""
+#~ "Apologies, but no results were found for the requested archive. Perhaps "
+#~ "searching will help find a related post."
+#~ msgstr ""
+#~ "Sorry, er zijn geen resultaten gevonden. Misschien kunt u de zoekfunctie "
+#~ "bovenaan de pagina proberen."
+
+#~ msgid "There are no posts within this category."
+#~ msgstr "Er zijn geen berichten in deze categorie"
+
+#~ msgid "More %s&hellip;"
+#~ msgstr "Meer %s&hellip;"
+
+#~ msgid "facade"
+#~ msgstr "gevel"
+
+#~ msgid "Facade"
+#~ msgstr "Gevel"
+
+#~ msgid "frameworks"
+#~ msgstr "draagconstructies"
+
+#~ msgid "Frameworks"
+#~ msgstr "Draagconstructies"
+
+#~ msgid "windows-doors-windows"
+#~ msgstr "ramen-deuren-ramen"
+
+#~ msgid "Windows, doors, windows"
+#~ msgstr "Ramen, deuren, ramen"
+
+#~ msgid "Filter:"
+#~ msgstr "Filter:"
+
+#~ msgid "<span class=\"rarr\">&rarr;</span>"
+#~ msgstr "<span class=\"rarr\">&rarr;</span>"
+
+#~ msgid "Attachment(s)"
+#~ msgstr "Bijlage(n)"
+
+#~ msgid "More Arbitration"
+#~ msgstr "Meer arbitrage"
+
+#~ msgid "Chapters in this file"
+#~ msgstr "Hoofdstukken in dit dossier"
+
+#~ msgid "Location: %s"
+#~ msgstr "Locatie: %s"
+
+#~ msgid "Construction products"
+#~ msgstr "Bouwproducten"
+
+#~ msgid "Read more &hellip;"
+#~ msgstr "Lees meer &hellip;"
+
+#~ msgid "Arbitrary advertisement script, text or HTML"
+#~ msgstr "Willekeurige advertentie script, tekst of HTML"
+
+#~ msgid "Automatically add paragraphs"
+#~ msgstr "Automatisch paragrafen toevoegen"
+
+#~ msgctxt "post type general name"
+#~ msgid "Agenda"
+#~ msgstr "Agenda"
+
+#~ msgctxt "post type singular name"
+#~ msgid "Event"
+#~ msgstr "Evenement"
+
+#~ msgid "Add New Event"
+#~ msgstr "Nieuwe evenement toevoegen"
+
+#~ msgid "New Event"
+#~ msgstr "Nieuwe evenement"
+
+#~ msgid "No Events found"
+#~ msgstr "Geen evenementen gevonden"
+
+#~ msgid "No Events found in Trash"
+#~ msgstr "Geen evenementen gevonden in prullenbak"
+
+#~ msgid "Parent Event:"
+#~ msgstr "Bovenliggende evenement:"
+
+#~ msgctxt "taxonomy singular name"
+#~ msgid "Project Type"
+#~ msgstr "Project type"
+
+#~ msgid "Search Project Types"
+#~ msgstr "Project types zoeken"
+
+#~ msgid "All Project Types"
+#~ msgstr "Alle project types"
+
+#~ msgid "Parent Project Type"
+#~ msgstr "Bovenliggend project type"
+
+#~ msgid "Parent Project Type:"
+#~ msgstr "Bovenliggend project type:"
+
+#~ msgid "Edit Project Type"
+#~ msgstr "Project type bewerken"
+
+#~ msgid "Update Project Type"
+#~ msgstr "Update project type"
+
+#~ msgid "Add New Project Type"
+#~ msgstr "Nieuw project type toevoegen"
+
+#~ msgid "New Project Type Name"
+#~ msgstr "Nieuwe project type naam"
+
+#~ msgid "%s <span class=\"says\">says:</span>"
+#~ msgstr "%s <span class=\"says\">zegt:</span>"
+
+#~ msgid "Your comment is awaiting moderation."
+#~ msgstr "Je reactie is in afwachting van goedkeuring."
+
+#~ msgid "(Edit)"
+#~ msgstr "(Bewerken)"
+
+#~ msgid "Pingback: "
+#~ msgstr "Pingback: "
+
+#~ msgid "Filter on subject:"
+#~ msgstr "Filter op onderwerp:"
+
+#~ msgctxt "class general name"
+#~ msgid "Classes"
+#~ msgstr "Classificaties"
+
+#~ msgctxt "class singular name"
+#~ msgid "Class"
+#~ msgstr "Classificatie"
+
+#~ msgid "Search Classes"
+#~ msgstr "Zoek classificaties"
+
+#~ msgid "All Classes"
+#~ msgstr "Alle classificaties"
+
+#~ msgid "Parent Classes"
+#~ msgstr "Bovenliggende classificatie"
+
+#~ msgid "Parent Class:"
+#~ msgstr "Bovenliggende classificatie:"
+
+#~ msgid "Edit Class"
+#~ msgstr "Classificatie bewerken"
+
+#~ msgid "Bouwmedia"
+#~ msgstr "Eisma Bouwmedia"
+
+#~ msgid "RSS Bouwproducten.nl"
+#~ msgstr "RSS Bouwproducten.nl"
+
+#~ msgid "Respond Conditions Page"
+#~ msgstr "Reactie voorwaarden pagina"
+
+#~ msgid "&mdash; Select &mdash;"
+#~ msgstr "&mdash; Selecteren &mdash;"
+
+#~ msgid "Breadcrumbs not available"
+#~ msgstr "Broodkruimel niet beschikbaar"
+
+#~ msgid "Import Zibbsearch Information"
+#~ msgstr "Importeer Zibbsearch informatie"
+
+#~ msgid "Search Project Categories"
+#~ msgstr "Zoek project categorieën"
+
+#~ msgid "Popular Project Categories"
+#~ msgstr "Populaire project categorieën"
+
+#~ msgid "All Project Categories"
+#~ msgstr "Alle project categorieën"
+
+#~ msgid "Parent Project Category"
+#~ msgstr "Bovenliggende project categorie"
+
+#~ msgid "Parent Project Category:"
+#~ msgstr "Bovenliggende project categorie:"
+
+#~ msgid "Edit Project Category"
+#~ msgstr "Project categorie bewerken"
+
+#~ msgid "Update Project Category"
+#~ msgstr "Update project categorie"
+
+#~ msgid "Add New Project Category"
+#~ msgstr "Nieuwe project categorie toevoegen"
+
+#~ msgid "New Category Name"
+#~ msgstr "Nieuwe categorie naam"
+
+#~ msgid "Additional information"
+#~ msgstr "Aanvullende informatie"
+
+#~ msgctxt "post type general name"
+#~ msgid "Projects"
+#~ msgstr "Projecten"
+
+#~ msgctxt "project"
+#~ msgid "Add New"
+#~ msgstr "Nieuwe toevoegen"
+
+#~ msgid "Add New Project"
+#~ msgstr "Nieuw project toevoegen"
+
+#~ msgid "New Project"
+#~ msgstr "Nieuw project"
+
+#~ msgid "Search Projects"
+#~ msgstr "Projecten zoeken"
+
+#~ msgid "No projects found"
+#~ msgstr "Geen projecten gevonden"
+
+#~ msgid "No projects found in Trash"
+#~ msgstr "Geen projecten gevonden in prullenbak"
+
+#~ msgid "Parent Project:"
+#~ msgstr "Bovenliggend project:"
+
+#~ msgid "%1$s%2$s, %3$s @ %4$s : %5$s"
+#~ msgstr "%1$s%2$s, %3$s @ %4$s : %5$s"
+
+#~ msgid "Filter on subject: "
+#~ msgstr "Filter op onderwerp: "
+
+#~ msgid "Bucket Type"
+#~ msgstr "Bucket type"
+
+#~ msgid "Unique ID 1"
+#~ msgstr "Unieke ID 1"
+
+#~ msgid "Unique ID 2"
+#~ msgstr "Unieke ID 2"
+
+#~ msgid "NIB 1"
+#~ msgstr "NIB 1"
+
+#~ msgid "Taxonomy"
+#~ msgstr "Taxonomie"
+
+#~ msgid "Tax IDs"
+#~ msgstr "Tax IDs"
+
+#~ msgid "Image URLs 1"
+#~ msgstr "Afbeelding URLs 1"
+
+#~ msgid "Primary Navigation"
+#~ msgstr "Primaire navigatie"
+
+#~ msgid "Utility Navigation"
+#~ msgstr "Utility navigatie"
+
+#~ msgid "Media Navigation"
+#~ msgstr "Media navigatie"
+
+#~ msgid "Footer Navigation"
+#~ msgstr "Voettekst navigatie"
+
+#~ msgid "Social Navigation"
+#~ msgstr "Sociale navigatie"
+
+#~ msgid "Project Categories Filter"
+#~ msgstr "Project categorieën filter"
+
+#~ msgid "Post Footer Navigation"
+#~ msgstr "Bericht voettekst navigatie"
+
+#~ msgctxt "taxonomy general name"
+#~ msgid "Event Categories"
+#~ msgstr "Evenement categorieën"
+
+#~ msgctxt "taxonomy singular name"
+#~ msgid "Event Category"
+#~ msgstr "Evenement categorie"
+
+#~ msgid "Search Event Categories"
+#~ msgstr "Zoek evenement categorieën"
+
+#~ msgid "All Event Categories"
+#~ msgstr "Alle evenement categorieën"
+
+#~ msgid "Parent Event Category"
+#~ msgstr "Bovenliggende evenement categorie:"
+
+#~ msgid "Parent Event Category:"
+#~ msgstr "Bovenliggende evenement categorie:"
+
+#~ msgid "Edit Event Category"
+#~ msgstr "Evenement categorie bewerken"
+
+#~ msgid "Add New Event Category"
+#~ msgstr "Nieuwe evenement categorie toevoegen"
+
+#~ msgid "New Event Category Name"
+#~ msgstr "Nieuwe evenement categorie naam"
+
+#~ msgid "%d views"
+#~ msgstr "%d keer bekeken"
+
+#~ msgid "Loading Photos"
+#~ msgstr "Foto's worden geladen"
+
+#~ msgid "loading&hellip;"
+#~ msgstr "Bezig met laden&hellip;"
+
+#~ msgid "Sidebar Widget Area (Homepage excluded)"
+#~ msgstr "Zijbalk widget gebied (Home pagina uitgesloten)"
+
+#~ msgid "The sidebar widget area that is exlcuded on the homepage"
+#~ msgstr "De zijbalk widget gebied die is uitgesloten op de home pagina."
+
+#~ msgid "Top Widget Area"
+#~ msgstr "Top widget gebied"
+
+#~ msgid "The top widget area"
+#~ msgstr "De top widget gebied"
+
+#~ msgid "Primary Widget Area"
+#~ msgstr "Primaire widget gebied"
+
+#~ msgid "The primary widget area"
+#~ msgstr "De primaire widget gebied"
+
+#~ msgid "Secondary Widget Area"
+#~ msgstr "Secundaire widget gebied"
+
+#~ msgid "The secondary widget area"
+#~ msgstr "De secundaire widget gebied"
+
+#~ msgid "Home Widget Area"
+#~ msgstr "Home widget gebied"
+
+#~ msgid "The home widget area"
+#~ msgstr "De home widget gebied"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "Tabs Widget Area"
+#~ msgstr "Tabbladen widget gebied"
+
+#~ msgid "The tabs widget area"
+#~ msgstr "De tabbladen widget gebied"
+
+#, fuzzy
+#~ msgid "Class:"
+#~ msgstr "Classificatie"
+
+#~ msgctxt "taxonomy general name"
+#~ msgid "Phases"
+#~ msgstr "Bouwfasen"
+
+#~ msgctxt "taxonomy singular name"
+#~ msgid "Phase"
+#~ msgstr "Bouwfout"
+
+#~ msgid "All Phases"
+#~ msgstr "Alle bouwfasen"
+
+#~ msgid "Parent Phases"
+#~ msgstr "Bovenliggende bouwfasen"
+
+#~ msgid "Update Phase"
+#~ msgstr "Update fase"
+
+#~ msgid "Add New Phase"
+#~ msgstr "Nieuwe fase toevoegen"
+
+#~ msgid "Phases"
+#~ msgstr "Bouwfasen"
+
+#~ msgid "Events"
+#~ msgstr "Evenementen"
+
+#~ msgctxt "post type general name"
+#~ msgid "Events"
+#~ msgstr "Evenementen"
+
+#~ msgid "Recent projects"
+#~ msgstr "Recente projecten"
+
+#~ msgid "Construction error"
+#~ msgstr "Bouwfout"
+
+#~ msgid "There are no posts in this category."
+#~ msgstr "Er zijn geen berichten in deze categorie."
+
+#~ msgid "Wall analysis"
+#~ msgstr "Gevelanalyse"
+
+#~ msgid "Go to map overview"
+#~ msgstr "Ga naar map overzicht"
+
+#~ msgid "Permalink to %s"
+#~ msgstr "Permalink naar %s"
+
+#~ msgctxt "taxonomy general name"
+#~ msgid "Categories"
+#~ msgstr "Categorieën"
+
+#~ msgid "Skip to content"
+#~ msgstr "Spring naar inhoud"
+
+#~ msgid "Category Archives: %s"
+#~ msgstr "Categorie archief: %s"
+
+#~ msgid "Comments are closed."
+#~ msgstr "Er kunnen geen reacties geplaatst worden."
+
+#~ msgid ""
+#~ "Apologies, but the page you requested could not be found. Perhaps "
+#~ "searching will help."
+#~ msgstr ""
+#~ "Onze excuses, we konden de opgevraagde pagina niet vinden. Misschien kunt "
+#~ "u via de zoekfunctie vinden wat u zoekt."
+
+#~ msgid "Author Archives: %s"
+#~ msgstr "Auteur archieven: %s"
+
+#~ msgid "Tag Archives: %s"
+#~ msgstr "Tag archief: %s"
+
+#~ msgid "<span class=\"meta-nav\">&larr;</span> Older posts"
+#~ msgstr "<span class=\"meta-nav\">&larr;</span> Oudere berichten"
+
+#~ msgid "Newer posts <span class=\"meta-nav\">&rarr;</span>"
+#~ msgstr "Nieuwere berichten <span class=\"meta-nav\">&rarr;</span>"
+
+#, fuzzy
+#~ msgid "View Galleries"
+#~ msgstr "Bekijk alle oefenstof"
+
+#, fuzzy
+#~ msgid "More Galleries"
+#~ msgstr "Bekijk alle oefenstof"
+
+#~ msgid "% Comments"
+#~ msgstr "% Reacties"
+
+#, fuzzy
+#~ msgid "<span class=\"%1$s\">Posted in</span> %2$s"
+#~ msgstr "<span class=\"%1$s\">Geplaatst op</span> %2$s"
+
+#~ msgid "<span class=\"%1$s\">Tagged</span> %2$s"
+#~ msgstr "<span class=\"%1$s\">Tagged</span> %2$s"
+
+#~ msgctxt "Next post link"
+#~ msgid "&rarr;"
+#~ msgstr "&rarr;"
+
+#~ msgid "View all posts by %s <span class=\"meta-nav\">&rarr;</span>"
+#~ msgstr ""
+#~ "Bekijk alle berichten door %s <span class=\"meta-nav\">&rarr;</span>"
+
+#~ msgid "<span class=\"meta-nav\">&larr;</span> %s"
+#~ msgstr "<span class=\"meta-nav\">&larr;</span> %s"
+
+#~ msgid "<span class=\"%1$s\">By</span> %2$s"
+#~ msgstr "<span class=\"%1$s\">Door</span> %2$s"
+
+#~ msgid "<span class=\"%1$s\">Published</span> %2$s"
+#~ msgstr "<span class=\"%1$s\">Gepubliceerd</span> %2$s"
+
+#~ msgid "Full size is %s pixels"
+#~ msgstr "Volledig formaat is %s pixels"
+
+#~ msgid "Link to full-size image"
+#~ msgstr "Link naar volledige afbeelding"
+
+#~ msgid "You must be logged in to edit your posts."
+#~ msgstr "Je moet ingelogd zijn om je berichten te wijzigen."
+
+#~ msgid "No post to edit found."
+#~ msgstr "Geen berichten om te wijzigen gevonden."
+
+#~ msgid "Posted On"
+#~ msgstr "Geplaatst op "
+
+#~ msgid "There are no interviews."
+#~ msgstr "Er zijn geen interviews."
+
+#~ msgid "My profile"
+#~ msgstr "Mijn profiel"
+
+#~ msgid "Logout of this account"
+#~ msgstr "Uitloggen van dit account."
+
+#~ msgid "There are no exercises."
+#~ msgstr "Er zijn geen oefeningen."
+
+#~ msgid "There are no vacancies."
+#~ msgstr "Er zijn geen vacatures."
+
+#~ msgid "Search for:"
+#~ msgstr "Zoek resultaten voor:"
+
+#~ msgid "<span class=\"meta-nav\">&larr;</span> Previous Exercises"
+#~ msgstr "<span class=\"meta-nav\">&larr;</span> Vorige oefeningen"
+
+#~ msgid "Next Exercises <span class=\"meta-nav\">&rarr;</span>"
+#~ msgstr "Volgende oefeningen <span class=\"meta-nav\">&rarr;</span>"
+
+#~ msgid "De Voetbaltrainer"
+#~ msgstr "De Voetbaltrainer"
+
+#~ msgid "<span class=\"meta-nav\">&larr;</span> Previous Magazines"
+#~ msgstr "<span class=\"meta-nav\">&larr;</span> Vorige magazines"
+
+#~ msgid "Next Magazines <span class=\"meta-nav\">&rarr;</span>"
+#~ msgstr "Volgende magazines <span class=\"meta-nav\">&rarr;</span>"
+
+#~ msgid "There are no magazines"
+#~ msgstr "Er zijn geen magazines."
+
+#~ msgid "Unfortunately we could not find exhibition games."
+#~ msgstr "Helaas konden we geen oefenwedstrijden vinden."
+
+#~ msgid "<em>You must be logged in to add vacancies</em>"
+#~ msgstr "<em>Je moet ingelogd zijn om een vacatures toe te voegen.</em>"
+
+#~ msgid "Log in"
+#~ msgstr "Inloggen"
+
+#~ msgid "Lost password?"
+#~ msgstr "Wachtwoord vergeten?"
+
+#~ msgid "Register"
+#~ msgstr "Registreren"
+
+#~ msgid "Vacancies"
+#~ msgstr "Vacatures"
+
+#~ msgid "<span class=\"meta-nav\">&larr;</span> Previous Vacancies"
+#~ msgstr "<span class=\"meta-nav\">&larr;</span> Vorige vacatures"
+
+#~ msgid "Next Vacancies <span class=\"meta-nav\">&rarr;</span>"
+#~ msgstr "Volgende vacatures <span class=\"meta-nav\">&rarr;</span>"
+
+#~ msgid "You must be logged in to edit your profile."
+#~ msgstr "Je moet ingelogd zijn om je profiel te wijzigen."
+
+#~ msgid "Usernames cannot be changed."
+#~ msgstr "Gebruikersnaam kan niet worden gewijzigd."
+
+#~ msgid "Nickname"
+#~ msgstr "Nickname"
+
+#~ msgid "Contact Info"
+#~ msgstr "Contact informatie"
+
+#~ msgid ""
+#~ "There is a pending change of your e-mail to <code>%1$s</code>. <a href="
+#~ "\"%2$s\">Cancel</a>"
+#~ msgstr ""
+#~ "Er is een afwachtende verandering van je e-mailadres naar <code>%1$s</"
+#~ "code>. <a href=\"%2$s\">Annuleren</a>"
+
+#~ msgid "About Yourself"
+#~ msgstr "Over jezelf"
+
+#~ msgid "Biographical Info"
+#~ msgstr "Biografische informatie"
+
+#~ msgid ""
+#~ "Share a little biographical information to fill out your profile. This "
+#~ "may be shown publicly."
+#~ msgstr ""
+#~ "Deel een kleine biografischoe informatie om je profiel te complementere. "
+#~ "Dit kan publiekelijk worden weergegeven."
+
+#~ msgid ""
+#~ "If you would like to change the password type a new one. Otherwise leave "
+#~ "this blank."
+#~ msgstr ""
+#~ "Type een nieuw wachtwoord in om je wachtwoord te wijzigen. Anders dit "
+#~ "veld leeg laten."
+
+#~ msgid "Type your new password again."
+#~ msgstr "Type je nieuwe wachtwoord nogmaals."
+
+#~ msgid "Exhibition Games"
+#~ msgstr "Oefenwedstrijden"
+
+#~ msgid "You didn't add any posts within this section."
+#~ msgstr "Je hebt nog geen berichten toegevoegd binnen deze sectie."
+
+#~ msgid ""
+#~ "DeVoetbaltrainer.nl is een activiteit van Eisma Businessmedia. "
+#~ "Auteursrecht voorbehouden. Op gebruik van deze site zijn de volgende "
+#~ "regelingen van toepassing:"
+#~ msgstr ""
+#~ "DeVoetbaltrainer.nl is een activiteit van Eisma Businessmedia. "
+#~ "Auteursrecht voorbehouden. Op gebruik van deze site zijn de volgende "
+#~ "regelingen van toepassing:"
+
+#~ msgid "Add Exhibition Game"
+#~ msgstr "Oefenwedstrijd toevoegen"
+
+#~ msgid "You must be logged in to add an exhibition game."
+#~ msgstr "Je moet ingelogd zijn om een oefenwedstrijd toe te voegen."
+
+#~ msgid "<span class=\"meta-nav\">&larr;</span> Previous Exhibition Game"
+#~ msgstr "<span class=\"meta-nav\">&larr;</span> Vorige oefenwedstrijd"
+
+#~ msgid "Next Exhibition Game <span class=\"meta-nav\">&rarr;</span>"
+#~ msgstr "Volgende oefenwedstrijd <span class=\"meta-nav\">&rarr;</span>"
+
+#~ msgid "<em>You must be logged in to add exhibition games.</em>"
+#~ msgstr "<em>Je moet ingelogd zijn om een oefenwedstrijd toe te voegen.</em>"
+
+#~ msgid "<span class=\"meta-nav\">&larr;</span> Previous Interview"
+#~ msgstr "<span class=\"meta-nav\">&larr;</span> Vorige interview"
+
+#~ msgid "Next Interview <span class=\"meta-nav\">&rarr;</span>"
+#~ msgstr "Volgende interview <span class=\"meta-nav\">&rarr;</span>"
+
+#~ msgid ""
+#~ "This entry was posted in %1$s and tagged %2$s. Bookmark the <a href=\"%3$s"
+#~ "\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+#~ msgstr ""
+#~ "Dit bericht is geplaatst in %1$s en getagd %2$s. Bookmark de <a href="
+#~ "\"%3$s\" title=\"Permalink naar %4$s\" rel=\"bookmark\">permalink</a>."
+
+#~ msgid ""
+#~ "This entry was posted in %1$s. Bookmark the <a href=\"%3$s\" title="
+#~ "\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+#~ msgstr ""
+#~ "Dit bericht is geplaatst in %1$s. Bookmark de <a href=\"%3$s\" title="
+#~ "\"Permalink naar %4$s\" rel=\"bookmark\">permalink</a>."
+
+#~ msgid ""
+#~ "Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark"
+#~ "\">permalink</a>."
+#~ msgstr ""
+#~ "Favoriet de <a href=\"%3$s\" title=\"Permalink naar %4$s\" rel=\"bookmark"
+#~ "\">permalink</a>."
+
+#~ msgid "Region:"
+#~ msgstr "Regio:"
+
+#~ msgid "All regions"
+#~ msgstr "Alle regio's"
+
+#~ msgid "Level:"
+#~ msgstr "Leeftijd:"
+
+#~ msgid "Section:"
+#~ msgstr "Rubriek:"
+
+#~ msgid "All sections"
+#~ msgstr "Alle secties"
+
+#~ msgid "All subjects"
+#~ msgstr "Alle onderwerpen"
+
+#~ msgid ""
+#~ "Please enter your username or email address. You will receive a link to "
+#~ "create a new password via email."
+#~ msgstr ""
+#~ "Gebruikersnaam of e-mailadres invoeren. Je zult per e-mail een link "
+#~ "ontvangen waarna je een nieuw wachtwoord kunt aanmaken."
+
+#~ msgid "Reset Password"
+#~ msgstr "Reset wachtwoord"
+
+#~ msgid "Check your e-mail for the confirmation link."
+#~ msgstr "Controleer je e-mail voor de bevestigingslink."
+
+#~ msgid "There are no events."
+#~ msgstr "Er zijn geen evenementen."
+
+#~ msgid "There is no news."
+#~ msgstr "Er is geen nieuws."
+
+#~ msgid ""
+#~ "You are currently logged in as <a href=\"%1$s\" title=\"%2$s\">%2$s</a>."
+#~ msgstr ""
+#~ "Je bent momenteel ingelogd als <a href=\"%1$s\" title=\"%2$s\">%2$s</a>."
+
+#~ msgid "Log out of this account"
+#~ msgstr "Uitloggen van dit account"
+
+#~ msgid "An unknown error has occurred."
+#~ msgstr "Er is een onbekende fout opgetreden."
+
+#~ msgid "View all the news"
+#~ msgstr "Bekijk al het nieuws"
+
+#~ msgid "Exercies"
+#~ msgstr "Oefenstof"
+
+#~ msgid "View all events"
+#~ msgstr "Bekijk alle evenementen"
+
+#~ msgid "Name:"
+#~ msgstr "Naam:"
+
+#~ msgid "View all vacancies"
+#~ msgstr "Bekijk alle vacatures"
+
+#~ msgctxt "home"
+#~ msgid "News"
+#~ msgstr "Actueel"
+
+#~ msgid "View all news"
+#~ msgstr "Bekijk alle berichten"
+
+#~ msgid "There are no exhibition games."
+#~ msgstr "Er zijn geen oefenwedstrijden."
+
+#~ msgid "View all exhibition games"
+#~ msgstr "Bekijk alle oefenwedstrijden"
+
+#~ msgid "There are no articles."
+#~ msgstr "Er zijn geen artikelen."
+
+#~ msgid "View all articles"
+#~ msgstr "Bekijk alle artikelen"
+
+#~ msgctxt "post type general name"
+#~ msgid "Teasers"
+#~ msgstr "Teasers"
+
+#~ msgctxt "teaser"
+#~ msgid "Add New"
+#~ msgstr "Nieuwe toevoegen"
+
+#~ msgid "New Teaser"
+#~ msgstr "Nieuwe teaser"
+
+#~ msgid "View Teaser"
+#~ msgstr "Teaser bekijken"
+
+#~ msgid "No teasers found in Trash"
+#~ msgstr "Geen teasers gevonden in prullenbak"
+
+#~ msgid "Search Sections"
+#~ msgstr "Rubrieken zoeken"
+
+#~ msgid "All Sections"
+#~ msgstr "Alle rubrieken"
+
+#~ msgid "Parent Section"
+#~ msgstr "Bovenliggende rubriek"
+
+#~ msgid "Parent Section:"
+#~ msgstr "Bovenliggende rubriek:"
+
+#~ msgid "Add New Section"
+#~ msgstr "Nieuwe rubriek toevoegen"
+
+#~ msgid "New Section Name"
+#~ msgstr "Nieuwe rubriek naam"
+
+#~ msgctxt "taxonomy general name"
+#~ msgid "Levels"
+#~ msgstr "Leeftijden"
+
+#~ msgctxt "taxonomy singular name"
+#~ msgid "Level"
+#~ msgstr "Leeftijd"
+
+#~ msgid "All Levels"
+#~ msgstr "Alle leeftijden"
+
+#~ msgid "Parent Level"
+#~ msgstr "Bovenliggende leeftijd"
+
+#~ msgid "Edit Level"
+#~ msgstr "Leeftijd bewerken"
+
+#~ msgid "Update Level"
+#~ msgstr "Update leeftijd"
+
+#~ msgid "Add New Level"
+#~ msgstr "Nieuwe leeftijd toevoegen"
+
+#~ msgid "The number \"%s\" is not an valid subscriber number."
+#~ msgstr "Het nummer \"%s\" is geen geldige abonneenummer."
+
+#~ msgctxt "post type general name"
+#~ msgid "Exhibition Games"
+#~ msgstr "Oefenwedstrijden"
+
+#~ msgctxt "exhibition_game"
+#~ msgid "Add New"
+#~ msgstr "Nieuwe toevoegen"
+
+#~ msgid "Add New Exhibition Game"
+#~ msgstr "Nieuwe oefenwedstrijd toevoegen"
+
+#~ msgid "Edit Exhibition Game"
+#~ msgstr "Oefenwedstrijd bewerken"
+
+#~ msgid "New Exhibition Game"
+#~ msgstr "Nieuwe oefenwedstrijd"
+
+#~ msgid "View Exhibition Game"
+#~ msgstr "Bekijk oefenwedstrijd"
+
+#~ msgid "Search Exhibition Games"
+#~ msgstr "Oefenwedstrijden zoeken"
+
+#~ msgid "No exhibition games found"
+#~ msgstr "Geen oefenwedstrijden gevonden"
+
+#~ msgid "No exhibition games found in Trash"
+#~ msgstr "Geen oefenwedstrijden gevonden in prullenbak"
+
+#~ msgid "Regions"
+#~ msgstr "Regio's"
+
+#~ msgid "Levels"
+#~ msgstr "Leeftijden"
+
+#~ msgid "Extend Subscriber Numbers"
+#~ msgstr "Uitbreiding abonneenummers"
+
+#~ msgid "Login Page"
+#~ msgstr "Inloggen pagina"
+
+#~ msgid "Not Logged in Page"
+#~ msgstr "Niet ingelogd pagina"
+
+#~ msgid "Not Paying Page"
+#~ msgstr "Niet betaald pagina"
+
+#~ msgctxt "post type general name"
+#~ msgid "Exercises"
+#~ msgstr "Oefenstof"
+
+#~ msgctxt "post type singular name"
+#~ msgid "Exercise"
+#~ msgstr "Oefenstof"
+
+#~ msgctxt "exercise"
+#~ msgid "Add New"
+#~ msgstr "Nieuwe toevoegen"
+
+#~ msgid "Add New Exercise"
+#~ msgstr "Nieuwe oefenstof toevoegen"
+
+#~ msgid "Edit Exercise"
+#~ msgstr "Oefenstof bewerken"
+
+#~ msgid "Search Exercises"
+#~ msgstr "Oefenstof zoeken"
+
+#~ msgid "No exercises found"
+#~ msgstr "Geen oefenstof gevonden"
+
+#~ msgid "No exercises found in Trash"
+#~ msgstr "Geen oefenstof gevonden in prullenbak"
+
+#~ msgid "Exercises"
+#~ msgstr "Oefenstof"
+
+#~ msgid "Twitter Username"
+#~ msgstr "Twitter gebruikersnaam"
+
+#~ msgid "Facebook Username"
+#~ msgstr "Facebook gebruikersnaam"
+
+#~ msgctxt "taxonomy general name"
+#~ msgid "Magazines"
+#~ msgstr "Magazines"
+
+#~ msgctxt "taxonomy singular name"
+#~ msgid "Magazine"
+#~ msgstr "Magazine"
+
+#~ msgid "Search Magazines"
+#~ msgstr "Magazines zoeken"
+
+#~ msgid "All Magazines"
+#~ msgstr "Alle magazines"
+
+#~ msgid "Parent Magazine:"
+#~ msgstr "Bovenliggend magazine:"
+
+#~ msgid "Edit Magazine"
+#~ msgstr "Vakblad magazine"
+
+#~ msgid "Add New Magazine"
+#~ msgstr "Nieuw magazine toevoegen"
+
+#~ msgid "New Magazine Name"
+#~ msgstr "Nieuw magazine naam"
+
+#~ msgctxt "post type general name"
+#~ msgid "Vacancies"
+#~ msgstr "Vacatures"
+
+#~ msgctxt "post type singular name"
+#~ msgid "Vacancy"
+#~ msgstr "Vacature"
+
+#~ msgctxt "vacancy"
+#~ msgid "Add New"
+#~ msgstr "Nieuwe toevoegen"
+
+#~ msgid "Add New Vacancy"
+#~ msgstr "Nieuwe vacature toevoegen"
+
+#~ msgid "Edit Vacancy"
+#~ msgstr "Vacature bewerken"
+
+#~ msgid "View Vacancy"
+#~ msgstr "Bekijk vacature"
+
+#~ msgid "Search Vacancies"
+#~ msgstr "Vacatures zoeken"
+
+#~ msgid "No vacancies found"
+#~ msgstr "Geen vacatures gevonden"
+
+#~ msgid "No vacancies found in Trash"
+#~ msgstr "Geen vacatures gevonden in prullenbak"
+
+#~ msgid "Subscriber numbers cannot be changed."
+#~ msgstr "Abonneenummers kunnen niet worden veranderd."
+
+#~ msgid "No Regions"
+#~ msgstr "Geen regio's"
+
+#~ msgid "No Levels"
+#~ msgstr "Geen leeftijden"
+
+#~ msgid "Y/m/d"
+#~ msgstr "Y/m/d"
+
+#~ msgid "Large Rectangle Advertisement"
+#~ msgstr "Large rectangle advertentie"
+
+#~ msgid "Paying Subscriber"
+#~ msgstr "Betalende abonnee"
+
+#~ msgctxt "post type general name"
+#~ msgid "Magazines"
+#~ msgstr "Magazines"
+
+#~ msgctxt "post type singular name"
+#~ msgid "Magazine"
+#~ msgstr "Vakblad"
+
+#~ msgctxt "magazine"
+#~ msgid "Add New"
+#~ msgstr "Nieuwe toevoegen"
+
+#~ msgid "New Magazine"
+#~ msgstr "Nieuw vakblad"
+
+#~ msgid "View Magazine"
+#~ msgstr "Bekijk vakblad"
+
+#~ msgid "No magazines found"
+#~ msgstr "Geen magazines gevonden"
+
+#~ msgid "No magazines found in Trash"
+#~ msgstr "Geen magazines gevonden in prullenbak"
+
+#~ msgid "Magazines"
+#~ msgstr "Vakbladen"
+
+#~ msgctxt "taxonomy general name"
+#~ msgid "Subjects"
+#~ msgstr "Onderwerpen"
+
+#~ msgctxt "taxonomy singular name"
+#~ msgid "Subject"
+#~ msgstr "Onderwerp"
+
+#~ msgid "All Subjects"
+#~ msgstr "Alle onderwerpen"
+
+#~ msgid "Update Subject"
+#~ msgstr "Update onderwerp"
+
+#~ msgctxt "post type general name"
+#~ msgid "Interviews"
+#~ msgstr "Interviews"
+
+#~ msgctxt "interview"
+#~ msgid "Add New"
+#~ msgstr "Nieuwe toevoegen"
+
+#~ msgid "Add New Interview"
+#~ msgstr "Nieuwe interview toevoegen"
+
+#~ msgid "Edit Interview"
+#~ msgstr "Interview bewerken"
+
+#~ msgid "New Interview"
+#~ msgstr "Nieuwe interview"
+
+#~ msgid "No interviews found"
+#~ msgstr "Geen interviews gevonden"
+
+#~ msgid "No interviews found in Trash"
+#~ msgstr "Geen interviews gevonden in prullenbak"
+
+#~ msgid "Footer Widget Area"
+#~ msgstr "Voettekst widget gebied"
+
+#~ msgid "The footer widget area"
+#~ msgstr "De voettekst widget gebied"
+
+#~ msgctxt "taxonomy general name"
+#~ msgid "Regions"
+#~ msgstr "Regio's"
+
+#~ msgctxt "taxonomy singular name"
+#~ msgid "Region"
+#~ msgstr "Regio"
+
+#~ msgid "All Regions"
+#~ msgstr "Alle regio's"
+
+#~ msgid "Parent Region"
+#~ msgstr "Bovenliggende regio"
+
+#~ msgid "Edit Region"
+#~ msgstr "Bewerk regio"
+
+#~ msgid "Add New Region"
+#~ msgstr "Nieuwe regio toevoegen"
+
+#~ msgid "osCommerce import info"
+#~ msgstr "osCommerce import info"
+
+#~ msgid ""
+#~ "<p><em>This content is only available for payed subscribers of the "
+#~ "magazine De Voetbaltrainer.<em></p>"
+#~ msgstr ""
+#~ "<p><em>Deze inhoud is alleen toegankelijk voor betaalde abonnees van het "
+#~ "vakblad De Voetbaltrainer.</em></p>"
+
+#~ msgid "<p><a href=\"%s\">Login</a> or <a href=\"%s\">Register</a></p>"
+#~ msgstr "<p><a href=\"%s\">Login</a> of <a href=\"%s\">registreer</a></p>"
+
+#~ msgid "Lost Password?"
+#~ msgstr "Wachtwoord vergeten?"
+
+#~ msgid "There are no news."
+#~ msgstr "Er is geen nieuws."
+
+#~ msgid "Opponent"
+#~ msgstr "Tegenstander"
+
+#~ msgid "There are no opponents."
+#~ msgstr "Er zijn geen tegenstanders."
+
+#~ msgid "Opponents"
+#~ msgstr "Tegenstanders"
+
+#~ msgid "<span class=\"meta-nav\">&larr;</span> Previous Opponents"
+#~ msgstr "<span class=\"meta-nav\">&larr;</span> Vorige tegenstanders"
+
+#~ msgid "Next Opponents <span class=\"meta-nav\">&rarr;</span>"
+#~ msgstr "Volgende tegenstanders <span class=\"meta-nav\">&rarr;</span>"
+
+#~ msgid "Add opponent"
+#~ msgstr "Tegenstander toevoegen"
+
+#~ msgid "View all opponents"
+#~ msgstr "Bekijk alle tegenstanders"
+
+#~ msgctxt "post type general name"
+#~ msgid "Opponents"
+#~ msgstr "Tegenstanders"
+
+#~ msgctxt "post type singular name"
+#~ msgid "Opponent"
+#~ msgstr "Tegenstander"
+
+#~ msgctxt "opponent"
+#~ msgid "Add New"
+#~ msgstr "Nieuwe toevoegen"
+
+#~ msgid "Add New Opponent"
+#~ msgstr "Nieuwe tegenstander toevoegen"
+
+#~ msgid "Edit Opponent"
+#~ msgstr "Tegenstander bewerken"
+
+#~ msgid "New Opponent"
+#~ msgstr "Nieuwe tegenstander"
+
+#~ msgid "View Opponent"
+#~ msgstr "Bekijk tegenstander"
+
+#~ msgid "Search Opponents"
+#~ msgstr "Tegenstanders zoeken"
+
+#~ msgid "Subscriber numbers"
+#~ msgstr "Abonneenummers"
+
+#~ msgid "There are no vacanvies."
+#~ msgstr "Er zijn geen vacatures."
+
+#~ msgid ""
+#~ "<span class=\"%1$s\">Posted on</span> %2$s <span class=\"meta-sep\">by</"
+#~ "span> %3$s"
+#~ msgstr ""
+#~ "<span class=\"%1$s\">Geplaatst op</span> %2$s <span class=\"meta-sep"
+#~ "\">door</span> %3$s"
+
+#~ msgid "About De Voetbaltrainer"
+#~ msgstr "Over De Voetbaltrainer"
+
+#~ msgid "This teaser is part of:"
+#~ msgstr "Deze teaser is onderdeel van:"
+
+#~ msgid "Subjects"
+#~ msgstr "Onderwerpen"
+
+#, fuzzy
+#~ msgid "The Voetbaltrainer"
+#~ msgstr "De Voetbaltrainer"
+
+#~ msgctxt "post type general name"
+#~ msgid "Meetings"
+#~ msgstr "Bijeenkomsten"
+
+#~ msgctxt "meeting"
+#~ msgid "Add New"
+#~ msgstr "Nieuwe toevoegen"
+
+#~ msgid "Add New Meeting"
+#~ msgstr "Nieuwe bijeenkomst toevoegen"
+
+#~ msgid "View Meeting"
+#~ msgstr "Bekijk bijeenkomst"
+
+#~ msgid "Search Meetings"
+#~ msgstr "Bijeenkomsten zoeken"
+
+#~ msgid "<span class=\"meta-nav\">&larr;</span> Previous Meetings"
+#~ msgstr "<span class=\"meta-nav\">&larr;</span> Vorige bijeenkomsten"
+
+#~ msgid "Next Meetings <span class=\"meta-nav\">&rarr;</span>"
+#~ msgstr "Volgende bijeenkomsten <span class=\"meta-nav\">&rarr;</span>"
+
+#~ msgid "District"
+#~ msgstr "Regio"
+
+#~ msgid "There are no vacancies"
+#~ msgstr "Er zijn geen vacatures."
+
+#~ msgid "Games"
+#~ msgstr "Wedstrijden"
+
+#~ msgctxt "post type general name"
+#~ msgid "Games"
+#~ msgstr "Wedstrijden"
+
+#~ msgctxt "game"
+#~ msgid "Add New"
+#~ msgstr "Nieuwe toevoegen"
+
+#~ msgctxt "taxonomy general name"
+#~ msgid "Districts"
+#~ msgstr "Regio's"
+
+#~ msgctxt "taxonomy singular name"
+#~ msgid "District"
+#~ msgstr "Regio"
+
+#~ msgid "Search Districts"
+#~ msgstr "Regio's zoeken"
+
+#~ msgid "All Districts"
+#~ msgstr "Alle regio's"
+
+#~ msgid "Edit District"
+#~ msgstr "Regio bewerken"
+
+#~ msgid "Add New District"
+#~ msgstr "Nieuwe regio toevoegen"
+
+#~ msgid "New District Name"
+#~ msgstr "Nieuwe regio naam"
+
+#~ msgid "Quick reservations"
+#~ msgstr "Snel naar reserveren"
+
+#~ msgid "Subscribe for newsletter"
+#~ msgstr "Aanmelden nieuwsbrief"
+
+#~ msgid "persons"
+#~ msgstr "personen"
+
+#~ msgid "We could not find any ships."
+#~ msgstr "Er zijn geen schepen gevonden."
+
+#~ msgid "Week"
+#~ msgstr "Week"
+
+#~ msgid "Weekend"
+#~ msgstr "Weekend"
+
+#~ msgid "Midweek"
+#~ msgstr "Midweek"
+
+#~ msgid "3 Holidays"
+#~ msgstr "3 feestdagen"
+
+#~ msgid "4 Holidays"
+#~ msgstr "4 feestdagen"
+
+#~ msgid "Day trip"
+#~ msgstr "Dagtocht"
+
+#~ msgid "Short weekend"
+#~ msgstr "Kort weekend"
+
+#~ msgid "Daytrip 4-75 persons"
+#~ msgstr "Dagtocht 4-75 personen"
+
+#~ msgid "ship"
+#~ msgstr "schip"
+
+#~ msgid "Read more"
+#~ msgstr "Lees verder"
+
+#~ msgid "Your email address will not be published."
+#~ msgstr "Uw e-mail adres wordt niet gepubliceerd."
+
+#~ msgid "ships"
+#~ msgstr "schepen"
+
+#~ msgid "route"
+#~ msgstr "route"
+
+#~ msgid "Enjoy at"
+#~ msgstr "Geniet bij"
+
+#~ msgid ""
+#~ "Sailing with a traditional ship? Rederij Vooruit, the company with the "
+#~ "biggest fleet and choice."
+#~ msgstr ""
+#~ "Traditioneel zeilschip huren? Kies voor Rederij Vooruit, de rederij met "
+#~ "de meeste keus en arrangementen."
+
+#~ msgid "More about Rederij Vooruit"
+#~ msgstr "Meer over Rederij Vooruit"
+
+#~ msgid "Sailing programs"
+#~ msgstr "Vaarprogramma’s"
+
+#~ msgid "All sailing programs"
+#~ msgstr "Onze gehele vaarprogramma"
+
+#~ msgid "Our ships"
+#~ msgstr "Onze zeilschepen"
+
+#~ msgid "Home ports"
+#~ msgstr "Thuishavens"
+
+#~ msgid ""
+#~ "If you would like to contact us, please feel free to use the form .We "
+#~ "look forward to hear from you."
+#~ msgstr ""
+#~ "Onze medewerkers staan u graag te woord. Vul het contactformulier in en "
+#~ "wij nemen spoedig contact met u op."
+
+#~ msgid "4-15 berths"
+#~ msgstr "4-15 slaapplaatsen"
+
+#~ msgid "16-20 berths"
+#~ msgstr "16-20 slaapplaatsen"
+
+#~ msgid "21-28 berths"
+#~ msgstr "21-28 slaapplaatsen"
+
+#~ msgid "30-34 berths"
+#~ msgstr "30-34 slaapplaatsen"
+
+#~ msgid "Daytrip 4-30 persons"
+#~ msgstr "Dagtocht 4-30 personen"
+
+#~ msgid "Daytrip 30 or more persons"
+#~ msgstr "Dagtocht 30 of meer personen"
+
+#~ msgid "Route to"
+#~ msgstr "Route naar"
+
+#~ msgid "Ships at"
+#~ msgstr "Zeilschepen in "
+
+#~ msgid "info@rederij-vooruit.com"
+#~ msgstr "info@rederij-vooruit.nl"
+
+#~ msgid "Follow Rederij Vooruit"
+#~ msgstr "Volg Rederij Vooruit"
+
+#~ msgid "Copyright"
+#~ msgstr "Copyright"
+
+#~ msgid "All rights reserved"
+#~ msgstr "Alle rechten voorbehouden"
+
+#~ msgid "people during day trip"
+#~ msgstr "personen tijdens dagtocht"
+
+#~ msgid "Width"
+#~ msgstr "Breedte"
+
+#~ msgid "Sail surface"
+#~ msgstr "Zeiloppervlak"
+
+#~ msgid "m<sup>2</sup>"
+#~ msgstr "m<sup>2</sup>"
+
+#~ msgid "Accomodations"
+#~ msgstr "Accomodaties"
+
+#~ msgid "Accessories"
+#~ msgstr "Accessoires"
+
+#~ msgid "More info"
+#~ msgstr "Meer informatie"
+
+#~ msgctxt "ship"
+#~ msgid "Add New"
+#~ msgstr "Schip toevoegen"
+
+#~ msgid "Edit Ship"
+#~ msgstr "Schip bewerken"
+
+#~ msgid "New Ship"
+#~ msgstr "Nieuw schip"
+
+#~ msgid "Accommodation"
+#~ msgstr "Accomodatie"
+
+#~ msgid "Search Accommodations"
+#~ msgstr "Accomodaties zoeken"
+
+#~ msgid "All Accommodations"
+#~ msgstr "Alle accomodaties"
+
+#~ msgid "Parent Accommodation"
+#~ msgstr "Bovenliggende accomodatie"
+
+#~ msgid "Parent Accommodation:"
+#~ msgstr "Bovenliggende accomodatie:"
+
+#~ msgid "Edit Accommodation"
+#~ msgstr "Accomodatie bewerken"
+
+#~ msgid "Update Accommodation"
+#~ msgstr "Update accomodatie"
+
+#~ msgid "Add New Accommodation"
+#~ msgstr "Nieuwe accomodatie toevoegen"
+
+#~ msgid "New Accommodation"
+#~ msgstr "Nieuwe accomodatie"
+
+#~ msgid "Accessory"
+#~ msgstr "Accessoire"
+
+#~ msgid "Parent Accessory"
+#~ msgstr "Bovenliggende accessoire"
+
+#~ msgid "Parent Accessory:"
+#~ msgstr "Bovenliggende accessoire:"
+
+#~ msgid "Port details"
+#~ msgstr "Haven details"
+
+#~ msgid "ZIP"
+#~ msgstr "Postcode"
+
+#~ msgid "Latitude"
+#~ msgstr "Breedtegraad"
+
+#~ msgid "Longitude"
+#~ msgstr "Lengtegraad"
+
+#~ msgid "Snakeware ship ID"
+#~ msgstr "Snakeware schip ID"
+
+#~ msgid "Ships specifications"
+#~ msgstr "Schepen specificaties"
+
+#~ msgid "Ship specifications"
+#~ msgstr "Schip specificaties"
+
+#~ msgctxt "ship specifications"
+#~ msgid "Add New"
+#~ msgstr "Schip specificaties toevoegen"
+
+#~ msgid "Add New Ship specifications"
+#~ msgstr "Nieuwe schip specificaties toevoegen"
+
+#~ msgid "Edit Ship specifications"
+#~ msgstr "Schip specificaties bewerken"
+
+#~ msgid "New Ship specifications"
+#~ msgstr "Nieuwe schip specificaties"
+
+#~ msgid "View Ship specifications"
+#~ msgstr "Bekijk schip specificaties"
+
+#~ msgid "Search Ships specifications"
+#~ msgstr "Schepen specificaties zoeken"
+
+#~ msgid "No ships specifications found"
+#~ msgstr "Geen schepen specificaties gevonden"
+
+#~ msgid "No ships specifications found in Trash"
+#~ msgstr "Geen schepen specificaties gevonden in prullenbak"
+
+#~ msgid "Ship details"
+#~ msgstr "Schip details"
+
+#~ msgctxt "ship details"
+#~ msgid "Add New"
+#~ msgstr "Schip details toevoegen"
