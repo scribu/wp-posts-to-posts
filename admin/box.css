@@ -117,11 +117,11 @@ td.p2p-col-create .p2p-icon {
 }
 
 .p2p-col-delete .p2p-icon {
-	background: url("images/delete.png") no-repeat scroll 50% 50% transparent;
+	background: url("images/minus.png") no-repeat scroll 50% 50% transparent;
 }
 
 .p2p-col-create .p2p-icon {
-	background: url("images/add.png") no-repeat scroll 50% 50% transparent;
+	background: url("images/plus.png") no-repeat scroll 50% 50% transparent;
 	float: left;
 	margin-right: 6px;
 }
