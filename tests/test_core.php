@@ -19,10 +19,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	protected function assertIdsMatch( $id_list, $collection ) {
 		$resulting_ids = wp_list_pluck( $collection->items, 'ID' );
 
-		sort( $id_list );
-		sort( $resulting_ids );
-
-		$constraint = new PHPUnit_Framework_Constraint_IsEqual( $id_list );
+		$constraint = new PHPUnit_Framework_Constraint_IsEqual( $id_list, 0, 10, true );
 
 		self::assertThat( $resulting_ids, $constraint );
 	}
