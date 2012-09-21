@@ -16,12 +16,18 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		self::assertThat( $args, $constraint );
 	}
 
+	// http://unit-tests.trac.wordpress.org/ticket/130
+	function assertEqualSets( $expected, $actual ) {
+		$missing = array_diff( $expected, $actual );
+		$extra = array_diff( $actual, $expected );
+
+		$this->assertEquals( $extra, $missing );
+	}
+
 	protected function assertIdsMatch( $id_list, $collection ) {
 		$resulting_ids = wp_list_pluck( $collection->items, 'ID' );
 
-		$constraint = new PHPUnit_Framework_Constraint_IsEqual( $id_list, 0, 10, true );
-
-		self::assertThat( $resulting_ids, $constraint );
+		$this->assertEqualSets( $id_list, $resulting_ids );
 	}
 
 	function setUp() {
