@@ -10,9 +10,7 @@ class P2P_CLI_Command extends WP_CLI_Command {
 		}
 	}
 
-	function generate_connections( $args ) {
-		$n = 10;
-
+	function generate_connections( $args, $assoc_args ) {
 		if ( empty( $args ) ) {
 			WP_CLI::line( "usage: wp p2p " . __FUNCTION__ . " <connection-type>" );
 			exit;
@@ -24,13 +22,26 @@ class P2P_CLI_Command extends WP_CLI_Command {
 		if ( !$ctype )
 			WP_CLI::error( "'$connection_type' is not a registered connection type." );
 
-		$directed = $ctype->set_direction( 'from' );
+		if ( isset( $assoc_args['items'] ) ) {
+			foreach ( _p2p_extract_post_types( $ctype->side ) as $ptype ) {
+				$command = array( 'wp', 'generate', 'posts' );
+				$assoc_args = array( 'type' => $ptype );
 
-		$side = $directed->get( 'current', 'side' );
+				WP_CLI::launch( WP_CLI::compose_args( $command, $assoc_args ) );
+			}
+		}
 
-		$extra_qv = array( 'p2p:per_page' => $n );
+		$count = $this->_generate_c( $ctype );
 
-		$candidate = $directed->get_connectable( 'any', $extra_qv, 'abstract' );
+		WP_CLI::success( "Created $count connections." );
+	}
+
+	private function _generate_c( $ctype ) {
+		$extra_qv = array( 'p2p:per_page' => 10 );
+
+		$candidate = $ctype
+			->set_direction( 'from' )
+			->get_connectable( 'any', $extra_qv, 'abstract' );
 
 		$count = 0;
 
@@ -49,7 +60,7 @@ class P2P_CLI_Command extends WP_CLI_Command {
 			}
 		}
 
-		WP_CLI::success( "Created $count connections." );
+		return $count;
 	}
 
 	function setup_example() {
