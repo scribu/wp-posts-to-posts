@@ -2,9 +2,15 @@
 
 # install the debug code in mu-plugins. requires wp-cli
 
-if [ $# -lt 1 ]; then
+if [[ $# -gt 0 ]]; then
+	WP_CORE_DIR=$1
+fi
+
+if [[ '' = $WP_CORE_DIR ]]; then
 	echo "usage: $(basename $0) /path/to/wp"
 	exit
 fi
 
-ln -s $(pwd -P)/debug.php $(wp --path=$1 eval 'echo WP_CONTENT_DIR;')/mu-plugins/p2p-debug.php
+wp="wp --path=$WP_CORE_DIR"
+
+ln -sf $(pwd -P)/debug.php $($wp eval 'echo WP_CONTENT_DIR;')/mu-plugins/p2p-debug.php
