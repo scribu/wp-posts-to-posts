@@ -10,7 +10,7 @@ class P2P_CLI_Command extends WP_CLI_Command {
 		}
 	}
 
-	function create_connections( $args ) {
+	function generate_connections( $args ) {
 		$n = 10;
 
 		if ( empty( $args ) ) {
