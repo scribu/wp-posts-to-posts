@@ -58,6 +58,18 @@ function _p2p_wrap( $items, $class ) {
 }
 
 /** @internal */
+function _p2p_extract_post_types( $sides ) {
+	$ptypes = array();
+
+	foreach ( $sides as $side ) {
+		if ( 'post' == $side->get_object_type() )
+			_p2p_append( $ptypes, $side->query_vars['post_type'] );
+	}
+
+	return array_unique( $ptypes );
+}
+
+/** @internal */
 function _p2p_meta_sql_helper( $query ) {
 	global $wpdb;
 
