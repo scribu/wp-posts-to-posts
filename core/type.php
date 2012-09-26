@@ -14,7 +14,7 @@ class P2P_Connection_Type {
 
 	public $labels;
 
-	public function __construct( $sides, $args ) {
+	public function __construct( $args, $sides ) {
 		$this->side = $sides;
 
 		$this->set_self_connections( $args );

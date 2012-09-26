@@ -49,7 +49,7 @@ class P2P_Connection_Type_Factory {
 
 		$class = self::get_ctype_class( $sides, _p2p_pluck( $args, 'reciprocal' ) );
 
-		$ctype = new $class( $sides, $args );
+		$ctype = new $class( $args, $sides );
 
 		self::$instances[ $ctype->name ] = $ctype;
 
