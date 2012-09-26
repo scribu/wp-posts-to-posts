@@ -199,7 +199,7 @@ class P2P_Query {
 			if ( $this->order_num )
 				$field .= '+0';
 
-			$clauses['orderby'] = "p2pm_order.$field $order";
+			$clauses['orderby'] = "p2pm_order.$field $order, " . str_replace( 'ORDER BY ', '', $clauses['orderby'] );
 		}
 
 		return $clauses;
