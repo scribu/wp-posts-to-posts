@@ -6,13 +6,13 @@ class P2P_Connection_Type {
 
 	protected $arrow = '&rarr;';
 
-	public $side;
+	protected $side;
 
-	public $cardinality;
+	protected $cardinality;
 
-	public $title;
+	protected $title;
 
-	public $labels;
+	protected $labels;
 
 	public function __construct( $args, $sides ) {
 		$this->side = $sides;
@@ -30,6 +30,13 @@ class P2P_Connection_Type {
 		foreach ( $args as $key => $value ) {
 			$this->$key = $value;
 		}
+	}
+
+	public function __get( $field ) {
+		if ( in_array( $field, array( 'side', 'cardinality', 'title', 'labels' ) ) )
+			return $this->$field;
+
+		trigger_error( 'Trying to access nonexistant property', E_USER_NOTICE );
 	}
 
 	function _directions_for_admin( $direction, $show_ui ) {
