@@ -10,9 +10,9 @@ class P2P_Connection_Type {
 
 	public $cardinality;
 
-	public $title;
-
 	public $labels;
+
+	protected $title;
 
 	public function __construct( $args, $sides ) {
 		$this->side = $sides;
@@ -21,15 +21,33 @@ class P2P_Connection_Type {
 
 		$this->set_cardinality( _p2p_pluck( $args, 'cardinality' ) );
 
-		$this->set_labels( $args );
+		$labels = array();
+		foreach ( array( 'from', 'to' ) as $key ) {
+			$labels[ $key ] = (array) _p2p_pluck( $args, $key . '_labels' );
+		}
 
-		$this->title = $this->expand_title( _p2p_pluck( $args, 'title' ) );
+		$this->labels = $labels;
 
 		$this->fields = $this->expand_fields( _p2p_pluck( $args, 'fields' ) );
 
 		foreach ( $args as $key => $value ) {
 			$this->$key = $value;
 		}
+	}
+
+	public function get_field( $field, $direction ) {
+		$value = $this->$field;
+
+		if ( 'title' == $field )
+			return $this->expand_title( $value, $direction );
+
+		if ( 'labels' == $field )
+			return $this->expand_labels( $value, $direction );
+
+		if ( false === $direction )
+			return $value;
+
+		return $value[ $direction ];
 	}
 
 	function _directions_for_admin( $direction, $show_ui ) {
@@ -79,38 +97,25 @@ class P2P_Connection_Type {
 		}
 	}
 
-	private function set_labels( &$args ) {
-		foreach ( array( 'from', 'to' ) as $key ) {
-			$labels = $this->side[ $key ]->get_labels();
-			$labels['create'] = __( 'Create connections', P2P_TEXTDOMAIN );
+	private function expand_labels( $labels, $key ) {
+		$labels['create'] = __( 'Create connections', P2P_TEXTDOMAIN );
 
-			_p2p_append( $labels, (array) _p2p_pluck( $args, $key . '_labels' ) );
-
-			$this->labels[ $key ] = (object) $labels;
-		}
+		return (object) array_merge( $this->side[ $key ]->get_labels(), $labels );
 	}
 
-	private function expand_title( $title ) {
-		if ( $title && !is_array( $title ) ) {
-			return array(
-				'from' => $title,
-				'to' => $title,
-			);
-		}
+	private function expand_title( $title, $key ) {
+		if ( $title && !is_array( $title ) )
+			return $title;
 
-		foreach ( array( 'from', 'to' ) as $key ) {
-			if ( isset( $title[$key] ) )
-				continue;
+		if ( isset( $title[$key] ) )
+			return $title[$key];
 
-			$other_key = ( 'from' == $key ) ? 'to' : 'from';
+		$other_key = ( 'from' == $key ) ? 'to' : 'from';
 
-			$title[$key] = sprintf(
-				__( 'Connected %s', P2P_TEXTDOMAIN ),
-				$this->side[ $other_key ]->get_title()
-			);
-		}
-
-		return $title;
+		return sprintf(
+			__( 'Connected %s', P2P_TEXTDOMAIN ),
+			$this->side[ $other_key ]->get_title()
+		);
 	}
 
 	public function __call( $method, $args ) {
@@ -376,7 +381,7 @@ class P2P_Connection_Type {
 
 		$label = "$from {$this->arrow} $to";
 
-		$title = $this->title[ 'from' ];
+		$title = $this->get_field( 'title', 'from' );
 
 		if ( $title )
 			$label .= " ($title)";

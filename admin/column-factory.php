@@ -3,12 +3,12 @@
 class P2P_Column_Factory extends P2P_Factory {
 
 	function __construct() {
-		add_filter( 'p2p_connection_type_args', array( $this, 'filter_ctypes' ) );
+		add_action( 'p2p_registered_connection_type', array( $this, 'filter_ctypes' ), 10, 2 );
 
 		add_action( 'admin_print_styles', array( $this, 'add_columns' ) );
 	}
 
-	function filter_ctypes( $args ) {
+	function filter_ctypes( $ctype, $args ) {
 		if ( isset( $args['admin_column'] ) ) {
 			$column_args = _p2p_pluck( $args, 'admin_column' );
 			if ( !is_array( $column_args ) )
@@ -21,7 +21,7 @@ class P2P_Column_Factory extends P2P_Factory {
 			'show' => false,
 		) );
 
-		$this->register( $args['name'], $column_args );
+		$this->register( $ctype->name, $column_args );
 
 		return $args;
 	}
