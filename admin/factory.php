@@ -24,12 +24,7 @@ abstract class P2P_Factory {
 
 			$directions = self::determine_directions( $ctype, $object_type, $post_type, $args->show );
 
-			$title = $ctype->title;
-
-			if ( count( $directions ) > 1 && $title['from'] == $title['to'] ) {
-				$title['from'] .= __( ' (from)', P2P_TEXTDOMAIN );
-				$title['to']   .= __( ' (to)', P2P_TEXTDOMAIN );
-			}
+			$title = self::get_title( $directions, $ctype->title );
 
 			foreach ( $directions as $direction ) {
 				$key = ( 'to' == $direction ) ? 'to' : 'from';
@@ -39,6 +34,15 @@ abstract class P2P_Factory {
 				$this->add_item( $directed, $object_type, $post_type, $title[$key] );
 			}
 		}
+	}
+
+	protected static function get_title( $directions, $title ) {
+		if ( count( $directions ) > 1 && $title['from'] == $title['to'] ) {
+			$title['from'] .= __( ' (from)', P2P_TEXTDOMAIN );
+			$title['to']   .= __( ' (to)', P2P_TEXTDOMAIN );
+		}
+
+		return $title;
 	}
 
 	protected static function determine_directions( $ctype, $object_type, $post_type, $show_ui ) {
