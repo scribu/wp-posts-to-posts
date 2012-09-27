@@ -5,7 +5,7 @@ class P2P_Connection_Type_Factory {
 	private static $instances = array();
 
 	public static function register( $args ) {
-		$args = wp_parse_args( $args, array(
+		$defaults = array(
 			'name' => false,
 			'from_object' => 'post',
 			'to_object' => 'post',
@@ -23,7 +23,9 @@ class P2P_Connection_Type_Factory {
 			'from_labels' => '',
 			'to_labels' => '',
 			'reciprocal' => false,
-		) );
+		);
+
+		$args = shortcode_atts( $defaults, $args );
 
 		if ( strlen( $args['name'] ) > 44 ) {
 			trigger_error( sprintf( "Connection name '%s' is longer than 44 characters.", $args['name'] ), E_USER_WARNING );
