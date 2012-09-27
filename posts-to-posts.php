@@ -25,8 +25,10 @@ function _p2p_load() {
 		'storage', 'query', 'query-post', 'query-user', 'url-query',
 		'util', 'item', 'list', 'side',
 		'type-factory', 'type', 'directed-type', 'indeterminate-type',
-		'api', 'extra'
+		'api', 'rewrite', 'extra'
 	) );
+
+	P2P_Rewrite::init();
 
 	P2P_Widget::init();
 	P2P_Shortcodes::init();

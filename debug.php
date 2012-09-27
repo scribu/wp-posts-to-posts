@@ -148,6 +148,8 @@ class P2P_Debug {
 					'values' => array( 'lead', 'secondary', '\\episodic' )
 				),
 			),
+			'from_rewrite' => 'actors',
+			'to_rewrite' => 'movies',
 			'sortable' => 'any',
 			'prevent_duplicates' => false,
 			'admin_box' => array(

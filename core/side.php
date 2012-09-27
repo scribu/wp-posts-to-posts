@@ -21,6 +21,8 @@ abstract class P2P_Side {
 
 	abstract function is_indeterminate( $side );
 
+	abstract function add_endpoint( $side );
+
 	final function is_same_type( $side ) {
 		return $this->get_object_type() == $side->get_object_type();
 	}
@@ -63,6 +65,16 @@ class P2P_Side_Post extends P2P_Side {
 
 	public function get_object_type() {
 		return 'post';
+	}
+
+	public function add_endpoint( $endpoint ) {
+		foreach ( $this->query_vars['post_type'] as $post_type ) {
+			$ptype = get_post_type_object( $post_type );
+			if ( !$ptype->rewrite )
+				continue;
+
+			add_rewrite_endpoint( $endpoint, $ptype->rewrite['ep_mask'] );
+		}
 	}
 
 	public function first_post_type() {
@@ -222,6 +234,10 @@ class P2P_Side_User extends P2P_Side {
 
 	function get_desc() {
 		return __( 'Users', P2P_TEXTDOMAIN );
+	}
+
+	function add_endpoint( $endpoint ) {
+		throw new Exception( 'Not implemented.' );
 	}
 
 	function get_title() {
