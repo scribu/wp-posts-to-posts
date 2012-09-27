@@ -21,7 +21,12 @@ class P2P_Connection_Type {
 
 		$this->set_cardinality( _p2p_pluck( $args, 'cardinality' ) );
 
-		$this->set_labels( $args );
+		$labels = array();
+		foreach ( array( 'from', 'to' ) as $key ) {
+			$labels[ $key ] = (array) _p2p_pluck( $args, $key . '_labels' );
+		}
+
+		$this->labels = $labels;
 
 		$this->fields = $this->expand_fields( _p2p_pluck( $args, 'fields' ) );
 
@@ -35,6 +40,9 @@ class P2P_Connection_Type {
 
 		if ( 'title' == $field )
 			return $this->expand_title( $value, $direction );
+
+		if ( 'labels' == $field )
+			return $this->expand_labels( $value, $direction );
 
 		if ( false === $direction )
 			return $value;
@@ -89,15 +97,10 @@ class P2P_Connection_Type {
 		}
 	}
 
-	private function set_labels( &$args ) {
-		foreach ( array( 'from', 'to' ) as $key ) {
-			$labels = $this->side[ $key ]->get_labels();
-			$labels['create'] = __( 'Create connections', P2P_TEXTDOMAIN );
+	private function expand_labels( $labels, $key ) {
+		$labels['create'] = __( 'Create connections', P2P_TEXTDOMAIN );
 
-			_p2p_append( $labels, (array) _p2p_pluck( $args, $key . '_labels' ) );
-
-			$this->labels[ $key ] = (object) $labels;
-		}
+		return (object) array_merge( $this->side[ $key ]->get_labels(), $labels );
 	}
 
 	private function expand_title( $title, $key ) {
