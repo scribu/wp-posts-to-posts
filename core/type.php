@@ -6,13 +6,13 @@ class P2P_Connection_Type {
 
 	protected $arrow = '&rarr;';
 
-	protected $side;
+	public $side;
 
-	protected $cardinality;
+	public $cardinality;
+
+	public $labels;
 
 	protected $title;
-
-	protected $labels;
 
 	public function __construct( $args, $sides ) {
 		$this->side = $sides;
@@ -23,8 +23,6 @@ class P2P_Connection_Type {
 
 		$this->set_labels( $args );
 
-		$this->title = $this->expand_title( _p2p_pluck( $args, 'title' ) );
-
 		$this->fields = $this->expand_fields( _p2p_pluck( $args, 'fields' ) );
 
 		foreach ( $args as $key => $value ) {
@@ -32,11 +30,16 @@ class P2P_Connection_Type {
 		}
 	}
 
-	public function __get( $field ) {
-		if ( in_array( $field, array( 'side', 'cardinality', 'title', 'labels' ) ) )
-			return $this->$field;
+	public function get_field( $field, $direction ) {
+		$value = $this->$field;
 
-		trigger_error( 'Trying to access nonexistant property', E_USER_NOTICE );
+		if ( 'title' == $field )
+			return $this->expand_title( $value, $direction );
+
+		if ( false === $direction )
+			return $value;
+
+		return $value[ $direction ];
 	}
 
 	function _directions_for_admin( $direction, $show_ui ) {
@@ -97,27 +100,19 @@ class P2P_Connection_Type {
 		}
 	}
 
-	private function expand_title( $title ) {
-		if ( $title && !is_array( $title ) ) {
-			return array(
-				'from' => $title,
-				'to' => $title,
-			);
-		}
+	private function expand_title( $title, $key ) {
+		if ( $title && !is_array( $title ) )
+			return $title;
 
-		foreach ( array( 'from', 'to' ) as $key ) {
-			if ( isset( $title[$key] ) )
-				continue;
+		if ( isset( $title[$key] ) )
+			return $title[$key];
 
-			$other_key = ( 'from' == $key ) ? 'to' : 'from';
+		$other_key = ( 'from' == $key ) ? 'to' : 'from';
 
-			$title[$key] = sprintf(
-				__( 'Connected %s', P2P_TEXTDOMAIN ),
-				$this->side[ $other_key ]->get_title()
-			);
-		}
-
-		return $title;
+		return sprintf(
+			__( 'Connected %s', P2P_TEXTDOMAIN ),
+			$this->side[ $other_key ]->get_title()
+		);
 	}
 
 	public function __call( $method, $args ) {
@@ -383,7 +378,7 @@ class P2P_Connection_Type {
 
 		$label = "$from {$this->arrow} $to";
 
-		$title = $this->title[ 'from' ];
+		$title = $this->get_field( 'title', 'from' );
 
 		if ( $title )
 			$label .= " ($title)";
