@@ -5,12 +5,12 @@ class P2P_Rewrite {
 	protected static $queue = array();
 
 	function init() {
-		add_filter( 'p2p_connection_type_args', array( __CLASS__, 'filter_ctypes' ), 10, 2 );
+		add_action( 'p2p_registered_connection_type', array( __CLASS__, 'filter_ctypes' ), 10, 2 );
 
 		add_action( 'template_redirect', array( __CLASS__, 'handle_endpoints' ) );
 	}
 
-	function filter_ctypes( $args, $sides ) {
+	function filter_ctypes( $ctype, $args ) {
 		foreach ( array( 'from', 'to' ) as $key ) {
 			if ( !isset( $args[ $key . '_rewrite' ] ) )
 				continue;
@@ -20,7 +20,7 @@ class P2P_Rewrite {
 			if ( true === $endpoint )
 				$endpoint = 'connected';
 
-			$side = $sides[ $key ];
+			$side = $ctype->side[ $key ];
 
 			$rewrite_class = 'P2P_Rewrite_' . ucfirst( $side->get_object_type() );
 
@@ -30,7 +30,7 @@ class P2P_Rewrite {
 				), E_USER_WARNING );
 			}
 
-			$rewrite = new $rewrite_class( $args['name'], $side, $endpoint );
+			$rewrite = new $rewrite_class( $ctype->set_direction( $key ), $endpoint );
 			$rewrite->add_endpoint();
 
 			self::$queue[] = $rewrite;
@@ -51,18 +51,20 @@ class P2P_Rewrite {
 
 class P2P_Rewrite_Post {
 
-	protected $ctype_name;
-	protected $side;
+	protected $directed;
 	protected $endpoint;
 
-	function __construct( $ctype, $side, $endpoint ) {
-		$this->ctype_name = $ctype;
+	function __construct( $directed, $endpoint ) {
+		$this->directed = $directed;
 		$this->endpoint = $endpoint;
-		$this->side = $side;
+
+		$side = $this->directed->get( 'current', 'side' );
+
+		$this->post_types = $side->query_vars['post_type'];
 	}
 
 	function add_endpoint() {
-		foreach ( $this->side->query_vars['post_type'] as $post_type ) {
+		foreach ( $this->post_types as $post_type ) {
 			$ptype = get_post_type_object( $post_type );
 			if ( !$ptype->rewrite )
 				continue;
@@ -75,13 +77,11 @@ class P2P_Rewrite_Post {
 		if ( !isset( $wp_query->query_vars[ $this->endpoint ] ) )
 			return;
 
-		if ( !$wp_query->is_singular( $this->side->query_vars['post_type'] ) )
+		if ( !$wp_query->is_singular( $this->post_types ) )
 			return;
 
-		query_posts( array(
-			'connected_type' => $this->ctype_name,
-			'connected_items' => $wp_query->get_queried_object(),
-		) );
+		$GLOBALS['wp_query'] = $this->directed->get_connected(
+			$wp_query->get_queried_object() );
 	}
 }
 
