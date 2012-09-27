@@ -82,6 +82,21 @@ class P2P_Rewrite_Post {
 
 		$GLOBALS['wp_query'] = $this->directed->get_connected(
 			$wp_query->get_queried_object() );
+
+		$this->post = $wp_query->get_queried_object();
+
+		add_filter( 'wp_title', array( $this, 'handle_title' ), 10, 3 );
+	}
+
+	function handle_title( $title, $sep, $seplocation ) {
+		$parts = array( '' );
+		$parts[] = $this->post->post_title;
+		$parts[] = $this->directed->get( 'current', 'title' );
+
+		if ( 'right' == $seplocation )
+			$parts = array_reverse( $parts );
+
+		return implode( " $sep ", $parts );
 	}
 }
 
