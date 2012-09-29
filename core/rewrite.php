@@ -85,7 +85,16 @@ class P2P_Rewrite_Post {
 
 		$this->post = $wp_query->get_queried_object();
 
+		add_filter( 'template_include', array( $this, 'handle_template' ) );
 		add_filter( 'wp_title', array( $this, 'handle_title' ), 10, 3 );
+	}
+
+	function handle_template( $path ) {
+		$template = locate_template( 'connected.php' );
+		if ( $template )
+			return $template;
+
+		return $path;
 	}
 
 	function handle_title( $title, $sep, $seplocation ) {
