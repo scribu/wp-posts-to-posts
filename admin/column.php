@@ -8,6 +8,10 @@ abstract class P2P_Column {
 
 	function __construct( $directed, $items ) {
 		$this->ctype = $directed;
+		$this->column_id = sprintf( 'p2p-%s-%s',
+			$this->ctype->get_direction(),
+			$this->ctype->name
+		);
 
 		$extra_qv = array(
 			'p2p:per_page' => -1,
@@ -24,10 +28,6 @@ abstract class P2P_Column {
 	}
 
 	function add_column( $columns ) {
-		$this->column_id = sprintf( 'p2p-%s-%s',
-			$this->ctype->get_direction(),
-			$this->ctype->name
-		);
 
 		$columns[ $this->column_id ] = $this->ctype->get( 'current', 'title' );
 
@@ -37,7 +37,7 @@ abstract class P2P_Column {
 	function styles() {
 ?>
 <style type="text/css">
-.column-<?php echo $this->ctype->name; ?> ul {
+.column-<?php echo $this->column_id; ?> ul {
 	margin-top: 0;
 	margin-bottom: 0;
 }
