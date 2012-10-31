@@ -6,4 +6,4 @@
 	url = git://github.com/bobthecow/mustache.php.git
 [submodule "tests/lib"]
 	path = tests/lib
-	url = git@github.com:scribu/wp-tests-lib.git
+	url = git://github.com/scribu/wp-tests-lib.git
