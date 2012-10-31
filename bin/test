@@ -1,14 +1,5 @@
 #!/bin/bash
 
-if [[ $# -gt 0 ]]; then
-	WP_TESTS_DIR=$1
-fi
-
-if [[ '' = $WP_TESTS_DIR ]]; then
-	echo 'usage: ./bin/test /path/to/wp-tests/'
-	exit
-fi
-
 cd ./tests
 
 phpunit test_core.php
