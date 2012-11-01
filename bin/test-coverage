@@ -2,17 +2,10 @@
 
 # runs the unit tests and generates a Code Coverage Analysis document: /tmp/p2p-coverage/index.html
 
-wp_tests_dir=${1-$WP_TESTS_DIR}
-
-if [[ '' = $wp_tests_dir ]]; then
-	echo 'usage: ./bin/test /path/to/wp-tests/'
-	exit
-fi
-
 rm -rf /tmp/p2p-coverage
 
 cd ./tests
 
-phpunit --coverage-html /tmp/p2p-coverage test_core.php
+phpunit --coverage-html /tmp/p2p-coverage
 
 x-www-browser /tmp/p2p-coverage/index.html
