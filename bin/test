@@ -1,5 +1,3 @@
 #!/bin/bash
 
-cd ./tests
-
-phpunit test_core.php
+phpunit -c tests/phpunit.xml

@@ -5,10 +5,12 @@
 	convertErrorsToExceptions="true"
 	convertNoticesToExceptions="true"
 	convertWarningsToExceptions="true"
->
-	<php>
-		<ini name="memory_limit" value="-1" />
-	</php>
+	>
+	<testsuites>
+		<testsuite>
+			<directory prefix="test_" suffix=".php">./</directory>
+		</testsuite>
+	</testsuites>
 	<filter>
 		<whitelist>
 			<directory suffix=".php">../core</directory>
