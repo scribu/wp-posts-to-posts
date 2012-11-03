@@ -43,10 +43,6 @@ class P2P_Connection_Type_Factory {
 			$args['name'] = self::generate_name( $sides, $args );
 		}
 
-		if ( isset( self::$instances[ $args['name'] ] ) ) {
-			trigger_error( sprintf( "Connection type '%s' is already defined.", $args['name'] ), E_USER_NOTICE );
-		}
-
 		$args = apply_filters( 'p2p_connection_type_args', $args, $sides );
 
 		$class = self::get_ctype_class( $sides, _p2p_pluck( $args, 'reciprocal' ) );
