@@ -2,14 +2,14 @@
 
 require_once __DIR__ . '/debug-utils.php';
 
-if ( defined( 'WP_CLI' ) )
-	require_once __DIR__ . '/command.php';
-
 add_action( 'p2p_init', array( 'P2P_Debug', 'init' ), 11 );
 
 class P2P_Debug {
 
 	function init() {
+		if ( defined( 'WP_CLI' ) )
+			require_once __DIR__ . '/command.php';
+
 		self::posts_to_attachments();
 		self::posts_to_users();
 		self::contacts_and_tickets();
