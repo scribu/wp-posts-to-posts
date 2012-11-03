@@ -123,7 +123,12 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_direction_array_from() {
-		$ctype = @p2p_register_connection_type( array( 'actor', 'movie' ), 'studio' );
+		$ctype = p2p_register_connection_type( array(
+			'name' => __FUNCTION__,
+			'from' => array( 'actor', 'movie' ),
+			'to' => 'studio'
+		) );
+
 		$this->assertEquals( 'P2P_Connection_Type', get_class( $ctype ) );
 
 		$this->assertEquals( 'from', $ctype->find_direction( $this->generate_post( 'actor' ), false ) );
@@ -134,7 +139,12 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_direction_array_to() {
-		$ctype = @p2p_register_connection_type( 'actor', array( 'movie', 'studio' ) );
+		$ctype = p2p_register_connection_type( array(
+			'name' => __FUNCTION__,
+			'from' => 'actor',
+			'to' => array( 'movie', 'studio' )
+		) );
+
 		$this->assertEquals( 'P2P_Connection_Type', get_class( $ctype ) );
 
 		$this->assertEquals( 'from', $ctype->find_direction( $this->generate_post( 'actor' ), false ) );
@@ -160,7 +170,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_direction_reciprocal() {
-		$reciprocal = @p2p_register_connection_type( array(
+		$reciprocal = p2p_register_connection_type( array(
+			'name' => __FUNCTION__,
 			'from' => 'movie',
 			'to' => 'movie',
 			'reciprocal' => true
@@ -472,8 +483,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 	}
 
 	function test_connect_indeterminate() {
-		$ctype = @p2p_register_connection_type( array(
-			'name' => 'reciprocal',
+		$ctype = p2p_register_connection_type( array(
+			'name' => __FUNCTION__,
 			'from' => 'actor',
 			'to' => array( 'actor', 'movie' ),
 			'reciprocal' => true,
@@ -496,7 +507,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 	function test_non_reciprocal() {
 		$ctype = @p2p_register_connection_type( array(
-			'name' => 'non_reciprocal',
+			'name' => __FUNCTION__,
 			'from' => 'actor',
 			'to' => 'actor',
 			'reciprocal' => false,
