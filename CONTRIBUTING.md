@@ -14,7 +14,7 @@ You can now work on the PHP and CSS files.
 
 Don't modify `admin/box.js` directly. Instead:
 
-- [Install node.js](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager) and [npm](http://npmjs.org/).
+- [Install node.js](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager).
 
 - Install [CoffeeScript](http://coffeescript.org):
 
