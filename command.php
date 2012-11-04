@@ -4,18 +4,24 @@ WP_CLI::add_command( 'p2p', 'P2P_CLI_Command' );
 
 class P2P_CLI_Command extends WP_CLI_Command {
 
+	/**
+	 * List registered connection types.
+	 *
+	 * @subcommand connection-types
+	 */
 	function connection_types() {
 		foreach ( P2P_Connection_Type_Factory::get_all_instances() as $p2p_type => $ctype ) {
 			WP_CLI::line( $p2p_type );
 		}
 	}
 
+	/**
+	 * Generate connections for a specific connection type.
+	 *
+	 * @subcommand generate-connections
+	 * @synopsis <connection-type> [--items]
+	 */
 	function generate_connections( $args, $assoc_args ) {
-		if ( empty( $args ) ) {
-			WP_CLI::line( "usage: wp p2p " . __FUNCTION__ . " <connection-type>" );
-			exit;
-		}
-
 		list( $connection_type ) = $args;
 
 		$ctype = p2p_type( $connection_type );
@@ -63,6 +69,11 @@ class P2P_CLI_Command extends WP_CLI_Command {
 		return $count;
 	}
 
+	/**
+	 * Set up the example connections.
+	 *
+	 * @subcommand setup-example
+	 */
 	function setup_example() {
 		$ctype = p2p_type( 'actor_movie' );
 
