@@ -64,6 +64,9 @@ class P2P_Debug {
 					'default' => 'green'
 				),
 			),
+			'admin_box' => array(
+				'context' => 'advanced'
+			),
 			'sortable' => true,
 		) );
 	}
