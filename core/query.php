@@ -112,6 +112,7 @@ class P2P_Query {
 		$side = $directed->get( $which, 'side' );
 
 		$qv = array_merge( $this->query, array(
+			'post_status' => 'any',
 			'fields' => 'ids',
 			'p2p:per_page' => -1
 		) );
