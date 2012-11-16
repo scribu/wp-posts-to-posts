@@ -12,6 +12,8 @@ class P2P_Box {
 
 	private $columns;
 
+	private static $enqueued_scripts = false;
+
 	private static $admin_box_qv = array(
 		'update_post_term_cache' => false,
 		'update_post_meta_cache' => false,
@@ -29,6 +31,10 @@ class P2P_Box {
 	}
 
 	public function init_scripts() {
+
+		if ( self::$enqueued_scripts )
+			return;
+
 		wp_enqueue_style( 'p2p-box', plugins_url( 'box.css', __FILE__ ), array(), P2P_PLUGIN_VERSION );
 
 		wp_enqueue_script( 'p2p-box', plugins_url( 'box.js', __FILE__ ), array( 'jquery' ), P2P_PLUGIN_VERSION, true );
@@ -37,6 +43,9 @@ class P2P_Box {
 			'spinner' => admin_url( 'images/wpspin_light.gif' ),
 			'deleteConfirmMessage' => __( 'Are you sure you want to delete all connections?', P2P_TEXTDOMAIN ),
 		) );
+
+		self::$enqueued_scripts = true;
+
 	}
 
 	function render( $post ) {
