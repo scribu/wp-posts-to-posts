@@ -36,7 +36,7 @@ class P2P_URL_Query {
 			return;
 
 		_p2p_append( $query->query_vars, wp_array_slice_assoc( $_GET,
-			P2P_URL_Query::get_custom_qv() ) );
+			self::get_custom_qv() ) );
 	}
 }
 
