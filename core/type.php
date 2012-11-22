@@ -97,10 +97,15 @@ class P2P_Connection_Type {
 		}
 	}
 
-	private function expand_labels( $labels, $key ) {
-		$labels['create'] = __( 'Create connections', P2P_TEXTDOMAIN );
+	private function expand_labels( $additional_labels, $key ) {
+		$additional_labels['create'] = __( 'Create connections', P2P_TEXTDOMAIN );
 
-		return (object) array_merge( $this->side[ $key ]->get_labels(), $labels );
+		$labels = clone $this->side[ $key ]->get_labels();
+
+		foreach ( $additional_labels as $key => $var )
+			$labels->$key = $var;
+
+		return $labels;
 	}
 
 	private function expand_title( $title, $key ) {

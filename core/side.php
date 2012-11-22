@@ -101,7 +101,7 @@ class P2P_Side_Post extends P2P_Side {
 	}
 
 	function get_labels() {
-		return get_object_vars( $this->get_ptype()->labels );
+		return $this->get_ptype()->labels;
 	}
 
 	function can_edit_connections() {
@@ -229,7 +229,7 @@ class P2P_Side_User extends P2P_Side {
 	}
 
 	function get_labels() {
-		return array(
+		return (object) array(
 			'singular_name' => __( 'User', P2P_TEXTDOMAIN ),
 			'search_items' => __( 'Search Users', P2P_TEXTDOMAIN ),
 			'not_found' => __( 'No users found.', P2P_TEXTDOMAIN ),
