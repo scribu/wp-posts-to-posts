@@ -232,7 +232,7 @@ class P2P_Directed_Connection_Type {
 
 	protected function get_default( $args, $p2p_id ) {
 		if ( isset( $args['default_cb'] ) )
-			return call_user_func( $args['default_cb'], p2p_get_connection( $p2p_id ) );
+			return call_user_func( $args['default_cb'], p2p_get_connection( $p2p_id ), $this->direction );
 
 		if ( !isset( $args['default'] ) )
 			return null;
