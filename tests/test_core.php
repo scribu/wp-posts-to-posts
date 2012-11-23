@@ -588,7 +588,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 
 		$user = $this->generate_user();
 
-		$posts = $this->factory->post->create_many( get_option( 'posts_per_page' ) );
+		$posts = $this->factory->post->create_many( get_option( 'posts_per_page' ) + 1 );
 		$more_posts = $this->factory->post->create_many( 2 );
 
 		foreach ( $posts as $post ) {
