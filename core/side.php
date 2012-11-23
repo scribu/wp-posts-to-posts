@@ -166,6 +166,9 @@ class P2P_Side_Post extends P2P_Side {
 	}
 
 	protected function recognize( $arg ) {
+		if ( is_object( $arg ) && !isset( $arg->post_type ) )
+			return false;
+
 		$post = get_post( $arg );
 
 		if ( !is_object( $post ) )
