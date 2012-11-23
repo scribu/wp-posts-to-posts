@@ -583,6 +583,23 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEmpty( $connected_users->items );
 	}
 
+	function test_non_connectable() {
+		$ctype = p2p_type( 'posts_to_users' );
+
+		$user = $this->generate_user();
+
+		$posts = $this->factory->post->create_many( get_option( 'posts_per_page' ) );
+		$more_posts = $this->factory->post->create_many( 2 );
+
+		foreach ( $posts as $post ) {
+			$ctype->connect( $user, $post );
+		}
+
+		$candidate = $ctype->get_connectable( $user, array(), 'abstract' );
+
+		$this->assertEqualSets( $more_posts, wp_list_pluck( $candidate->items, 'ID' ) );
+	}
+
 	private function generate_posts( $type, $count ) {
 		return $this->factory->post->create_many( $count, array(
 			'post_type' => $type
