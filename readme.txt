@@ -2,7 +2,7 @@
 Contributors: scribu, ciobi
 Tags: connections, custom post types, relationships, many-to-many, users
 Requires at least: 3.4
-Tested up to: 3.4
+Tested up to: 3.5
 Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -31,7 +31,7 @@ Links: [**Documentation**](http://github.com/scribu/wp-posts-to-posts/wiki) | [P
 See [Installing Plugins](http://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
 
 After activating it, refer to the [Basic usage](https://github.com/scribu/wp-posts-to-posts/wiki/Basic-usage) tutorial.
-
+ 
 Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-posts/wiki).
 
 == Frequently Asked Questions ==
@@ -52,6 +52,12 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 5. Connection Types screen
 
 == Changelog ==
+
+= 1.4.3 =
+* various bug fixes
+* added 'inline' mode for shortcodes
+* replaced 'trash' icon with 'minus' icon
+* pass direction to 'default_cb'
 
 = 1.4.2 =
 * fixed each_connected() returning wrapped objects
