@@ -86,6 +86,16 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertTrue( strlen( $ctype->name ) > 0 );
 	}
 
+	function test_direction_user() {
+		$ctype = p2p_type( 'posts_to_users' );
+
+		$post = $this->generate_post();
+		$user = $this->generate_user();
+
+		$this->assertEquals( 'from', $ctype->find_direction( $post, false ) );
+		$this->assertEquals( 'to', $ctype->find_direction( $user, false ) );
+	}
+
 	function test_direction_types_user() {
 		$ctypes = p2p_type( 'posts_to_users' );
 
