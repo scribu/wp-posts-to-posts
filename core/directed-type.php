@@ -162,6 +162,8 @@ class P2P_Directed_Connection_Type {
 		}
 
 		$extra_qv['fields'] = 'ids';
+		$extra_qv['p2p:per_page'] = -1;
+
 		$already_connected = $this->get_connected( $to_check, $extra_qv, 'abstract' )->items;
 
 		_p2p_append( $to_exclude, $already_connected );
