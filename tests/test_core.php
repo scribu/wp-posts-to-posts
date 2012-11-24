@@ -595,9 +595,8 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 			$ctype->connect( $user, $post );
 		}
 
-		$candidate = $ctype->get_connectable( $user, array(), 'abstract' );
-
-		$this->assertEqualSets( $more_posts, wp_list_pluck( $candidate->items, 'ID' ) );
+		$collection = $ctype->get_connectable( $user, array(), 'abstract' );
+		$this->assertIdsMatch( $more_posts, $collection );
 	}
 
 	private function generate_posts( $type, $count ) {
