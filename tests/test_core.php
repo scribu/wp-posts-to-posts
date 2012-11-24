@@ -265,7 +265,7 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		$this->assertEquals( 'no_direction', $r->get_error_code() );
 	}
 
-	function test_extra_qv() {
+	function test_connection_filtering() {
 		$ctype = p2p_register_connection_type( array(
 			'name' => 'posts_to_pages',
 			'from' => 'post',
@@ -299,6 +299,41 @@ class P2P_Unit_Tests extends WP_UnitTestCase {
 		// users should be able to specify a different order
 		$this->assertEquals( 'foo', $p2p_query->orderby );
 		$this->assertEquals( 'desc', $p2p_query->order );
+	}
+
+	function test_extra_qv() {
+		$ctype = p2p_register_connection_type( array(
+			'name' => __FUNCTION__,
+			'from' => 'post',
+			'from_query_vars' => array(
+				'meta_key' => 'type',
+				'meta_value' => 'foo'
+			),
+			'to' => 'post',
+			'to_query_vars' => array(
+				'meta_key' => 'type',
+				'meta_value' => 'bar'
+			),
+		) );
+
+		$posts = array();
+
+		foreach ( array( 'foo', 'bar' ) as $key ) {
+			$posts[ $key ] = $this->factory->post->create_many( 3 );
+			foreach ( $posts[ $key ] as $prod_id ) {
+				add_post_meta( $prod_id, 'type', $key );
+			}
+		}
+
+		$candidates = $ctype->set_direction( 'to' )
+			->get_connectable( $posts['foo'][0], array(), 'abstract' );
+
+		$this->assertIdsMatch( $posts['bar'], $candidates );
+
+		$candidates = $ctype->set_direction( 'from' )
+			->get_connectable( $posts['bar'][0], array(), 'abstract' );
+
+		$this->assertIdsMatch( $posts['foo'], $candidates );
 	}
 
 	function test_not_each_connected() {
