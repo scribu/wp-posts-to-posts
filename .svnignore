@@ -1,13 +1,15 @@
-admin/box.coffee
-
-bin
-tests
-docblox.dist.xml
-.travis.yml
-
 mustache/examples
 mustache/test
 mustache/bin
 
+admin/box.coffee
+
+debug.php
+
+bin
+tests
+.travis.yml
+
+docblox.dist.xml
 diagrams
 tags
