@@ -12,7 +12,7 @@ class P2P_Box_Factory extends P2P_Factory {
 		add_action( 'wp_ajax_p2p_box', array( $this, 'wp_ajax_p2p_box' ) );
 	}
 
-	function filter_ctypes( $ctype, $args ) {
+	function check_ctype( $ctype, $args ) {
 		if ( isset( $args['admin_box'] ) ) {
 			$box_args = _p2p_pluck( $args, 'admin_box' );
 			if ( !is_array( $box_args ) )

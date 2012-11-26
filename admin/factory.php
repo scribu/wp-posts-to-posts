@@ -5,11 +5,11 @@ abstract class P2P_Factory {
 	protected $queue = array();
 
 	function __construct() {
-		add_action( 'p2p_registered_connection_type', array( $this, 'filter_ctypes' ), 10, 2 );
+		add_action( 'p2p_registered_connection_type', array( $this, 'check_ctype' ), 10, 2 );
 	}
 
 	// Check if a newly registered connection type needs an item to be produced.
-	abstract function filter_ctypes( $ctype, $args );
+	abstract function check_ctype( $ctype, $args );
 
 	// Register an item to be produced.
 	function register( $p2p_type, $args ) {

@@ -8,7 +8,7 @@ class P2P_Column_Factory extends P2P_Factory {
 		add_action( 'admin_print_styles', array( $this, 'add_items' ) );
 	}
 
-	function filter_ctypes( $ctype, $args ) {
+	function check_ctype( $ctype, $args ) {
 		if ( isset( $args['admin_column'] ) ) {
 			$column_args = _p2p_pluck( $args, 'admin_column' );
 			if ( !is_array( $column_args ) )
