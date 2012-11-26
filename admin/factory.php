@@ -18,6 +18,22 @@ abstract class P2P_Factory {
 		return true;
 	}
 
+	function add_items() {
+		$screen = get_current_screen();
+
+		$screen_map = array(
+			'edit' => 'post',
+			'users' => 'user'
+		);
+
+		if ( !isset( $screen_map[ $screen->base ] ) )
+			return;
+
+		$object_type = $screen_map[ $screen->base ];
+
+		$this->filter( $object_type, $screen->post_type );
+	}
+
 	function filter( $object_type, $post_type ) {
 		foreach ( $this->queue as $p2p_type => $args ) {
 			$ctype = p2p_type( $p2p_type );

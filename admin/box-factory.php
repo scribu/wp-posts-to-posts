@@ -7,7 +7,7 @@ class P2P_Box_Factory extends P2P_Factory {
 	function __construct() {
 		add_action( 'p2p_registered_connection_type', array( $this, 'filter_ctypes' ), 10, 2 );
 
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_items' ) );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );
 		add_action( 'wp_ajax_p2p_box', array( $this, 'wp_ajax_p2p_box' ) );
 	}
@@ -39,7 +39,7 @@ class P2P_Box_Factory extends P2P_Factory {
 		return $args;
 	}
 
-	function add_meta_boxes( $post_type ) {
+	function add_items( $post_type ) {
 		$this->filter( 'post', $post_type );
 	}
 
