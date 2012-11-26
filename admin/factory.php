@@ -4,6 +4,7 @@ abstract class P2P_Factory {
 
 	protected $queue = array();
 
+	// Register an item to be produced.
 	function register( $p2p_type, $args ) {
 		if ( isset( $this->queue[$p2p_type] ) )
 			return false;
@@ -18,6 +19,7 @@ abstract class P2P_Factory {
 		return true;
 	}
 
+	// Begin processing item queue for a particular screen.
 	function add_items() {
 		$screen = get_current_screen();
 
@@ -34,6 +36,7 @@ abstract class P2P_Factory {
 		$this->filter( $object_type, $screen->post_type );
 	}
 
+	// Filter item queue based on object type.
 	function filter( $object_type, $post_type ) {
 		foreach ( $this->queue as $p2p_type => $args ) {
 			$ctype = p2p_type( $p2p_type );
@@ -51,6 +54,9 @@ abstract class P2P_Factory {
 			}
 		}
 	}
+
+	// Produce an item and add it to the screen.
+	abstract function add_item( $directed, $object_type, $post_type, $title );
 
 	protected static function get_title( $directions, $ctype ) {
 		$title = array(
@@ -73,7 +79,5 @@ abstract class P2P_Factory {
 
 		return $ctype->_directions_for_admin( $direction, $show_ui );
 	}
-
-	abstract function add_item( $directed, $object_type, $post_type, $title );
 }
 
