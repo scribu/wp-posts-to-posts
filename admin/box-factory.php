@@ -35,8 +35,6 @@ class P2P_Box_Factory extends P2P_Factory {
 		) );
 
 		$this->register( $ctype->name, $box_args );
-
-		return $args;
 	}
 
 	function add_items( $post_type ) {

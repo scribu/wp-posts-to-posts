@@ -22,8 +22,6 @@ class P2P_Column_Factory extends P2P_Factory {
 		) );
 
 		$this->register( $ctype->name, $column_args );
-
-		return $args;
 	}
 
 	function add_item( $directed, $object_type, $post_type, $title ) {
