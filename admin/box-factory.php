@@ -5,7 +5,7 @@ define( 'P2P_BOX_NONCE', 'p2p-box' );
 class P2P_Box_Factory extends P2P_Factory {
 
 	function __construct() {
-		add_action( 'p2p_registered_connection_type', array( $this, 'filter_ctypes' ), 10, 2 );
+		parent::__construct();
 
 		add_action( 'add_meta_boxes', array( $this, 'add_items' ) );
 		add_action( 'save_post', array( $this, 'save_post' ), 10, 2 );

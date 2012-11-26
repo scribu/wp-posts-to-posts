@@ -3,7 +3,7 @@
 class P2P_Column_Factory extends P2P_Factory {
 
 	function __construct() {
-		add_action( 'p2p_registered_connection_type', array( $this, 'filter_ctypes' ), 10, 2 );
+		parent::__construct();
 
 		add_action( 'admin_print_styles', array( $this, 'add_items' ) );
 	}
