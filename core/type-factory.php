@@ -7,8 +7,6 @@ class P2P_Connection_Type_Factory {
 	public static function register( $args ) {
 		$defaults = array(
 			'name' => false,
-			'from_object' => 'post',
-			'to_object' => 'post',
 			'from' => 'post',
 			'to' => 'post',
 			'from_query_vars' => array(),
