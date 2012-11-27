@@ -9,13 +9,7 @@ class P2P_Column_Factory extends P2P_Factory {
 	}
 
 	function check_ctype( $ctype, $args ) {
-		if ( isset( $args['admin_column'] ) ) {
-			$column_args = _p2p_pluck( $args, 'admin_column' );
-			if ( !is_array( $column_args ) )
-				$column_args = array( 'show' => $column_args );
-		} else {
-			$column_args = array();
-		}
+		$column_args = self::expand_arg( 'admin_column', $args );
 
 		$column_args = wp_parse_args( $column_args, array(
 			'show' => false,

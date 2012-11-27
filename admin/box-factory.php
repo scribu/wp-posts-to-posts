@@ -13,13 +13,7 @@ class P2P_Box_Factory extends P2P_Factory {
 	}
 
 	function check_ctype( $ctype, $args ) {
-		if ( isset( $args['admin_box'] ) ) {
-			$box_args = _p2p_pluck( $args, 'admin_box' );
-			if ( !is_array( $box_args ) )
-				$box_args = array( 'show' => $box_args );
-		} else {
-			$box_args = array();
-		}
+		$box_args = self::expand_arg( 'admin_box', $args );
 
 		foreach ( array( 'can_create_post' ) as $key ) {
 			if ( isset( $args[ $key ] ) ) {

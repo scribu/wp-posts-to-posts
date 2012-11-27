@@ -26,6 +26,18 @@ abstract class P2P_Factory {
 		return true;
 	}
 
+	protected static function expand_arg( $key, $args ) {
+		if ( isset( $args[ $key ] ) ) {
+			$sub_args = $args[ $key ];
+			if ( !is_array( $sub_args ) )
+				$sub_args = array( 'show' => $sub_args );
+		} else {
+			$sub_args = array();
+		}
+
+		return $sub_args;
+	}
+
 	// Begin processing item queue for a particular screen.
 	function add_items() {
 		$screen = get_current_screen();
