@@ -1,8 +1,8 @@
 <?php
 
-require __DIR__ . '/constraints.php';
+require_once __DIR__ . '/constraints.php';
 
-class P2P_Unit_Tests extends WP_UnitTestCase {
+class P2P_Tests_Core extends WP_UnitTestCase {
 
 	protected function assertConnectionDoesntExist( $ctype, $args ) {
 		$cb = function( $args ) use ( $ctype ) {

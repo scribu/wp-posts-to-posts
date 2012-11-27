@@ -31,19 +31,22 @@ function _p2p_load() {
 	P2P_Widget::init();
 	P2P_Shortcodes::init();
 
-	if ( is_admin() ) {
-		_p2p_load_files( "$base/admin", array(
-			'mustache', 'factory',
-			'box-factory', 'box', 'fields',
-			'column-factory', 'column',
-			'dropdown-factory', 'dropdown',
-			'tools'
-		) );
-	}
+	if ( is_admin() )
+		_p2p_load_admin();
 
 	register_uninstall_hook( __FILE__, array( 'P2P_Storage', 'uninstall' ) );
 }
 scb_init( '_p2p_load' );
+
+function _p2p_load_admin() {
+	_p2p_load_files( dirname(__FILE__) . '/admin', array(
+		'mustache', 'factory',
+		'box-factory', 'box', 'fields',
+		'column-factory', 'column',
+		'dropdown-factory', 'dropdown',
+		'tools'
+	) );
+}
 
 function _p2p_init() {
 	// Safe hook for calling p2p_register_connection_type()
