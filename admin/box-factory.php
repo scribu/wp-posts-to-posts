@@ -24,7 +24,6 @@ class P2P_Box_Factory extends P2P_Factory {
 		}
 
 		$box_args = wp_parse_args( $box_args, array(
-			'show' => 'any',
 			'context' => 'side',
 			'priority' => 'default',
 			'can_create_post' => true

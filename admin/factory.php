@@ -24,14 +24,16 @@ abstract class P2P_Factory {
 	protected function expand_arg( $args ) {
 		if ( isset( $args[ $this->key ] ) ) {
 			$sub_args = $args[ $this->key ];
-			if ( !is_array( $sub_args ) )
+
+			if ( !is_array( $sub_args ) ) {
 				$sub_args = array( 'show' => $sub_args );
+			}
 		} else {
-			$sub_args = array();
+			$sub_args = array( 'show' => false );
 		}
 
 		$sub_args = wp_parse_args( $sub_args, array(
-			'show' => false,
+			'show' => 'any',
 		) );
 
 		return $sub_args;
