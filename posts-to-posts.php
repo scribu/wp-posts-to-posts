@@ -36,6 +36,7 @@ function _p2p_load() {
 			'mustache', 'factory',
 			'box-factory', 'box', 'fields',
 			'column-factory', 'column',
+			'dropdown-factory',
 			'tools'
 		) );
 	}
