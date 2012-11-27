@@ -2,6 +2,8 @@
 
 abstract class P2P_Factory {
 
+	protected $key;
+
 	protected $queue = array();
 
 	function __construct() {
@@ -9,31 +11,28 @@ abstract class P2P_Factory {
 	}
 
 	// Check if a newly registered connection type needs an item to be produced.
-	abstract function check_ctype( $ctype, $args );
+	function check_ctype( $ctype, $args ) {
+		$sub_args = $this->expand_arg( $args );
 
-	// Register an item to be produced.
-	function register( $p2p_type, $args ) {
-		if ( isset( $this->queue[$p2p_type] ) )
+		if ( !$sub_args['show'] )
 			return false;
 
-		$args = (object) $args;
-
-		if ( !$args->show )
-			return false;
-
-		$this->queue[$p2p_type] = $args;
-
-		return true;
+		$this->queue[ $ctype->name ] = (object) $sub_args;
 	}
 
-	protected static function expand_arg( $key, $args ) {
-		if ( isset( $args[ $key ] ) ) {
-			$sub_args = $args[ $key ];
+	// Collect sub-args from main connection type args and set defaults
+	protected function expand_arg( $args ) {
+		if ( isset( $args[ $this->key ] ) ) {
+			$sub_args = $args[ $this->key ];
 			if ( !is_array( $sub_args ) )
 				$sub_args = array( 'show' => $sub_args );
 		} else {
 			$sub_args = array();
 		}
+
+		$sub_args = wp_parse_args( $sub_args, array(
+			'show' => false,
+		) );
 
 		return $sub_args;
 	}

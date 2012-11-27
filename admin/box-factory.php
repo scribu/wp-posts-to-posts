@@ -4,6 +4,8 @@ define( 'P2P_BOX_NONCE', 'p2p-box' );
 
 class P2P_Box_Factory extends P2P_Factory {
 
+	protected $key = 'admin_box';
+
 	function __construct() {
 		parent::__construct();
 
@@ -12,8 +14,8 @@ class P2P_Box_Factory extends P2P_Factory {
 		add_action( 'wp_ajax_p2p_box', array( $this, 'wp_ajax_p2p_box' ) );
 	}
 
-	function check_ctype( $ctype, $args ) {
-		$box_args = self::expand_arg( 'admin_box', $args );
+	function expand_arg( $args ) {
+		$box_args = parent::expand_arg( $args );
 
 		foreach ( array( 'can_create_post' ) as $key ) {
 			if ( isset( $args[ $key ] ) ) {
@@ -28,7 +30,7 @@ class P2P_Box_Factory extends P2P_Factory {
 			'can_create_post' => true
 		) );
 
-		$this->register( $ctype->name, $box_args );
+		return $box_args;
 	}
 
 	function add_items( $post_type ) {

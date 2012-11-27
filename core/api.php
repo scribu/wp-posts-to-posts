@@ -77,6 +77,9 @@ function p2p_register_connection_type( $args ) {
 			$args['admin_box']['context'] = _p2p_pluck( $args, 'context' );
 	}
 
+	if ( !isset( $args['admin_box'] ) )
+		$args['admin_box'] = 'any';
+
 	$ctype = P2P_Connection_Type_Factory::register( $args );
 
 	do_action( 'p2p_registered_connection_type', $ctype, $args );
