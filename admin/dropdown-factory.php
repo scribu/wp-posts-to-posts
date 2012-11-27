@@ -8,6 +8,7 @@ class P2P_Dropdown_Factory extends P2P_Factory {
 		parent::__construct();
 
 		add_action( 'restrict_manage_posts', array( $this, 'add_items' ) );
+
 		add_filter( 'request', array( $this, 'request' ) );
 	}
 
@@ -44,7 +45,7 @@ class P2P_Dropdown_Factory extends P2P_Factory {
 			'type' => 'select',
 			'name' => array( 'p2p', $directed->name, $direction ),
 			'choices' => $options,
-			'text' => ''// TODO
+			'text' => $directed->get( 'current', 'title' )
 		), $_GET );
 	}
 }
