@@ -67,6 +67,7 @@ class P2P_Debug {
 			'admin_box' => array(
 				'context' => 'advanced'
 			),
+			'admin_dropdown' => 'any',
 			'sortable' => true,
 		) );
 	}
