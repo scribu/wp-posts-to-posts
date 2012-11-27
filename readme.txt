@@ -53,6 +53,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 1.5 =
+* added admin dropdowns
+
 = 1.4.3 =
 * various bug fixes
 * added 'inline' mode for shortcodes
