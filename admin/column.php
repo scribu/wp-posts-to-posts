@@ -6,12 +6,31 @@ abstract class P2P_Column {
 
 	protected $connected = array();
 
-	function __construct( $directed, $items ) {
+	function __construct( $directed ) {
 		$this->ctype = $directed;
+
 		$this->column_id = sprintf( 'p2p-%s-%s',
 			$this->ctype->get_direction(),
 			$this->ctype->name
 		);
+
+		$screen = get_current_screen();
+
+		add_filter( "manage_{$screen->id}_columns", array( $this, 'add_column' ) );
+	}
+
+	function add_column( $columns ) {
+		$this->prepare_items();
+
+		$columns[ $this->column_id ] = $this->ctype->get( 'current', 'title' );
+
+		return $columns;
+	}
+
+	protected abstract function get_items();
+
+	protected function prepare_items() {
+		$items = $this->get_items();
 
 		$extra_qv = array(
 			'p2p:per_page' => -1,
@@ -21,17 +40,6 @@ abstract class P2P_Column {
 		$connected = $this->ctype->get_connected( $items, $extra_qv, 'abstract' );
 
 		$this->connected = p2p_triage_connected( $connected->items );
-
-		$screen = get_current_screen();
-
-		add_filter( "manage_{$screen->id}_columns", array( $this, 'add_column' ) );
-	}
-
-	function add_column( $columns ) {
-
-		$columns[ $this->column_id ] = $this->ctype->get( 'current', 'title' );
-
-		return $columns;
 	}
 
 	function styles() {
@@ -68,17 +76,17 @@ abstract class P2P_Column {
 class P2P_Column_Post extends P2P_Column {
 
 	function __construct( $directed ) {
-		global $wp_query;
-
-		$this->ctype = $directed;
-
-		$extra_qv = array( 'p2p:context' => 'admin_column' );
-
-		parent::__construct( $directed, $wp_query->posts );
+		parent::__construct( $directed );
 
 		$screen = get_current_screen();
 
 		add_action( "manage_{$screen->post_type}_posts_custom_column", array( $this, 'display_column' ), 10, 2 );
+	}
+
+	protected function get_items() {
+		global $wp_query;
+
+		return $wp_query->posts;
 	}
 
 	function get_admin_link( $item ) {
@@ -101,11 +109,30 @@ class P2P_Column_Post extends P2P_Column {
 class P2P_Column_User extends P2P_Column {
 
 	function __construct( $directed ) {
-		global $wp_list_table;
+		parent::__construct( $directed );
 
-		parent::__construct( $directed, $wp_list_table->items );
+		add_action( 'pre_user_query', array( __CLASS__, 'user_query' ), 9 );
 
 		add_filter( 'manage_users_custom_column', array( $this, 'display_column' ), 10, 3 );
+	}
+
+	protected function get_items() {
+		global $wp_list_table;
+
+		return $wp_list_table->items;
+	}
+
+	// Add the query vars to the global user query (on the user admin screen)
+	static function user_query( $query ) {
+		if ( isset( $query->_p2p_capture ) )
+			return;
+
+		// Don't overwrite existing P2P query
+		if ( isset( $query->query_vars['connected_type'] ) )
+			return;
+
+		_p2p_append( $query->query_vars, wp_array_slice_assoc( $_GET,
+			P2P_URL_Query::get_custom_qv() ) );
 	}
 
 	function get_admin_link( $item ) {
