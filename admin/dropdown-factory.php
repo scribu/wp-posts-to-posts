@@ -8,13 +8,19 @@ class P2P_Dropdown_Factory extends P2P_Factory {
 		parent::__construct();
 
 		add_action( 'restrict_manage_posts', array( $this, 'add_items' ) );
-		add_filter( 'request', array( __CLASS__, 'request' ) );
+		add_filter( 'request', array( $this, 'request' ) );
 	}
 
-	static function request( $request ) {
+	function request( $request ) {
 		if ( isset( $_GET['p2p'] ) ) {
-			list( $request['connected_type'], $tmp ) = each( $_GET['p2p'] );
-			list( $request['connected_direction'], $request['connected_items'] ) = each( $tmp );
+			$args = array();
+
+			list( $args['connected_type'], $tmp ) = each( $_GET['p2p'] );
+			list( $args['connected_direction'], $args['connected_items'] ) = each( $tmp );
+
+			if ( $args['connected_items'] ) {
+				_p2p_append( $request, $args );
+			}
 		}
 
 		return $request;
@@ -38,9 +44,8 @@ class P2P_Dropdown_Factory extends P2P_Factory {
 			'type' => 'select',
 			'name' => array( 'p2p', $directed->name, $direction ),
 			'choices' => $options,
-			'selected' => false, // TODO
 			'text' => ''// TODO
-		) );
+		), $_GET );
 	}
 }
 
