@@ -8,6 +8,16 @@ class P2P_Dropdown_Factory extends P2P_Factory {
 		parent::__construct();
 
 		add_action( 'restrict_manage_posts', array( $this, 'add_items' ) );
+		add_filter( 'request', array( __CLASS__, 'request' ) );
+	}
+
+	static function request( $request ) {
+		if ( isset( $_GET['p2p'] ) ) {
+			list( $request['connected_type'], $tmp ) = each( $_GET['p2p'] );
+			list( $request['connected_direction'], $request['connected_items'] ) = each( $tmp );
+		}
+
+		return $request;
 	}
 
 	function add_item( $directed, $object_type, $post_type, $title ) {
@@ -22,9 +32,11 @@ class P2P_Dropdown_Factory extends P2P_Factory {
 		foreach ( $connected->items as $item )
 			$options[ $item->get_id() ] = $item->get_title();
 
+		$direction = $directed->flip_direction()->get_direction();
+
 		echo scbForms::input( array(
 			'type' => 'select',
-			'name' => 'connected_items',
+			'name' => array( 'p2p', $directed->name, $direction ),
 			'choices' => $options,
 			'selected' => false, // TODO
 			'text' => ''// TODO
