@@ -1,19 +1,17 @@
 <?php
 
 /**
- * Register a connection between two post types.
- *
- * This creates the appropriate meta box in the admin edit screen.
+ * Register a connection type.
  *
  * @param array $args Associative array:
  *
  * - 'name' - string A unique identifier for this connection type.
  *
- * - 'from' - string|array The first end of the connection.
+ * - 'from' - string|array The first end of the connection: post type name or 'user'
  *
  * - 'from_query_vars' - array Additional query vars to pass to WP_Query. Default: none.
  *
- * - 'to' - string|array The second end of the connection.
+ * - 'to' - string|array The second end of the connection: post type name or 'user'
  *
  * - 'to_query_vars' - array Additional query vars to pass to WP_Query. Default: none.
  *
@@ -23,7 +21,7 @@
  *
  * - 'duplicate_connections' - bool Whether to allow more than one connection between the same two posts. Default: false.
  *
- * - 'self_connections' - bool Whether to allow a post to connect to itself. Default: false.
+ * - 'self_connections' - bool Whether to allow a post/user to connect to itself. Default: false.
  *
  * - 'sortable' - bool|string Whether to allow connections to be ordered via drag-and-drop. Can be 'from', 'to', 'any' or false. Default: false.
  *
@@ -35,13 +33,13 @@
  *
  * - 'reciprocal' - bool For indeterminate connections: True means all connections are displayed in a single box. False means 'from' connections are shown in one box and 'to' connections are shown in another box. Default: false.
  *
- * - 'admin_box' - bool|string|array Whether and where to show the admin connections box.
+ * - 'admin_box' - bool|string|array Whether and where to show the admin connections box. Default: 'any'
  *
  * - 'can_create_post' - bool Whether to allow post creation via the connection box. Default: true.
  *
- * - 'admin_column' - bool|string|array Whether to show connection columns on post/user list table.
+ * - 'admin_column' - bool|string|array Whether to show connection columns on post/user list table. Default: false
  *
- * - 'admin_dropdown' - bool|string|array Whether to show connection dropdown on post/user list table.
+ * - 'admin_dropdown' - bool|string|array Whether to show connection dropdown on post/user list table. Default: false
  *
  * @return bool|object False on failure, P2P_Connection_Type instance on success.
  */
