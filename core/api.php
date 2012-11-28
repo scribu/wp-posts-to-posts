@@ -5,7 +5,7 @@
  *
  * This creates the appropriate meta box in the admin edit screen.
  *
- * Takes the following parameters, as an associative array:
+ * @param array $args Associative array:
  *
  * - 'name' - string A unique identifier for this connection type.
  *
@@ -39,7 +39,9 @@
  *
  * - 'can_create_post' - bool Whether to allow post creation via the connection box. Default: true.
  *
- * @param array $args
+ * - 'admin_column' - bool|string|array Whether to show connection columns on post/user list table.
+ *
+ * - 'admin_dropdown' - bool|string|array Whether to show connection dropdown on post/user list table.
  *
  * @return bool|object False on failure, P2P_Connection_Type instance on success.
  */
