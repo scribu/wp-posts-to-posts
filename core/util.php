@@ -1,5 +1,20 @@
 <?php
 
+function p2p_list_cluster( $items, $callback ) {
+	$groups = array();
+
+	foreach ( $items as $item ) {
+		$key = $callback( $item );
+
+		if ( null === $key )
+			continue;
+
+		$groups[ $key ][] = $item;
+	}
+
+	return $groups;
+}
+
 /** @internal */
 function _p2p_expand_direction( $direction ) {
 	if ( !$direction )
@@ -105,5 +120,16 @@ function _p2p_first( $args ) {
 		return false;
 
 	return reset( $args );
+}
+
+/** @internal */
+function _p2p_get_other_id( $item ) {
+	if ( $item->ID == $item->p2p_from )
+		return $item->p2p_to;
+
+	if ( $item->ID == $item->p2p_to )
+		return $item->p2p_from;
+
+	trigger_error( "Corrupted data for item $inner_item->ID", E_USER_WARNING );
 }
 
