@@ -634,6 +634,22 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 		$this->assertIdsMatch( $more_posts, $collection );
 	}
 
+	function test_labels() {
+		$ctype = p2p_register_connection_type( array(
+			'name' => __FUNCTION__,
+			'from_labels' => array(
+				'create' => 'create from',
+			),
+			'to_labels' => array(
+				'create' => 'create to',
+			),
+		) );
+
+		$from_labels = $ctype->get_field( 'labels', 'from' );
+
+		$this->assertEquals( 'create from', $from_labels->create );
+	}
+
 	private function generate_posts( $type, $count ) {
 		return $this->factory->post->create_many( $count, array(
 			'post_type' => $type
