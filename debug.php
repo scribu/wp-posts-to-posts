@@ -190,8 +190,8 @@ class P2P_Debug {
 			'reciprocal' => true,
 			'title' => 'Friends with',
 			'data' => array( 'type' => 'friends' ),
-			'from_labels' => array(
-				'create' => 'CONNECT YO'
+			'to_labels' => array(
+				'create' => 'Add friends'
 			),
 			'admin_column' => 'any'
 		) );
