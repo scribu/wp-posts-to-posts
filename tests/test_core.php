@@ -621,17 +621,27 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 	function test_non_connectable() {
 		$ctype = p2p_type( 'posts_to_users' );
 
-		$user = $this->generate_user();
+		$users = $this->factory->user->create_many( get_option( 'posts_per_page' ) + 1 );
+		$more_users = $this->factory->user->create_many( 2 );
 
 		$posts = $this->factory->post->create_many( get_option( 'posts_per_page' ) + 1 );
 		$more_posts = $this->factory->post->create_many( 2 );
 
 		foreach ( $posts as $post ) {
-			$ctype->connect( $user, $post );
+			$post = get_post( $post );
+
+			foreach ( $users as $user ) {
+				$ctype->connect( $user, $post );
+			}
 		}
 
-		$collection = $ctype->get_connectable( $user, array(), 'abstract' );
+		$first_user = $this->factory->user->get_object_by_id( $users[0] );
+		$collection = $ctype->get_connectable( $first_user, array(), 'abstract' );
 		$this->assertIdsMatch( $more_posts, $collection );
+
+		$first_post = $this->factory->post->get_object_by_id( $posts[0] );
+		$collection = $ctype->get_connectable( $first_post, array(), 'abstract' );
+		$this->assertIdsMatch( array_merge( array(1), $more_users ), $collection );
 	}
 
 	function test_labels() {
