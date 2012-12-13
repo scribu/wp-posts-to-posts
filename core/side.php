@@ -258,8 +258,10 @@ class P2P_Side_User extends P2P_Side {
 			$qv['search'] = '*' . _p2p_pluck( $qv, 'p2p:search' ) . '*';
 
 		if ( isset( $qv['p2p:page'] ) && $qv['p2p:page'] > 0 ) {
-			$qv['number'] = $qv['p2p:per_page'];
-			$qv['offset'] = $qv['p2p:per_page'] * ( $qv['p2p:page'] - 1 );
+			if ( isset( $qv['p2p:per_page'] ) && $qv['p2p:per_page'] > 0 ) {
+				$qv['number'] = $qv['p2p:per_page'];
+				$qv['offset'] = $qv['p2p:per_page'] * ( $qv['p2p:page'] - 1 );
+			}
 		}
 
 		return $qv;
