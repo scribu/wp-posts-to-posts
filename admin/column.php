@@ -22,7 +22,13 @@ abstract class P2P_Column {
 	function add_column( $columns ) {
 		$this->prepare_items();
 
-		$columns[ $this->column_id ] = $this->ctype->get( 'current', 'title' );
+		$labels = $this->ctype->get( 'current', 'labels' );
+
+		$title = isset( $labels->column_title )
+			? $labels->column_title
+			: $labels->title;
+
+		$columns[ $this->column_id ] = $title;
 
 		return $columns;
 	}

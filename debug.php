@@ -177,6 +177,7 @@ class P2P_Debug {
 			'admin_column' => 'any',
 			'can_create_post' => false,
 			'to_labels' => array(
+				'column_title' => 'XXX Doubles',
 				'singular_name' => 'Double',
 				'search_items' => 'Search doubles',
 				'not_found' => 'No doubles found'
