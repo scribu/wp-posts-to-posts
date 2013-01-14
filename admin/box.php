@@ -1,10 +1,5 @@
 <?php
 
-interface P2P_Field {
-	function get_title();
-	function render( $p2p_id, $item );
-}
-
 class P2P_Box {
 	private $ctype;
 

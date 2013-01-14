@@ -43,13 +43,13 @@ function _p2p_load() {
 scb_init( '_p2p_load' );
 
 function _p2p_load_admin() {
-	_p2p_load_files( dirname(__FILE__) . '/admin', array(
-		'mustache', 'factory',
-		'box-factory', 'box', 'fields',
-		'column-factory', 'column',
-		'dropdown-factory', 'dropdown',
-		'tools'
-	) );
+	P2P_Autoload::register( 'P2P_', dirname( __FILE__ ) . '/admin' );
+
+	new P2P_Box_Factory;
+	new P2P_Column_Factory;
+	new P2P_Dropdown_Factory;
+
+	new P2P_Tools_Page;
 }
 
 function _p2p_init() {
@@ -57,9 +57,4 @@ function _p2p_init() {
 	do_action( 'p2p_init' );
 }
 add_action( 'wp_loaded', '_p2p_init' );
-
-function _p2p_load_files( $dir, $files ) {
-	foreach ( $files as $file )
-		require_once "$dir/$file.php";
-}
 
