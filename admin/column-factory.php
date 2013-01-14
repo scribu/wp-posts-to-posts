@@ -19,5 +19,3 @@ class P2P_Column_Factory extends P2P_Factory {
 	}
 }
 
-new P2P_Column_Factory;
-

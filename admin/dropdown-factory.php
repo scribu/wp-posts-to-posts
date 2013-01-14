@@ -17,5 +17,3 @@ class P2P_Dropdown_Factory extends P2P_Factory {
 	}
 }
 
-new P2P_Dropdown_Factory;
-

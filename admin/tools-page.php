@@ -133,5 +133,3 @@ class P2P_Tools_Page extends scbAdminPage {
 	}
 }
 
-new P2P_Tools_Page;
-

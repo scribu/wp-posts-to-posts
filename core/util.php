@@ -133,3 +133,52 @@ function _p2p_get_other_id( $item ) {
 	trigger_error( "Corrupted data for item $inner_item->ID", E_USER_WARNING );
 }
 
+/** @internal */
+function _p2p_get_list( $args ) {
+	extract( $args );
+
+	$ctype = p2p_type( $ctype );
+	if ( !$ctype ) {
+		trigger_error( sprintf( "Unregistered connection type '%s'.", $ctype ), E_USER_WARNING );
+		return '';
+	}
+
+	$directed = $ctype->find_direction( $item );
+	if ( !$directed )
+		return '';
+
+	$extra_qv = array(
+		'p2p:per_page' => -1,
+		'p2p:context' => $context
+	);
+
+	$connected = $directed->$method( $item, $extra_qv, 'abstract' );
+
+	switch ( $mode ) {
+	case 'inline':
+		$args = array(
+			'separator' => ', '
+		);
+		break;
+
+	case 'ol':
+		$args = array(
+			'before_list' => '<ol id="' . $ctype->name . '_list">',
+			'after_list' => '</ol>',
+		);
+		break;
+
+	case 'ul':
+	default:
+		$args = array(
+			'before_list' => '<ul id="' . $ctype->name . '_list">',
+			'after_list' => '</ul>',
+		);
+		break;
+	}
+
+	$args['echo'] = false;
+
+	return apply_filters( "p2p_{$context}_html", $connected->render( $args ), $connected, $directed, $mode );
+}
+

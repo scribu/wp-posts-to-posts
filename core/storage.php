@@ -60,5 +60,3 @@ class P2P_Storage {
 	}
 }
 
-P2P_Storage::init();
-
