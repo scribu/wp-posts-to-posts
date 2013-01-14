@@ -254,9 +254,16 @@ function p2p_create_connection( $p2p_type, $args ) {
 	) );
 
 	$p2p_id = $wpdb->insert_id;
-
-	foreach ( $meta as $key => $value )
-		p2p_add_meta( $p2p_id, $key, $value );
+		
+	foreach ( $meta as $key => $value ) {
+		if( is_array( $value ) ) {
+			foreach ( $value as $value_part ) {
+				p2p_add_meta( $p2p_id, $key, $value_part );
+			}
+		} else {
+			p2p_add_meta( $p2p_id, $key, $value );
+		}
+	}
 
 	do_action( 'p2p_created_connection', $p2p_id );
 
