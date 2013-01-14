@@ -155,5 +155,3 @@ class P2P_Box_Factory extends P2P_Factory {
 	}
 }
 
-new P2P_Box_Factory;
-
