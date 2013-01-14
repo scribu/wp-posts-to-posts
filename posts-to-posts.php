@@ -21,12 +21,16 @@ function _p2p_load() {
 
 	load_plugin_textdomain( P2P_TEXTDOMAIN, '', basename( $base ) . '/lang' );
 
-	_p2p_load_files( "$base/core", array(
-		'storage', 'query', 'query-post', 'query-user', 'url-query',
-		'util', 'item', 'list', 'side',
-		'type-factory', 'type', 'directed-type', 'indeterminate-type',
-		'api', 'extra'
-	) );
+	require $base . '/core/util.php';
+	require $base . '/core/api.php';
+	require $base . '/autoload.php';
+
+	P2P_Autoload::register( 'P2P_', $base . '/core' );
+
+	P2P_Storage::init();
+
+	P2P_Query_Post::init();
+	P2P_Query_User::init();
 
 	P2P_Widget::init();
 	P2P_Shortcodes::init();

@@ -1,6 +1,6 @@
 <?php
 
-class P2P_User_Query {
+class P2P_Query_User {
 
 	static function init() {
 		add_action( 'pre_user_query', array( __CLASS__, 'pre_user_query' ), 20 );
@@ -42,6 +42,4 @@ class P2P_User_Query {
 			$query->$key = $clauses[ $clause ];
 	}
 }
-
-P2P_User_Query::init();
 
