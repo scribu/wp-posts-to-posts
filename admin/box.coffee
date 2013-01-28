@@ -24,20 +24,27 @@ jQuery ->
 			.focus(clearVal)
 			.blur(setVal)
 
-	jQuery('.p2p-box').each ->
-		$metabox = jQuery(this)
-		$connections = $metabox.find('.p2p-connections')
+	class Metabox
 
-		$spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
+		constructor: (options) ->
+			@el = options.el
+			@spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
+
+	jQuery('.p2p-box').each ->
+		metabox = new Metabox {
+			el: jQuery(this)
+		}
+
+		$connections = metabox.el.find('.p2p-connections')
 
 		ajax_request = (data, callback, type = 'POST') ->
 			jQuery.extend data,
 				action: 'p2p_box'
 				nonce: P2PAdmin.nonce
-				p2p_type: $metabox.data('p2p_type')
-				direction: $metabox.data('direction')
+				p2p_type: metabox.el.data('p2p_type')
+				direction: metabox.el.data('direction')
 				from: jQuery('#post_ID').val()
-				s: searchTab.params.s
+				s: searchTab.params.s 	# TODO: don't need this for all requests
 				paged: searchTab.params.paged
 
 			handler = (response) ->
@@ -58,10 +65,11 @@ jQuery ->
 				success: handler
 			}
 
-
 		class PostsTab
-			constructor: (selector) ->
-				@tab = $metabox.find(selector)
+
+			constructor: (options) ->
+				@tab = options.el
+				@spinner = options.spinner
 
 				@params = {
 					subaction: 'search'
@@ -89,7 +97,7 @@ jQuery ->
 				else
 					new_page++
 
-				$spinner.appendTo @tab.find('.p2p-navigation')
+				@spinner.appendTo @tab.find('.p2p-navigation')
 
 				@find_posts(new_page)
 
@@ -102,7 +110,7 @@ jQuery ->
 				, 'GET'
 
 			update_rows: (response) ->
-				$spinner.remove()
+				@spinner.remove()
 
 				@tab.find('button, .p2p-results, .p2p-navigation, .p2p-notice').remove()
 
@@ -110,8 +118,10 @@ jQuery ->
 
 				@init_pagination_data()
 
-		searchTab = new PostsTab('.p2p-tab-search')
-
+		searchTab = new PostsTab {
+			el: metabox.el.find('.p2p-tab-search')
+			spinner: metabox.spinner
+		}
 
 		row_ajax_request = ($td, data, callback) ->
 			$td.find('.p2p-icon').css 'background-image', 'url(' + P2PAdmin.spinner + ')'
@@ -129,11 +139,11 @@ jQuery ->
 			$connections.show()
 				.find('tbody').append(response.row)
 
-			if 'one' == $metabox.data('cardinality')
-				$metabox.find('.p2p-create-connections').hide()
+			if 'one' == metabox.el.data('cardinality')
+				metabox.el.find('.p2p-create-connections').hide()
 
 		refresh_candidates = (results) ->
-			$metabox.find('.p2p-create-connections').show()
+			metabox.el.find('.p2p-create-connections').show()
 
 			searchTab.update_rows(results)
 
@@ -187,7 +197,7 @@ jQuery ->
 			row_ajax_request $td, data, (response) =>
 				append_connection(response)
 
-				if $metabox.data('duplicate_connections')
+				if metabox.el.data('duplicate_connections')
 					$td.find('.p2p-icon').css('background-image', '')
 				else
 					remove_row $td
@@ -197,7 +207,7 @@ jQuery ->
 		toggle_tabs = (ev) ->
 			ev.preventDefault()
 
-			$metabox.find('.p2p-create-connections-tabs').toggle()
+			metabox.el.find('.p2p-create-connections-tabs').toggle()
 
 			null
 
@@ -207,11 +217,11 @@ jQuery ->
 			$tab = jQuery(this)
 
 			# Set active tab
-			$metabox.find('.wp-tab-bar li').removeClass('wp-tab-active')
+			metabox.el.find('.wp-tab-bar li').removeClass('wp-tab-active')
 			$tab.addClass('wp-tab-active')
 
 			# Set active panel
-			$metabox
+			metabox.el
 				.find('.tabs-panel')
 					.hide()
 				.end()
@@ -219,7 +229,7 @@ jQuery ->
 					.show()
 					.find(':text').focus()
 
-		$metabox
+		metabox.el
 			.delegate('th.p2p-col-delete .p2p-icon', 'click', clear_connections)
 			.delegate('td.p2p-col-delete .p2p-icon', 'click', delete_connection)
 			.delegate('td.p2p-col-create div', 'click', create_connection)
@@ -238,7 +248,7 @@ jQuery ->
 			}
 
 		# Search posts
-		$searchInput = $metabox.find('.p2p-tab-search :text')
+		$searchInput = metabox.el.find('.p2p-tab-search :text')
 
 		$searchInput
 			.keypress (ev) ->
@@ -259,7 +269,7 @@ jQuery ->
 
 					searchTab.params.s = searchStr
 
-					$spinner.insertAfter($searchInput).show()
+					metabox.spinner.insertAfter($searchInput).show()
 
 					searchTab.find_posts(1)
 				, 400
@@ -267,8 +277,8 @@ jQuery ->
 				null
 
 		# Post creation
-		$createButton = $metabox.find('.p2p-tab-create-post button')
-		$createInput = $metabox.find('.p2p-tab-create-post :text')
+		$createButton = metabox.el.find('.p2p-tab-create-post button')
+		$createInput = metabox.el.find('.p2p-tab-create-post :text')
 
 		$createButton.click (ev) ->
 			ev.preventDefault()
