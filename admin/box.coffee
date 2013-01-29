@@ -136,43 +136,6 @@ jQuery ->
 	}
 
 
-	MetaboxView = Backbone.View.extend {
-
-		events: {
-			'click .p2p-toggle-tabs': 'toggle_tabs'
-			'click .wp-tab-bar li': 'switch_to_tab'
-		}
-
-		initialize: (options) ->
-			@spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
-
-		toggle_tabs: (ev) ->
-			ev.preventDefault()
-
-			@.$('.p2p-create-connections-tabs').toggle()
-
-			null
-
-		switch_to_tab: (ev) ->
-			ev.preventDefault()
-
-			$tab = jQuery(ev.currentTarget)
-
-			# Set active tab
-			@.$('.wp-tab-bar li').removeClass('wp-tab-active')
-			$tab.addClass('wp-tab-active')
-
-			# Set active panel
-			@.$el
-				.find('.tabs-panel')
-					.hide()
-				.end()
-				.find( $tab.data('ref') )
-					.show()
-					.find(':text').focus()
-	}
-
-
 	CandidatesView = Backbone.View.extend {
 
 		events: {
@@ -331,6 +294,43 @@ jQuery ->
 				ev.preventDefault()
 
 			null
+	}
+
+
+	MetaboxView = Backbone.View.extend {
+
+		events: {
+			'click .p2p-toggle-tabs': 'toggle_tabs'
+			'click .wp-tab-bar li': 'switch_to_tab'
+		}
+
+		initialize: (options) ->
+			@spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
+
+		toggle_tabs: (ev) ->
+			ev.preventDefault()
+
+			@.$('.p2p-create-connections-tabs').toggle()
+
+			null
+
+		switch_to_tab: (ev) ->
+			ev.preventDefault()
+
+			$tab = jQuery(ev.currentTarget)
+
+			# Set active tab
+			@.$('.wp-tab-bar li').removeClass('wp-tab-active')
+			$tab.addClass('wp-tab-active')
+
+			# Set active panel
+			@.$el
+				.find('.tabs-panel')
+					.hide()
+				.end()
+				.find( $tab.data('ref') )
+					.show()
+					.find(':text').focus()
 	}
 
 
