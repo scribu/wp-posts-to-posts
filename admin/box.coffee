@@ -105,13 +105,14 @@ jQuery ->
 			handler = (response) ->
 				try
 					response = jQuery.parseJSON response
-
-					if response.error
-						alert response.error
-					else
-						callback response
 				catch e
 					console?.error 'Malformed response', response
+					return
+
+				if response.error
+					alert response.error
+				else
+					callback response
 
 			jQuery.ajax {
 				type: type
