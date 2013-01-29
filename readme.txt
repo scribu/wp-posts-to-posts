@@ -53,8 +53,10 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
-= 1.5 =
+= 1.5 (next) =
 * added admin dropdowns
+* fixed SQL error related to user connections
+* fixed 'labels' handling and added 'column_title' subkey
 
 = 1.4.3 =
 * various bug fixes
