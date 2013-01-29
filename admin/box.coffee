@@ -145,7 +145,7 @@ jQuery ->
 			@spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
 
 
-	class PostsTab
+	class CandidatesView
 
 		constructor: (options) ->
 			@tab = options.el
@@ -209,7 +209,7 @@ jQuery ->
 			el: jQuery(this)
 		}
 
-		# TODO: fix circular dependency between searchTab and ajax_request
+		# TODO: fix circular dependency between candidatesView and ajax_request
 		ajax_request = (data, callback, type = 'POST') ->
 			jQuery.extend data,
 				action: 'p2p_box'
@@ -217,8 +217,8 @@ jQuery ->
 				p2p_type: metabox.el.data('p2p_type')
 				direction: metabox.el.data('direction')
 				from: jQuery('#post_ID').val()
-				s: searchTab.params.s
-				paged: searchTab.params.paged
+				s: candidatesView.params.s
+				paged: candidatesView.params.paged
 
 			handler = (response) ->
 				try
@@ -250,7 +250,7 @@ jQuery ->
 			duplicate_connections: metabox.el.data('duplicate_connections')
 		}
 
-		searchTab = new PostsTab {
+		candidatesView = new CandidatesView {
 			el: metabox.el.find('.p2p-tab-search')
 			spinner: metabox.spinner
 			ajax_request: ajax_request
@@ -259,8 +259,8 @@ jQuery ->
 		events.on('connection:create', candidates.on_connection_create, candidates)
 		events.on('connection:append', candidates.on_connection_append, candidates)
 
-		events.on('connection:delete', searchTab.refresh_candidates, searchTab)
-		events.on('connection:clear', searchTab.refresh_candidates, searchTab)
+		events.on('connection:delete', candidatesView.refresh_candidates, candidatesView)
+		events.on('connection:clear', candidatesView.refresh_candidates, candidatesView)
 
 		toggle_tabs = (ev) ->
 			ev.preventDefault()
@@ -311,14 +311,14 @@ jQuery ->
 				delayed = setTimeout ->
 					searchStr = $searchInput.val()
 
-					if searchStr is searchTab.params.s
+					if searchStr is candidatesView.params.s
 						return
 
-					searchTab.params.s = searchStr
+					candidatesView.params.s = searchStr
 
 					metabox.spinner.insertAfter($searchInput).show()
 
-					searchTab.find_posts(1)
+					candidatesView.find_posts(1)
 				, 400
 
 				null
