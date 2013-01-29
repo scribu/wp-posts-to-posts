@@ -391,7 +391,6 @@ jQuery ->
 
 		createPostView = new CreatePostView {
 			el: metabox.$('.p2p-tab-create-post')
-			metabox
 			ajax_request
 			connectionsView
 		}

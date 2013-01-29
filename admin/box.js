@@ -345,7 +345,6 @@
       });
       return createPostView = new CreatePostView({
         el: metabox.$('.p2p-tab-create-post'),
-        metabox: metabox,
         ajax_request: ajax_request,
         connectionsView: connectionsView
       });
