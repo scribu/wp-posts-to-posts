@@ -1,3 +1,312 @@
+remove_row = ($td) ->
+	$table = $td.closest('table')
+	$td.closest('tr').remove()
+
+	if not $table.find('tbody tr').length
+		$table.hide()
+
+
+Candidate = Backbone.Model
+
+Connection = Backbone.Model
+
+
+CandidateCollection = Backbone.Collection.extend {
+	model: Candidate
+}
+
+ConnectionCollection = Backbone.Collection.extend {
+	model: Connection
+}
+
+
+ConnectionsView = Backbone.View.extend {
+
+	events: {
+		'click th.p2p-col-delete .p2p-icon': 'clear'
+		'click td.p2p-col-delete .p2p-icon': 'delete'
+	}
+
+	initialize: (options) ->
+		@ajax_request = options.ajax_request
+
+		@maybe_make_sortable()
+
+		options.candidates.on('promote', @create, this)
+
+	maybe_make_sortable: ->
+		if @$('th.p2p-col-order').length
+			@$('tbody').sortable {
+				handle: 'td.p2p-col-order'
+				helper: (e, ui) ->
+					ui.children().each ->
+						$this = jQuery(this)
+						$this.width($this.width())
+					return ui
+			}
+
+	row_ajax_request: ($td, data, callback) ->
+		$td.find('.p2p-icon').css 'background-image', 'url(' + P2PAdmin.spinner + ')'
+
+		@ajax_request data, callback
+
+	clear: (ev) ->
+		ev.preventDefault()
+
+		if not confirm(P2PAdmin.deleteConfirmMessage)
+			return
+
+		$td = jQuery(ev.target).closest('td')
+
+		data = {
+			subaction: 'clear_connections'
+		}
+
+		@row_ajax_request $td, data, (response) =>
+			@$el.hide().find('tbody').html('')
+
+			@collection.trigger('clear', response)
+
+		null
+
+	delete: (ev) ->
+		ev.preventDefault()
+
+		$td = jQuery(ev.target).closest('td')
+
+		data = {
+			subaction: 'disconnect'
+			p2p_id: $td.find('input').val()
+		}
+
+		@row_ajax_request $td, data, (response) =>
+			remove_row $td
+
+			@collection.trigger('delete', response)
+
+		null
+
+	# appends a connection to the list of tables
+	appendConnection: (response) ->
+		@$el.show()
+			.find('tbody').append(response.row)
+
+		@collection.trigger('append', response)
+
+	# creates a connection in the database
+	create: ($td) ->
+		data = {
+			subaction: 'connect'
+			to: $td.find('div').data('item-id')
+		}
+
+		@row_ajax_request $td, data, (response) =>
+			@appendConnection(response)
+
+			@collection.trigger('create', $td)
+
+		null
+}
+
+
+CandidatesView = Backbone.View.extend {
+
+	events: {
+		'keypress :text': 'keypress'
+		'keyup :text': 'keyup'
+		'click .p2p-prev, .p2p-next': 'change_page'
+		'click td.p2p-col-create div': 'promote'
+	}
+
+	initialize: (options) ->
+		@spinner = options.spinner
+		@ajax_request = options.ajax_request
+
+		@params = {
+			subaction: 'search'
+			s: ''
+		}
+
+		@init_pagination_data()
+
+		options.connections.on('create', @on_connection_create, this)
+		options.connections.on('append', @on_connection_append, this)
+		options.connections.on('delete', @refresh_candidates, this)
+		options.connections.on('clear', @refresh_candidates, this)
+
+	on_connection_create: ($td) ->
+		if @options.duplicate_connections
+			$td.find('.p2p-icon').css('background-image', '')
+		else
+			remove_row $td
+
+	on_connection_append: (response) ->
+		if 'one' == @options.cardinality
+			@$('.p2p-create-connections').hide()
+
+	promote: (ev) ->
+		@collection.trigger('promote', jQuery(ev.target).closest('td'))
+
+		false
+
+	init_pagination_data: ->
+		@params.paged = @$('.p2p-current').data('num') || 1
+		@total_pages = @$('.p2p-total').data('num') || 1
+
+	keypress: (ev) ->
+		if ev.keyCode is 13 # RETURN
+			ev.preventDefault()
+
+		null
+
+	keyup: (ev) ->
+		if delayed isnt undefined
+			clearTimeout(delayed)
+
+		$searchInput = jQuery(ev.target)
+
+		delayed = setTimeout =>
+			searchStr = $searchInput.val()
+
+			if searchStr is @params.s
+				return
+
+			@spinner.insertAfter(@searchInput).show()
+
+			@params.s = searchStr
+
+			@find_posts(1)
+		, 400
+
+		null
+
+	change_page: (button) ->
+		$navButton = jQuery(button)
+		new_page = @params.paged
+
+		if $navButton.hasClass('inactive')
+			return
+
+		if $navButton.hasClass('p2p-prev')
+			new_page--
+		else
+			new_page++
+
+		@spinner.appendTo @$('.p2p-navigation')
+
+		@find_posts(new_page)
+
+	find_posts: (new_page) ->
+		if 0 < new_page <= @total_pages
+			@params.paged = new_page
+
+		@ajax_request @params, (response) =>
+			@update_rows response
+		, 'GET'
+
+	update_rows: (response) ->
+		@spinner.remove()
+
+		@$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove()
+
+		@$el.append response.rows
+
+		@init_pagination_data()
+
+	refresh_candidates: (response) ->
+		@$('.p2p-create-connections').show()
+
+		@update_rows response
+}
+
+
+CreatePostView = Backbone.View.extend {
+
+	events: {
+		'click button': 'on_button_click'
+		'keypress :text': 'on_input_keypress'
+	}
+
+	initialize: (options) ->
+		@ajax_request = options.ajax_request
+
+		@createButton = @$('button')
+		@createInput = @$(':text')
+
+	on_button_click: (ev) ->
+		ev.preventDefault()
+
+		if @createButton.hasClass('inactive')
+			return
+
+		title = @createInput.val()
+
+		if title is ''
+			@createInput.focus()
+			return
+
+		@createButton.addClass('inactive')
+
+		data =
+			subaction: 'create_post'
+			post_title: title
+
+		@ajax_request data, (response) =>
+			@options.connectionsView.appendConnection(response)
+
+			@createInput.val('')
+
+			@createButton.removeClass('inactive')
+
+		null
+
+	on_input_keypress: (ev) ->
+		if 13 is ev.keyCode
+			@createButton.click()
+
+			ev.preventDefault()
+
+		null
+}
+
+
+MetaboxView = Backbone.View.extend {
+
+	events: {
+		'click .p2p-toggle-tabs': 'toggle_tabs'
+		'click .wp-tab-bar li': 'switch_to_tab'
+	}
+
+	initialize: (options) ->
+		@spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
+
+	toggle_tabs: (ev) ->
+		ev.preventDefault()
+
+		@.$('.p2p-create-connections-tabs').toggle()
+
+		null
+
+	switch_to_tab: (ev) ->
+		ev.preventDefault()
+
+		$tab = jQuery(ev.currentTarget)
+
+		# Set active tab
+		@.$('.wp-tab-bar li').removeClass('wp-tab-active')
+		$tab.addClass('wp-tab-active')
+
+		# Set active panel
+		@.$el
+			.find('.tabs-panel')
+				.hide()
+			.end()
+			.find( $tab.data('ref') )
+				.show()
+				.find(':text').focus()
+}
+
+
 jQuery ->
 
 	# Placeholder support for IE
@@ -24,32 +333,34 @@ jQuery ->
 			.focus(clearVal)
 			.blur(setVal)
 
+
 	jQuery('.p2p-box').each ->
-		$metabox = jQuery(this)
-		$connections = $metabox.find('.p2p-connections')
+		metabox = new MetaboxView {
+			el: jQuery(this)
+		}
 
-		$spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
-
+		# TODO: fix circular dependency between candidatesView and ajax_request
 		ajax_request = (data, callback, type = 'POST') ->
 			jQuery.extend data,
 				action: 'p2p_box'
 				nonce: P2PAdmin.nonce
-				p2p_type: $metabox.data('p2p_type')
-				direction: $metabox.data('direction')
+				p2p_type: metabox.$el.data('p2p_type')
+				direction: metabox.$el.data('direction')
 				from: jQuery('#post_ID').val()
-				s: searchTab.params.s
-				paged: searchTab.params.paged
+				s: candidatesView.params.s
+				paged: candidatesView.params.paged
 
 			handler = (response) ->
 				try
 					response = jQuery.parseJSON response
-
-					if response.error
-						alert response.error
-					else
-						callback response
 				catch e
 					console?.error 'Malformed response', response
+					return
+
+				if response.error
+					alert response.error
+				else
+					callback response
 
 			jQuery.ajax {
 				type: type
@@ -58,251 +369,28 @@ jQuery ->
 				success: handler
 			}
 
-
-		class PostsTab
-			constructor: (selector) ->
-				@tab = $metabox.find(selector)
-
-				@params = {
-					subaction: 'search'
-					s: ''
-				}
-
-				@init_pagination_data()
-
-				@tab.delegate '.p2p-prev, .p2p-next', 'click', (ev) =>
-					@change_page(ev.target)
-
-			init_pagination_data: ->
-				@params.paged = @tab.find('.p2p-current').data('num') || 1
-				@total_pages = @tab.find('.p2p-total').data('num') || 1
-
-			change_page: (button) ->
-				$navButton = jQuery(button)
-				new_page = @params.paged
-
-				if $navButton.hasClass('inactive')
-					return
-
-				if $navButton.hasClass('p2p-prev')
-					new_page--
-				else
-					new_page++
-
-				$spinner.appendTo @tab.find('.p2p-navigation')
-
-				@find_posts(new_page)
-
-			find_posts: (new_page) ->
-				if 0 < new_page <= @total_pages
-					@params.paged = new_page
-
-				ajax_request @params, (response) =>
-					@update_rows response
-				, 'GET'
-
-			update_rows: (response) ->
-				$spinner.remove()
-
-				@tab.find('button, .p2p-results, .p2p-navigation, .p2p-notice').remove()
-
-				@tab.append response.rows
-
-				@init_pagination_data()
-
-		searchTab = new PostsTab('.p2p-tab-search')
-
-
-		row_ajax_request = ($td, data, callback) ->
-			$td.find('.p2p-icon').css 'background-image', 'url(' + P2PAdmin.spinner + ')'
-
-			ajax_request data, callback
-
-		remove_row = ($td) ->
-			$table = $td.closest('table')
-			$td.closest('tr').remove()
-
-			if not $table.find('tbody tr').length
-				$table.hide()
-
-		append_connection = (response) ->
-			$connections.show()
-				.find('tbody').append(response.row)
-
-			if 'one' == $metabox.data('cardinality')
-				$metabox.find('.p2p-create-connections').hide()
-
-		refresh_candidates = (results) ->
-			$metabox.find('.p2p-create-connections').show()
-
-			searchTab.update_rows(results)
-
-
-		clear_connections = (ev) ->
-			ev.preventDefault()
-
-			if not confirm(P2PAdmin.deleteConfirmMessage)
-				return
-
-			$td = jQuery(ev.target).closest('td')
-
-			data = {
-				subaction: 'clear_connections'
-			}
-
-			row_ajax_request $td, data, (response) =>
-				$connections.hide().find('tbody').html('')
-
-				refresh_candidates response
-
-			null
-
-		delete_connection = (ev) ->
-			ev.preventDefault()
-
-			$td = jQuery(ev.target).closest('td')
-
-			data = {
-				subaction: 'disconnect'
-				p2p_id: $td.find('input').val()
-			}
-
-			row_ajax_request $td, data, (response) =>
-				remove_row $td
-
-				refresh_candidates response
-
-			null
-
-		create_connection = (ev) ->
-			ev.preventDefault()
-
-			$td = jQuery(ev.target).closest('td')
-
-			data = {
-				subaction: 'connect'
-				to: $td.find('div').data('item-id')
-			}
-
-			row_ajax_request $td, data, (response) =>
-				append_connection(response)
-
-				if $metabox.data('duplicate_connections')
-					$td.find('.p2p-icon').css('background-image', '')
-				else
-					remove_row $td
-
-			null
-
-		toggle_tabs = (ev) ->
-			ev.preventDefault()
-
-			$metabox.find('.p2p-create-connections-tabs').toggle()
-
-			null
-
-		switch_to_tab = (ev) ->
-			ev.preventDefault()
-
-			$tab = jQuery(this)
-
-			# Set active tab
-			$metabox.find('.wp-tab-bar li').removeClass('wp-tab-active')
-			$tab.addClass('wp-tab-active')
-
-			# Set active panel
-			$metabox
-				.find('.tabs-panel')
-					.hide()
-				.end()
-				.find( $tab.data('ref') )
-					.show()
-					.find(':text').focus()
-
-		$metabox
-			.delegate('th.p2p-col-delete .p2p-icon', 'click', clear_connections)
-			.delegate('td.p2p-col-delete .p2p-icon', 'click', delete_connection)
-			.delegate('td.p2p-col-create div', 'click', create_connection)
-			.delegate('.p2p-toggle-tabs', 'click', toggle_tabs)
-			.delegate('.wp-tab-bar li', 'click', switch_to_tab)
-
-		# Make sortable
-		if $connections.find('th.p2p-col-order').length
-			$connections.find('tbody').sortable {
-				handle: 'td.p2p-col-order'
-				helper: (e, ui) ->
-					ui.children().each ->
-						$this = jQuery(this)
-						$this.width($this.width())
-					return ui
-			}
-
-		# Search posts
-		$searchInput = $metabox.find('.p2p-tab-search :text')
-
-		$searchInput
-			.keypress (ev) ->
-				if ev.keyCode is 13 # RETURN
-					ev.preventDefault()
-
-				null
-
-			.keyup (ev) ->
-				if delayed isnt undefined
-					clearTimeout(delayed)
-
-				delayed = setTimeout ->
-					searchStr = $searchInput.val()
-
-					if searchStr is searchTab.params.s
-						return
-
-					searchTab.params.s = searchStr
-
-					$spinner.insertAfter($searchInput).show()
-
-					searchTab.find_posts(1)
-				, 400
-
-				null
-
-		# Post creation
-		$createButton = $metabox.find('.p2p-tab-create-post button')
-		$createInput = $metabox.find('.p2p-tab-create-post :text')
-
-		$createButton.click (ev) ->
-			ev.preventDefault()
-
-			$button = jQuery(this)
-
-			if $button.hasClass('inactive')
-				return
-
-			title = $createInput.val()
-
-			if title is ''
-				$createInput.focus()
-				return
-
-			$button.addClass('inactive')
-
-			data =
-				subaction: 'create_post'
-				post_title: title
-
-			ajax_request data, (response) ->
-				append_connection(response)
-
-				$createInput.val('')
-
-				$button.removeClass('inactive')
-
-			null
-
-		$createInput.keypress (ev) ->
-			if 13 is ev.keyCode
-				$createButton.click()
-
-				ev.preventDefault()
-
-			null
+		candidates = new CandidateCollection
+		connections = new ConnectionCollection
+
+		connectionsView = new ConnectionsView {
+			el: metabox.$('.p2p-connections')
+			collection: connections
+			candidates
+			ajax_request
+		}
+
+		candidatesView = new CandidatesView {
+			el: metabox.$('.p2p-tab-search')
+			collection: candidates
+			connections
+			spinner: metabox.spinner
+			cardinality: metabox.$el.data('cardinality')
+			duplicate_connections: metabox.$el.data('duplicate_connections')
+			ajax_request
+		}
+
+		createPostView = new CreatePostView {
+			el: metabox.$('.p2p-tab-create-post')
+			ajax_request
+			connectionsView
+		}
