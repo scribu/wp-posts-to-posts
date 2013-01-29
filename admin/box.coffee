@@ -41,6 +41,19 @@ jQuery ->
 			@el = options.el
 			@ajax_request = options.ajax_request
 
+			@maybe_make_sortable()
+
+		maybe_make_sortable: ->
+			if @el.find('th.p2p-col-order').length
+				@el.find('tbody').sortable {
+					handle: 'td.p2p-col-order'
+					helper: (e, ui) ->
+						ui.children().each ->
+							$this = jQuery(this)
+							$this.width($this.width())
+						return ui
+				}
+
 		# appends a row to the connections table
 		append: (response) ->
 			@el.show()
@@ -281,17 +294,6 @@ jQuery ->
 			.delegate('td.p2p-col-create div', 'click', (ev) -> connections.create(ev))
 			.delegate('.p2p-toggle-tabs', 'click', toggle_tabs)
 			.delegate('.wp-tab-bar li', 'click', switch_to_tab)
-
-		# Make sortable
-		if connections.el.find('th.p2p-col-order').length
-			connections.el.find('tbody').sortable {
-				handle: 'td.p2p-col-order'
-				helper: (e, ui) ->
-					ui.children().each ->
-						$this = jQuery(this)
-						$this.width($this.width())
-					return ui
-			}
 
 		# Search posts
 		$searchInput = metabox.el.find('.p2p-tab-search :text')
