@@ -205,6 +205,40 @@ jQuery ->
 			@update_rows response
 
 
+	CandidateSearchView = Backbone.View.extend {
+
+		events: {
+			'keypress': 'keypress'
+			'keyup': 'keyup'
+		}
+
+		keypress: (ev) ->
+			if ev.keyCode is 13 # RETURN
+				ev.preventDefault()
+
+			null
+
+		keyup: (ev) ->
+			if delayed isnt undefined
+				clearTimeout(delayed)
+
+			delayed = setTimeout =>
+				searchStr = @$el.val()
+
+				if searchStr is @options.candidatesView.params.s
+					return
+
+				@options.candidatesView.params.s = searchStr
+
+				@options.spinner.insertAfter(@el).show()
+
+				@options.candidatesView.find_posts(1)
+			, 400
+
+			null
+	}
+
+
 	class CreatePostView
 
 		constructor: (options) ->
@@ -348,32 +382,9 @@ jQuery ->
 			.delegate('.p2p-toggle-tabs', 'click', toggle_tabs)
 			.delegate('.wp-tab-bar li', 'click', switch_to_tab)
 
-		# Search posts
-		$searchInput = metabox.el.find('.p2p-tab-search :text')
-
-		$searchInput
-			.keypress (ev) ->
-				if ev.keyCode is 13 # RETURN
-					ev.preventDefault()
-
-				null
-
-			.keyup (ev) ->
-				if delayed isnt undefined
-					clearTimeout(delayed)
-
-				delayed = setTimeout ->
-					searchStr = $searchInput.val()
-
-					if searchStr is candidatesView.params.s
-						return
-
-					candidatesView.params.s = searchStr
-
-					metabox.spinner.insertAfter($searchInput).show()
-
-					candidatesView.find_posts(1)
-				, 400
-
-				null
+		candidateSearchView = new CandidateSearchView {
+			el: metabox.el.find('.p2p-tab-search :text')
+			spinner: metabox.spinner
+			candidatesView: candidatesView
+		}
 
