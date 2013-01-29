@@ -37,10 +37,17 @@ jQuery ->
 
 	ConnectionsView = Backbone.View.extend {
 
+		events: {
+			'click th.p2p-col-delete .p2p-icon': 'clear'
+			'click td.p2p-col-delete .p2p-icon': 'delete'
+		}
+
 		initialize: (options) ->
 			@ajax_request = options.ajax_request
 
 			@maybe_make_sortable()
+
+			events.on('candidate:promote', @create, this)
 
 		maybe_make_sortable: ->
 			if @$('th.p2p-col-order').length
@@ -101,11 +108,7 @@ jQuery ->
 
 			null
 
-		create: (ev) ->
-			ev.preventDefault()
-
-			$td = jQuery(ev.target).closest('td')
-
+		create: ($td) ->
 			data = {
 				subaction: 'connect'
 				to: $td.find('div').data('item-id')
@@ -117,13 +120,44 @@ jQuery ->
 				events.trigger('connection:create', $td)
 
 			null
+
 	}
 
 
 	MetaboxView = Backbone.View.extend {
 
+		events: {
+			'click .p2p-toggle-tabs': 'toggle_tabs'
+			'click .wp-tab-bar li': 'switch_to_tab'
+		}
+
 		initialize: (options) ->
 			@spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
+
+		toggle_tabs: (ev) ->
+			ev.preventDefault()
+
+			@.$('.p2p-create-connections-tabs').toggle()
+
+			null
+
+		switch_to_tab: (ev) ->
+			ev.preventDefault()
+
+			$tab = jQuery(ev.currentTarget)
+
+			# Set active tab
+			@.$('.wp-tab-bar li').removeClass('wp-tab-active')
+			$tab.addClass('wp-tab-active')
+
+			# Set active panel
+			@.$el
+				.find('.tabs-panel')
+					.hide()
+				.end()
+				.find( $tab.data('ref') )
+					.show()
+					.find(':text').focus()
 	}
 
 
@@ -148,9 +182,10 @@ jQuery ->
 	CandidatesView = Backbone.View.extend {
 
 		events: {
-			'click .p2p-prev, .p2p-next': 'change_page'
 			'keypress :text': 'keypress'
 			'keyup :text': 'keyup'
+			'click .p2p-prev, .p2p-next': 'change_page'
+			'click td.p2p-col-create div': 'promote'
 		}
 
 		initialize: (options) ->
@@ -163,6 +198,16 @@ jQuery ->
 			}
 
 			@init_pagination_data()
+
+			events.on('connection:delete', @refresh_candidates, this)
+			events.on('connection:clear', @refresh_candidates, this)
+
+		promote: (ev) ->
+			console.log ev
+
+			events.trigger('candidate:promote', jQuery(ev.target).closest('td'))
+
+			false
 
 		init_pagination_data: ->
 			@params.paged = @$('.p2p-current').data('num') || 1
@@ -344,39 +389,3 @@ jQuery ->
 			ajax_request: ajax_request
 			connections: connections
 		}
-
-		events.on('connection:delete', candidatesView.refresh_candidates, candidatesView)
-		events.on('connection:clear', candidatesView.refresh_candidates, candidatesView)
-
-		toggle_tabs = (ev) ->
-			ev.preventDefault()
-
-			metabox.$('.p2p-create-connections-tabs').toggle()
-
-			null
-
-		switch_to_tab = (ev) ->
-			ev.preventDefault()
-
-			$tab = jQuery(this)
-
-			# Set active tab
-			metabox.$('.wp-tab-bar li').removeClass('wp-tab-active')
-			$tab.addClass('wp-tab-active')
-
-			# Set active panel
-			metabox.$el
-				.find('.tabs-panel')
-					.hide()
-				.end()
-				.find( $tab.data('ref') )
-					.show()
-					.find(':text').focus()
-
-		metabox.$el
-			.delegate('th.p2p-col-delete .p2p-icon', 'click', (ev) -> connections.clear(ev))
-			.delegate('td.p2p-col-delete .p2p-icon', 'click', (ev) -> connections.delete(ev))
-			.delegate('td.p2p-col-create div', 'click', (ev) -> connections.create(ev))
-			.delegate('.p2p-toggle-tabs', 'click', toggle_tabs)
-			.delegate('.wp-tab-bar li', 'click', switch_to_tab)
-
