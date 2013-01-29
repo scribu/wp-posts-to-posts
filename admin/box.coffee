@@ -59,13 +59,6 @@ jQuery ->
 						return ui
 				}
 
-		# appends a row to the connections table
-		append: (response) ->
-			@$el.show()
-				.find('tbody').append(response.row)
-
-			@connections.trigger('append', response)
-
 		row_ajax_request: ($td, data, callback) ->
 			$td.find('.p2p-icon').css 'background-image', 'url(' + P2PAdmin.spinner + ')'
 
@@ -107,6 +100,14 @@ jQuery ->
 
 			null
 
+		# appends a connection to the list of tables
+		appendConnection: (response) ->
+			@$el.show()
+				.find('tbody').append(response.row)
+
+			@connections.trigger('append', response)
+
+		# creates a connection in the database
 		create: ($td) ->
 			data = {
 				subaction: 'connect'
@@ -114,12 +115,11 @@ jQuery ->
 			}
 
 			@row_ajax_request $td, data, (response) =>
-				@append(response)
+				@appendConnection(response)
 
 				@connections.trigger('create', $td)
 
 			null
-
 	}
 
 
@@ -303,7 +303,7 @@ jQuery ->
 				post_title: title
 
 			@ajax_request data, (response) =>
-				@options.connectionsView.append(response)
+				@options.connectionsView.appendConnection(response)
 
 				@createInput.val('')
 
