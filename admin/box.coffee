@@ -149,6 +149,8 @@ jQuery ->
 
 		events: {
 			'click .p2p-prev, .p2p-next': 'change_page'
+			'keypress :text': 'keypress'
+			'keyup :text': 'keyup'
 		}
 
 		initialize: (options) ->
@@ -165,6 +167,33 @@ jQuery ->
 		init_pagination_data: ->
 			@params.paged = @$('.p2p-current').data('num') || 1
 			@total_pages = @$('.p2p-total').data('num') || 1
+
+		keypress: (ev) ->
+			if ev.keyCode is 13 # RETURN
+				ev.preventDefault()
+
+			null
+
+		keyup: (ev) ->
+			if delayed isnt undefined
+				clearTimeout(delayed)
+
+			$searchInput = jQuery(ev.target)
+
+			delayed = setTimeout =>
+				searchStr = $searchInput.val()
+
+				if searchStr is @params.s
+					return
+
+				@spinner.insertAfter(@searchInput).show()
+
+				@params.s = searchStr
+
+				@find_posts(1)
+			, 400
+
+			null
 
 		change_page: (button) ->
 			$navButton = jQuery(button)
@@ -203,40 +232,6 @@ jQuery ->
 			@$('.p2p-create-connections').show()
 
 			@update_rows response
-	}
-
-
-	CandidateSearchView = Backbone.View.extend {
-
-		events: {
-			'keypress': 'keypress'
-			'keyup': 'keyup'
-		}
-
-		keypress: (ev) ->
-			if ev.keyCode is 13 # RETURN
-				ev.preventDefault()
-
-			null
-
-		keyup: (ev) ->
-			if delayed isnt undefined
-				clearTimeout(delayed)
-
-			delayed = setTimeout =>
-				searchStr = @$el.val()
-
-				if searchStr is @options.candidatesView.params.s
-					return
-
-				@options.spinner.insertAfter(@el).show()
-
-				@options.candidatesView.params.s = searchStr
-
-				@options.candidatesView.find_posts(1)
-			, 400
-
-			null
 	}
 
 
@@ -384,10 +379,4 @@ jQuery ->
 			.delegate('td.p2p-col-create div', 'click', (ev) -> connections.create(ev))
 			.delegate('.p2p-toggle-tabs', 'click', toggle_tabs)
 			.delegate('.wp-tab-bar li', 'click', switch_to_tab)
-
-		candidateSearchView = new CandidateSearchView {
-			el: metabox.$('.p2p-tab-search :text')
-			spinner: metabox.spinner
-			candidatesView: candidatesView
-		}
 
