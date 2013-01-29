@@ -32,8 +32,6 @@ jQuery ->
 		if not $table.find('tbody tr').length
 			$table.hide()
 
-	events = _.clone(Backbone.Events)
-
 
 	ConnectionsView = Backbone.View.extend {
 
@@ -43,11 +41,12 @@ jQuery ->
 		}
 
 		initialize: (options) ->
+			@connections = options.connections
 			@ajax_request = options.ajax_request
 
 			@maybe_make_sortable()
 
-			events.on('candidate:promote', @create, this)
+			options.candidates.on('promote', @create, this)
 
 		maybe_make_sortable: ->
 			if @$('th.p2p-col-order').length
@@ -65,7 +64,7 @@ jQuery ->
 			@$el.show()
 				.find('tbody').append(response.row)
 
-			events.trigger('connection:append', response)
+			@connections.trigger('append', response)
 
 		row_ajax_request: ($td, data, callback) ->
 			$td.find('.p2p-icon').css 'background-image', 'url(' + P2PAdmin.spinner + ')'
@@ -87,7 +86,7 @@ jQuery ->
 			@row_ajax_request $td, data, (response) =>
 				@$el.hide().find('tbody').html('')
 
-				events.trigger('connection:clear', response)
+				@connections.trigger('clear', response)
 
 			null
 
@@ -104,7 +103,7 @@ jQuery ->
 			@row_ajax_request $td, data, (response) =>
 				remove_row $td
 
-				events.trigger('connection:delete', response)
+				@connections.trigger('delete', response)
 
 			null
 
@@ -117,7 +116,7 @@ jQuery ->
 			@row_ajax_request $td, data, (response) =>
 				@append(response)
 
-				events.trigger('connection:create', $td)
+				@connections.trigger('create', $td)
 
 			null
 
@@ -181,10 +180,10 @@ jQuery ->
 
 			@init_pagination_data()
 
-			events.on('connection:create', @on_connection_create, this)
-			events.on('connection:append', @on_connection_append, this)
-			events.on('connection:delete', @refresh_candidates, this)
-			events.on('connection:clear', @refresh_candidates, this)
+			options.connections.on('create', @on_connection_create, this)
+			options.connections.on('append', @on_connection_append, this)
+			options.connections.on('delete', @refresh_candidates, this)
+			options.connections.on('clear', @refresh_candidates, this)
 
 		on_connection_create: ($td) ->
 			if @options.duplicate_connections
@@ -197,9 +196,7 @@ jQuery ->
 				@$('.p2p-create-connections').hide()
 
 		promote: (ev) ->
-			console.log ev
-
-			events.trigger('candidate:promote', jQuery(ev.target).closest('td'))
+			@options.candidates.trigger('promote', jQuery(ev.target).closest('td'))
 
 			false
 
@@ -283,7 +280,6 @@ jQuery ->
 
 		initialize: (options) ->
 			@ajax_request = options.ajax_request
-			@connections = options.connections
 
 			@createButton = @$('button')
 			@createInput = @$(':text')
@@ -307,7 +303,7 @@ jQuery ->
 				post_title: title
 
 			@ajax_request data, (response) =>
-				@connections.append(response)
+				@options.connectionsView.append(response)
 
 				@createInput.val('')
 
@@ -360,22 +356,29 @@ jQuery ->
 				success: handler
 			}
 
-		connections = new ConnectionsView {
+		candidates = _.extend({}, Backbone.Events)
+		connections = _.extend({}, Backbone.Events)
+
+		connectionsView = new ConnectionsView {
 			el: metabox.$('.p2p-connections')
-			ajax_request: ajax_request
+			ajax_request
+			candidates
+			connections
 		}
 
 		candidatesView = new CandidatesView {
 			el: metabox.$('.p2p-tab-search')
 			spinner: metabox.spinner
-			ajax_request: ajax_request
 			cardinality: metabox.$el.data('cardinality')
 			duplicate_connections: metabox.$el.data('duplicate_connections')
+			ajax_request
+			candidates
+			connections
 		}
 
 		createPostView = new CreatePostView {
 			el: metabox.$('.p2p-tab-create-post')
-			metabox: metabox
-			ajax_request: ajax_request
-			connections: connections
+			metabox
+			ajax_request
+			connectionsView
 		}
