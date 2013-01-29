@@ -24,11 +24,113 @@ jQuery ->
 			.focus(clearVal)
 			.blur(setVal)
 
+
+	remove_row = ($td) ->
+		$table = $td.closest('table')
+		$td.closest('tr').remove()
+
+		if not $table.find('tbody tr').length
+			$table.hide()
+
+	events = _.clone(Backbone.Events)
+
+
+	class Connections
+
+		constructor: (options) ->
+			@el = options.el
+			@ajax_request = options.ajax_request
+
+		# appends a row to the connections table
+		append: (response) ->
+			@el.show()
+				.find('tbody').append(response.row)
+
+			events.trigger('connection:append', response)
+
+		row_ajax_request: ($td, data, callback) ->
+			$td.find('.p2p-icon').css 'background-image', 'url(' + P2PAdmin.spinner + ')'
+
+			@ajax_request data, callback
+
+		clear: (ev) ->
+			ev.preventDefault()
+
+			if not confirm(P2PAdmin.deleteConfirmMessage)
+				return
+
+			$td = jQuery(ev.target).closest('td')
+
+			data = {
+				subaction: 'clear_connections'
+			}
+
+			@row_ajax_request $td, data, (response) =>
+				@el.hide().find('tbody').html('')
+
+				events.trigger('connection:clear', response)
+
+			null
+
+		delete: (ev) ->
+			ev.preventDefault()
+
+			$td = jQuery(ev.target).closest('td')
+
+			data = {
+				subaction: 'disconnect'
+				p2p_id: $td.find('input').val()
+			}
+
+			@row_ajax_request $td, data, (response) =>
+				remove_row $td
+
+				events.trigger('connection:delete', response)
+
+			null
+
+		create: (ev) ->
+			ev.preventDefault()
+
+			$td = jQuery(ev.target).closest('td')
+
+			data = {
+				subaction: 'connect'
+				to: $td.find('div').data('item-id')
+			}
+
+			@row_ajax_request $td, data, (response) =>
+				@append(response)
+
+				events.trigger('connection:create', $td)
+
+			null
+
+
+	class Candidates
+
+		constructor: (options) ->
+			@el = options.el
+
+			@duplicate_connections = options.duplicate_connections
+			@cardinality = options.cardinality
+
+		on_connection_create: ($td) ->
+			if @duplicate_connections
+				$td.find('.p2p-icon').css('background-image', '')
+			else
+				remove_row $td
+
+		on_connection_append: (response) ->
+			if 'one' == @cardinality
+				@el.hide()
+
 	class Metabox
 
 		constructor: (options) ->
 			@el = options.el
 			@spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
+
 
 	class PostsTab
 
@@ -84,12 +186,11 @@ jQuery ->
 
 			@init_pagination_data()
 
+
 	jQuery('.p2p-box').each ->
 		metabox = new Metabox {
 			el: jQuery(this)
 		}
-
-		$connections = metabox.el.find('.p2p-connections')
 
 		# TODO: fix circular dependency between searchTab and ajax_request
 		ajax_request = (data, callback, type = 'POST') ->
@@ -121,92 +222,33 @@ jQuery ->
 				success: handler
 			}
 
+		connections = new Connections {
+			el: metabox.el.find('.p2p-connections')
+			ajax_request: ajax_request
+		}
+
+		candidates = new Candidates {
+			el: metabox.el.find('.p2p-create-connections')
+			cardinality: metabox.el.data('cardinality')
+			duplicate_connections: metabox.el.data('duplicate_connections')
+		}
+
+		events.on('connection:create', candidates.on_connection_create, candidates)
+		events.on('connection:append', candidates.on_connection_append, candidates)
+
 		searchTab = new PostsTab {
 			el: metabox.el.find('.p2p-tab-search')
 			spinner: metabox.spinner
 			ajax_request: ajax_request
 		}
 
-		row_ajax_request = ($td, data, callback) ->
-			$td.find('.p2p-icon').css 'background-image', 'url(' + P2PAdmin.spinner + ')'
-
-			ajax_request data, callback
-
-		remove_row = ($td) ->
-			$table = $td.closest('table')
-			$td.closest('tr').remove()
-
-			if not $table.find('tbody tr').length
-				$table.hide()
-
-		append_connection = (response) ->
-			$connections.show()
-				.find('tbody').append(response.row)
-
-			if 'one' == metabox.el.data('cardinality')
-				metabox.el.find('.p2p-create-connections').hide()
-
 		refresh_candidates = (results) ->
 			metabox.el.find('.p2p-create-connections').show()
 
 			searchTab.update_rows(results)
 
-
-		clear_connections = (ev) ->
-			ev.preventDefault()
-
-			if not confirm(P2PAdmin.deleteConfirmMessage)
-				return
-
-			$td = jQuery(ev.target).closest('td')
-
-			data = {
-				subaction: 'clear_connections'
-			}
-
-			row_ajax_request $td, data, (response) =>
-				$connections.hide().find('tbody').html('')
-
-				refresh_candidates response
-
-			null
-
-		delete_connection = (ev) ->
-			ev.preventDefault()
-
-			$td = jQuery(ev.target).closest('td')
-
-			data = {
-				subaction: 'disconnect'
-				p2p_id: $td.find('input').val()
-			}
-
-			row_ajax_request $td, data, (response) =>
-				remove_row $td
-
-				refresh_candidates response
-
-			null
-
-		create_connection = (ev) ->
-			ev.preventDefault()
-
-			$td = jQuery(ev.target).closest('td')
-
-			data = {
-				subaction: 'connect'
-				to: $td.find('div').data('item-id')
-			}
-
-			row_ajax_request $td, data, (response) =>
-				append_connection(response)
-
-				if metabox.el.data('duplicate_connections')
-					$td.find('.p2p-icon').css('background-image', '')
-				else
-					remove_row $td
-
-			null
+		events.on('connection:delete', refresh_candidates)
+		events.on('connection:clear', refresh_candidates)
 
 		toggle_tabs = (ev) ->
 			ev.preventDefault()
@@ -234,15 +276,15 @@ jQuery ->
 					.find(':text').focus()
 
 		metabox.el
-			.delegate('th.p2p-col-delete .p2p-icon', 'click', clear_connections)
-			.delegate('td.p2p-col-delete .p2p-icon', 'click', delete_connection)
-			.delegate('td.p2p-col-create div', 'click', create_connection)
+			.delegate('th.p2p-col-delete .p2p-icon', 'click', (ev) -> connections.clear(ev))
+			.delegate('td.p2p-col-delete .p2p-icon', 'click', (ev) -> connections.delete(ev))
+			.delegate('td.p2p-col-create div', 'click', (ev) -> connections.create(ev))
 			.delegate('.p2p-toggle-tabs', 'click', toggle_tabs)
 			.delegate('.wp-tab-bar li', 'click', switch_to_tab)
 
 		# Make sortable
-		if $connections.find('th.p2p-col-order').length
-			$connections.find('tbody').sortable {
+		if connections.el.find('th.p2p-col-order').length
+			connections.el.find('tbody').sortable {
 				handle: 'td.p2p-col-order'
 				helper: (e, ui) ->
 					ui.children().each ->
@@ -305,7 +347,7 @@ jQuery ->
 				post_title: title
 
 			ajax_request data, (response) ->
-				append_connection(response)
+				connections.append(response)
 
 				$createInput.val('')
 
