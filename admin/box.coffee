@@ -198,7 +198,11 @@ jQuery ->
 			@tab.append response.rows
 
 			@init_pagination_data()
+	
+		refresh_candidates: (response) ->
+			@tab.find('.p2p-create-connections').show()
 
+			@update_rows response
 
 	jQuery('.p2p-box').each ->
 		metabox = new Metabox {
@@ -246,22 +250,17 @@ jQuery ->
 			duplicate_connections: metabox.el.data('duplicate_connections')
 		}
 
-		events.on('connection:create', candidates.on_connection_create, candidates)
-		events.on('connection:append', candidates.on_connection_append, candidates)
-
 		searchTab = new PostsTab {
 			el: metabox.el.find('.p2p-tab-search')
 			spinner: metabox.spinner
 			ajax_request: ajax_request
 		}
 
-		refresh_candidates = (results) ->
-			metabox.el.find('.p2p-create-connections').show()
+		events.on('connection:create', candidates.on_connection_create, candidates)
+		events.on('connection:append', candidates.on_connection_append, candidates)
 
-			searchTab.update_rows(results)
-
-		events.on('connection:delete', refresh_candidates)
-		events.on('connection:clear', refresh_candidates)
+		events.on('connection:delete', searchTab.refresh_candidates, searchTab)
+		events.on('connection:clear', searchTab.refresh_candidates, searchTab)
 
 		toggle_tabs = (ev) ->
 			ev.preventDefault()
