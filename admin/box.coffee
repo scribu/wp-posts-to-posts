@@ -204,6 +204,54 @@ jQuery ->
 
 			@update_rows response
 
+
+	class CreatePostView
+
+		constructor: (options) ->
+			@ajax_request = options.ajax_request
+			@connections = options.connections
+
+			@createButton = options.metabox.el.find('.p2p-tab-create-post button')
+			@createInput = options.metabox.el.find('.p2p-tab-create-post :text')
+
+			@createButton.click (ev) => @on_button_click(ev)
+			@createInput.keypress (ev) => @on_input_keypress(ev)
+
+		on_button_click: (ev) ->
+			ev.preventDefault()
+
+			if @createButton.hasClass('inactive')
+				return
+
+			title = @createInput.val()
+
+			if title is ''
+				@createInput.focus()
+				return
+
+			@createButton.addClass('inactive')
+
+			data =
+				subaction: 'create_post'
+				post_title: title
+
+			@ajax_request data, (response) =>
+				@connections.append(response)
+
+				@createInput.val('')
+
+				@createButton.removeClass('inactive')
+
+			null
+
+		on_input_keypress: (ev) ->
+			if 13 is ev.keyCode
+				@createButton.click()
+
+				ev.preventDefault()
+
+			null
+
 	jQuery('.p2p-box').each ->
 		metabox = new Metabox {
 			el: jQuery(this)
@@ -254,6 +302,12 @@ jQuery ->
 			el: metabox.el.find('.p2p-tab-search')
 			spinner: metabox.spinner
 			ajax_request: ajax_request
+		}
+
+		createPostView = new CreatePostView {
+			metabox: metabox
+			ajax_request: ajax_request
+			connections: connections
 		}
 
 		events.on('connection:create', candidates.on_connection_create, candidates)
@@ -323,43 +377,3 @@ jQuery ->
 
 				null
 
-		# Post creation
-		$createButton = metabox.el.find('.p2p-tab-create-post button')
-		$createInput = metabox.el.find('.p2p-tab-create-post :text')
-
-		$createButton.click (ev) ->
-			ev.preventDefault()
-
-			$button = jQuery(this)
-
-			if $button.hasClass('inactive')
-				return
-
-			title = $createInput.val()
-
-			if title is ''
-				$createInput.focus()
-				return
-
-			$button.addClass('inactive')
-
-			data =
-				subaction: 'create_post'
-				post_title: title
-
-			ajax_request data, (response) ->
-				connections.append(response)
-
-				$createInput.val('')
-
-				$button.removeClass('inactive')
-
-			null
-
-		$createInput.keypress (ev) ->
-			if 13 is ev.keyCode
-				$createButton.click()
-
-				ev.preventDefault()
-
-			null
