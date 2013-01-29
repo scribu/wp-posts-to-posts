@@ -33,6 +33,20 @@ jQuery ->
 			$table.hide()
 
 
+	Candidate = Backbone.Model
+
+	Connection = Backbone.Model
+
+
+	CandidateCollection = Backbone.Collection.extend {
+		model: Candidate
+	}
+
+	ConnectionCollection = Backbone.Collection.extend {
+		model: Connection
+	}
+
+
 	ConnectionsView = Backbone.View.extend {
 
 		events: {
@@ -41,7 +55,6 @@ jQuery ->
 		}
 
 		initialize: (options) ->
-			@connections = options.connections
 			@ajax_request = options.ajax_request
 
 			@maybe_make_sortable()
@@ -79,7 +92,7 @@ jQuery ->
 			@row_ajax_request $td, data, (response) =>
 				@$el.hide().find('tbody').html('')
 
-				@connections.trigger('clear', response)
+				@collection.trigger('clear', response)
 
 			null
 
@@ -96,7 +109,7 @@ jQuery ->
 			@row_ajax_request $td, data, (response) =>
 				remove_row $td
 
-				@connections.trigger('delete', response)
+				@collection.trigger('delete', response)
 
 			null
 
@@ -105,7 +118,7 @@ jQuery ->
 			@$el.show()
 				.find('tbody').append(response.row)
 
-			@connections.trigger('append', response)
+			@collection.trigger('append', response)
 
 		# creates a connection in the database
 		create: ($td) ->
@@ -117,7 +130,7 @@ jQuery ->
 			@row_ajax_request $td, data, (response) =>
 				@appendConnection(response)
 
-				@connections.trigger('create', $td)
+				@collection.trigger('create', $td)
 
 			null
 	}
@@ -196,7 +209,7 @@ jQuery ->
 				@$('.p2p-create-connections').hide()
 
 		promote: (ev) ->
-			@options.candidates.trigger('promote', jQuery(ev.target).closest('td'))
+			@collection.trigger('promote', jQuery(ev.target).closest('td'))
 
 			false
 
@@ -356,24 +369,24 @@ jQuery ->
 				success: handler
 			}
 
-		candidates = _.extend({}, Backbone.Events)
-		connections = _.extend({}, Backbone.Events)
+		candidates = new CandidateCollection
+		connections = new ConnectionCollection
 
 		connectionsView = new ConnectionsView {
 			el: metabox.$('.p2p-connections')
-			ajax_request
+			collection: connections
 			candidates
-			connections
+			ajax_request
 		}
 
 		candidatesView = new CandidatesView {
 			el: metabox.$('.p2p-tab-search')
+			collection: candidates
+			connections
 			spinner: metabox.spinner
 			cardinality: metabox.$el.data('cardinality')
 			duplicate_connections: metabox.$el.data('duplicate_connections')
 			ajax_request
-			candidates
-			connections
 		}
 
 		createPostView = new CreatePostView {
