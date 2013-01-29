@@ -161,24 +161,6 @@ jQuery ->
 	}
 
 
-	CandidateListView = Backbone.View.extend {
-
-		initialize: ->
-			events.on('connection:create', @on_connection_create, this)
-			events.on('connection:append', @on_connection_append, this)
-
-		on_connection_create: ($td) ->
-			if @options.duplicate_connections
-				$td.find('.p2p-icon').css('background-image', '')
-			else
-				remove_row $td
-
-		on_connection_append: (response) ->
-			if 'one' == @options.cardinality
-				@$el.hide()
-	}
-
-	# TODO: merge into CandidateListView
 	CandidatesView = Backbone.View.extend {
 
 		events: {
@@ -199,8 +181,20 @@ jQuery ->
 
 			@init_pagination_data()
 
+			events.on('connection:create', @on_connection_create, this)
+			events.on('connection:append', @on_connection_append, this)
 			events.on('connection:delete', @refresh_candidates, this)
 			events.on('connection:clear', @refresh_candidates, this)
+
+		on_connection_create: ($td) ->
+			if @options.duplicate_connections
+				$td.find('.p2p-icon').css('background-image', '')
+			else
+				remove_row $td
+
+		on_connection_append: (response) ->
+			if 'one' == @options.cardinality
+				@$('.p2p-create-connections').hide()
 
 		promote: (ev) ->
 			console.log ev
@@ -371,16 +365,12 @@ jQuery ->
 			ajax_request: ajax_request
 		}
 
-		new CandidateListView {
-			el: metabox.$('.p2p-create-connections')
-			cardinality: metabox.$el.data('cardinality')
-			duplicate_connections: metabox.$el.data('duplicate_connections')
-		}
-
 		candidatesView = new CandidatesView {
 			el: metabox.$('.p2p-tab-search')
 			spinner: metabox.spinner
 			ajax_request: ajax_request
+			cardinality: metabox.$el.data('cardinality')
+			duplicate_connections: metabox.$el.data('duplicate_connections')
 		}
 
 		createPostView = new CreatePostView {
