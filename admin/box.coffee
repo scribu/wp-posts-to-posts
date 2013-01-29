@@ -35,17 +35,16 @@ jQuery ->
 	events = _.clone(Backbone.Events)
 
 
-	class Connections
+	ConnectionsView = Backbone.View.extend {
 
-		constructor: (options) ->
-			@el = options.el
+		initialize: (options) ->
 			@ajax_request = options.ajax_request
 
 			@maybe_make_sortable()
 
 		maybe_make_sortable: ->
-			if @el.find('th.p2p-col-order').length
-				@el.find('tbody').sortable {
+			if @$('th.p2p-col-order').length
+				@$('tbody').sortable {
 					handle: 'td.p2p-col-order'
 					helper: (e, ui) ->
 						ui.children().each ->
@@ -56,7 +55,7 @@ jQuery ->
 
 		# appends a row to the connections table
 		append: (response) ->
-			@el.show()
+			@$el.show()
 				.find('tbody').append(response.row)
 
 			events.trigger('connection:append', response)
@@ -79,7 +78,7 @@ jQuery ->
 			}
 
 			@row_ajax_request $td, data, (response) =>
-				@el.hide().find('tbody').html('')
+				@$el.hide().find('tbody').html('')
 
 				events.trigger('connection:clear', response)
 
@@ -118,37 +117,41 @@ jQuery ->
 				events.trigger('connection:create', $td)
 
 			null
+	}
 
 
-	class Candidates
+	MetaboxView = Backbone.View.extend {
 
-		constructor: (options) ->
-			@el = options.el
+		initialize: (options) ->
+			@spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
+	}
 
-			@duplicate_connections = options.duplicate_connections
-			@cardinality = options.cardinality
+
+	CandidateListView = Backbone.View.extend {
+
+		initialize: ->
+			events.on('connection:create', @on_connection_create, this)
+			events.on('connection:append', @on_connection_append, this)
 
 		on_connection_create: ($td) ->
-			if @duplicate_connections
+			if @options.duplicate_connections
 				$td.find('.p2p-icon').css('background-image', '')
 			else
 				remove_row $td
 
 		on_connection_append: (response) ->
-			if 'one' == @cardinality
-				@el.hide()
+			if 'one' == @options.cardinality
+				@$el.hide()
+	}
 
-	class Metabox
+	# TODO: merge into CandidateListView
+	CandidatesView = Backbone.View.extend {
 
-		constructor: (options) ->
-			@el = options.el
-			@spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
+		events: {
+			'click .p2p-prev, .p2p-next': 'change_page'
+		}
 
-
-	class CandidatesView
-
-		constructor: (options) ->
-			@tab = options.el
+		initialize: (options) ->
 			@spinner = options.spinner
 			@ajax_request = options.ajax_request
 
@@ -159,12 +162,9 @@ jQuery ->
 
 			@init_pagination_data()
 
-			@tab.delegate '.p2p-prev, .p2p-next', 'click', (ev) =>
-				@change_page(ev.target)
-
 		init_pagination_data: ->
-			@params.paged = @tab.find('.p2p-current').data('num') || 1
-			@total_pages = @tab.find('.p2p-total').data('num') || 1
+			@params.paged = @$('.p2p-current').data('num') || 1
+			@total_pages = @$('.p2p-total').data('num') || 1
 
 		change_page: (button) ->
 			$navButton = jQuery(button)
@@ -178,7 +178,7 @@ jQuery ->
 			else
 				new_page++
 
-			@spinner.appendTo @tab.find('.p2p-navigation')
+			@spinner.appendTo @$('.p2p-navigation')
 
 			@find_posts(new_page)
 
@@ -193,16 +193,17 @@ jQuery ->
 		update_rows: (response) ->
 			@spinner.remove()
 
-			@tab.find('button, .p2p-results, .p2p-navigation, .p2p-notice').remove()
+			@$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove()
 
-			@tab.append response.rows
+			@$el.append response.rows
 
 			@init_pagination_data()
 	
 		refresh_candidates: (response) ->
-			@tab.find('.p2p-create-connections').show()
+			@$('.p2p-create-connections').show()
 
 			@update_rows response
+	}
 
 
 	CandidateSearchView = Backbone.View.extend {
@@ -228,9 +229,9 @@ jQuery ->
 				if searchStr is @options.candidatesView.params.s
 					return
 
-				@options.candidatesView.params.s = searchStr
-
 				@options.spinner.insertAfter(@el).show()
+
+				@options.candidatesView.params.s = searchStr
 
 				@options.candidatesView.find_posts(1)
 			, 400
@@ -239,17 +240,19 @@ jQuery ->
 	}
 
 
-	class CreatePostView
+	CreatePostView = Backbone.View.extend {
 
-		constructor: (options) ->
+		events: {
+			'click button': 'on_button_click'
+			'keypress :text': 'on_input_keypress'
+		}
+
+		initialize: (options) ->
 			@ajax_request = options.ajax_request
 			@connections = options.connections
 
-			@createButton = options.metabox.el.find('.p2p-tab-create-post button')
-			@createInput = options.metabox.el.find('.p2p-tab-create-post :text')
-
-			@createButton.click (ev) => @on_button_click(ev)
-			@createInput.keypress (ev) => @on_input_keypress(ev)
+			@createButton = @$('button')
+			@createInput = @$(':text')
 
 		on_button_click: (ev) ->
 			ev.preventDefault()
@@ -285,9 +288,11 @@ jQuery ->
 				ev.preventDefault()
 
 			null
+	}
+
 
 	jQuery('.p2p-box').each ->
-		metabox = new Metabox {
+		metabox = new MetaboxView {
 			el: jQuery(this)
 		}
 
@@ -296,8 +301,8 @@ jQuery ->
 			jQuery.extend data,
 				action: 'p2p_box'
 				nonce: P2PAdmin.nonce
-				p2p_type: metabox.el.data('p2p_type')
-				direction: metabox.el.data('direction')
+				p2p_type: metabox.$el.data('p2p_type')
+				direction: metabox.$el.data('direction')
 				from: jQuery('#post_ID').val()
 				s: candidatesView.params.s
 				paged: candidatesView.params.paged
@@ -321,31 +326,29 @@ jQuery ->
 				success: handler
 			}
 
-		connections = new Connections {
-			el: metabox.el.find('.p2p-connections')
+		connections = new ConnectionsView {
+			el: metabox.$('.p2p-connections')
 			ajax_request: ajax_request
 		}
 
-		candidates = new Candidates {
-			el: metabox.el.find('.p2p-create-connections')
-			cardinality: metabox.el.data('cardinality')
-			duplicate_connections: metabox.el.data('duplicate_connections')
+		new CandidateListView {
+			el: metabox.$('.p2p-create-connections')
+			cardinality: metabox.$el.data('cardinality')
+			duplicate_connections: metabox.$el.data('duplicate_connections')
 		}
 
 		candidatesView = new CandidatesView {
-			el: metabox.el.find('.p2p-tab-search')
+			el: metabox.$('.p2p-tab-search')
 			spinner: metabox.spinner
 			ajax_request: ajax_request
 		}
 
 		createPostView = new CreatePostView {
+			el: metabox.$('.p2p-tab-create-post')
 			metabox: metabox
 			ajax_request: ajax_request
 			connections: connections
 		}
-
-		events.on('connection:create', candidates.on_connection_create, candidates)
-		events.on('connection:append', candidates.on_connection_append, candidates)
 
 		events.on('connection:delete', candidatesView.refresh_candidates, candidatesView)
 		events.on('connection:clear', candidatesView.refresh_candidates, candidatesView)
@@ -353,7 +356,7 @@ jQuery ->
 		toggle_tabs = (ev) ->
 			ev.preventDefault()
 
-			metabox.el.find('.p2p-create-connections-tabs').toggle()
+			metabox.$('.p2p-create-connections-tabs').toggle()
 
 			null
 
@@ -363,11 +366,11 @@ jQuery ->
 			$tab = jQuery(this)
 
 			# Set active tab
-			metabox.el.find('.wp-tab-bar li').removeClass('wp-tab-active')
+			metabox.$('.wp-tab-bar li').removeClass('wp-tab-active')
 			$tab.addClass('wp-tab-active')
 
 			# Set active panel
-			metabox.el
+			metabox.$el
 				.find('.tabs-panel')
 					.hide()
 				.end()
@@ -375,7 +378,7 @@ jQuery ->
 					.show()
 					.find(':text').focus()
 
-		metabox.el
+		metabox.$el
 			.delegate('th.p2p-col-delete .p2p-icon', 'click', (ev) -> connections.clear(ev))
 			.delegate('td.p2p-col-delete .p2p-icon', 'click', (ev) -> connections.delete(ev))
 			.delegate('td.p2p-col-create div', 'click', (ev) -> connections.create(ev))
@@ -383,7 +386,7 @@ jQuery ->
 			.delegate('.wp-tab-bar li', 'click', switch_to_tab)
 
 		candidateSearchView = new CandidateSearchView {
-			el: metabox.el.find('.p2p-tab-search :text')
+			el: metabox.$('.p2p-tab-search :text')
 			spinner: metabox.spinner
 			candidatesView: candidatesView
 		}
