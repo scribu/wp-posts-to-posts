@@ -30,9 +30,15 @@ class P2P_Box {
 		if ( self::$enqueued_scripts )
 			return;
 
-		wp_enqueue_style( 'p2p-box', plugins_url( 'box.css', __FILE__ ), array(), P2P_PLUGIN_VERSION );
+		wp_enqueue_style( 'p2p-box', plugins_url( 'box.css', __FILE__ ),
+			array(), P2P_PLUGIN_VERSION );
 
-		wp_enqueue_script( 'p2p-box', plugins_url( 'box.js', __FILE__ ), array( 'backbone' ), P2P_PLUGIN_VERSION, true );
+		wp_register_script( 'mustache', plugins_url( 'mustache.js', __FILE__ ),
+			array(), '0.7.2', true );
+
+		wp_enqueue_script( 'p2p-box', plugins_url( 'box.js', __FILE__ ),
+			array( 'backbone', 'mustache' ), P2P_PLUGIN_VERSION, true );
+
 		wp_localize_script( 'p2p-box', 'P2PAdmin', array(
 			'nonce' => wp_create_nonce( P2P_BOX_NONCE ),
 			'spinner' => admin_url( 'images/wpspin_light.gif' ),
