@@ -24,6 +24,13 @@
         _this.total_pages = response.navigation['total-pages-raw'];
         return model.trigger('sync', response);
       });
+    },
+    validate: function(attrs) {
+      var _ref;
+      if ((0 < (_ref = attrs['paged']) && _ref <= this.total_pages)) {
+        return null;
+      }
+      return 'invalid page';
     }
   });
 
@@ -124,7 +131,9 @@
       options.connections.on('append', this.on_connection_append, this);
       options.connections.on('delete', this.refresh_candidates, this);
       options.connections.on('clear', this.refresh_candidates, this);
-      return this.collection.on('sync', this.refresh_candidates, this);
+      this.collection.on('sync', this.refresh_candidates, this);
+      this.collection.on('error', this.handle_invalid, this);
+      return this.collection.on('invalid', this.handle_invalid, this);
     },
     on_connection_create: function($td) {
       if (this.options.duplicate_connections) {
@@ -178,16 +187,17 @@
       } else {
         new_page++;
       }
-      if ((0 < new_page && new_page <= this.collection.total_pages)) {
-        this.spinner.appendTo(this.$('.p2p-navigation'));
-        return this.collection.save('paged', new_page);
-      }
+      this.spinner.appendTo(this.$('.p2p-navigation'));
+      return this.collection.save('paged', new_page);
     },
     refresh_candidates: function(response) {
       this.$('.p2p-create-connections').show();
       this.spinner.remove();
       this.$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove();
       return this.$el.append(this.template(response));
+    },
+    handle_invalid: function() {
+      return this.spinner.remove();
     }
   });
 

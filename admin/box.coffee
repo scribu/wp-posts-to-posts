@@ -19,6 +19,12 @@ Candidates = Backbone.Model.extend {
 			@total_pages = response.navigation['total-pages-raw']
 
 			model.trigger('sync', response)
+	
+	validate: (attrs) ->
+		if 0 < attrs['paged'] <= @total_pages
+			return null
+
+		return 'invalid page'
 }
 
 Connections = Backbone.Model.extend {
@@ -137,6 +143,9 @@ CandidatesView = Backbone.View.extend {
 
 		@collection.on('sync', @refresh_candidates, this)
 
+		@collection.on('error', @handle_invalid, this)    # Backbone 0.9.2
+		@collection.on('invalid', @handle_invalid, this)
+
 	on_connection_create: ($td) ->
 		if @options.duplicate_connections
 			$td.find('.p2p-icon').css('background-image', '')
@@ -189,10 +198,9 @@ CandidatesView = Backbone.View.extend {
 		else
 			new_page++
 
-		if 0 < new_page <= @collection.total_pages
-			@spinner.appendTo @$('.p2p-navigation')
+		@spinner.appendTo @$('.p2p-navigation')
 
-			@collection.save('paged', new_page)
+		@collection.save('paged', new_page)
 
 	refresh_candidates: (response) ->
 		@$('.p2p-create-connections').show()
@@ -202,6 +210,9 @@ CandidatesView = Backbone.View.extend {
 		@$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove()
 
 		@$el.append @template(response)
+	
+	handle_invalid: ->
+		@spinner.remove()
 }
 
 
