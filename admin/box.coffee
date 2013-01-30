@@ -135,7 +135,6 @@ CandidatesView = Backbone.View.extend {
 
 	initialize: (options) ->
 		@spinner = options.spinner
-		@ajax_request = options.ajax_request
 
 		options.connections.on('create', @on_connection_create, this)
 		options.connections.on('append', @on_connection_append, this)
@@ -386,7 +385,6 @@ jQuery ->
 			spinner: metabox.spinner
 			cardinality: metabox.$el.data('cardinality')
 			duplicate_connections: metabox.$el.data('duplicate_connections')
-			ajax_request
 		}
 
 		createPostView = new CreatePostView {

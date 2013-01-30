@@ -127,7 +127,6 @@
     },
     initialize: function(options) {
       this.spinner = options.spinner;
-      this.ajax_request = options.ajax_request;
       options.connections.on('create', this.on_connection_create, this);
       options.connections.on('append', this.on_connection_append, this);
       options.connections.on('delete', this.refresh_candidates, this);
@@ -346,8 +345,7 @@
         connections: connections,
         spinner: metabox.spinner,
         cardinality: metabox.$el.data('cardinality'),
-        duplicate_connections: metabox.$el.data('duplicate_connections'),
-        ajax_request: ajax_request
+        duplicate_connections: metabox.$el.data('duplicate_connections')
       });
       return createPostView = new CreatePostView({
         el: metabox.$('.p2p-tab-create-post'),
