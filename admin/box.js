@@ -35,7 +35,19 @@
     }
   });
 
-  Connections = Backbone.Model.extend({});
+  Connections = Backbone.Model.extend({
+    createItemAndConnect: function(title) {
+      var data,
+        _this = this;
+      data = {
+        subaction: 'create_post',
+        post_title: title
+      };
+      return this.ajax_request(data, function(response) {
+        return _this.trigger('createdItem', response);
+      });
+    }
+  });
 
   ConnectionsView = Backbone.View.extend({
     events: {
@@ -45,6 +57,7 @@
     initialize: function(options) {
       this.ajax_request = options.ajax_request;
       this.maybe_make_sortable();
+      this.collection.on('createdItem', this.appendConnection, this);
       return options.candidates.on('promote', this.create, this);
     },
     maybe_make_sortable: function() {
@@ -209,11 +222,11 @@
     initialize: function(options) {
       this.ajax_request = options.ajax_request;
       this.createButton = this.$('button');
-      return this.createInput = this.$(':text');
+      this.createInput = this.$(':text');
+      return this.collection.on('createdItem', this.afterItemCreated, this);
     },
     on_button_click: function(ev) {
-      var data, title,
-        _this = this;
+      var title;
       ev.preventDefault();
       if (this.createButton.hasClass('inactive')) {
         return false;
@@ -224,16 +237,12 @@
         return;
       }
       this.createButton.addClass('inactive');
-      data = {
-        subaction: 'create_post',
-        post_title: title
-      };
-      this.ajax_request(data, function(response) {
-        _this.options.connectionsView.appendConnection(response);
-        _this.createInput.val('');
-        return _this.createButton.removeClass('inactive');
-      });
+      this.collection.createItemAndConnect(title);
       return null;
+    },
+    afterItemCreated: function() {
+      this.createInput.val('');
+      return this.createButton.removeClass('inactive');
     },
     on_input_keypress: function(ev) {
       if (13 === ev.keyCode) {
@@ -304,6 +313,7 @@
         'paged': 1
       });
       candidates.total_pages = metabox.$('.p2p-total').data('num') || 1;
+      candidates.ajax_request = ajax_request;
       ctype = {
         p2p_type: metabox.$el.data('p2p_type'),
         direction: metabox.$el.data('direction'),
@@ -331,8 +341,8 @@
           }
         });
       };
-      candidates.ajax_request = ajax_request;
       connections = new Connections;
+      connections.ajax_request = ajax_request;
       connectionsView = new ConnectionsView({
         el: metabox.$('.p2p-connections'),
         collection: connections,
@@ -349,8 +359,7 @@
       });
       return createPostView = new CreatePostView({
         el: metabox.$('.p2p-tab-create-post'),
-        ajax_request: ajax_request,
-        connectionsView: connectionsView
+        collection: connections
       });
     });
   });

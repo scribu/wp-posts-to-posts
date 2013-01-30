@@ -30,6 +30,14 @@ Candidates = Backbone.Model.extend {
 
 Connections = Backbone.Model.extend {
 
+	createItemAndConnect: (title) ->
+		data = {
+			subaction: 'create_post'
+			post_title: title
+		}
+
+		@ajax_request data, (response) =>
+			@trigger 'createdItem', response
 }
 
 
@@ -46,6 +54,7 @@ ConnectionsView = Backbone.View.extend {
 
 		@maybe_make_sortable()
 
+		@collection.on('createdItem', @appendConnection, this)
 		options.candidates.on('promote', @create, this)
 
 	maybe_make_sortable: ->
@@ -229,6 +238,8 @@ CreatePostView = Backbone.View.extend {
 		@createButton = @$('button')
 		@createInput = @$(':text')
 
+		@collection.on('createdItem', @afterItemCreated, this)
+
 	on_button_click: (ev) ->
 		ev.preventDefault()
 
@@ -243,18 +254,14 @@ CreatePostView = Backbone.View.extend {
 
 		@createButton.addClass('inactive')
 
-		data =
-			subaction: 'create_post'
-			post_title: title
-
-		@ajax_request data, (response) =>
-			@options.connectionsView.appendConnection(response)
-
-			@createInput.val('')
-
-			@createButton.removeClass('inactive')
+		@collection.createItemAndConnect title
 
 		null
+
+	afterItemCreated: ->
+		@createInput.val('')
+
+		@createButton.removeClass('inactive')
 
 	on_input_keypress: (ev) ->
 		if 13 is ev.keyCode
@@ -341,6 +348,7 @@ jQuery ->
 			'paged': 1
 		}
 		candidates.total_pages = metabox.$('.p2p-total').data('num') || 1 # TODO
+		candidates.ajax_request = ajax_request
 
 		ctype = {
 			p2p_type: metabox.$el.data('p2p_type')
@@ -367,9 +375,8 @@ jQuery ->
 				else
 					callback response
 
-		candidates.ajax_request = ajax_request
-
 		connections = new Connections
+		connections.ajax_request = ajax_request
 
 		connectionsView = new ConnectionsView {
 			el: metabox.$('.p2p-connections')
@@ -389,6 +396,5 @@ jQuery ->
 
 		createPostView = new CreatePostView {
 			el: metabox.$('.p2p-tab-create-post')
-			ajax_request
-			connectionsView
+			collection: connections
 		}
