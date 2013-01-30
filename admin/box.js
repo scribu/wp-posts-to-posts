@@ -18,8 +18,9 @@
     sync: function(method, model) {
       var params,
         _this = this;
-      params = _.clone(model.attributes);
-      params['subaction'] = 'search';
+      params = _.extend({}, model.attributes, {
+        subaction: 'search'
+      });
       return this.ajax_request(params, function(response) {
         _this.total_pages = response.navigation['total-pages-raw'];
         return model.trigger('sync', response);
@@ -311,8 +312,7 @@
       };
       ajax_request = function(options, callback) {
         var handler, params;
-        params = _.clone(options);
-        _.extend(params, candidates.attributes, ctype, {
+        params = _.extend({}, options, candidates.attributes, ctype, {
           action: 'p2p_box',
           nonce: P2PAdmin.nonce
         });

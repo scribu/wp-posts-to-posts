@@ -12,8 +12,9 @@ get_mustache_template = (name) ->
 Candidates = Backbone.Model.extend {
 
 	sync: (method, model) ->
-		params = _.clone model.attributes
-		params['subaction'] = 'search'
+		params = _.extend {}, model.attributes, {
+			subaction: 'search'
+		}
 
 		@ajax_request params, (response) =>
 			@total_pages = response.navigation['total-pages-raw']
@@ -350,9 +351,7 @@ jQuery ->
 
 		# TODO: fix circular dependency between candidates and ajax_request
 		ajax_request = (options, callback) ->
-			params = _.clone options
-
-			_.extend params, candidates.attributes, ctype, {
+			params = _.extend {}, options, candidates.attributes, ctype, {
 				action: 'p2p_box'
 				nonce: P2PAdmin.nonce
 			}
