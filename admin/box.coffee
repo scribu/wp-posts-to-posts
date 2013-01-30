@@ -338,7 +338,7 @@ jQuery ->
 		}
 
 		# TODO: fix circular dependency between candidates and ajax_request
-		ajax_request = (options, callback, type = 'POST') ->
+		ajax_request = (options, callback) ->
 			params = _.clone options
 
 			_.extend params, candidates.attributes, ctype, {
@@ -359,7 +359,7 @@ jQuery ->
 					callback response
 
 			jQuery.ajax {
-				type: type
+				type: 'POST'
 				url: ajaxurl
 				data: params
 				success: handler

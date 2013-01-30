@@ -299,11 +299,8 @@
         direction: metabox.$el.data('direction'),
         from: jQuery('#post_ID').val()
       };
-      ajax_request = function(options, callback, type) {
+      ajax_request = function(options, callback) {
         var handler, params;
-        if (type == null) {
-          type = 'POST';
-        }
         params = _.clone(options);
         _.extend(params, candidates.attributes, ctype, {
           action: 'p2p_box',
@@ -325,7 +322,7 @@
           }
         };
         return jQuery.ajax({
-          type: type,
+          type: 'POST',
           url: ajaxurl,
           data: params,
           success: handler
