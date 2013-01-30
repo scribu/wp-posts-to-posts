@@ -311,12 +311,12 @@
         from: jQuery('#post_ID').val()
       };
       ajax_request = function(options, callback) {
-        var handler, params;
+        var params;
         params = _.extend({}, options, candidates.attributes, ctype, {
           action: 'p2p_box',
           nonce: P2PAdmin.nonce
         });
-        handler = function(response) {
+        return jQuery.post(ajaxurl, params, function(response) {
           try {
             response = jQuery.parseJSON(response);
           } catch (e) {
@@ -330,12 +330,6 @@
           } else {
             return callback(response);
           }
-        };
-        return jQuery.ajax({
-          type: 'POST',
-          url: ajaxurl,
-          data: params,
-          success: handler
         });
       };
       candidates.ajax_request = ajax_request;

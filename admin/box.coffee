@@ -356,7 +356,7 @@ jQuery ->
 				nonce: P2PAdmin.nonce
 			}
 
-			handler = (response) ->
+			jQuery.post ajaxurl, params, (response) ->
 				try
 					response = jQuery.parseJSON response
 				catch e
@@ -367,13 +367,6 @@ jQuery ->
 					alert response.error
 				else
 					callback response
-
-			jQuery.ajax {
-				type: 'POST'
-				url: ajaxurl
-				data: params
-				success: handler
-			}
 
 		candidates.ajax_request = ajax_request
 
