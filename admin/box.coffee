@@ -234,7 +234,7 @@ CreatePostView = Backbone.View.extend {
 		ev.preventDefault()
 
 		if @createButton.hasClass('inactive')
-			return
+			return false
 
 		title = @createInput.val()
 

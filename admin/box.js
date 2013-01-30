@@ -217,7 +217,7 @@
         _this = this;
       ev.preventDefault();
       if (this.createButton.hasClass('inactive')) {
-        return;
+        return false;
       }
       title = this.createInput.val();
       if (title === '') {
