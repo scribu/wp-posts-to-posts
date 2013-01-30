@@ -1,5 +1,9 @@
 (function() {
-  var Candidates, CandidatesView, Connections, ConnectionsView, CreatePostView, MetaboxView, get_mustache_template, remove_row;
+  var Candidates, CandidatesView, Connections, ConnectionsView, CreatePostView, MetaboxView, get_mustache_template, remove_row, row_wait;
+
+  row_wait = function($td) {
+    return $td.find('.p2p-icon').css('background-image', 'url(' + P2PAdmin.spinner + ')');
+  };
 
   remove_row = function($td) {
     var $table;
@@ -44,7 +48,39 @@
         post_title: title
       };
       return this.ajax_request(data, function(response) {
-        return _this.trigger('createdItem', response);
+        return _this.trigger('create:from_new_item', response);
+      });
+    },
+    create: function($td) {
+      var data,
+        _this = this;
+      data = {
+        subaction: 'connect',
+        to: $td.find('div').data('item-id')
+      };
+      return this.ajax_request(data, function(response) {
+        return _this.trigger('create', response, $td);
+      });
+    },
+    "delete": function($td) {
+      var data,
+        _this = this;
+      data = {
+        subaction: 'disconnect',
+        p2p_id: $td.find('input').val()
+      };
+      return this.ajax_request(data, function(response) {
+        return _this.trigger('delete', response, $td);
+      });
+    },
+    clear: function() {
+      var data,
+        _this = this;
+      data = {
+        subaction: 'clear_connections'
+      };
+      return this.ajax_request(data, function(response) {
+        return _this.trigger('clear', response);
       });
     }
   });
@@ -57,7 +93,10 @@
     initialize: function(options) {
       this.ajax_request = options.ajax_request;
       this.maybe_make_sortable();
-      this.collection.on('createdItem', this.appendConnection, this);
+      this.collection.on('create', this.afterCreate, this);
+      this.collection.on('create:from_new_item', this.afterCreate, this);
+      this.collection.on('delete', this.afterDelete, this);
+      this.collection.on('clear', this.afterClear, this);
       return options.candidates.on('promote', this.create, this);
     },
     maybe_make_sortable: function() {
@@ -75,58 +114,37 @@
         });
       }
     },
-    row_ajax_request: function($td, data, callback) {
-      $td.find('.p2p-icon').css('background-image', 'url(' + P2PAdmin.spinner + ')');
-      return this.ajax_request(data, callback);
-    },
     clear: function(ev) {
-      var $td, data,
-        _this = this;
+      var $td;
       ev.preventDefault();
       if (!confirm(P2PAdmin.deleteConfirmMessage)) {
         return;
       }
       $td = jQuery(ev.target).closest('td');
-      data = {
-        subaction: 'clear_connections'
-      };
-      this.row_ajax_request($td, data, function(response) {
-        _this.$el.hide().find('tbody').html('');
-        return _this.collection.trigger('clear', response);
-      });
-      return null;
+      row_wait($td);
+      return this.collection.clear();
+    },
+    afterClear: function() {
+      return this.$el.hide().find('tbody').html('');
     },
     "delete": function(ev) {
-      var $td, data,
-        _this = this;
+      var $td;
       ev.preventDefault();
       $td = jQuery(ev.target).closest('td');
-      data = {
-        subaction: 'disconnect',
-        p2p_id: $td.find('input').val()
-      };
-      this.row_ajax_request($td, data, function(response) {
-        remove_row($td);
-        return _this.collection.trigger('delete', response);
-      });
+      row_wait($td);
+      this.collection["delete"]($td);
       return null;
     },
-    appendConnection: function(response) {
-      this.$el.show().find('tbody').append(response.row);
-      return this.collection.trigger('append', response);
+    afterDelete: function(response, $td) {
+      return remove_row($td);
     },
     create: function($td) {
-      var data,
-        _this = this;
-      data = {
-        subaction: 'connect',
-        to: $td.find('div').data('item-id')
-      };
-      this.row_ajax_request($td, data, function(response) {
-        _this.appendConnection(response);
-        return _this.collection.trigger('create', $td);
-      });
+      this.collection.create($td);
       return null;
+    },
+    afterCreate: function(response) {
+      this.$el.show().find('tbody').append(response.row);
+      return this.collection.trigger('append', response);
     }
   });
 
@@ -148,7 +166,7 @@
       this.collection.on('error', this.handle_invalid, this);
       return this.collection.on('invalid', this.handle_invalid, this);
     },
-    on_connection_create: function($td) {
+    on_connection_create: function(response, $td) {
       if (this.options.duplicate_connections) {
         return $td.find('.p2p-icon').css('background-image', '');
       } else {
@@ -161,7 +179,10 @@
       }
     },
     promote: function(ev) {
-      this.collection.trigger('promote', jQuery(ev.target).closest('td'));
+      var $td;
+      $td = jQuery(ev.target).closest('td');
+      row_wait($td);
+      this.collection.trigger('promote', $td);
       return false;
     },
     keypress: function(ev) {
@@ -223,7 +244,7 @@
       this.ajax_request = options.ajax_request;
       this.createButton = this.$('button');
       this.createInput = this.$(':text');
-      return this.collection.on('createdItem', this.afterItemCreated, this);
+      return this.collection.on('create:from_new_item', this.afterItemCreated, this);
     },
     on_button_click: function(ev) {
       var title;
@@ -346,8 +367,7 @@
       connectionsView = new ConnectionsView({
         el: metabox.$('.p2p-connections'),
         collection: connections,
-        candidates: candidates,
-        ajax_request: ajax_request
+        candidates: candidates
       });
       candidatesView = new CandidatesView({
         el: metabox.$('.p2p-tab-search'),

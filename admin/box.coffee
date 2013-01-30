@@ -1,3 +1,6 @@
+row_wait = ($td) ->
+	$td.find('.p2p-icon').css 'background-image', 'url(' + P2PAdmin.spinner + ')'
+
 remove_row = ($td) ->
 	$table = $td.closest('table')
 	$td.closest('tr').remove()
@@ -36,10 +39,31 @@ Connections = Backbone.Model.extend {
 			post_title: title
 		}
 
-		@ajax_request data, (response) =>
-			@trigger 'createdItem', response
-}
+		@ajax_request data, (response) => @trigger 'create:from_new_item', response
 
+	create: ($td) ->
+		data = {
+			subaction: 'connect'
+			to: $td.find('div').data('item-id')
+		}
+
+		@ajax_request data, (response) => @trigger 'create', response, $td
+
+	delete: ($td) ->
+		data = {
+			subaction: 'disconnect'
+			p2p_id: $td.find('input').val()
+		}
+
+		@ajax_request data, (response) => @trigger 'delete', response, $td
+
+	clear: ->
+		data = {
+			subaction: 'clear_connections'
+		}
+
+		@ajax_request data, (response) => @trigger 'clear', response
+}
 
 
 ConnectionsView = Backbone.View.extend {
@@ -54,7 +78,11 @@ ConnectionsView = Backbone.View.extend {
 
 		@maybe_make_sortable()
 
-		@collection.on('createdItem', @appendConnection, this)
+		@collection.on('create', @afterCreate, this)
+		@collection.on('create:from_new_item', @afterCreate, this)
+		@collection.on('delete', @afterDelete, this)
+		@collection.on('clear', @afterClear, this)
+
 		options.candidates.on('promote', @create, this)
 
 	maybe_make_sortable: ->
@@ -68,11 +96,6 @@ ConnectionsView = Backbone.View.extend {
 					return ui
 			}
 
-	row_ajax_request: ($td, data, callback) ->
-		$td.find('.p2p-icon').css 'background-image', 'url(' + P2PAdmin.spinner + ')'
-
-		@ajax_request data, callback
-
 	clear: (ev) ->
 		ev.preventDefault()
 
@@ -81,54 +104,37 @@ ConnectionsView = Backbone.View.extend {
 
 		$td = jQuery(ev.target).closest('td')
 
-		data = {
-			subaction: 'clear_connections'
-		}
+		row_wait $td
 
-		@row_ajax_request $td, data, (response) =>
-			@$el.hide().find('tbody').html('')
+		@collection.clear()
 
-			@collection.trigger('clear', response)
-
-		null
+	afterClear: ->
+		@$el.hide().find('tbody').html('')
 
 	delete: (ev) ->
 		ev.preventDefault()
 
 		$td = jQuery(ev.target).closest('td')
 
-		data = {
-			subaction: 'disconnect'
-			p2p_id: $td.find('input').val()
-		}
+		row_wait $td
 
-		@row_ajax_request $td, data, (response) =>
-			remove_row $td
-
-			@collection.trigger('delete', response)
+		@collection.delete $td
 
 		null
 
-	# appends a connection to the list of tables
-	appendConnection: (response) ->
+	afterDelete: (response, $td) ->
+		remove_row $td
+
+	create: ($td) ->
+		@collection.create $td
+
+		null
+
+	afterCreate: (response) ->
 		@$el.show()
 			.find('tbody').append(response.row)
 
 		@collection.trigger('append', response)
-
-	# creates a connection in the database
-	create: ($td) ->
-		data = {
-			subaction: 'connect'
-			to: $td.find('div').data('item-id')
-		}
-
-		@row_ajax_request $td, data, (response) =>
-			@appendConnection(response)
-
-			@collection.trigger('create', $td)
-
-		null
 }
 
 CandidatesView = Backbone.View.extend {
@@ -155,7 +161,7 @@ CandidatesView = Backbone.View.extend {
 		@collection.on('error', @handle_invalid, this)    # Backbone 0.9.2
 		@collection.on('invalid', @handle_invalid, this)
 
-	on_connection_create: ($td) ->
+	on_connection_create: (response, $td) ->
 		if @options.duplicate_connections
 			$td.find('.p2p-icon').css('background-image', '')
 		else
@@ -166,7 +172,11 @@ CandidatesView = Backbone.View.extend {
 			@$('.p2p-create-connections').hide()
 
 	promote: (ev) ->
-		@collection.trigger('promote', jQuery(ev.target).closest('td'))
+		$td = jQuery(ev.target).closest('td')
+
+		row_wait $td
+
+		@collection.trigger 'promote', $td
 
 		false
 
@@ -238,7 +248,7 @@ CreatePostView = Backbone.View.extend {
 		@createButton = @$('button')
 		@createInput = @$(':text')
 
-		@collection.on('createdItem', @afterItemCreated, this)
+		@collection.on('create:from_new_item', @afterItemCreated, this)
 
 	on_button_click: (ev) ->
 		ev.preventDefault()
@@ -382,7 +392,6 @@ jQuery ->
 			el: metabox.$('.p2p-connections')
 			collection: connections
 			candidates
-			ajax_request
 		}
 
 		candidatesView = new CandidatesView {
