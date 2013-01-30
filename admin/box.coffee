@@ -5,6 +5,9 @@ remove_row = ($td) ->
 	if not $table.find('tbody tr').length
 		$table.hide()
 
+get_mustache_template = (name) ->
+	jQuery('#p2p-template-' + name).html()
+
 
 Candidate = Backbone.Model
 
@@ -108,8 +111,9 @@ ConnectionsView = Backbone.View.extend {
 		null
 }
 
-
 CandidatesView = Backbone.View.extend {
+
+	template: Mustache.compile get_mustache_template('tab-list')
 
 	events: {
 		'keypress :text': 'keypress'
@@ -209,7 +213,7 @@ CandidatesView = Backbone.View.extend {
 
 		@$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove()
 
-		@$el.append response.rows
+		@$el.append @template(response)
 
 		@init_pagination_data()
 
@@ -333,6 +337,7 @@ jQuery ->
 			.focus(clearVal)
 			.blur(setVal)
 
+	Mustache.compilePartial 'table-row', get_mustache_template('table-row')
 
 	jQuery('.p2p-box').each ->
 		metabox = new MetaboxView {

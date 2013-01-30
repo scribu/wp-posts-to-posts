@@ -1,5 +1,5 @@
 (function() {
-  var Candidate, CandidateCollection, CandidatesView, Connection, ConnectionCollection, ConnectionsView, CreatePostView, MetaboxView, remove_row;
+  var Candidate, CandidateCollection, CandidatesView, Connection, ConnectionCollection, ConnectionsView, CreatePostView, MetaboxView, get_mustache_template, remove_row;
 
   remove_row = function($td) {
     var $table;
@@ -8,6 +8,10 @@
     if (!$table.find('tbody tr').length) {
       return $table.hide();
     }
+  };
+
+  get_mustache_template = function(name) {
+    return jQuery('#p2p-template-' + name).html();
   };
 
   Candidate = Backbone.Model;
@@ -103,6 +107,7 @@
   });
 
   CandidatesView = Backbone.View.extend({
+    template: Mustache.compile(get_mustache_template('tab-list')),
     events: {
       'keypress :text': 'keypress',
       'keyup :text': 'keyup',
@@ -194,7 +199,7 @@
     update_rows: function(response) {
       this.spinner.remove();
       this.$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove();
-      this.$el.append(response.rows);
+      this.$el.append(this.template(response));
       return this.init_pagination_data();
     },
     refresh_candidates: function(response) {
@@ -295,6 +300,7 @@
       };
       jQuery('.p2p-search input[placeholder]').each(setVal).focus(clearVal).blur(setVal);
     }
+    Mustache.compilePartial('table-row', get_mustache_template('table-row'));
     return jQuery('.p2p-box').each(function() {
       var ajax_request, candidates, candidatesView, connections, connectionsView, createPostView, metabox;
       metabox = new MetaboxView({

@@ -47,6 +47,19 @@ class P2P_Box {
 
 		self::$enqueued_scripts = true;
 
+		add_action( 'admin_footer', array( __CLASS__, 'add_templates' ) );
+	}
+
+	static function add_templates() {
+		self::add_template( 'tab-list' );
+		self::add_template( 'table-row' );
+	}
+
+	private static function add_template( $slug ) {
+		echo html( 'script', array(
+			'type' => 'text/html',
+			'id' => "p2p-template-$slug"
+		), file_get_contents( dirname( __FILE__ ) . "/templates/$slug.html" ) );
 	}
 
 	function render( $post ) {
@@ -116,7 +129,7 @@ class P2P_Box {
 		// Search tab
 		$tab_content = P2P_Mustache::render( 'tab-search', array(
 			'placeholder' => $this->labels->search_items,
-			'candidates' => $this->post_rows( $post->ID )
+			'candidates' => P2P_Mustache::render( 'tab-list', $this->post_rows( $post->ID ) )
 		) );
 
 		$data['tabs'][] = array(
@@ -204,7 +217,7 @@ class P2P_Box {
 			);
 		}
 
-		return P2P_Mustache::render( 'tab-list', $data );
+		return $data;
 	}
 
 
@@ -281,11 +294,8 @@ class P2P_Box {
 	}
 
 	private function refresh_candidates() {
-		$rows = $this->post_rows( $_REQUEST['from'], $_REQUEST['paged'], $_REQUEST['s'] );
-
-		$results = compact( 'rows' );
-
-		die( json_encode( $results ) );
+		die( json_encode( $this->post_rows(
+			$_REQUEST['from'], $_REQUEST['paged'], $_REQUEST['s'] ) ) );
 	}
 
 	protected function can_create_post() {
