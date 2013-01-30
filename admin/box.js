@@ -334,7 +334,6 @@
         'paged': 1
       });
       candidates.total_pages = metabox.$('.p2p-total').data('num') || 1;
-      candidates.ajax_request = ajax_request;
       ctype = {
         p2p_type: metabox.$el.data('p2p_type'),
         direction: metabox.$el.data('direction'),
@@ -362,6 +361,7 @@
           }
         });
       };
+      candidates.ajax_request = ajax_request;
       connections = new Connections;
       connections.ajax_request = ajax_request;
       connectionsView = new ConnectionsView({

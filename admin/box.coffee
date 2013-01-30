@@ -358,7 +358,6 @@ jQuery ->
 			'paged': 1
 		}
 		candidates.total_pages = metabox.$('.p2p-total').data('num') || 1 # TODO
-		candidates.ajax_request = ajax_request
 
 		ctype = {
 			p2p_type: metabox.$el.data('p2p_type')
@@ -384,6 +383,8 @@ jQuery ->
 					alert response.error
 				else
 					callback response
+
+		candidates.ajax_request = ajax_request
 
 		connections = new Connections
 		connections.ajax_request = ajax_request
