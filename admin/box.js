@@ -1,5 +1,5 @@
 (function() {
-  var Candidate, CandidateCollection, CandidatesView, Connection, ConnectionCollection, ConnectionsView, CreatePostView, MetaboxView, get_mustache_template, remove_row;
+  var Candidates, CandidatesView, Connections, ConnectionsView, CreatePostView, MetaboxView, get_mustache_template, remove_row;
 
   remove_row = function($td) {
     var $table;
@@ -14,17 +14,20 @@
     return jQuery('#p2p-template-' + name).html();
   };
 
-  Candidate = Backbone.Model;
-
-  Connection = Backbone.Model;
-
-  CandidateCollection = Backbone.Collection.extend({
-    model: Candidate
+  Candidates = Backbone.Model.extend({
+    sync: function(method, model) {
+      var params,
+        _this = this;
+      params = _.clone(model.attributes);
+      params['subaction'] = 'search';
+      return this.ajax_request(params, function(response) {
+        _this.total_pages = response.navigation['total-pages-raw'];
+        return model.trigger('sync', response);
+      });
+    }
   });
 
-  ConnectionCollection = Backbone.Collection.extend({
-    model: Connection
-  });
+  Connections = Backbone.Model.extend({});
 
   ConnectionsView = Backbone.View.extend({
     events: {
@@ -117,15 +120,11 @@
     initialize: function(options) {
       this.spinner = options.spinner;
       this.ajax_request = options.ajax_request;
-      this.params = {
-        subaction: 'search',
-        s: ''
-      };
-      this.init_pagination_data();
       options.connections.on('create', this.on_connection_create, this);
       options.connections.on('append', this.on_connection_append, this);
       options.connections.on('delete', this.refresh_candidates, this);
-      return options.connections.on('clear', this.refresh_candidates, this);
+      options.connections.on('clear', this.refresh_candidates, this);
+      return this.collection.on('sync', this.refresh_candidates, this);
     },
     on_connection_create: function($td) {
       if (this.options.duplicate_connections) {
@@ -143,10 +142,6 @@
       this.collection.trigger('promote', jQuery(ev.target).closest('td'));
       return false;
     },
-    init_pagination_data: function() {
-      this.params.paged = this.$('.p2p-current').data('num') || 1;
-      return this.total_pages = this.$('.p2p-total').data('num') || 1;
-    },
     keypress: function(ev) {
       if (ev.keyCode === 13) {
         ev.preventDefault();
@@ -163,48 +158,36 @@
       delayed = setTimeout(function() {
         var searchStr;
         searchStr = $searchInput.val();
-        if (searchStr === _this.params.s) {
+        if (searchStr === _this.collection.get('s')) {
           return;
         }
         _this.spinner.insertAfter(_this.searchInput).show();
-        _this.params.s = searchStr;
-        return _this.find_posts(1);
+        return _this.collection.save({
+          's': searchStr,
+          'paged': 1
+        });
       }, 400);
       return null;
     },
-    change_page: function(button) {
+    change_page: function(ev) {
       var $navButton, new_page;
-      $navButton = jQuery(button);
-      new_page = this.params.paged;
-      if ($navButton.hasClass('inactive')) {
-        return;
-      }
+      $navButton = jQuery(ev.currentTarget);
+      new_page = this.collection.get('paged');
       if ($navButton.hasClass('p2p-prev')) {
         new_page--;
       } else {
         new_page++;
       }
-      this.spinner.appendTo(this.$('.p2p-navigation'));
-      return this.find_posts(new_page);
-    },
-    find_posts: function(new_page) {
-      var _this = this;
-      if ((0 < new_page && new_page <= this.total_pages)) {
-        this.params.paged = new_page;
+      if ((0 < new_page && new_page <= this.collection.total_pages)) {
+        this.spinner.appendTo(this.$('.p2p-navigation'));
+        return this.collection.save('paged', new_page);
       }
-      return this.ajax_request(this.params, function(response) {
-        return _this.update_rows(response);
-      }, 'GET');
-    },
-    update_rows: function(response) {
-      this.spinner.remove();
-      this.$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove();
-      this.$el.append(this.template(response));
-      return this.init_pagination_data();
     },
     refresh_candidates: function(response) {
       this.$('.p2p-create-connections').show();
-      return this.update_rows(response);
+      this.spinner.remove();
+      this.$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove();
+      return this.$el.append(this.template(response));
     }
   });
 
@@ -302,23 +285,29 @@
     }
     Mustache.compilePartial('table-row', get_mustache_template('table-row'));
     return jQuery('.p2p-box').each(function() {
-      var ajax_request, candidates, candidatesView, connections, connectionsView, createPostView, metabox;
+      var ajax_request, candidates, candidatesView, connections, connectionsView, createPostView, ctype, metabox;
       metabox = new MetaboxView({
         el: jQuery(this)
       });
-      ajax_request = function(data, callback, type) {
-        var handler;
+      candidates = new Candidates({
+        's': '',
+        'paged': 1
+      });
+      candidates.total_pages = metabox.$('.p2p-total').data('num') || 1;
+      ctype = {
+        p2p_type: metabox.$el.data('p2p_type'),
+        direction: metabox.$el.data('direction'),
+        from: jQuery('#post_ID').val()
+      };
+      ajax_request = function(options, callback, type) {
+        var handler, params;
         if (type == null) {
           type = 'POST';
         }
-        jQuery.extend(data, {
+        params = _.clone(options);
+        _.extend(params, candidates.attributes, ctype, {
           action: 'p2p_box',
-          nonce: P2PAdmin.nonce,
-          p2p_type: metabox.$el.data('p2p_type'),
-          direction: metabox.$el.data('direction'),
-          from: jQuery('#post_ID').val(),
-          s: candidatesView.params.s,
-          paged: candidatesView.params.paged
+          nonce: P2PAdmin.nonce
         });
         handler = function(response) {
           try {
@@ -338,12 +327,12 @@
         return jQuery.ajax({
           type: type,
           url: ajaxurl,
-          data: data,
+          data: params,
           success: handler
         });
       };
-      candidates = new CandidateCollection;
-      connections = new ConnectionCollection;
+      candidates.ajax_request = ajax_request;
+      connections = new Connections;
       connectionsView = new ConnectionsView({
         el: metabox.$('.p2p-connections'),
         collection: connections,

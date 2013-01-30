@@ -8,19 +8,23 @@ remove_row = ($td) ->
 get_mustache_template = (name) ->
 	jQuery('#p2p-template-' + name).html()
 
+# Controller that handles the pagination state
+Candidates = Backbone.Model.extend {
 
-Candidate = Backbone.Model
+	sync: (method, model) ->
+		params = _.clone model.attributes
+		params['subaction'] = 'search'
 
-Connection = Backbone.Model
+		@ajax_request params, (response) =>
+			@total_pages = response.navigation['total-pages-raw']
 
-
-CandidateCollection = Backbone.Collection.extend {
-	model: Candidate
+			model.trigger('sync', response)
 }
 
-ConnectionCollection = Backbone.Collection.extend {
-	model: Connection
+Connections = Backbone.Model.extend {
+
 }
+
 
 
 ConnectionsView = Backbone.View.extend {
@@ -126,17 +130,12 @@ CandidatesView = Backbone.View.extend {
 		@spinner = options.spinner
 		@ajax_request = options.ajax_request
 
-		@params = {
-			subaction: 'search'
-			s: ''
-		}
-
-		@init_pagination_data()
-
 		options.connections.on('create', @on_connection_create, this)
 		options.connections.on('append', @on_connection_append, this)
 		options.connections.on('delete', @refresh_candidates, this)
 		options.connections.on('clear', @refresh_candidates, this)
+
+		@collection.on('sync', @refresh_candidates, this)
 
 	on_connection_create: ($td) ->
 		if @options.duplicate_connections
@@ -153,10 +152,6 @@ CandidatesView = Backbone.View.extend {
 
 		false
 
-	init_pagination_data: ->
-		@params.paged = @$('.p2p-current').data('num') || 1
-		@total_pages = @$('.p2p-total').data('num') || 1
-
 	keypress: (ev) ->
 		if ev.keyCode is 13 # RETURN
 			ev.preventDefault()
@@ -172,55 +167,41 @@ CandidatesView = Backbone.View.extend {
 		delayed = setTimeout =>
 			searchStr = $searchInput.val()
 
-			if searchStr is @params.s
+			if searchStr is @collection.get 's'
 				return
 
 			@spinner.insertAfter(@searchInput).show()
 
-			@params.s = searchStr
-
-			@find_posts(1)
+			@collection.save {
+				's': searchStr,
+				'paged': 1
+			}
 		, 400
 
 		null
 
-	change_page: (button) ->
-		$navButton = jQuery(button)
-		new_page = @params.paged
-
-		if $navButton.hasClass('inactive')
-			return
+	change_page: (ev) ->
+		$navButton = jQuery(ev.currentTarget)
+		new_page = @collection.get 'paged'
 
 		if $navButton.hasClass('p2p-prev')
 			new_page--
 		else
 			new_page++
 
-		@spinner.appendTo @$('.p2p-navigation')
+		if 0 < new_page <= @collection.total_pages
+			@spinner.appendTo @$('.p2p-navigation')
 
-		@find_posts(new_page)
+			@collection.save('paged', new_page)
 
-	find_posts: (new_page) ->
-		if 0 < new_page <= @total_pages
-			@params.paged = new_page
+	refresh_candidates: (response) ->
+		@$('.p2p-create-connections').show()
 
-		@ajax_request @params, (response) =>
-			@update_rows response
-		, 'GET'
-
-	update_rows: (response) ->
 		@spinner.remove()
 
 		@$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove()
 
 		@$el.append @template(response)
-
-		@init_pagination_data()
-
-	refresh_candidates: (response) ->
-		@$('.p2p-create-connections').show()
-
-		@update_rows response
 }
 
 
@@ -344,16 +325,26 @@ jQuery ->
 			el: jQuery(this)
 		}
 
-		# TODO: fix circular dependency between candidatesView and ajax_request
-		ajax_request = (data, callback, type = 'POST') ->
-			jQuery.extend data,
+		candidates = new Candidates {
+			's': '',
+			'paged': 1
+		}
+		candidates.total_pages = metabox.$('.p2p-total').data('num') || 1 # TODO
+
+		ctype = {
+			p2p_type: metabox.$el.data('p2p_type')
+			direction: metabox.$el.data('direction')
+			from: jQuery('#post_ID').val()
+		}
+
+		# TODO: fix circular dependency between candidates and ajax_request
+		ajax_request = (options, callback, type = 'POST') ->
+			params = _.clone options
+
+			_.extend params, candidates.attributes, ctype, {
 				action: 'p2p_box'
 				nonce: P2PAdmin.nonce
-				p2p_type: metabox.$el.data('p2p_type')
-				direction: metabox.$el.data('direction')
-				from: jQuery('#post_ID').val()
-				s: candidatesView.params.s
-				paged: candidatesView.params.paged
+			}
 
 			handler = (response) ->
 				try
@@ -370,12 +361,13 @@ jQuery ->
 			jQuery.ajax {
 				type: type
 				url: ajaxurl
-				data: data
+				data: params
 				success: handler
 			}
 
-		candidates = new CandidateCollection
-		connections = new ConnectionCollection
+		candidates.ajax_request = ajax_request
+
+		connections = new Connections
 
 		connectionsView = new ConnectionsView {
 			el: metabox.$('.p2p-connections')
