@@ -160,7 +160,6 @@
     initialize: function(options) {
       this.spinner = options.spinner;
       options.connections.on('create', this.afterConnectionCreated, this);
-      options.connections.on('append', this.afterConnectionAppended, this);
       options.connections.on('delete', this.refreshCandidates, this);
       options.connections.on('clear', this.refreshCandidates, this);
       this.collection.on('sync', this.refreshCandidates, this);
@@ -172,11 +171,6 @@
         return $td.find('.p2p-icon').css('background-image', '');
       } else {
         return remove_row($td);
-      }
-    },
-    afterConnectionAppended: function(response) {
-      if ('one' === this.options.cardinality) {
-        return this.$('.p2p-create-connections').hide();
       }
     },
     promote: function(ev) {
@@ -226,7 +220,6 @@
       return this.collection.save('paged', new_page);
     },
     refreshCandidates: function(response) {
-      this.$('.p2p-create-connections').show();
       this.spinner.remove();
       this.$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove();
       return this.$el.append(this.template(response));
@@ -282,7 +275,10 @@
     },
     initialize: function(options) {
       this.spinner = options.spinner;
-      return this.initializedCandidates = false;
+      this.initializedCandidates = false;
+      options.connections.on('append', this.afterConnectionAppended, this);
+      options.connections.on('clear', this.afterConnectionDeleted, this);
+      return options.connections.on('delete', this.afterConnectionDeleted, this);
     },
     toggleTabs: function(ev) {
       var $tabs;
@@ -302,6 +298,16 @@
       this.$('.wp-tab-bar li').removeClass('wp-tab-active');
       $tab.addClass('wp-tab-active');
       return this.$el.find('.tabs-panel').hide().end().find($tab.data('ref')).show().find(':text').focus();
+    },
+    afterConnectionAppended: function(response) {
+      if ('one' === this.options.cardinality) {
+        return this.$('.p2p-create-connections').hide();
+      }
+    },
+    afterConnectionDeleted: function(response) {
+      if ('one' === this.options.cardinality) {
+        return this.$('.p2p-create-connections').show();
+      }
     }
   });
 
@@ -381,7 +387,6 @@
         collection: candidates,
         connections: connections,
         spinner: $spinner,
-        cardinality: $metabox.data('cardinality'),
         duplicate_connections: $metabox.data('duplicate_connections')
       });
       createPostView = new CreatePostView({
@@ -391,7 +396,9 @@
       return metaboxView = new MetaboxView({
         el: $metabox,
         spinner: $spinner,
-        candidates: candidates
+        cardinality: $metabox.data('cardinality'),
+        candidates: candidates,
+        connections: connections
       });
     });
   });

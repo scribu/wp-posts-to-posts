@@ -153,7 +153,6 @@ CandidatesView = Backbone.View.extend {
 		@spinner = options.spinner
 
 		options.connections.on('create', @afterConnectionCreated, this)
-		options.connections.on('append', @afterConnectionAppended, this)
 		options.connections.on('delete', @refreshCandidates, this)
 		options.connections.on('clear', @refreshCandidates, this)
 
@@ -167,10 +166,6 @@ CandidatesView = Backbone.View.extend {
 			$td.find('.p2p-icon').css('background-image', '')
 		else
 			remove_row $td
-
-	afterConnectionAppended: (response) ->
-		if 'one' == @options.cardinality
-			@$('.p2p-create-connections').hide()
 
 	promote: (ev) ->
 		$td = jQuery(ev.target).closest('td')
@@ -223,8 +218,6 @@ CandidatesView = Backbone.View.extend {
 		@collection.save('paged', new_page)
 
 	refreshCandidates: (response) ->
-		@$('.p2p-create-connections').show()
-
 		@spinner.remove()
 
 		@$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove()
@@ -294,6 +287,10 @@ MetaboxView = Backbone.View.extend {
 
 		@initializedCandidates = false
 
+		options.connections.on('append', @afterConnectionAppended, this)
+		options.connections.on('clear', @afterConnectionDeleted, this)
+		options.connections.on('delete', @afterConnectionDeleted, this)
+
 	toggleTabs: (ev) ->
 		ev.preventDefault()
 
@@ -325,6 +322,14 @@ MetaboxView = Backbone.View.extend {
 			.find( $tab.data('ref') )
 				.show()
 				.find(':text').focus()
+
+	afterConnectionAppended: (response) ->
+		if 'one' == @options.cardinality
+			@$('.p2p-create-connections').hide()
+
+	afterConnectionDeleted: (response) ->
+		if 'one' == @options.cardinality
+			@$('.p2p-create-connections').show()
 }
 
 
@@ -406,7 +411,6 @@ jQuery ->
 			collection: candidates
 			connections
 			spinner: $spinner
-			cardinality: $metabox.data('cardinality')
 			duplicate_connections: $metabox.data('duplicate_connections')
 		}
 
@@ -418,5 +422,7 @@ jQuery ->
 		metaboxView = new MetaboxView {
 			el: $metabox
 			spinner: $spinner
+			cardinality: $metabox.data('cardinality')
 			candidates
+			connections
 		}
