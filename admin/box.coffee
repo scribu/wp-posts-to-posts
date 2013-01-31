@@ -154,10 +154,10 @@ CandidatesView = Backbone.View.extend {
 
 		options.connections.on('create', @afterConnectionCreated, this)
 		options.connections.on('append', @afterConnectionAppended, this)
-		options.connections.on('delete', @refresh_candidates, this)
-		options.connections.on('clear', @refresh_candidates, this)
+		options.connections.on('delete', @refreshCandidates, this)
+		options.connections.on('clear', @refreshCandidates, this)
 
-		@collection.on('sync', @refresh_candidates, this)
+		@collection.on('sync', @refreshCandidates, this)
 
 		@collection.on('error', @afterInvalid, this)    # Backbone 0.9.2
 		@collection.on('invalid', @afterInvalid, this)
@@ -222,7 +222,7 @@ CandidatesView = Backbone.View.extend {
 
 		@collection.save('paged', new_page)
 
-	refresh_candidates: (response) ->
+	refreshCandidates: (response) ->
 		@$('.p2p-create-connections').show()
 
 		@spinner.remove()
