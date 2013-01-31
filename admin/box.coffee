@@ -290,12 +290,21 @@ MetaboxView = Backbone.View.extend {
 	}
 
 	initialize: (options) ->
-		@spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
+		@spinner = options.spinner
+
+		@initializedCandidates = false
 
 	toggleTabs: (ev) ->
 		ev.preventDefault()
 
-		@.$('.p2p-create-connections-tabs').toggle()
+		$tabs = @.$('.p2p-create-connections-tabs')
+
+		$tabs.toggle()
+
+		if not @initializedCandidates and $tabs.is(':visible')
+			@options.candidates.sync()
+
+			@initializedCandidates = true
 
 		null
 
@@ -348,19 +357,18 @@ jQuery ->
 	Mustache.compilePartial 'table-row', get_mustache_template('table-row')
 
 	jQuery('.p2p-box').each ->
-		metabox = new MetaboxView {
-			el: jQuery(this)
-		}
+		$metabox = jQuery(this)
+		$spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
 
 		candidates = new Candidates {
 			's': '',
 			'paged': 1
 		}
-		candidates.total_pages = metabox.$('.p2p-total').data('num') || 1
+		candidates.total_pages = $metabox.find('.p2p-total').data('num') || 1
 
 		ctype = {
-			p2p_type: metabox.$el.data('p2p_type')
-			direction: metabox.$el.data('direction')
+			p2p_type: $metabox.data('p2p_type')
+			direction: $metabox.data('direction')
 			from: jQuery('#post_ID').val()
 		}
 
@@ -388,21 +396,27 @@ jQuery ->
 		connections.ajax_request = ajax_request
 
 		connectionsView = new ConnectionsView {
-			el: metabox.$('.p2p-connections')
+			el: $metabox.find('.p2p-connections')
 			collection: connections
 			candidates
 		}
 
 		candidatesView = new CandidatesView {
-			el: metabox.$('.p2p-tab-search')
+			el: $metabox.find('.p2p-tab-search')
 			collection: candidates
 			connections
-			spinner: metabox.spinner
-			cardinality: metabox.$el.data('cardinality')
-			duplicate_connections: metabox.$el.data('duplicate_connections')
+			spinner: $spinner
+			cardinality: $metabox.data('cardinality')
+			duplicate_connections: $metabox.data('duplicate_connections')
 		}
 
 		createPostView = new CreatePostView {
-			el: metabox.$('.p2p-tab-create-post')
+			el: $metabox.find('.p2p-tab-create-post')
 			collection: connections
+		}
+
+		metaboxView = new MetaboxView {
+			el: $metabox
+			spinner: $spinner
+			candidates
 		}

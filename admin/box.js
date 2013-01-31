@@ -280,14 +280,18 @@
       'click .wp-tab-bar li': 'setActiveTab'
     },
     initialize: function(options) {
-      return this.spinner = jQuery('<img>', {
-        'src': P2PAdmin.spinner,
-        'class': 'p2p-spinner'
-      });
+      this.spinner = options.spinner;
+      return this.initializedCandidates = false;
     },
     toggleTabs: function(ev) {
+      var $tabs;
       ev.preventDefault();
-      this.$('.p2p-create-connections-tabs').toggle();
+      $tabs = this.$('.p2p-create-connections-tabs');
+      $tabs.toggle();
+      if (!this.initializedCandidates && $tabs.is(':visible')) {
+        this.options.candidates.sync();
+        this.initializedCandidates = true;
+      }
       return null;
     },
     setActiveTab: function(ev) {
@@ -325,18 +329,20 @@
     }
     Mustache.compilePartial('table-row', get_mustache_template('table-row'));
     return jQuery('.p2p-box').each(function() {
-      var ajax_request, candidates, candidatesView, connections, connectionsView, createPostView, ctype, metabox;
-      metabox = new MetaboxView({
-        el: jQuery(this)
+      var $metabox, $spinner, ajax_request, candidates, candidatesView, connections, connectionsView, createPostView, ctype, metaboxView;
+      $metabox = jQuery(this);
+      $spinner = jQuery('<img>', {
+        'src': P2PAdmin.spinner,
+        'class': 'p2p-spinner'
       });
       candidates = new Candidates({
         's': '',
         'paged': 1
       });
-      candidates.total_pages = metabox.$('.p2p-total').data('num') || 1;
+      candidates.total_pages = $metabox.find('.p2p-total').data('num') || 1;
       ctype = {
-        p2p_type: metabox.$el.data('p2p_type'),
-        direction: metabox.$el.data('direction'),
+        p2p_type: $metabox.data('p2p_type'),
+        direction: $metabox.data('direction'),
         from: jQuery('#post_ID').val()
       };
       ajax_request = function(options, callback) {
@@ -365,21 +371,26 @@
       connections = new Connections;
       connections.ajax_request = ajax_request;
       connectionsView = new ConnectionsView({
-        el: metabox.$('.p2p-connections'),
+        el: $metabox.find('.p2p-connections'),
         collection: connections,
         candidates: candidates
       });
       candidatesView = new CandidatesView({
-        el: metabox.$('.p2p-tab-search'),
+        el: $metabox.find('.p2p-tab-search'),
         collection: candidates,
         connections: connections,
-        spinner: metabox.spinner,
-        cardinality: metabox.$el.data('cardinality'),
-        duplicate_connections: metabox.$el.data('duplicate_connections')
+        spinner: $spinner,
+        cardinality: $metabox.data('cardinality'),
+        duplicate_connections: $metabox.data('duplicate_connections')
       });
-      return createPostView = new CreatePostView({
-        el: metabox.$('.p2p-tab-create-post'),
+      createPostView = new CreatePostView({
+        el: $metabox.find('.p2p-tab-create-post'),
         collection: connections
+      });
+      return metaboxView = new MetaboxView({
+        el: $metabox,
+        spinner: $spinner,
+        candidates: candidates
       });
     });
   });

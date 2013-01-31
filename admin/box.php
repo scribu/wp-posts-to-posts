@@ -129,7 +129,6 @@ class P2P_Box {
 		// Search tab
 		$tab_content = P2P_Mustache::render( 'tab-search', array(
 			'placeholder' => $this->labels->search_items,
-			'candidates' => P2P_Mustache::render( 'tab-list', $this->post_rows( $post->ID ) )
 		) );
 
 		$data['tabs'][] = array(
