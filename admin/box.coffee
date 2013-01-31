@@ -357,7 +357,7 @@ jQuery ->
 			's': '',
 			'paged': 1
 		}
-		candidates.total_pages = metabox.$('.p2p-total').data('num') || 1 # TODO
+		candidates.total_pages = metabox.$('.p2p-total').data('num') || 1
 
 		ctype = {
 			p2p_type: metabox.$el.data('p2p_type')
@@ -365,7 +365,6 @@ jQuery ->
 			from: jQuery('#post_ID').val()
 		}
 
-		# TODO: fix circular dependency between candidates and ajax_request
 		ajax_request = (options, callback) ->
 			params = _.extend {}, options, candidates.attributes, ctype, {
 				action: 'p2p_box'
