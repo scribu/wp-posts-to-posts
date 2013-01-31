@@ -21,7 +21,7 @@ Candidates = Backbone.Model.extend {
 		}
 
 		@ajax_request params, (response) =>
-			@total_pages = response.navigation['total-pages-raw']
+			@total_pages = response.navigation?['total-pages-raw'] || 1
 
 			@trigger 'sync', response
 

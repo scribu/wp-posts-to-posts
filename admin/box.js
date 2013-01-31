@@ -26,7 +26,8 @@
         subaction: 'search'
       });
       return this.ajax_request(params, function(response) {
-        _this.total_pages = response.navigation['total-pages-raw'];
+        var _ref;
+        _this.total_pages = ((_ref = response.navigation) != null ? _ref['total-pages-raw'] : void 0) || 1;
         return _this.trigger('sync', response);
       });
     },
