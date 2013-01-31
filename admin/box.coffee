@@ -14,7 +14,7 @@ get_mustache_template = (name) ->
 # Controller that handles the pagination state
 Candidates = Backbone.Model.extend {
 
-	sync: (method, model) ->
+	sync: (method) ->
 		params = _.extend {}, model.attributes, {
 			subaction: 'search'
 		}
@@ -22,8 +22,8 @@ Candidates = Backbone.Model.extend {
 		@ajax_request params, (response) =>
 			@total_pages = response.navigation['total-pages-raw']
 
-			model.trigger('sync', response)
-	
+			@trigger 'sync', response
+
 	validate: (attrs) ->
 		if 0 < attrs['paged'] <= @total_pages
 			return null

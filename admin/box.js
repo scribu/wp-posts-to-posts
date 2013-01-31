@@ -19,7 +19,7 @@
   };
 
   Candidates = Backbone.Model.extend({
-    sync: function(method, model) {
+    sync: function(method) {
       var params,
         _this = this;
       params = _.extend({}, model.attributes, {
@@ -27,7 +27,7 @@
       });
       return this.ajax_request(params, function(response) {
         _this.total_pages = response.navigation['total-pages-raw'];
-        return model.trigger('sync', response);
+        return _this.trigger('sync', response);
       });
     },
     validate: function(attrs) {
