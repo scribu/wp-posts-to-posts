@@ -15,7 +15,7 @@ get_mustache_template = (name) ->
 Candidates = Backbone.Model.extend {
 
 	sync: (method) ->
-		params = _.extend {}, model.attributes, {
+		params = _.extend {}, @attributes, {
 			subaction: 'search'
 		}
 
