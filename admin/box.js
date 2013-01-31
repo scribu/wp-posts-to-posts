@@ -22,7 +22,7 @@
     sync: function(method) {
       var params,
         _this = this;
-      params = _.extend({}, model.attributes, {
+      params = _.extend({}, this.attributes, {
         subaction: 'search'
       });
       return this.ajax_request(params, function(response) {
@@ -151,29 +151,29 @@
   CandidatesView = Backbone.View.extend({
     template: Mustache.compile(get_mustache_template('tab-list')),
     events: {
-      'keypress :text': 'keypress',
-      'keyup :text': 'keyup',
-      'click .p2p-prev, .p2p-next': 'change_page',
+      'keypress :text': 'handleReturn',
+      'keyup :text': 'handleSearch',
+      'click .p2p-prev, .p2p-next': 'changePage',
       'click td.p2p-col-create div': 'promote'
     },
     initialize: function(options) {
       this.spinner = options.spinner;
-      options.connections.on('create', this.on_connection_create, this);
-      options.connections.on('append', this.on_connection_append, this);
+      options.connections.on('create', this.afterConnectionCreated, this);
+      options.connections.on('append', this.afterConnectionAppended, this);
       options.connections.on('delete', this.refresh_candidates, this);
       options.connections.on('clear', this.refresh_candidates, this);
       this.collection.on('sync', this.refresh_candidates, this);
-      this.collection.on('error', this.handle_invalid, this);
-      return this.collection.on('invalid', this.handle_invalid, this);
+      this.collection.on('error', this.afterInvalid, this);
+      return this.collection.on('invalid', this.afterInvalid, this);
     },
-    on_connection_create: function(response, $td) {
+    afterConnectionCreated: function(response, $td) {
       if (this.options.duplicate_connections) {
         return $td.find('.p2p-icon').css('background-image', '');
       } else {
         return remove_row($td);
       }
     },
-    on_connection_append: function(response) {
+    afterConnectionAppended: function(response) {
       if ('one' === this.options.cardinality) {
         return this.$('.p2p-create-connections').hide();
       }
@@ -185,13 +185,13 @@
       this.collection.trigger('promote', $td);
       return false;
     },
-    keypress: function(ev) {
+    handleReturn: function(ev) {
       if (ev.keyCode === 13) {
         ev.preventDefault();
       }
       return null;
     },
-    keyup: function(ev) {
+    handleSearch: function(ev) {
       var $searchInput, delayed,
         _this = this;
       if (delayed !== void 0) {
@@ -212,7 +212,7 @@
       }, 400);
       return null;
     },
-    change_page: function(ev) {
+    changePage: function(ev) {
       var $navButton, new_page;
       $navButton = jQuery(ev.currentTarget);
       new_page = this.collection.get('paged');
@@ -230,15 +230,15 @@
       this.$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove();
       return this.$el.append(this.template(response));
     },
-    handle_invalid: function() {
+    afterInvalid: function() {
       return this.spinner.remove();
     }
   });
 
   CreatePostView = Backbone.View.extend({
     events: {
-      'click button': 'on_button_click',
-      'keypress :text': 'on_input_keypress'
+      'click button': 'createItem',
+      'keypress :text': 'handleReturn'
     },
     initialize: function(options) {
       this.ajax_request = options.ajax_request;
@@ -246,7 +246,14 @@
       this.createInput = this.$(':text');
       return this.collection.on('create:from_new_item', this.afterItemCreated, this);
     },
-    on_button_click: function(ev) {
+    handleReturn: function(ev) {
+      if (ev.keyCode === 13) {
+        this.createButton.click();
+        ev.preventDefault();
+      }
+      return null;
+    },
+    createItem: function(ev) {
       var title;
       ev.preventDefault();
       if (this.createButton.hasClass('inactive')) {
@@ -264,20 +271,13 @@
     afterItemCreated: function() {
       this.createInput.val('');
       return this.createButton.removeClass('inactive');
-    },
-    on_input_keypress: function(ev) {
-      if (13 === ev.keyCode) {
-        this.createButton.click();
-        ev.preventDefault();
-      }
-      return null;
     }
   });
 
   MetaboxView = Backbone.View.extend({
     events: {
-      'click .p2p-toggle-tabs': 'toggle_tabs',
-      'click .wp-tab-bar li': 'switch_to_tab'
+      'click .p2p-toggle-tabs': 'toggleTabs',
+      'click .wp-tab-bar li': 'setActiveTab'
     },
     initialize: function(options) {
       return this.spinner = jQuery('<img>', {
@@ -285,12 +285,12 @@
         'class': 'p2p-spinner'
       });
     },
-    toggle_tabs: function(ev) {
+    toggleTabs: function(ev) {
       ev.preventDefault();
       this.$('.p2p-create-connections-tabs').toggle();
       return null;
     },
-    switch_to_tab: function(ev) {
+    setActiveTab: function(ev) {
       var $tab;
       ev.preventDefault();
       $tab = jQuery(ev.currentTarget);

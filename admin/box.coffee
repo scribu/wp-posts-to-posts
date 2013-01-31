@@ -11,6 +11,7 @@ remove_row = ($td) ->
 get_mustache_template = (name) ->
 	jQuery('#p2p-template-' + name).html()
 
+
 # Controller that handles the pagination state
 Candidates = Backbone.Model.extend {
 
@@ -142,32 +143,32 @@ CandidatesView = Backbone.View.extend {
 	template: Mustache.compile get_mustache_template('tab-list')
 
 	events: {
-		'keypress :text': 'keypress'
-		'keyup :text': 'keyup'
-		'click .p2p-prev, .p2p-next': 'change_page'
+		'keypress :text': 'handleReturn'
+		'keyup :text': 'handleSearch'
+		'click .p2p-prev, .p2p-next': 'changePage'
 		'click td.p2p-col-create div': 'promote'
 	}
 
 	initialize: (options) ->
 		@spinner = options.spinner
 
-		options.connections.on('create', @on_connection_create, this)
-		options.connections.on('append', @on_connection_append, this)
+		options.connections.on('create', @afterConnectionCreated, this)
+		options.connections.on('append', @afterConnectionAppended, this)
 		options.connections.on('delete', @refresh_candidates, this)
 		options.connections.on('clear', @refresh_candidates, this)
 
 		@collection.on('sync', @refresh_candidates, this)
 
-		@collection.on('error', @handle_invalid, this)    # Backbone 0.9.2
-		@collection.on('invalid', @handle_invalid, this)
+		@collection.on('error', @afterInvalid, this)    # Backbone 0.9.2
+		@collection.on('invalid', @afterInvalid, this)
 
-	on_connection_create: (response, $td) ->
+	afterConnectionCreated: (response, $td) ->
 		if @options.duplicate_connections
 			$td.find('.p2p-icon').css('background-image', '')
 		else
 			remove_row $td
 
-	on_connection_append: (response) ->
+	afterConnectionAppended: (response) ->
 		if 'one' == @options.cardinality
 			@$('.p2p-create-connections').hide()
 
@@ -180,13 +181,13 @@ CandidatesView = Backbone.View.extend {
 
 		false
 
-	keypress: (ev) ->
+	handleReturn: (ev) ->
 		if ev.keyCode is 13 # RETURN
 			ev.preventDefault()
 
 		null
 
-	keyup: (ev) ->
+	handleSearch: (ev) ->
 		if delayed isnt undefined
 			clearTimeout(delayed)
 
@@ -208,7 +209,7 @@ CandidatesView = Backbone.View.extend {
 
 		null
 
-	change_page: (ev) ->
+	changePage: (ev) ->
 		$navButton = jQuery(ev.currentTarget)
 		new_page = @collection.get 'paged'
 
@@ -230,16 +231,15 @@ CandidatesView = Backbone.View.extend {
 
 		@$el.append @template(response)
 	
-	handle_invalid: ->
+	afterInvalid: ->
 		@spinner.remove()
 }
-
 
 CreatePostView = Backbone.View.extend {
 
 	events: {
-		'click button': 'on_button_click'
-		'keypress :text': 'on_input_keypress'
+		'click button': 'createItem'
+		'keypress :text': 'handleReturn'
 	}
 
 	initialize: (options) ->
@@ -250,7 +250,15 @@ CreatePostView = Backbone.View.extend {
 
 		@collection.on('create:from_new_item', @afterItemCreated, this)
 
-	on_button_click: (ev) ->
+	handleReturn: (ev) ->
+		if ev.keyCode is 13
+			@createButton.click()
+
+			ev.preventDefault()
+
+		null
+
+	createItem: (ev) ->
 		ev.preventDefault()
 
 		if @createButton.hasClass('inactive')
@@ -272,35 +280,26 @@ CreatePostView = Backbone.View.extend {
 		@createInput.val('')
 
 		@createButton.removeClass('inactive')
-
-	on_input_keypress: (ev) ->
-		if 13 is ev.keyCode
-			@createButton.click()
-
-			ev.preventDefault()
-
-		null
 }
-
 
 MetaboxView = Backbone.View.extend {
 
 	events: {
-		'click .p2p-toggle-tabs': 'toggle_tabs'
-		'click .wp-tab-bar li': 'switch_to_tab'
+		'click .p2p-toggle-tabs': 'toggleTabs'
+		'click .wp-tab-bar li': 'setActiveTab'
 	}
 
 	initialize: (options) ->
 		@spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
 
-	toggle_tabs: (ev) ->
+	toggleTabs: (ev) ->
 		ev.preventDefault()
 
 		@.$('.p2p-create-connections-tabs').toggle()
 
 		null
 
-	switch_to_tab: (ev) ->
+	setActiveTab: (ev) ->
 		ev.preventDefault()
 
 		$tab = jQuery(ev.currentTarget)
