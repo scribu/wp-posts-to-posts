@@ -19,7 +19,7 @@
   };
 
   Candidates = Backbone.Model.extend({
-    sync: function(method) {
+    sync: function() {
       var params,
         _this = this;
       params = _.extend({}, this.attributes, {

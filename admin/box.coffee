@@ -15,7 +15,7 @@ get_mustache_template = (name) ->
 # Controller that handles the pagination state
 Candidates = Backbone.Model.extend {
 
-	sync: (method) ->
+	sync: ->
 		params = _.extend {}, @attributes, {
 			subaction: 'search'
 		}
