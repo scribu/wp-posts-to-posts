@@ -156,13 +156,13 @@ function _p2p_get_list( $args ) {
 
 	switch ( $mode ) {
 	case 'inline':
-		$args = array(
+		$render_args = array(
 			'separator' => ', '
 		);
 		break;
 
 	case 'ol':
-		$args = array(
+		$render_args = array(
 			'before_list' => '<ol id="' . $ctype->name . '_list">',
 			'after_list' => '</ol>',
 		);
@@ -170,15 +170,15 @@ function _p2p_get_list( $args ) {
 
 	case 'ul':
 	default:
-		$args = array(
+		$render_args = array(
 			'before_list' => '<ul id="' . $ctype->name . '_list">',
 			'after_list' => '</ul>',
 		);
 		break;
 	}
 
-	$args['echo'] = false;
+	$render_args['echo'] = false;
 
-	return apply_filters( "p2p_{$context}_html", $connected->render( $args ), $connected, $directed, $mode );
+	return apply_filters( "p2p_{$context}_html", $connected->render( $render_args ), $connected, $directed, $mode );
 }
 
