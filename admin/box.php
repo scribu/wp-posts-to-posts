@@ -178,6 +178,7 @@ class P2P_Box {
 
 	protected function post_rows( $current_post_id, $page = 1, $search = '' ) {
 		$extra_qv = array_merge( self::$admin_box_qv, array(
+			'p2p:context' => 'admin_box_candidates',
 			'p2p:search' => $search,
 			'p2p:page' => $page,
 			'p2p:per_page' => 5
