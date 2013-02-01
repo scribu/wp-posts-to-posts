@@ -226,34 +226,34 @@ function p2p_get_connection( $p2p_id ) {
 function p2p_create_connection( $p2p_type, $args ) {
 	global $wpdb;
 
-	extract( wp_parse_args( $args, array(
+	$args = wp_parse_args( $args, array(
 		'direction' => 'from',
 		'from' => false,
 		'to' => false,
 		'meta' => array()
-	) ), EXTR_SKIP );
+	) );
 
-	list( $from ) = _p2p_normalize( $from );
-	list( $to ) = _p2p_normalize( $to );
+	list( $from ) = _p2p_normalize( $args['from'] );
+	list( $to ) = _p2p_normalize( $args['to'] );
 
 	if ( !$from || !$to )
 		return false;
 
-	$args = array( $from, $to );
+	$dirs = array( $from, $to );
 
-	if ( 'to' == $direction ) {
-		$args = array_reverse( $args );
+	if ( 'to' == $args['direction'] ) {
+		$dirs = array_reverse( $dirs );
 	}
 
 	$wpdb->insert( $wpdb->p2p, array(
 		'p2p_type' => $p2p_type,
-		'p2p_from' => $args[0],
-		'p2p_to' => $args[1]
+		'p2p_from' => $dirs[0],
+		'p2p_to' => $dirs[1]
 	) );
 
 	$p2p_id = $wpdb->insert_id;
 
-	foreach ( $meta as $key => $value )
+	foreach ( $args['meta'] as $key => $value )
 		p2p_add_meta( $p2p_id, $key, $value );
 
 	do_action( 'p2p_created_connection', $p2p_id );
