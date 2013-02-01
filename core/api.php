@@ -167,27 +167,25 @@ function p2p_get_connections( $p2p_type, $args = array() ) {
 function _p2p_get_connections( $p2p_type, $args = array() ) {
 	global $wpdb;
 
-	extract( $args, EXTR_SKIP );
-
 	$where = $wpdb->prepare( 'WHERE p2p_type = %s', $p2p_type );
 
 	foreach ( array( 'from', 'to' ) as $key ) {
-		if ( 'any' == $$key )
+		if ( 'any' == $args[ $key ] )
 			continue;
 
-		if ( empty( $$key ) )
+		if ( empty( $args[ $key ] ) )
 			return array();
 
-		$value = scbUtil::array_to_sql( _p2p_normalize( $$key ) );
+		$value = scbUtil::array_to_sql( _p2p_normalize( $args[ $key ] ) );
 
 		$where .= " AND p2p_$key IN ($value)";
 	}
 
-	switch ( $fields ) {
+	switch ( $args['fields'] ) {
 	case 'p2p_id':
 	case 'p2p_from':
 	case 'p2p_to':
-		$sql_field = $fields;
+		$sql_field = $args['fields'];
 		break;
 	case 'count':
 		$sql_field = 'COUNT(*)';
