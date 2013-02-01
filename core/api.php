@@ -129,35 +129,35 @@ function p2p_connection_exists( $p2p_type, $args = array() ) {
  * @return array
  */
 function p2p_get_connections( $p2p_type, $args = array() ) {
-	extract( wp_parse_args( $args, array(
+	$args = wp_parse_args( $args, array(
 		'direction' => 'from',
 		'from' => 'any',
 		'to' => 'any',
 		'fields' => 'all',
-	) ), EXTR_SKIP );
+	) );
 
 	$r = array();
 
-	foreach ( _p2p_expand_direction( $direction ) as $direction ) {
-		$args = array( $from, $to );
+	foreach ( _p2p_expand_direction( $args['direction'] ) as $direction ) {
+		$dirs = array( $args['from'], $args['to'] );
 
 		if ( 'to' == $direction ) {
-			$args = array_reverse( $args );
+			$dirs = array_reverse( $dirs );
 		}
 
-		if ( 'object_id' == $fields )
-			$field = ( 'to' == $direction ) ? 'p2p_from' : 'p2p_to';
+		if ( 'object_id' == $args['fields'] )
+			$fields = ( 'to' == $direction ) ? 'p2p_from' : 'p2p_to';
 		else
-			$field = $fields;
+			$fields = $args['fields'];
 
 		$r = array_merge( $r, _p2p_get_connections( $p2p_type, array(
-			'from' => $args[0],
-			'to' => $args[1],
-			'fields' => $field
+			'from' => $dirs[0],
+			'to' => $dirs[1],
+			'fields' => $fields
 		) ) );
 	}
 
-	if ( 'count' == $fields )
+	if ( 'count' == $args['fields'] )
 		return array_sum( $r );
 
 	return $r;
