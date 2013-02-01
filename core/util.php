@@ -135,34 +135,34 @@ function _p2p_get_other_id( $item ) {
 
 /** @internal */
 function _p2p_get_list( $args ) {
-	extract( $args );
-
-	$ctype = p2p_type( $ctype );
+	$ctype = p2p_type( $args['ctype'] );
 	if ( !$ctype ) {
 		trigger_error( sprintf( "Unregistered connection type '%s'.", $ctype ), E_USER_WARNING );
 		return '';
 	}
 
-	$directed = $ctype->find_direction( $item );
+	$directed = $ctype->find_direction( $args['item'] );
 	if ( !$directed )
 		return '';
+
+	$context = $args['context'];
 
 	$extra_qv = array(
 		'p2p:per_page' => -1,
 		'p2p:context' => $context
 	);
 
-	$connected = $directed->$method( $item, $extra_qv, 'abstract' );
+	$connected = call_user_func( array( $directed, $args['method'] ), $args['item'], $extra_qv, 'abstract' );
 
-	switch ( $mode ) {
+	switch ( $args['mode'] ) {
 	case 'inline':
-		$args = array(
+		$render_args = array(
 			'separator' => ', '
 		);
 		break;
 
 	case 'ol':
-		$args = array(
+		$render_args = array(
 			'before_list' => '<ol id="' . $ctype->name . '_list">',
 			'after_list' => '</ol>',
 		);
@@ -170,15 +170,15 @@ function _p2p_get_list( $args ) {
 
 	case 'ul':
 	default:
-		$args = array(
+		$render_args = array(
 			'before_list' => '<ul id="' . $ctype->name . '_list">',
 			'after_list' => '</ul>',
 		);
 		break;
 	}
 
-	$args['echo'] = false;
+	$render_args['echo'] = false;
 
-	return apply_filters( "p2p_{$context}_html", $connected->render( $args ), $connected, $directed, $mode );
+	return apply_filters( "p2p_{$context}_html", $connected->render( $render_args ), $connected, $directed, $args['mode'] );
 }
 
