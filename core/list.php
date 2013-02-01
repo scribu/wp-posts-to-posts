@@ -26,36 +26,34 @@ class P2P_List {
 			'echo' => true
 		) );
 
-		extract( $args, EXTR_SKIP );
+		if ( $args['separator'] ) {
+			if ( '<ul>' == $args['before_list'] )
+				$args['before_list'] = '';
 
-		if ( $separator ) {
-			if ( '<ul>' == $before_list )
-				$before_list = '';
-
-			if ( '</ul>' == $after_list )
-				$after_list = '';
+			if ( '</ul>' == $args['after_list'] )
+				$args['after_list'] = '';
 		}
 
-		if ( !$echo )
+		if ( !$args['echo'] )
 			ob_start();
 
-		echo $before_list;
+		echo $args['before_list'];
 
-		if ( $separator ) {
+		if ( $args['separator'] ) {
 			$list = array();
 			foreach ( $this->items as $item ) {
 				$list[] = $this->render_item( $item );
 			}
-			echo implode( $separator, $list );
+			echo implode( $args['separator'], $list );
 		} else {
 			foreach ( $this->items as $item ) {
-				echo $before_item . $this->render_item( $item ) . $after_item;
+				echo $args['before_item'] . $this->render_item( $item ) . $args['after_item'];
 			}
 		}
 
-		echo $after_list;
+		echo $args['after_list'];
 
-		if ( !$echo )
+		if ( !$args['echo'] )
 			return ob_get_clean();
 	}
 
