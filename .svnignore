@@ -8,6 +8,7 @@ debug.php
 
 bin
 tests
+phpunit.xml
 .travis.yml
 
 docblox.dist.xml
