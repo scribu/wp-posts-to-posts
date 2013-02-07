@@ -14,7 +14,16 @@ before_install:
     - git submodule update --init --recursive
 
 before_script:
-    - wget -nv https://raw.github.com/scribu/wordpress-plugin-tests/setup/setup.sh
-    - sh setup.sh
+    - export WP_CORE_DIR=/tmp/wordpress
+    - plugin_slug=$(basename $(pwd))
+    - plugin_dir=$WP_CORE_DIR/wp-content/plugins/$plugin_slug
+    - mysql -e 'CREATE DATABASE wordpress_test;' -uroot
+    - wget -nv -O /tmp/wordpress.tar.gz https://github.com/WordPress/WordPress/tarball/$WP_VERSION
+    - mkdir -p $WP_CORE_DIR
+    - tar --strip-components=1 -zxmf /tmp/wordpress.tar.gz -C $WP_CORE_DIR
+    - cd ..
+    - mv $plugin_slug $plugin_dir
+    - wget -nv -O $plugin_dir/tests/wp-tests-config.php https://raw.github.com/benbalter/wordpress-plugin-tests/setup/wp-tests-config.php
+    - cd $plugin_dir
 
 script: phpunit
