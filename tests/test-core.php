@@ -647,6 +647,12 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 	function test_labels() {
 		$ctype = p2p_register_connection_type( array(
 			'name' => __FUNCTION__,
+			'from' => 'post',
+			'to' => 'page',
+			'title' => array(
+				'from' => 'title from',
+				'to' => 'title to'
+			),
 			'from_labels' => array(
 				'create' => 'create from',
 			),
@@ -655,9 +661,11 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 			),
 		) );
 
-		$from_labels = $ctype->get_field( 'labels', 'from' );
+		$this->assertEquals( 'title from', $ctype->get_field( 'title', 'from' ) );
+		$this->assertEquals( 'title to', $ctype->get_field( 'title', 'to' ) );
 
-		$this->assertEquals( 'create from', $from_labels->create );
+		$this->assertEquals( 'create from', $ctype->get_field( 'labels', 'from' )->create );
+		$this->assertEquals( 'create to', $ctype->get_field( 'labels', 'to' )->create );
 	}
 
 	private function generate_posts( $type, $count ) {
