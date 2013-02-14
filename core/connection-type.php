@@ -379,11 +379,13 @@ class P2P_Connection_Type {
 	}
 
 	public function get_desc() {
+		$desc = array();
+
 		foreach ( array( 'from', 'to' ) as $key ) {
-			$$key = $this->side[ $key ]->get_desc();
+			$desc[ $key ] = $this->side[ $key ]->get_desc();
 		}
 
-		$label = "$from {$this->arrow} $to";
+		$label = sprintf( '%s %s %s', $desc['from'], $this->arrow, $desc['to'] );
 
 		$title = $this->get_field( 'title', 'from' );
 
@@ -393,5 +395,4 @@ class P2P_Connection_Type {
 		return $label;
 	}
 }
-
 
