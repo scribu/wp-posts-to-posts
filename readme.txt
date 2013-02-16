@@ -1,7 +1,7 @@
 === Posts 2 Posts ===
 Contributors: scribu, ciobi
 Tags: connections, custom post types, relationships, many-to-many, users
-Requires at least: 3.4
+Requires at least: 3.5
 Tested up to: 3.5
 Stable tag: 1.4.3
 License: GPLv2 or later
@@ -54,9 +54,12 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 == Changelog ==
 
 = 1.5 (next) =
-* added admin dropdowns
+* added [admin dropdowns](https://github.com/scribu/wp-posts-to-posts/wiki/Admin-dropdown-display)
 * fixed SQL error related to user connections
 * fixed 'labels' handling and added 'column_title' subkey
+* refactor metabox JavaScript using Backbone.js
+* lazy-load connection candidates, for faster page loads
+* lazy-load PHP classes using `spl_register_autoload()`
 
 = 1.4.3 =
 * various bug fixes
