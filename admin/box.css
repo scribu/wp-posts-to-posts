@@ -183,13 +183,12 @@ tr:hover td.p2p-col-order {
 .p2p-navigation div {
 	float: left;
 	line-height: 13px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	margin-right: 5px;
+	padding: 6px 5px 0;
 }
 
 .p2p-navigation .p2p-spinner {
-	margin-top: 3px;
+	margin-top: 5px;
+	margin-left: 5px;
 }
 
 
@@ -209,6 +208,10 @@ body.rtl .p2p-tab-search input {
 	padding-right: 0;
 }
 
+body.rtl .p2p-navigation .p2p-spinner {
+	margin-right: 5px;
+}
+
 body.rtl .p2p-col-create,
 body.rtl .p2p-col-delete {
 	border-left: 1px solid transparent;
@@ -219,9 +222,3 @@ body.rtl .p2p-col-create:hover,
 body.rtl .p2p-col-delete:hover {
 	border-left-color: #ddd;
 }
-
-body.rtl .p2p-navigation div {
-	margin-right: 0;
-	margin-left: 5px;
-}
-
