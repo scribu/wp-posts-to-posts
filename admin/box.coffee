@@ -1,3 +1,5 @@
+ENTER_KEY = 13
+
 row_wait = ($td) ->
 	$td.find('.p2p-icon').css 'background-image', 'url(' + P2PAdmin.spinner + ')'
 
@@ -177,7 +179,7 @@ CandidatesView = Backbone.View.extend {
 		false
 
 	handleReturn: (ev) ->
-		if ev.keyCode is 13 # RETURN
+		if ev.keyCode is ENTER_KEY
 			ev.preventDefault()
 
 		null
@@ -244,7 +246,7 @@ CreatePostView = Backbone.View.extend {
 		@collection.on('create:from_new_item', @afterItemCreated, this)
 
 	handleReturn: (ev) ->
-		if ev.keyCode is 13
+		if ev.keyCode is ENTER_KEY
 			@createButton.click()
 
 			ev.preventDefault()
