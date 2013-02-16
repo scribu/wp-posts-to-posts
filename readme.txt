@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Tags: connections, custom post types, relationships, many-to-many, users
 Requires at least: 3.5
 Tested up to: 3.5
-Stable tag: 1.4.3
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,7 +53,7 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
-= 1.5 (next) =
+= 1.5 =
 * added [admin dropdowns](https://github.com/scribu/wp-posts-to-posts/wiki/Admin-dropdown-display)
 * fixed SQL error related to user connections
 * fixed 'labels' handling and added 'column_title' subkey
