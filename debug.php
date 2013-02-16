@@ -160,6 +160,7 @@ class P2P_Debug {
 				'priority' => 'high'
 			),
 			'admin_column' => 'any',
+			'admin_dropdown' => 'any',
 			'title' => array(
 				'from' => 'Played In',
 				'to' => 'Cast'
