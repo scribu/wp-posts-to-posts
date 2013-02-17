@@ -14,16 +14,16 @@ define( 'P2P_PLUGIN_VERSION', '1.5' );
 
 define( 'P2P_TEXTDOMAIN', 'posts-to-posts' );
 
-require dirname( __FILE__ ) . '/scb/load.php';
+require_once dirname( __FILE__ ) . '/scb/load.php';
 
 function _p2p_load() {
 	$base = dirname( __FILE__ );
 
 	load_plugin_textdomain( P2P_TEXTDOMAIN, '', basename( $base ) . '/lang' );
 
-	require $base . '/core/util.php';
-	require $base . '/core/api.php';
-	require $base . '/autoload.php';
+	require_once $base . '/core/util.php';
+	require_once $base . '/core/api.php';
+	require_once $base . '/autoload.php';
 
 	P2P_Autoload::register( 'P2P_', $base . '/core' );
 
