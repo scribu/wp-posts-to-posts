@@ -53,6 +53,9 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 1.5.1 =
+* fix fatal error on activation. props benmay
+
 = 1.5 =
 * added [admin dropdowns](https://github.com/scribu/wp-posts-to-posts/wiki/Admin-dropdown-display)
 * fixed SQL error related to user connections
