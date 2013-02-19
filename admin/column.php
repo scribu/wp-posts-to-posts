@@ -26,7 +26,7 @@ abstract class P2P_Column {
 
 		$title = isset( $labels->column_title )
 			? $labels->column_title
-			: $labels->title;
+			: $this->ctype->get( 'current', 'title' );
 
 		$columns[ $this->column_id ] = $title;
 
