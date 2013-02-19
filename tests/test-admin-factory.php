@@ -3,7 +3,7 @@
 _p2p_load_admin();
 
 require_once __DIR__ . '/constraints.php';
-require_once __DIR__ . '/factory-mock.php';
+require_once __DIR__ . '/mock-factory.php';
 
 
 class P2P_Tests_Admin_Factory extends WP_UnitTestCase {
