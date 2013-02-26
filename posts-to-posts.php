@@ -23,7 +23,7 @@ function _p2p_load() {
 
 	require_once $base . '/core/util.php';
 	require_once $base . '/core/api.php';
-	require_once $base . '/autoload.php';
+	require_once $base . '/core/autoload.php';
 
 	P2P_Autoload::register( 'P2P_', $base . '/core' );
 
