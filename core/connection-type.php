@@ -328,6 +328,57 @@ class P2P_Connection_Type {
 	}
 
 	/**
+	 * Get the previous, next and parent items, in an ordered connection type.
+	 *
+	 * @param mixed The current item
+	 *
+	 * @return bool|array False if the connections aren't sortable,
+	 *   associative array otherwise:
+	 * array(
+	 *   'parent' => bool|object
+	 *   'previous' => bool|object
+	 *   'next' => bool|object
+	 * )
+	 */
+	public function get_adjacent_items( $item ) {
+		$result = array(
+			'parent' => false,
+			'previous' => false,
+			'next' => false,
+		);
+
+		$r = $this->direction_from_item( $item );
+		if ( !$r )
+			return false;
+
+		list( $direction, $item ) = $r;
+
+		$connected_series = $this->set_direction( $direction )->get_connected( $item,
+			array(), 'abstract' )->items;
+
+		if ( empty( $connected_series ) )
+			return $r;
+
+		if ( count( $connected_series ) > 1 ) {
+			trigger_error( 'More than one connected parents found.', E_USER_WARNING );
+		}
+
+		$parent = $connected_series[0];
+
+		$result['parent'] = $parent;
+		$result['previous'] = $this->get_previous( $item->ID, $parent->ID );
+		$result['next'] = $this->get_next( $item, $parent );
+
+		// unwrap
+		foreach ( $result as &$value ) {
+			if ( $value )
+				$value = $value->get_object();
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Optimized inner query, after the outer query was executed.
 	 *
 	 * Populates each of the outer querie's $post objects with a 'connected' property, containing a list of connected posts
