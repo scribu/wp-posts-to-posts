@@ -318,7 +318,7 @@ class P2P_Connection_Type {
 		$adjacent = $directed->get_connected( $to, array(
 			'connected_meta' => array(
 				array(
-					'key' => $directed->get_orderby_key(),
+					'key' => $key,
 					'value' => $order + $which
 				)
 			)
