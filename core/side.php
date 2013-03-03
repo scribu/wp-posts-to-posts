@@ -27,6 +27,7 @@ abstract class P2P_Side {
 
 	/**
 	 * @param object Raw object or P2P_Item
+	 * @return bool|P2P_Item
 	 */
 	function item_recognize( $arg ) {
 		$class = $this->item_type;
