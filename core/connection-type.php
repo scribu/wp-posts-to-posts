@@ -128,12 +128,16 @@ class P2P_Connection_Type {
 			return;
 		}
 
-		// TODO: make find_direction() return the normalized item and pass that along
-		$directed = $this->find_direction( $args[0] );
-		if ( !$directed ) {
+		$r = $this->direction_from_item( $args[0] );
+		if ( !$r ) {
 			trigger_error( sprintf( "Can't determine direction for '%s' type.", $this->name ), E_USER_WARNING );
 			return false;
 		}
+
+		// replace the first argument with the normalized one, to avoid having to do it again
+		list( $direction, $args[0] ) = $r;
+
+		$directed = $this->set_direction( $direction );
 
 		return call_user_func_array( array( $directed, $method ), $args );
 	}
@@ -168,9 +172,6 @@ class P2P_Connection_Type {
 	 * @return bool|object|string False on failure, P2P_Directed_Connection_Type instance or direction on success.
 	 */
 	public function find_direction( $arg, $instantiate = true, $object_type = null ) {
-		if ( is_array( $arg ) )
-			$arg = reset( $arg );
-
 		if ( $object_type ) {
 			$direction = $this->direction_from_object_type( $object_type );
 			if ( !$direction )
@@ -180,12 +181,13 @@ class P2P_Connection_Type {
 				return $this->set_direction( $direction, $instantiate );
 		}
 
-		$direction = $this->direction_from_item( $arg );
+		$r = $this->direction_from_item( $arg );
+		if ( !$r )
+			return false;
 
-		if ( $direction )
-			return $this->set_direction( $direction, $instantiate );
+		list( $direction, $item ) = $r;
 
-		return false;
+		return $this->set_direction( $direction, $instantiate );
 	}
 
 	protected function choose_direction( $direction ) {
@@ -193,13 +195,16 @@ class P2P_Connection_Type {
 	}
 
 	protected function direction_from_item( $arg ) {
+		if ( is_array( $arg ) )
+			$arg = reset( $arg );
+
 		foreach ( array( 'from', 'to' ) as $direction ) {
 			$item = $this->side[ $direction ]->item_recognize( $arg );
 
 			if ( !$item )
 				continue;
 
-			return $this->choose_direction( $direction );
+			return array( $this->choose_direction( $direction ), $item );
 		}
 
 		return false;
@@ -292,9 +297,13 @@ class P2P_Connection_Type {
 
 		// The direction needs to be based on the second parameter,
 		// so that it's consistent with $this->connect( $from, $to ) etc.
-		$directed = $this->find_direction( $to );
-		if ( !$directed )
+		$r = $this->direction_from_item( $to );
+		if ( !$r )
 			return false;
+
+		list( $direction, $to ) = $r;
+
+		$directed = $this->set_direction( $direction );
 
 		$key = $directed->get_orderby_key();
 		if ( !$key )
