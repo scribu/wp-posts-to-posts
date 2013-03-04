@@ -74,6 +74,7 @@ class P2P_Box {
 			'attributes' => $this->render_data_attributes(),
 			'connections' => $this->render_connections_table( $post ),
 			'create-connections' => $this->render_create_connections( $post ),
+			'help' => isset( $this->labels->help ) ? $this->labels->help : ''
 		);
 
 		echo P2P_Mustache::render( 'box', $data );

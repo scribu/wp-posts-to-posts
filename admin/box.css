@@ -19,6 +19,11 @@
 	padding: 10px;
 }
 
+.p2p-box p.help {
+	color: #666;
+	font-style: normal;;
+}
+
 .p2p-box .p2p-tab-search {
 	display: block;
 }
