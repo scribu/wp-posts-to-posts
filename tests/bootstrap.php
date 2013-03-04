@@ -1,8 +1,11 @@
 <?php
 
-$GLOBALS['wp_tests_options'] = array(
-    'active_plugins' => array( basename( dirname( dirname( __FILE__ ) ) ) . '/posts-to-posts.php' ),
-);
+require_once getenv( 'WP_TESTS_DIR' ) . '/includes/functions.php';
 
-require dirname( __FILE__ ) . '/lib/bootstrap.php';
+tests_add_filter( 'muplugins_loaded', function() {
+	require dirname( __FILE__ ) . '/../posts-to-posts.php';
+	require dirname( __FILE__ ) . '/../debug-utils.php';
+} );
+
+require getenv( 'WP_TESTS_DIR' ) . '/includes/bootstrap.php';
 
