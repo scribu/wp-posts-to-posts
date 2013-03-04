@@ -177,7 +177,11 @@ class P2P_Debug {
 			'sortable' => 'order',
 			'admin_column' => 'any',
 			'can_create_post' => false,
+			'from_labels' => array(
+				'help' => 'The main actor this actor was doubling for.',
+			),
 			'to_labels' => array(
+				'help' => 'Other actors that have played as doubles for this actor.',
 				'column_title' => 'XXX Doubles',
 				'singular_name' => 'Double',
 				'search_items' => 'Search doubles',
