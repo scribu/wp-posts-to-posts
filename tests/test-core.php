@@ -439,6 +439,51 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 		$this->assertEquals( $ctype->get_next( $movie_ids[1], $actor )->ID, $movie_ids[2] );
 	}
 
+	function test_adjacent_items() {
+		$ctype = p2p_register_connection_type( array(
+			'name' => __FUNCTION__,
+			'from' => 'post',
+			'to' => 'serie',
+			'sortable' => true
+		) );
+
+		$serie = $this->generate_post( 'serie' );
+		$post_ids = $this->generate_posts( 'post', 3 );
+
+		$key = $ctype->set_direction( 'to' )->get_orderby_key();
+
+		foreach ( $post_ids as $i => $post_id ) {
+			$ctype->connect( $serie, $post_id, array( $key => $i ) );
+		}
+
+		// first in serie
+		$adjacent_items = $ctype->get_adjacent_items( $post_ids[0] );
+
+		$this->assertEquals( $serie->ID, $adjacent_items['parent']->ID );
+		$this->assertFalse( $adjacent_items['previous'] );
+		$this->assertEquals( $post_ids[1], $adjacent_items['next']->ID );
+
+		// in the middle of the serie
+		$adjacent_items = $ctype->get_adjacent_items( $post_ids[1] );
+
+		$this->assertEquals( $serie->ID, $adjacent_items['parent']->ID );
+
+		$this->assertEquals( $post_ids[0], $adjacent_items['previous']->ID );
+		$this->assertEquals( $post_ids[2], $adjacent_items['next']->ID );
+
+		$this->assertFalse( $adjacent_items['parent'] instanceof P2P_Item );
+		$this->assertFalse( $adjacent_items['previous'] instanceof P2P_Item );
+		$this->assertFalse( $adjacent_items['next'] instanceof P2P_Item );
+
+		// last in serie
+		$adjacent_items = $ctype->get_adjacent_items( $post_ids[2] );
+
+		$this->assertEquals( $serie->ID, $adjacent_items['parent']->ID );
+
+		$this->assertEquals( $post_ids[1], $adjacent_items['previous']->ID );
+		$this->assertFalse( $adjacent_items['next'] );
+	}
+
 	function test_related() {
 		$ctype = p2p_type( 'actor_to_movie' );
 
