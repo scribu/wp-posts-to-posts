@@ -2,10 +2,6 @@
 
 class P2P_Connection_Type {
 
-	protected $directed_class = 'P2P_Directed_Connection_Type';
-
-	protected $arrow = '&rarr;';
-
 	public $side;
 
 	public $cardinality;
@@ -48,13 +44,6 @@ class P2P_Connection_Type {
 			return $value;
 
 		return $value[ $direction ];
-	}
-
-	function _directions_for_admin( $direction, $show_ui ) {
-		return array_intersect(
-			_p2p_expand_direction( $show_ui ),
-			_p2p_expand_direction( $direction )
-		);
 	}
 
 	private function set_self_connections( &$args ) {
@@ -154,7 +143,7 @@ class P2P_Connection_Type {
 			return false;
 
 		if ( $instantiate ) {
-			$class = $this->directed_class;
+			$class = $this->strategy->get_directed_class();
 
 			return new $class( $this, $direction );
 		}
@@ -190,10 +179,6 @@ class P2P_Connection_Type {
 		return $this->set_direction( $direction, $instantiate );
 	}
 
-	protected function choose_direction( $direction ) {
-		return $direction;
-	}
-
 	protected function direction_from_item( $arg ) {
 		if ( is_array( $arg ) )
 			$arg = reset( $arg );
@@ -204,7 +189,7 @@ class P2P_Connection_Type {
 			if ( !$item )
 				continue;
 
-			return array( $this->choose_direction( $direction ), $item );
+			return array( $this->strategy->choose_direction( $direction ), $item );
 		}
 
 		return false;
@@ -231,7 +216,7 @@ class P2P_Connection_Type {
 			if ( !$this->_type_check( $direction, $object_type, $post_types ) )
 				continue;
 
-			return $this->choose_direction( $direction );
+			return $this->strategy->choose_direction( $direction );
 		}
 
 		return false;
@@ -445,7 +430,7 @@ class P2P_Connection_Type {
 			$desc[ $key ] = $this->side[ $key ]->get_desc();
 		}
 
-		$label = sprintf( '%s %s %s', $desc['from'], $this->arrow, $desc['to'] );
+		$label = sprintf( '%s %s %s', $desc['from'], $this->strategy->get_arrow(), $desc['to'] );
 
 		$title = $this->get_field( 'title', 'from' );
 

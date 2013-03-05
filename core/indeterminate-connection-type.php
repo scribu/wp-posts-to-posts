@@ -1,17 +1,24 @@
 <?php
 
-class P2P_Indeterminate_Connection_Type extends P2P_Connection_Type {
+class P2P_Indeterminate_Connection_Type implements P2P_Direction_Strategy {
 
-	protected $directed_class = 'P2P_Indeterminate_Directed_Connection_Type';
+	function get_arrow() {
+		return '&harr;';
+	}
 
-	protected $arrow = '&harr;';
-
-	protected function choose_direction( $direction ) {
+	function choose_direction( $direction ) {
 		return 'from';
 	}
 
-	function _directions_for_admin( $direction, $show_ui ) {
-		return parent::_directions_for_admin( 'any', $show_ui );
+	function directions_for_admin( $_, $show_ui ) {
+		return array_intersect(
+			_p2p_expand_direction( $show_ui ),
+			_p2p_expand_direction( 'any' )
+		);
+	}
+
+	function get_directed_class() {
+		return 'P2P_Indeterminate_Directed_Connection_Type';
 	}
 }
 

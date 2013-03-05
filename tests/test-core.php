@@ -158,7 +158,7 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 
 	function test_direction_indeterminate() {
 		$indeterminate = p2p_type( 'movies_to_movies' );
-		$this->assertEquals( 'P2P_Indeterminate_Connection_Type', get_class( $indeterminate ) );
+		$this->assertEquals( 'P2P_Indeterminate_Connection_Type', get_class( $indeterminate->strategy ) );
 
 		$this->assertFalse( $indeterminate->find_direction( $this->generate_post( 'post' ) ) );
 		$this->assertEquals( 'from', $indeterminate->find_direction( $this->generate_post( 'movie' ), false ) );
