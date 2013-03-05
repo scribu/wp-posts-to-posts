@@ -97,7 +97,7 @@ abstract class P2P_Factory {
 		if ( !$direction )
 			return array();
 
-		return $ctype->_directions_for_admin( $direction, $show_ui );
+		return $ctype->strategy->directions_for_admin( $direction, $show_ui );
 	}
 }
 

@@ -43,9 +43,8 @@ class P2P_Connection_Type_Factory {
 
 		$args = apply_filters( 'p2p_connection_type_args', $args, $sides );
 
-		$class = self::get_ctype_class( $sides, _p2p_pluck( $args, 'reciprocal' ) );
-
-		$ctype = new $class( $args, $sides );
+		$ctype = new P2P_Connection_Type( $args, $sides );
+		$ctype->strategy = self::get_direction_strategy( $sides, _p2p_pluck( $args, 'reciprocal' ) );
 
 		self::$instances[ $ctype->name ] = $ctype;
 
@@ -82,7 +81,7 @@ class P2P_Connection_Type_Factory {
 		return md5( serialize( $vals ) );
 	}
 
-	private static function get_ctype_class( $sides, $reciprocal ) {
+	private static function get_direction_strategy( $sides, $reciprocal ) {
 		if ( $sides['from']->is_same_type( $sides['to'] ) &&
 		     $sides['from']->is_indeterminate( $sides['to'] ) ) {
 			if ( $reciprocal )
@@ -90,10 +89,10 @@ class P2P_Connection_Type_Factory {
 			else
 				$class = 'P2P_Indeterminate_Connection_Type';
 		} else {
-			$class = 'P2P_Connection_Type';
+			$class = 'P2P_Determinate_Connection_Type';
 		}
 
-		return $class;
+		return new $class;
 	}
 
 	public static function get_all_instances() {
