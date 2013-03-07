@@ -435,8 +435,13 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 			$ctype->connect( $actor, $movie_id, array( $key => $i ) );
 		}
 
-		$this->assertEquals( $ctype->get_prev( $movie_ids[1], $actor )->ID, $movie_ids[0] );
-		$this->assertEquals( $ctype->get_next( $movie_ids[1], $actor )->ID, $movie_ids[2] );
+		$prev = $ctype->get_prev( $movie_ids[1], $actor );
+		$this->assertEquals( $prev->ID, $movie_ids[0] );
+		$this->assertFalse( $prev instanceof P2P_Item );
+
+		$next = $ctype->get_next( $movie_ids[1], $actor );
+		$this->assertEquals( $next->ID, $movie_ids[2] );
+		$this->assertFalse( $next instanceof P2P_Item );
 	}
 
 	function test_adjacent_items() {
