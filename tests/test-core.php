@@ -441,7 +441,7 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 
 		$next = $ctype->get_next( $movie_ids[1], $actor );
 		$this->assertEquals( $next->ID, $movie_ids[2] );
-		$this->assertFalse( $$next instanceof P2P_Item );
+		$this->assertFalse( $next instanceof P2P_Item );
 	}
 
 	function test_adjacent_items() {

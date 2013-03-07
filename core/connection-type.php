@@ -309,7 +309,12 @@ class P2P_Connection_Type {
 			)
 		), 'abstract' );
 
-		return _p2p_first( $adjacent->items );
+		if ( empty( $adjacent->items ) )
+			return false;
+
+		$item = reset( $adjacent->items );
+
+		return $item->get_object();
 	}
 
 	/**
@@ -350,15 +355,9 @@ class P2P_Connection_Type {
 
 		$parent = $connected_series[0];
 
-		$result['parent'] = $parent;
+		$result['parent'] = $parent->get_object();
 		$result['previous'] = $this->get_previous( $item->ID, $parent->ID );
 		$result['next'] = $this->get_next( $item, $parent );
-
-		// unwrap
-		foreach ( $result as &$value ) {
-			if ( $value )
-				$value = $value->get_object();
-		}
 
 		return $result;
 	}
