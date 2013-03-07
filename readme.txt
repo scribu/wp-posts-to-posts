@@ -53,6 +53,12 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
+= 1.5.2 (next) =
+* fixed get_prev() and get_next()
+* introduced get_adjacent_items()
+* fixed admin column titles
+* added 'help' key to 'from_labels' and 'to_labels' arrays. props tareq1988
+
 = 1.5.1 =
 * fix fatal error on activation. props benmay
 
