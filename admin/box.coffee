@@ -172,11 +172,13 @@ CandidatesView = Backbone.View.extend {
 	promote: (ev) ->
 		$td = jQuery(ev.target).closest('td')
 
+		ev.preventDefault()
+
 		row_wait $td
 
 		@collection.trigger 'promote', $td
 
-		false
+		null
 
 	handleReturn: (ev) ->
 		if ev.keyCode is ENTER_KEY
@@ -225,7 +227,7 @@ CandidatesView = Backbone.View.extend {
 		@$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove()
 
 		@$el.append @template(response)
-	
+
 	afterInvalid: ->
 		@spinner.remove()
 }
