@@ -28,7 +28,7 @@ abstract class P2P_Column {
 			? $labels->column_title
 			: $this->ctype->get( 'current', 'title' );
 
-		return array_splice($columns, 0, -1) + array($this->column_id => $title) + $columns;
+		return array_splice( $columns, 0, -1 ) + array( $this->column_id => $title ) + $columns;
 	}
 
 	protected abstract function get_items();
