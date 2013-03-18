@@ -3,7 +3,7 @@ Contributors: scribu, ciobi
 Tags: connections, custom post types, relationships, many-to-many, users
 Requires at least: 3.5
 Tested up to: 3.5
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,10 +53,11 @@ Make sure your host is running PHP 5. The only foolproof way to do this is to ad
 
 == Changelog ==
 
-= 1.5.2 (next) =
+= 1.5.2 =
 * fixed get_prev() and get_next()
 * introduced get_adjacent_items()
 * fixed admin column titles
+* made admin column titles show up before the post date. props luk3thomas
 * added 'help' key to 'from_labels' and 'to_labels' arrays. props tareq1988
 
 = 1.5.1 =
