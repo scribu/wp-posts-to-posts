@@ -316,7 +316,7 @@ function p2p_distribute_connected( $items, $connected, $prop_name ) {
 		$indexed_list[ $item->ID ] = $item;
 	}
 
-	$groups = p2p_list_cluster( $connected, '_p2p_get_other_id' );
+	$groups = scb_list_group_by( $connected, '_p2p_get_other_id' );
 
 	foreach ( $groups as $outer_item_id => $connected_items ) {
 		$indexed_list[ $outer_item_id ]->$prop_name = $connected_items;

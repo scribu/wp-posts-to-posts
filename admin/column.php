@@ -43,7 +43,7 @@ abstract class P2P_Column {
 
 		$connected = $this->ctype->get_connected( $items, $extra_qv, 'abstract' );
 
-		$this->connected = p2p_list_cluster( $connected->items, '_p2p_get_other_id' );
+		$this->connected = scb_list_group_by( $connected->items, '_p2p_get_other_id' );
 	}
 
 	function styles() {

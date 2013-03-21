@@ -1,18 +1,8 @@
 <?php
 
+/** @internal */
 function p2p_list_cluster( $items, $callback ) {
-	$groups = array();
-
-	foreach ( $items as $item ) {
-		$key = $callback( $item );
-
-		if ( null === $key )
-			continue;
-
-		$groups[ $key ][] = $item;
-	}
-
-	return $groups;
+	return scb_list_group_by( $items, $callback );
 }
 
 /** @internal */
