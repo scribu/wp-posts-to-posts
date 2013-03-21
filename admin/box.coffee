@@ -77,8 +77,6 @@ ConnectionsView = Backbone.View.extend {
 	}
 
 	initialize: (options) ->
-		@ajax_request = options.ajax_request
-
 		@maybe_make_sortable()
 
 		@collection.on('create', @afterCreate, this)
@@ -240,8 +238,6 @@ CreatePostView = Backbone.View.extend {
 	}
 
 	initialize: (options) ->
-		@ajax_request = options.ajax_request
-
 		@createButton = @$('button')
 		@createInput = @$(':text')
 
