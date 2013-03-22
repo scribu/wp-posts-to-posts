@@ -20,10 +20,8 @@ window.P2PAdmin = {
 P2PAdmin.Candidate = Backbone.Model.extend {}
 P2PAdmin.Connection = Backbone.Model.extend {}
 
-# Controller that handles the pagination state
-P2PAdmin.Candidates = Backbone.Collection.extend {
-
-	model: P2PAdmin.Candidate
+# Non-persistent model that contains the pagination state
+P2PAdmin.Candidates = Backbone.Model.extend {
 
 	sync: ->
 		params = {
@@ -372,8 +370,7 @@ jQuery ->
 		$metabox = jQuery(this)
 		$spinner = jQuery('<img>', 'src': P2PAdminL10n.spinner, 'class': 'p2p-spinner')
 
-		candidates = new P2PAdmin.Candidates
-		candidates.params = {
+		candidates = new P2PAdmin.Candidates {
 			's': '',
 			'paged': 1
 		}
@@ -386,7 +383,7 @@ jQuery ->
 		}
 
 		ajax_request = (options, callback) ->
-			params = _.extend {}, options, candidates.params, ctype, {
+			params = _.extend {}, options, candidates.attributes, ctype, {
 				action: 'p2p_box'
 				nonce: P2PAdminL10n.nonce
 			}
