@@ -13,7 +13,7 @@ class P2P_Field_Create implements P2P_Field {
 		return '';
 	}
 
-	function render( $p2p_id, $item ) {
+	function render( $_, $item ) {
 		$data = array_merge( $this->title_field->get_data( $item ), array(
 			'title' => $item->get_title(),
 			'item-id' => $item->get_id(),

@@ -177,6 +177,14 @@ class P2P_Box {
 		return P2P_Mustache::render( 'table-row', $data );
 	}
 
+	protected function candidate_row( $item ) {
+		$columns = array(
+			'create' => new P2P_Field_Create( $this->columns['title'] ),
+		);
+
+		return $this->table_row( $columns, 0, $item );
+	}
+
 	protected function candidate_rows( $current_post_id, $page = 1, $search = '' ) {
 		$extra_qv = array_merge( self::$admin_box_qv, array(
 			'p2p:context' => 'admin_box_candidates',
@@ -193,12 +201,8 @@ class P2P_Box {
 
 		$data = array();
 
-		$columns = array(
-			'create' => new P2P_Field_Create( $this->columns['title'] ),
-		);
-
 		foreach ( $candidate->items as $item ) {
-			$data['rows'][] = $this->table_row( $columns, 0, $item );
+			$data['rows'][] = $this->candidate_row( $item );
 		}
 
 		if ( $candidate->total_pages > 1 ) {
