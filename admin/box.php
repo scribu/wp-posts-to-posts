@@ -174,8 +174,10 @@ class P2P_Box {
 	}
 
 	protected function candidate_row( $item ) {
+		$title = apply_filters( 'p2p_candidate_title', $item->get_title(), $item->get_object(), $this->ctype );
+
 		$title_data = array_merge( $this->columns['title']->get_data( $item ), array(
-			'title' => $item->get_title(),
+			'title' => $title,
 			'item-id' => $item->get_id(),
 		) );
 
