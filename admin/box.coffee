@@ -13,7 +13,9 @@ remove_row = ($td) ->
 get_mustache_template = (name) ->
 	jQuery('#p2p-template-' + name).html()
 
-window.P2PAdmin = {}
+window.P2PAdmin = {
+	boxes: {}
+}
 
 # Controller that handles the pagination state
 P2PAdmin.Candidates = Backbone.Model.extend {
@@ -425,6 +427,11 @@ jQuery ->
 			el: $metabox
 			spinner: $spinner
 			cardinality: $metabox.data('cardinality')
+			candidates
+			connections
+		}
+
+		P2PAdmin.boxes[ctype.p2p_type] = {
 			candidates
 			connections
 		}

@@ -20,7 +20,9 @@
     return jQuery('#p2p-template-' + name).html();
   };
 
-  window.P2PAdmin = {};
+  window.P2PAdmin = {
+    boxes: {}
+  };
 
   P2PAdmin.Candidates = Backbone.Model.extend({
     sync: function() {
@@ -396,13 +398,17 @@
         el: $metabox.find('.p2p-tab-create-post'),
         collection: connections
       });
-      return metaboxView = new P2PAdmin.MetaboxView({
+      metaboxView = new P2PAdmin.MetaboxView({
         el: $metabox,
         spinner: $spinner,
         cardinality: $metabox.data('cardinality'),
         candidates: candidates,
         connections: connections
       });
+      return P2PAdmin.boxes[ctype.p2p_type] = {
+        candidates: candidates,
+        connections: connections
+      };
     });
   });
 
