@@ -174,18 +174,17 @@ class P2P_Box {
 	}
 
 	protected function candidate_row( $item ) {
-		$columns = array(
-			'create' => new P2P_Field_Create( $this->columns['title'] ),
-		);
+		$title_data = array_merge( $this->columns['title']->get_data( $item ), array(
+			'title' => $item->get_title(),
+			'item-id' => $item->get_id(),
+		) );
 
 		$data = array();
 
-		foreach ( $columns as $key => $field ) {
-			$data['columns'][] = array(
-				'column' => $key,
-				'content' => $field->render( 0, $item )
-			);
-		}
+		$data['columns'][] = array(
+			'column' => 'create',
+			'content' => P2P_Mustache::render( 'column-create', $title_data )
+		);
 
 		return $data;
 	}
