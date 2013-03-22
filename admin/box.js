@@ -1,10 +1,10 @@
 (function() {
-  var Candidates, CandidatesView, Connections, ConnectionsView, CreatePostView, ENTER_KEY, MetaboxView, get_mustache_template, remove_row, row_wait;
+  var ENTER_KEY, get_mustache_template, remove_row, row_wait;
 
   ENTER_KEY = 13;
 
   row_wait = function($td) {
-    return $td.find('.p2p-icon').css('background-image', 'url(' + P2PAdmin.spinner + ')');
+    return $td.find('.p2p-icon').css('background-image', 'url(' + P2PAdminL10n.spinner + ')');
   };
 
   remove_row = function($td) {
@@ -20,7 +20,11 @@
     return jQuery('#p2p-template-' + name).html();
   };
 
-  Candidates = Backbone.Model.extend({
+  window.P2PAdmin = {
+    boxes: {}
+  };
+
+  P2PAdmin.Candidates = Backbone.Model.extend({
     sync: function() {
       var params,
         _this = this;
@@ -42,7 +46,7 @@
     }
   });
 
-  Connections = Backbone.Model.extend({
+  P2PAdmin.Connections = Backbone.Model.extend({
     createItemAndConnect: function(title) {
       var data,
         _this = this;
@@ -88,7 +92,7 @@
     }
   });
 
-  ConnectionsView = Backbone.View.extend({
+  P2PAdmin.ConnectionsView = Backbone.View.extend({
     events: {
       'click th.p2p-col-delete .p2p-icon': 'clear',
       'click td.p2p-col-delete .p2p-icon': 'delete'
@@ -119,7 +123,7 @@
     clear: function(ev) {
       var $td;
       ev.preventDefault();
-      if (!confirm(P2PAdmin.deleteConfirmMessage)) {
+      if (!confirm(P2PAdminL10n.deleteConfirmMessage)) {
         return;
       }
       $td = jQuery(ev.target).closest('td');
@@ -150,7 +154,7 @@
     }
   });
 
-  CandidatesView = Backbone.View.extend({
+  P2PAdmin.CandidatesView = Backbone.View.extend({
     template: Mustache.compile(get_mustache_template('tab-list')),
     events: {
       'keypress :text': 'handleReturn',
@@ -161,9 +165,9 @@
     initialize: function(options) {
       this.spinner = options.spinner;
       options.connections.on('create', this.afterConnectionCreated, this);
-      options.connections.on('delete', this.refreshCandidates, this);
-      options.connections.on('clear', this.refreshCandidates, this);
-      this.collection.on('sync', this.refreshCandidates, this);
+      options.connections.on('delete', this.afterCandidatesRefreshed, this);
+      options.connections.on('clear', this.afterCandidatesRefreshed, this);
+      this.collection.on('sync', this.afterCandidatesRefreshed, this);
       this.collection.on('error', this.afterInvalid, this);
       return this.collection.on('invalid', this.afterInvalid, this);
     },
@@ -221,7 +225,7 @@
       this.spinner.appendTo(this.$('.p2p-navigation'));
       return this.collection.save('paged', new_page);
     },
-    refreshCandidates: function(response) {
+    afterCandidatesRefreshed: function(response) {
       this.spinner.remove();
       this.$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove();
       return this.$el.append(this.template(response));
@@ -231,7 +235,7 @@
     }
   });
 
-  CreatePostView = Backbone.View.extend({
+  P2PAdmin.CreatePostView = Backbone.View.extend({
     events: {
       'click button': 'createItem',
       'keypress :text': 'handleReturn'
@@ -269,7 +273,7 @@
     }
   });
 
-  MetaboxView = Backbone.View.extend({
+  P2PAdmin.MetaboxView = Backbone.View.extend({
     events: {
       'click .p2p-toggle-tabs': 'toggleTabs',
       'click .wp-tab-bar li': 'setActiveTab'
@@ -340,10 +344,10 @@
       var $metabox, $spinner, ajax_request, candidates, candidatesView, connections, connectionsView, createPostView, ctype, metaboxView;
       $metabox = jQuery(this);
       $spinner = jQuery('<img>', {
-        'src': P2PAdmin.spinner,
+        'src': P2PAdminL10n.spinner,
         'class': 'p2p-spinner'
       });
-      candidates = new Candidates({
+      candidates = new P2PAdmin.Candidates({
         's': '',
         'paged': 1
       });
@@ -357,7 +361,7 @@
         var params;
         params = _.extend({}, options, candidates.attributes, ctype, {
           action: 'p2p_box',
-          nonce: P2PAdmin.nonce
+          nonce: P2PAdminL10n.nonce
         });
         return jQuery.post(ajaxurl, params, function(response) {
           try {
@@ -376,31 +380,35 @@
         });
       };
       candidates.ajax_request = ajax_request;
-      connections = new Connections;
+      connections = new P2PAdmin.Connections;
       connections.ajax_request = ajax_request;
-      connectionsView = new ConnectionsView({
+      connectionsView = new P2PAdmin.ConnectionsView({
         el: $metabox.find('.p2p-connections'),
         collection: connections,
         candidates: candidates
       });
-      candidatesView = new CandidatesView({
+      candidatesView = new P2PAdmin.CandidatesView({
         el: $metabox.find('.p2p-tab-search'),
         collection: candidates,
         connections: connections,
         spinner: $spinner,
         duplicate_connections: $metabox.data('duplicate_connections')
       });
-      createPostView = new CreatePostView({
+      createPostView = new P2PAdmin.CreatePostView({
         el: $metabox.find('.p2p-tab-create-post'),
         collection: connections
       });
-      return metaboxView = new MetaboxView({
+      metaboxView = new P2PAdmin.MetaboxView({
         el: $metabox,
         spinner: $spinner,
         cardinality: $metabox.data('cardinality'),
         candidates: candidates,
         connections: connections
       });
+      return P2PAdmin.boxes[ctype.p2p_type] = {
+        candidates: candidates,
+        connections: connections
+      };
     });
   });
 
