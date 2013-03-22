@@ -158,13 +158,9 @@ class P2P_Box {
 	}
 
 	protected function connection_row( $p2p_id, $item, $render = false ) {
-		return $this->table_row( $this->columns, $p2p_id, $item, $render );
-	}
-
-	protected function table_row( $columns, $p2p_id, $item, $render = false ) {
 		$data = array();
 
-		foreach ( $columns as $key => $field ) {
+		foreach ( $this->columns as $key => $field ) {
 			$data['columns'][] = array(
 				'column' => $key,
 				'content' => $field->render( $p2p_id, $item )
