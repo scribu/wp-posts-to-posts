@@ -26,7 +26,7 @@ P2PAdmin.Candidates = Backbone.Collection.extend {
 	model: P2PAdmin.Candidate
 
 	sync: ->
-		params = _.extend {}, @attributes, {
+		params = {
 			subaction: 'search'
 		}
 

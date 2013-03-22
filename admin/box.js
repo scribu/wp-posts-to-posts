@@ -33,9 +33,9 @@
     sync: function() {
       var params,
         _this = this;
-      params = _.extend({}, this.attributes, {
+      params = {
         subaction: 'search'
-      });
+      };
       return this.ajax_request(params, function(response) {
         var _ref;
         _this.total_pages = ((_ref = response.navigation) != null ? _ref['total-pages-raw'] : void 0) || 1;
