@@ -163,9 +163,9 @@
     initialize: function(options) {
       this.spinner = options.spinner;
       options.connections.on('create', this.afterConnectionCreated, this);
-      options.connections.on('delete', this.refreshCandidates, this);
-      options.connections.on('clear', this.refreshCandidates, this);
-      this.collection.on('sync', this.refreshCandidates, this);
+      options.connections.on('delete', this.afterCandidatesRefreshed, this);
+      options.connections.on('clear', this.afterCandidatesRefreshed, this);
+      this.collection.on('sync', this.afterCandidatesRefreshed, this);
       this.collection.on('error', this.afterInvalid, this);
       return this.collection.on('invalid', this.afterInvalid, this);
     },
@@ -223,7 +223,7 @@
       this.spinner.appendTo(this.$('.p2p-navigation'));
       return this.collection.save('paged', new_page);
     },
-    refreshCandidates: function(response) {
+    afterCandidatesRefreshed: function(response) {
       this.spinner.remove();
       this.$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove();
       return this.$el.append(this.template(response));

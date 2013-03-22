@@ -154,10 +154,10 @@ P2PAdmin.CandidatesView = Backbone.View.extend {
 		@spinner = options.spinner
 
 		options.connections.on('create', @afterConnectionCreated, this)
-		options.connections.on('delete', @refreshCandidates, this)
-		options.connections.on('clear', @refreshCandidates, this)
+		options.connections.on('delete', @afterCandidatesRefreshed, this)
+		options.connections.on('clear', @afterCandidatesRefreshed, this)
 
-		@collection.on('sync', @refreshCandidates, this)
+		@collection.on('sync', @afterCandidatesRefreshed, this)
 
 		@collection.on('error', @afterInvalid, this)    # Backbone 0.9.2
 		@collection.on('invalid', @afterInvalid, this)
@@ -220,7 +220,8 @@ P2PAdmin.CandidatesView = Backbone.View.extend {
 
 		@collection.save('paged', new_page)
 
-	refreshCandidates: (response) ->
+	# Receives the updated list of candidates as response
+	afterCandidatesRefreshed: (response) ->
 		@spinner.remove()
 
 		@$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove()
