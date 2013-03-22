@@ -4,7 +4,7 @@
   ENTER_KEY = 13;
 
   row_wait = function($td) {
-    return $td.find('.p2p-icon').css('background-image', 'url(' + P2PAdmin.spinner + ')');
+    return $td.find('.p2p-icon').css('background-image', 'url(' + P2PAdminL10n.spinner + ')');
   };
 
   remove_row = function($td) {
@@ -119,7 +119,7 @@
     clear: function(ev) {
       var $td;
       ev.preventDefault();
-      if (!confirm(P2PAdmin.deleteConfirmMessage)) {
+      if (!confirm(P2PAdminL10n.deleteConfirmMessage)) {
         return;
       }
       $td = jQuery(ev.target).closest('td');
@@ -340,7 +340,7 @@
       var $metabox, $spinner, ajax_request, candidates, candidatesView, connections, connectionsView, createPostView, ctype, metaboxView;
       $metabox = jQuery(this);
       $spinner = jQuery('<img>', {
-        'src': P2PAdmin.spinner,
+        'src': P2PAdminL10n.spinner,
         'class': 'p2p-spinner'
       });
       candidates = new Candidates({
@@ -357,7 +357,7 @@
         var params;
         params = _.extend({}, options, candidates.attributes, ctype, {
           action: 'p2p_box',
-          nonce: P2PAdmin.nonce
+          nonce: P2PAdminL10n.nonce
         });
         return jQuery.post(ajaxurl, params, function(response) {
           try {

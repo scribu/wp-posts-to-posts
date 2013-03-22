@@ -1,7 +1,7 @@
 ENTER_KEY = 13
 
 row_wait = ($td) ->
-	$td.find('.p2p-icon').css 'background-image', 'url(' + P2PAdmin.spinner + ')'
+	$td.find('.p2p-icon').css 'background-image', 'url(' + P2PAdminL10n.spinner + ')'
 
 remove_row = ($td) ->
 	$table = $td.closest('table')
@@ -100,7 +100,7 @@ ConnectionsView = Backbone.View.extend {
 	clear: (ev) ->
 		ev.preventDefault()
 
-		if not confirm(P2PAdmin.deleteConfirmMessage)
+		if not confirm(P2PAdminL10n.deleteConfirmMessage)
 			return
 
 		$td = jQuery(ev.target).closest('td')
@@ -363,7 +363,7 @@ jQuery ->
 
 	jQuery('.p2p-box').each ->
 		$metabox = jQuery(this)
-		$spinner = jQuery('<img>', 'src': P2PAdmin.spinner, 'class': 'p2p-spinner')
+		$spinner = jQuery('<img>', 'src': P2PAdminL10n.spinner, 'class': 'p2p-spinner')
 
 		candidates = new Candidates {
 			's': '',
@@ -380,7 +380,7 @@ jQuery ->
 		ajax_request = (options, callback) ->
 			params = _.extend {}, options, candidates.attributes, ctype, {
 				action: 'p2p_box'
-				nonce: P2PAdmin.nonce
+				nonce: P2PAdminL10n.nonce
 			}
 
 			jQuery.post ajaxurl, params, (response) ->
