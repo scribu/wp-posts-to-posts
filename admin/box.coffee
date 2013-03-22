@@ -17,8 +17,13 @@ window.P2PAdmin = {
 	boxes: {}
 }
 
+P2PAdmin.Candidate = Backbone.Model.extend {}
+P2PAdmin.Connection = Backbone.Model.extend {}
+
 # Controller that handles the pagination state
 P2PAdmin.Candidates = Backbone.Collection.extend {
+
+	model: P2PAdmin.Candidate
 
 	sync: ->
 		params = _.extend {}, @attributes, {
@@ -39,6 +44,8 @@ P2PAdmin.Candidates = Backbone.Collection.extend {
 
 P2PAdmin.Connections = Backbone.Collection.extend {
 
+	model: P2PAdmin.Connection
+
 	createItemAndConnect: (title) ->
 		data = {
 			subaction: 'create_post'
@@ -47,23 +54,21 @@ P2PAdmin.Connections = Backbone.Collection.extend {
 
 		@ajax_request data, (response) => @trigger 'create:from_new_item', response
 
-	# TODO: should receive a Candidate object, not a DOM element
-	create: ($td) ->
+	create: (candidate) ->
 		data = {
 			subaction: 'connect'
-			to: $td.find('div').data('item-id')
+			to: candidate.get('id')
 		}
 
-		@ajax_request data, (response) => @trigger 'create', response, $td
+		@ajax_request data, (response) => @trigger 'create', response, candidate
 
-	# TODO: should receive a Candidate object, not a DOM element
-	delete: ($td) ->
+	delete: (connection) ->
 		data = {
 			subaction: 'disconnect'
-			p2p_id: $td.find('input').val()
+			p2p_id: connection.get('id')
 		}
 
-		@ajax_request data, (response) => @trigger 'delete', response, $td
+		@ajax_request data, (response) => @trigger 'delete', response, connection
 
 	clear: ->
 		data = {
@@ -86,10 +91,9 @@ P2PAdmin.ConnectionsView = Backbone.View.extend {
 
 		@collection.on('create', @afterCreate, this)
 		@collection.on('create:from_new_item', @afterCreate, this)
-		@collection.on('delete', @afterDelete, this)
 		@collection.on('clear', @afterClear, this)
 
-		options.candidates.on('promote', @create, this)
+		options.candidates.on('promote', @afterPromote, this)
 
 	maybe_make_sortable: ->
 		if @$('th.p2p-col-order').length
@@ -124,15 +128,18 @@ P2PAdmin.ConnectionsView = Backbone.View.extend {
 
 		row_wait $td
 
-		@collection.delete $td
+		req = @collection.delete new P2PAdmin.Connection {
+			id: $td.find('input').val()
+		}
+
+		req.done -> remove_row $td
 
 		null
 
-	afterDelete: (response, $td) ->
-		remove_row $td
-
-	create: ($td) ->
-		@collection.create $td
+	afterPromote: ($td) ->
+		@collection.create new P2PAdmin.Candidate {
+			id: $td.find('div').data('item-id')
+		}
 
 		null
 
@@ -166,7 +173,9 @@ P2PAdmin.CandidatesView = Backbone.View.extend {
 		@collection.on('error', @afterInvalid, this)    # Backbone 0.9.2
 		@collection.on('invalid', @afterInvalid, this)
 
-	afterConnectionCreated: (response, $td) ->
+	afterConnectionCreated: (response, candidate) ->
+		$td = @$el.find('.p2p-col-create div[data-item-id="' + candidate.get('id') + '"]')
+
 		if @options.duplicate_connections
 			$td.find('.p2p-icon').css('background-image', '')
 		else
