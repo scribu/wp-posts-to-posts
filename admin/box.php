@@ -158,13 +158,9 @@ class P2P_Box {
 	}
 
 	protected function connection_row( $p2p_id, $item, $render = false ) {
-		return $this->table_row( $this->columns, $p2p_id, $item, $render );
-	}
-
-	protected function table_row( $columns, $p2p_id, $item, $render = false ) {
 		$data = array();
 
-		foreach ( $columns as $key => $field ) {
+		foreach ( $this->columns as $key => $field ) {
 			$data['columns'][] = array(
 				'column' => $key,
 				'content' => $field->render( $p2p_id, $item )
@@ -175,6 +171,24 @@ class P2P_Box {
 			return $data;
 
 		return P2P_Mustache::render( 'table-row', $data );
+	}
+
+	protected function candidate_row( $item ) {
+		$title = apply_filters( 'p2p_candidate_title', $item->get_title(), $item->get_object(), $this->ctype );
+
+		$title_data = array_merge( $this->columns['title']->get_data( $item ), array(
+			'title' => $title,
+			'item-id' => $item->get_id(),
+		) );
+
+		$data = array();
+
+		$data['columns'][] = array(
+			'column' => 'create',
+			'content' => P2P_Mustache::render( 'column-create', $title_data )
+		);
+
+		return $data;
 	}
 
 	protected function candidate_rows( $current_post_id, $page = 1, $search = '' ) {
@@ -193,12 +207,8 @@ class P2P_Box {
 
 		$data = array();
 
-		$columns = array(
-			'create' => new P2P_Field_Create( $this->columns['title'] ),
-		);
-
 		foreach ( $candidate->items as $item ) {
-			$data['rows'][] = $this->table_row( $columns, 0, $item );
+			$data['rows'][] = $this->candidate_row( $item );
 		}
 
 		if ( $candidate->total_pages > 1 ) {
