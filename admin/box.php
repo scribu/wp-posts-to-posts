@@ -62,18 +62,18 @@ class P2P_Box {
 		), file_get_contents( dirname( __FILE__ ) . "/templates/$slug.html" ) );
 	}
 
-	function render( $post ) {
+	function render( $item ) {
 		$extra_qv = array_merge( self::$admin_box_qv, array(
 			'p2p:context' => 'admin_box',
 			'p2p:per_page' => -1
 		) );
 
-		$this->connected_items = $this->ctype->get_connected( $post, $extra_qv, 'abstract' )->items;
+		$this->connected_items = $this->ctype->get_connected( $item, $extra_qv, 'abstract' )->items;
 
 		$data = array(
 			'attributes' => $this->render_data_attributes(),
-			'connections' => $this->render_connections_table( $post ),
-			'create-connections' => $this->render_create_connections( $post ),
+			'connections' => $this->render_connections_table( $item ),
+			'create-connections' => $this->render_create_connections( $item ),
 			'help' => isset( $this->labels->help ) ? $this->labels->help : ''
 		);
 
@@ -95,7 +95,7 @@ class P2P_Box {
 		return implode( ' ', $data_attr_str );
 	}
 
-	protected function render_connections_table( $post ) {
+	protected function render_connections_table( $item ) {
 		$data = array();
 
 		if ( empty( $this->connected_items ) )
@@ -117,7 +117,7 @@ class P2P_Box {
 		return $data;
 	}
 
-	protected function render_create_connections( $post ) {
+	protected function render_create_connections( $item ) {
 		$data = array(
 			'label' => $this->labels->create,
 		);
@@ -139,7 +139,7 @@ class P2P_Box {
 			'tab-content' => $tab_content
 		);
 
-		// Create post tab
+		// "Create post" tab
 		if ( $this->can_create_post() ) {
 			$tab_content = P2P_Mustache::render( 'tab-create-post', array(
 				'title' => $this->labels->add_new_item
