@@ -182,7 +182,16 @@ class P2P_Box {
 			'create' => new P2P_Field_Create( $this->columns['title'] ),
 		);
 
-		return $this->table_row( $columns, 0, $item );
+		$data = array();
+
+		foreach ( $columns as $key => $field ) {
+			$data['columns'][] = array(
+				'column' => $key,
+				'content' => $field->render( 0, $item )
+			);
+		}
+
+		return $data;
 	}
 
 	protected function candidate_rows( $current_post_id, $page = 1, $search = '' ) {
