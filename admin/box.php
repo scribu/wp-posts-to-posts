@@ -177,7 +177,7 @@ class P2P_Box {
 		return P2P_Mustache::render( 'table-row', $data );
 	}
 
-	protected function post_rows( $current_post_id, $page = 1, $search = '' ) {
+	protected function candidate_rows( $current_post_id, $page = 1, $search = '' ) {
 		$extra_qv = array_merge( self::$admin_box_qv, array(
 			'p2p:context' => 'admin_box_candidates',
 			'p2p:search' => $search,
@@ -294,7 +294,7 @@ class P2P_Box {
 	}
 
 	private function refresh_candidates() {
-		die( json_encode( $this->post_rows(
+		die( json_encode( $this->candidate_rows(
 			$_REQUEST['from'], $_REQUEST['paged'], $_REQUEST['s'] ) ) );
 	}
 
