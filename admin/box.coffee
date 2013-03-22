@@ -92,8 +92,6 @@ P2PAdmin.ConnectionsView = Backbone.View.extend {
 		@collection.on('create', @afterCreate, this)
 		@collection.on('clear', @afterClear, this)
 
-		options.candidates.on('promote', @afterPromote, this)
-
 	maybe_make_sortable: ->
 		if @$('th.p2p-col-order').length
 			@$('tbody').sortable {
@@ -135,13 +133,6 @@ P2PAdmin.ConnectionsView = Backbone.View.extend {
 
 		null
 
-	afterPromote: ($td) ->
-		@collection.create new P2PAdmin.Candidate {
-			id: $td.find('div').data('item-id')
-		}
-
-		null
-
 	afterCreate: (response) ->
 		@$el.show()
 			.find('tbody').append(response.row)
@@ -163,7 +154,6 @@ P2PAdmin.CandidatesView = Backbone.View.extend {
 	initialize: (options) ->
 		@spinner = options.spinner
 
-		options.connections.on('create', @afterConnectionCreated, this)
 		options.connections.on('delete', @afterCandidatesRefreshed, this)
 		options.connections.on('clear', @afterCandidatesRefreshed, this)
 
@@ -172,22 +162,24 @@ P2PAdmin.CandidatesView = Backbone.View.extend {
 		@collection.on('error', @afterInvalid, this)    # Backbone 0.9.2
 		@collection.on('invalid', @afterInvalid, this)
 
-	afterConnectionCreated: (response, candidate) ->
-		$td = @$el.find('.p2p-col-create div[data-item-id="' + candidate.get('id') + '"]')
-
-		if @options.duplicate_connections
-			$td.find('.p2p-icon').css('background-image', '')
-		else
-			remove_row $td
-
 	promote: (ev) ->
-		$td = jQuery(ev.target).closest('td')
-
 		ev.preventDefault()
+
+		$div = jQuery(ev.target)
+
+		$td = $div.closest('td')
 
 		row_wait $td
 
-		@collection.trigger 'promote', $td
+		req = @options.connections.create new P2PAdmin.Candidate {
+			id: $div.data('item-id')
+		}
+
+		req.done =>
+			if @options.duplicate_connections
+				$td.find('.p2p-icon').css('background-image', '')
+			else
+				remove_row $td
 
 		null
 
@@ -279,7 +271,7 @@ P2PAdmin.CreatePostView = Backbone.View.extend {
 
 		req = @collection.createItemAndConnect title
 
-		req.done ->
+		req.done =>
 			@createInput.val('')
 
 			@createButton.removeClass('inactive')
