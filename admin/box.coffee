@@ -230,7 +230,10 @@ P2PAdmin.CandidatesView = Backbone.View.extend {
 
 		@$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove()
 
-		@$el.append @template(response)
+		if 'string' != typeof response
+			response = @template(response)
+
+		@$el.append response
 
 	afterInvalid: ->
 		@spinner.remove()

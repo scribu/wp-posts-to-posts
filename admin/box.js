@@ -232,7 +232,10 @@
     afterCandidatesRefreshed: function(response) {
       this.spinner.remove();
       this.$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove();
-      return this.$el.append(this.template(response));
+      if ('string' !== typeof response) {
+        response = this.template(response);
+      }
+      return this.$el.append(response);
     },
     afterInvalid: function() {
       return this.spinner.remove();
