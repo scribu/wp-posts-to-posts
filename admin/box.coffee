@@ -18,7 +18,7 @@ window.P2PAdmin = {
 }
 
 # Controller that handles the pagination state
-P2PAdmin.Candidates = Backbone.Model.extend {
+P2PAdmin.Candidates = Backbone.Collection.extend {
 
 	sync: ->
 		params = _.extend {}, @attributes, {
@@ -37,7 +37,7 @@ P2PAdmin.Candidates = Backbone.Model.extend {
 		return 'invalid page'
 }
 
-P2PAdmin.Connections = Backbone.Model.extend {
+P2PAdmin.Connections = Backbone.Collection.extend {
 
 	createItemAndConnect: (title) ->
 		data = {
@@ -47,6 +47,7 @@ P2PAdmin.Connections = Backbone.Model.extend {
 
 		@ajax_request data, (response) => @trigger 'create:from_new_item', response
 
+	# TODO: should receive a Candidate object, not a DOM element
 	create: ($td) ->
 		data = {
 			subaction: 'connect'
@@ -55,6 +56,7 @@ P2PAdmin.Connections = Backbone.Model.extend {
 
 		@ajax_request data, (response) => @trigger 'create', response, $td
 
+	# TODO: should receive a Candidate object, not a DOM element
 	delete: ($td) ->
 		data = {
 			subaction: 'disconnect'
@@ -369,7 +371,8 @@ jQuery ->
 		$metabox = jQuery(this)
 		$spinner = jQuery('<img>', 'src': P2PAdminL10n.spinner, 'class': 'p2p-spinner')
 
-		candidates = new P2PAdmin.Candidates {
+		candidates = new P2PAdmin.Candidates
+		candidates.params = {
 			's': '',
 			'paged': 1
 		}
@@ -382,7 +385,7 @@ jQuery ->
 		}
 
 		ajax_request = (options, callback) ->
-			params = _.extend {}, options, candidates.attributes, ctype, {
+			params = _.extend {}, options, candidates.params, ctype, {
 				action: 'p2p_box'
 				nonce: P2PAdminL10n.nonce
 			}

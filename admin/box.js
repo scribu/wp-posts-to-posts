@@ -24,7 +24,7 @@
     boxes: {}
   };
 
-  P2PAdmin.Candidates = Backbone.Model.extend({
+  P2PAdmin.Candidates = Backbone.Collection.extend({
     sync: function() {
       var params,
         _this = this;
@@ -46,7 +46,7 @@
     }
   });
 
-  P2PAdmin.Connections = Backbone.Model.extend({
+  P2PAdmin.Connections = Backbone.Collection.extend({
     createItemAndConnect: function(title) {
       var data,
         _this = this;
@@ -347,10 +347,11 @@
         'src': P2PAdminL10n.spinner,
         'class': 'p2p-spinner'
       });
-      candidates = new P2PAdmin.Candidates({
+      candidates = new P2PAdmin.Candidates;
+      candidates.params = {
         's': '',
         'paged': 1
-      });
+      };
       candidates.total_pages = $metabox.find('.p2p-total').data('num') || 1;
       ctype = {
         p2p_type: $metabox.data('p2p_type'),
@@ -359,7 +360,7 @@
       };
       ajax_request = function(options, callback) {
         var params;
-        params = _.extend({}, options, candidates.attributes, ctype, {
+        params = _.extend({}, options, candidates.params, ctype, {
           action: 'p2p_box',
           nonce: P2PAdminL10n.nonce
         });
