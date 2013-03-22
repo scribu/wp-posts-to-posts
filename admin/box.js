@@ -61,7 +61,7 @@
         post_title: title
       };
       return this.ajax_request(data, function(response) {
-        return _this.trigger('create:from_new_item', response);
+        return _this.trigger('create', response);
       });
     },
     create: function(candidate) {
@@ -72,7 +72,7 @@
         to: candidate.get('id')
       };
       return this.ajax_request(data, function(response) {
-        return _this.trigger('create', response, candidate);
+        return _this.trigger('create', response);
       });
     },
     "delete": function(connection) {
@@ -106,7 +106,6 @@
     initialize: function(options) {
       this.maybe_make_sortable();
       this.collection.on('create', this.afterCreate, this);
-      this.collection.on('create:from_new_item', this.afterCreate, this);
       this.collection.on('clear', this.afterClear, this);
       return options.candidates.on('promote', this.afterPromote, this);
     },
@@ -253,8 +252,7 @@
     },
     initialize: function(options) {
       this.createButton = this.$('button');
-      this.createInput = this.$(':text');
-      return this.collection.on('create:from_new_item', this.afterItemCreated, this);
+      return this.createInput = this.$(':text');
     },
     handleReturn: function(ev) {
       if (ev.keyCode === ENTER_KEY) {
@@ -264,7 +262,7 @@
       return null;
     },
     createItem: function(ev) {
-      var title;
+      var req, title;
       ev.preventDefault();
       if (this.createButton.hasClass('inactive')) {
         return false;
@@ -275,12 +273,12 @@
         return;
       }
       this.createButton.addClass('inactive');
-      this.collection.createItemAndConnect(title);
+      req = this.collection.createItemAndConnect(title);
+      req.done(function() {
+        this.createInput.val('');
+        return this.createButton.removeClass('inactive');
+      });
       return null;
-    },
-    afterItemCreated: function() {
-      this.createInput.val('');
-      return this.createButton.removeClass('inactive');
     }
   });
 

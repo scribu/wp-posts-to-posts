@@ -52,7 +52,7 @@ P2PAdmin.Connections = Backbone.Collection.extend {
 			post_title: title
 		}
 
-		@ajax_request data, (response) => @trigger 'create:from_new_item', response
+		@ajax_request data, (response) => @trigger 'create', response
 
 	create: (candidate) ->
 		data = {
@@ -60,7 +60,7 @@ P2PAdmin.Connections = Backbone.Collection.extend {
 			to: candidate.get('id')
 		}
 
-		@ajax_request data, (response) => @trigger 'create', response, candidate
+		@ajax_request data, (response) => @trigger 'create', response
 
 	delete: (connection) ->
 		data = {
@@ -90,7 +90,6 @@ P2PAdmin.ConnectionsView = Backbone.View.extend {
 		@maybe_make_sortable()
 
 		@collection.on('create', @afterCreate, this)
-		@collection.on('create:from_new_item', @afterCreate, this)
 		@collection.on('clear', @afterClear, this)
 
 		options.candidates.on('promote', @afterPromote, this)
@@ -256,8 +255,6 @@ P2PAdmin.CreatePostView = Backbone.View.extend {
 		@createButton = @$('button')
 		@createInput = @$(':text')
 
-		@collection.on('create:from_new_item', @afterItemCreated, this)
-
 	handleReturn: (ev) ->
 		if ev.keyCode is ENTER_KEY
 			@createButton.click()
@@ -280,14 +277,14 @@ P2PAdmin.CreatePostView = Backbone.View.extend {
 
 		@createButton.addClass('inactive')
 
-		@collection.createItemAndConnect title
+		req = @collection.createItemAndConnect title
+
+		req.done ->
+			@createInput.val('')
+
+			@createButton.removeClass('inactive')
 
 		null
-
-	afterItemCreated: ->
-		@createInput.val('')
-
-		@createButton.removeClass('inactive')
 }
 
 P2PAdmin.MetaboxView = Backbone.View.extend {
