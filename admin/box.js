@@ -1,5 +1,5 @@
 (function() {
-  var Candidates, CandidatesView, Connections, ConnectionsView, CreatePostView, ENTER_KEY, MetaboxView, get_mustache_template, remove_row, row_wait;
+  var ENTER_KEY, get_mustache_template, remove_row, row_wait;
 
   ENTER_KEY = 13;
 
@@ -20,7 +20,9 @@
     return jQuery('#p2p-template-' + name).html();
   };
 
-  Candidates = Backbone.Model.extend({
+  window.P2PAdmin = {};
+
+  P2PAdmin.Candidates = Backbone.Model.extend({
     sync: function() {
       var params,
         _this = this;
@@ -42,7 +44,7 @@
     }
   });
 
-  Connections = Backbone.Model.extend({
+  P2PAdmin.Connections = Backbone.Model.extend({
     createItemAndConnect: function(title) {
       var data,
         _this = this;
@@ -88,7 +90,7 @@
     }
   });
 
-  ConnectionsView = Backbone.View.extend({
+  P2PAdmin.ConnectionsView = Backbone.View.extend({
     events: {
       'click th.p2p-col-delete .p2p-icon': 'clear',
       'click td.p2p-col-delete .p2p-icon': 'delete'
@@ -150,7 +152,7 @@
     }
   });
 
-  CandidatesView = Backbone.View.extend({
+  P2PAdmin.CandidatesView = Backbone.View.extend({
     template: Mustache.compile(get_mustache_template('tab-list')),
     events: {
       'keypress :text': 'handleReturn',
@@ -231,7 +233,7 @@
     }
   });
 
-  CreatePostView = Backbone.View.extend({
+  P2PAdmin.CreatePostView = Backbone.View.extend({
     events: {
       'click button': 'createItem',
       'keypress :text': 'handleReturn'
@@ -269,7 +271,7 @@
     }
   });
 
-  MetaboxView = Backbone.View.extend({
+  P2PAdmin.MetaboxView = Backbone.View.extend({
     events: {
       'click .p2p-toggle-tabs': 'toggleTabs',
       'click .wp-tab-bar li': 'setActiveTab'
@@ -343,7 +345,7 @@
         'src': P2PAdminL10n.spinner,
         'class': 'p2p-spinner'
       });
-      candidates = new Candidates({
+      candidates = new P2PAdmin.Candidates({
         's': '',
         'paged': 1
       });
@@ -376,25 +378,25 @@
         });
       };
       candidates.ajax_request = ajax_request;
-      connections = new Connections;
+      connections = new P2PAdmin.Connections;
       connections.ajax_request = ajax_request;
-      connectionsView = new ConnectionsView({
+      connectionsView = new P2PAdmin.ConnectionsView({
         el: $metabox.find('.p2p-connections'),
         collection: connections,
         candidates: candidates
       });
-      candidatesView = new CandidatesView({
+      candidatesView = new P2PAdmin.CandidatesView({
         el: $metabox.find('.p2p-tab-search'),
         collection: candidates,
         connections: connections,
         spinner: $spinner,
         duplicate_connections: $metabox.data('duplicate_connections')
       });
-      createPostView = new CreatePostView({
+      createPostView = new P2PAdmin.CreatePostView({
         el: $metabox.find('.p2p-tab-create-post'),
         collection: connections
       });
-      return metaboxView = new MetaboxView({
+      return metaboxView = new P2PAdmin.MetaboxView({
         el: $metabox,
         spinner: $spinner,
         cardinality: $metabox.data('cardinality'),
