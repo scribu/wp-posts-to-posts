@@ -13,15 +13,11 @@ remove_row = ($td) ->
 get_mustache_template = (name) ->
 	jQuery('#p2p-template-' + name).html()
 
-window.P2PAdmin = {
-	boxes: {}
-}
-
-P2PAdmin.Candidate = Backbone.Model.extend {}
-P2PAdmin.Connection = Backbone.Model.extend {}
+Candidate = Backbone.Model.extend {}
+Connection = Backbone.Model.extend {}
 
 # Non-persistent model that contains the pagination state
-P2PAdmin.Candidates = Backbone.Model.extend {
+Candidates = Backbone.Model.extend {
 
 	sync: ->
 		params = {
@@ -40,9 +36,9 @@ P2PAdmin.Candidates = Backbone.Model.extend {
 		return 'invalid page'
 }
 
-P2PAdmin.Connections = Backbone.Collection.extend {
+Connections = Backbone.Collection.extend {
 
-	model: P2PAdmin.Connection
+	model: Connection
 
 	createItemAndConnect: (title) ->
 		data = {
@@ -77,7 +73,7 @@ P2PAdmin.Connections = Backbone.Collection.extend {
 }
 
 
-P2PAdmin.ConnectionsView = Backbone.View.extend {
+ConnectionsView = Backbone.View.extend {
 
 	events: {
 		'click th.p2p-col-delete .p2p-icon': 'clear'
@@ -123,7 +119,7 @@ P2PAdmin.ConnectionsView = Backbone.View.extend {
 
 		row_wait $td
 
-		req = @collection.delete new P2PAdmin.Connection {
+		req = @collection.delete new Connection {
 			id: $td.find('input').val()
 		}
 
@@ -138,7 +134,7 @@ P2PAdmin.ConnectionsView = Backbone.View.extend {
 		@collection.trigger('append', response)
 }
 
-P2PAdmin.CandidatesView = Backbone.View.extend {
+CandidatesView = Backbone.View.extend {
 
 	template: Mustache.compile get_mustache_template('tab-list')
 
@@ -169,7 +165,7 @@ P2PAdmin.CandidatesView = Backbone.View.extend {
 
 		row_wait $td
 
-		req = @options.connections.create new P2PAdmin.Candidate {
+		req = @options.connections.create new Candidate {
 			id: $div.data('item-id')
 		}
 
@@ -237,7 +233,7 @@ P2PAdmin.CandidatesView = Backbone.View.extend {
 		@spinner.remove()
 }
 
-P2PAdmin.CreatePostView = Backbone.View.extend {
+CreatePostView = Backbone.View.extend {
 
 	events: {
 		'click button': 'createItem'
@@ -280,7 +276,7 @@ P2PAdmin.CreatePostView = Backbone.View.extend {
 		null
 }
 
-P2PAdmin.MetaboxView = Backbone.View.extend {
+MetaboxView = Backbone.View.extend {
 
 	events: {
 		'click .p2p-toggle-tabs': 'toggleTabs'
@@ -337,6 +333,13 @@ P2PAdmin.MetaboxView = Backbone.View.extend {
 			@$('.p2p-create-connections').show()
 }
 
+# Export public API
+window.P2PAdmin = {
+	Candidate
+	Connection
+
+	boxes: {}
+}
 
 jQuery ->
 
@@ -370,7 +373,7 @@ jQuery ->
 		$metabox = jQuery(this)
 		$spinner = jQuery('<img>', 'src': P2PAdminL10n.spinner, 'class': 'p2p-spinner')
 
-		candidates = new P2PAdmin.Candidates {
+		candidates = new Candidates {
 			's': '',
 			'paged': 1
 		}
@@ -402,16 +405,16 @@ jQuery ->
 
 		candidates.ajax_request = ajax_request
 
-		connections = new P2PAdmin.Connections
+		connections = new Connections
 		connections.ajax_request = ajax_request
 
-		connectionsView = new P2PAdmin.ConnectionsView {
+		connectionsView = new ConnectionsView {
 			el: $metabox.find('.p2p-connections')
 			collection: connections
 			candidates
 		}
 
-		candidatesView = new P2PAdmin.CandidatesView {
+		candidatesView = new CandidatesView {
 			el: $metabox.find('.p2p-tab-search')
 			collection: candidates
 			connections
@@ -419,12 +422,12 @@ jQuery ->
 			duplicate_connections: $metabox.data('duplicate_connections')
 		}
 
-		createPostView = new P2PAdmin.CreatePostView {
+		createPostView = new CreatePostView {
 			el: $metabox.find('.p2p-tab-create-post')
 			collection: connections
 		}
 
-		metaboxView = new P2PAdmin.MetaboxView {
+		metaboxView = new MetaboxView {
 			el: $metabox
 			spinner: $spinner
 			cardinality: $metabox.data('cardinality')

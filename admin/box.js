@@ -1,5 +1,5 @@
 (function() {
-  var ENTER_KEY, get_mustache_template, remove_row, row_wait;
+  var Candidate, Candidates, CandidatesView, Connection, Connections, ConnectionsView, CreatePostView, ENTER_KEY, MetaboxView, get_mustache_template, remove_row, row_wait;
 
   ENTER_KEY = 13;
 
@@ -20,15 +20,11 @@
     return jQuery('#p2p-template-' + name).html();
   };
 
-  window.P2PAdmin = {
-    boxes: {}
-  };
+  Candidate = Backbone.Model.extend({});
 
-  P2PAdmin.Candidate = Backbone.Model.extend({});
+  Connection = Backbone.Model.extend({});
 
-  P2PAdmin.Connection = Backbone.Model.extend({});
-
-  P2PAdmin.Candidates = Backbone.Model.extend({
+  Candidates = Backbone.Model.extend({
     sync: function() {
       var params,
         _this = this;
@@ -50,8 +46,8 @@
     }
   });
 
-  P2PAdmin.Connections = Backbone.Collection.extend({
-    model: P2PAdmin.Connection,
+  Connections = Backbone.Collection.extend({
+    model: Connection,
     createItemAndConnect: function(title) {
       var data,
         _this = this;
@@ -97,7 +93,7 @@
     }
   });
 
-  P2PAdmin.ConnectionsView = Backbone.View.extend({
+  ConnectionsView = Backbone.View.extend({
     events: {
       'click th.p2p-col-delete .p2p-icon': 'clear',
       'click td.p2p-col-delete .p2p-icon': 'delete'
@@ -140,7 +136,7 @@
       ev.preventDefault();
       $td = jQuery(ev.target).closest('td');
       row_wait($td);
-      req = this.collection["delete"](new P2PAdmin.Connection({
+      req = this.collection["delete"](new Connection({
         id: $td.find('input').val()
       }));
       req.done(function() {
@@ -154,7 +150,7 @@
     }
   });
 
-  P2PAdmin.CandidatesView = Backbone.View.extend({
+  CandidatesView = Backbone.View.extend({
     template: Mustache.compile(get_mustache_template('tab-list')),
     events: {
       'keypress :text': 'handleReturn',
@@ -177,7 +173,7 @@
       $div = jQuery(ev.target);
       $td = $div.closest('td');
       row_wait($td);
-      req = this.options.connections.create(new P2PAdmin.Candidate({
+      req = this.options.connections.create(new Candidate({
         id: $div.data('item-id')
       }));
       req.done(function() {
@@ -241,7 +237,7 @@
     }
   });
 
-  P2PAdmin.CreatePostView = Backbone.View.extend({
+  CreatePostView = Backbone.View.extend({
     events: {
       'click button': 'createItem',
       'keypress :text': 'handleReturn'
@@ -279,7 +275,7 @@
     }
   });
 
-  P2PAdmin.MetaboxView = Backbone.View.extend({
+  MetaboxView = Backbone.View.extend({
     events: {
       'click .p2p-toggle-tabs': 'toggleTabs',
       'click .wp-tab-bar li': 'setActiveTab'
@@ -322,6 +318,12 @@
     }
   });
 
+  window.P2PAdmin = {
+    Candidate: Candidate,
+    Connection: Connection,
+    boxes: {}
+  };
+
   jQuery(function() {
     var clearVal, setVal;
     if (!jQuery('<input placeholder="1" />')[0].placeholder) {
@@ -353,7 +355,7 @@
         'src': P2PAdminL10n.spinner,
         'class': 'p2p-spinner'
       });
-      candidates = new P2PAdmin.Candidates({
+      candidates = new Candidates({
         's': '',
         'paged': 1
       });
@@ -386,25 +388,25 @@
         });
       };
       candidates.ajax_request = ajax_request;
-      connections = new P2PAdmin.Connections;
+      connections = new Connections;
       connections.ajax_request = ajax_request;
-      connectionsView = new P2PAdmin.ConnectionsView({
+      connectionsView = new ConnectionsView({
         el: $metabox.find('.p2p-connections'),
         collection: connections,
         candidates: candidates
       });
-      candidatesView = new P2PAdmin.CandidatesView({
+      candidatesView = new CandidatesView({
         el: $metabox.find('.p2p-tab-search'),
         collection: candidates,
         connections: connections,
         spinner: $spinner,
         duplicate_connections: $metabox.data('duplicate_connections')
       });
-      createPostView = new P2PAdmin.CreatePostView({
+      createPostView = new CreatePostView({
         el: $metabox.find('.p2p-tab-create-post'),
         collection: connections
       });
-      metaboxView = new P2PAdmin.MetaboxView({
+      metaboxView = new MetaboxView({
         el: $metabox,
         spinner: $spinner,
         cardinality: $metabox.data('cardinality'),
