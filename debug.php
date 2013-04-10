@@ -6,7 +6,7 @@ add_action( 'p2p_init', array( 'P2P_Debug', 'init' ), 11 );
 
 class P2P_Debug {
 
-	function init() {
+	static function init() {
 		if ( defined( 'WP_CLI' ) )
 			require_once __DIR__ . '/command.php';
 
@@ -16,7 +16,7 @@ class P2P_Debug {
 		self::actors_and_movies();
 	}
 
-	function posts_to_attachments() {
+	static function posts_to_attachments() {
 		p2p_register_connection_type( array(
 			'name' => 'posts_to_attachments',
 			'from' => 'post',
@@ -24,7 +24,7 @@ class P2P_Debug {
 		) );
 	}
 
-	function posts_to_users() {
+	static function posts_to_users() {
 		p2p_register_connection_type( array(
 			'name' => 'pages_to_users',
 			'from' => 'page',
@@ -72,7 +72,7 @@ class P2P_Debug {
 		) );
 	}
 
-	function contacts_and_tickets() {
+	static function contacts_and_tickets() {
 		$types = array(
 			'bug' => 'Bug',
 			'feature' => 'Feature'
@@ -113,7 +113,7 @@ class P2P_Debug {
 		));
 	}
 
-	function actors_and_movies() {
+	static function actors_and_movies() {
 		register_post_type('actor', array(
 			'public' => true,
 			'labels' => array(
