@@ -159,14 +159,12 @@ CandidatesView = Backbone.View.extend {
 	promote: (ev) ->
 		ev.preventDefault()
 
-		$div = jQuery(ev.target)
-
-		$td = $div.closest('td')
+		$td = jQuery(ev.target).closest('td')
 
 		row_wait $td
 
 		req = @options.connections.create new Candidate {
-			id: $div.data('item-id')
+			id: $td.find('div').data('item-id')
 		}
 
 		req.done =>
