@@ -297,7 +297,7 @@ function p2p_list_posts( $posts, $args = array() ) {
 		$list = new P2P_List( $posts, 'P2P_Item_Post' );
 	}
 
-	return $list->render( $args );
+	return P2P_List_Renderer::render( $list, $args );
 }
 
 /**

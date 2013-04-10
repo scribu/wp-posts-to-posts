@@ -23,7 +23,7 @@ class P2P_Shortcodes {
 			'mode' => 'ul',
 		), $attr );
 
-		return _p2p_get_list( array(
+		return P2P_List_Renderer::query_and_render( array(
 			'ctype' => $attr['type'],
 			'method' => $method,
 			'item' => $post,

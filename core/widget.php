@@ -59,7 +59,7 @@ class P2P_Widget extends scbWidget {
 	function widget( $args, $instance ) {
 		$instance = array_merge( $this->defaults, $instance );
 
-		$output = _p2p_get_list( array(
+		$output = P2P_List_Renderer::query_and_render( array(
 			'ctype' => $instance['ctype'],
 			'method' => ( 'related' == $instance['listing'] ? 'get_related' : 'get_connected' ),
 			'item' => get_queried_object(),

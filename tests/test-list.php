@@ -37,7 +37,7 @@ class P2P_Tests_List extends WP_UnitTestCase {
 	}
 
 	function test_default_output() {
-		$output = self::$list->render( array(
+		$output = P2P_List_Renderer::render( self::$list, array(
 			'echo' => false
 		) );
 
@@ -46,7 +46,7 @@ class P2P_Tests_List extends WP_UnitTestCase {
 	}
 
 	function test_separator_output() {
-		$output = self::$list->render( array(
+		$output = P2P_List_Renderer::render( self::$list, array(
 			'separator' => __FUNCTION__,
 			'echo' => false
 		) );
