@@ -11,6 +11,10 @@ tests
 phpunit.xml
 .travis.yml
 
+vendor
+composer.json
+composer.lock
+
 docblox.dist.xml
 diagrams
 tags
