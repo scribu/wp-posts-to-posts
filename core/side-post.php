@@ -17,7 +17,15 @@ class P2P_Side_Post extends P2P_Side {
 	}
 
 	private function get_ptype() {
-		return get_post_type_object( $this->first_post_type() );
+		$ptype = $this->first_post_type();
+
+		$ptype_object = get_post_type_object( $ptype );
+
+		if ( !$ptype_object ) {
+			throw new P2P_Exception( "Can't find $ptype." );
+		}
+
+		return $ptype_object;
 	}
 
 	function get_base_qv( $q ) {
@@ -44,15 +52,27 @@ class P2P_Side_Post extends P2P_Side {
 	}
 
 	function get_title() {
-		return $this->get_ptype()->labels->name;
+		return $this->get_labels()->name;
 	}
 
 	function get_labels() {
-		return $this->get_ptype()->labels;
+		try {
+			$labels = $this->get_ptype()->labels;
+		} catch ( P2P_Exception $e ) {
+			trigger_error( $e->getMessage(), E_USER_WARNING );
+			$labels = new stdClass;
+		}
+
+		return $labels;
 	}
 
 	function can_edit_connections() {
-		return current_user_can( $this->get_ptype()->cap->edit_posts );
+		try {
+			return current_user_can( $this->get_ptype()->cap->edit_posts );
+		} catch ( P2P_Exception $e ) {
+			trigger_error( $e->getMessage(), E_USER_WARNING );
+			return false;
+		}
 	}
 
 	function can_create_item() {
