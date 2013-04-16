@@ -373,11 +373,36 @@ class P2P_Connection_Type {
 	 */
 	public function each_connected( $items, $extra_qv = array(), $prop_name = 'connected' ) {
 		if ( is_a( $items, 'WP_Query' ) )
-			$items =& $items->posts;
+			$items = $items->posts;
 
 		if ( empty( $items ) || !is_object( $items[0] ) )
 			return;
 
+		try {
+			list( $raw_connected ) = $this->_connected_many( $items, $extra_qv );
+
+			p2p_distribute_connected( $items, $raw_connected, $prop_name );
+		} catch ( P2P_Exception $e ) {
+			trigger_error( $e->getMessage(), E_USER_WARNING );
+		}
+	}
+
+	public function connected_many( $items, $extra_qv = array() ) {
+		if ( is_a( $items, 'WP_Query' ) )
+			$items = $items->posts;
+
+		Xdebug_break();
+
+		try {
+			list( $raw_connected, $directed ) = $this->_connected_many( $items, $extra_qv );
+
+			return new P2P_Connections_Map( $raw_connected, $directed );
+		} catch ( P2P_Exception $e ) {
+			return new WP_Error( $e->getMessage() );
+		}
+	}
+
+	private function _connected_many( $items, $extra_qv = array() ) {
 		$post_types = array_unique( wp_list_pluck( $items, 'post_type' ) );
 
 		if ( count( $post_types ) > 1 ) {
@@ -401,7 +426,7 @@ class P2P_Connection_Type {
 		$direction = _p2p_compress_direction( $possible_directions );
 
 		if ( !$direction )
-			return false;
+			throw new P2P_Exception( "Can't determine direction." );
 
 		$directed = $this->set_direction( $direction );
 
@@ -419,7 +444,7 @@ class P2P_Connection_Type {
 		foreach ( $q->items as $item )
 			$raw_connected[] = $item->get_object();
 
-		p2p_distribute_connected( $items, $raw_connected, $prop_name );
+		return array( $raw_connected, $directed );
 	}
 
 	public function get_desc() {
