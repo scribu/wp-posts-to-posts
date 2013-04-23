@@ -46,6 +46,24 @@ class P2P_Query {
 		return $p2p_types;
 	}
 
+	private static function finalize_query_vars( $q, $directed, $item ) {
+		if ( $orderby_key = $directed->get_orderby_key() ) {
+			$q = wp_parse_args( $q, array(
+				'connected_orderby' => $orderby_key,
+				'connected_order' => 'ASC',
+				'connected_order_num' => true,
+			) );
+		}
+
+		$q = array_merge_recursive( $q, array(
+			'connected_meta' => $directed->data
+		) );
+
+		$q = $directed->get_final_qv( $q, 'opposite' );
+
+		return apply_filters( 'p2p_connected_args', $q, $directed, $item );
+	}
+
 	/**
 	 * Create instance from mixed query vars
 	 *
@@ -81,23 +99,7 @@ class P2P_Query {
 			return new WP_Error( 'no_direction', "Could not find direction(s)." );
 
 		if ( 1 == count( $p2p_types ) ) {
-			$directed = $p2p_types[0];
-
-			if ( $orderby_key = $directed->get_orderby_key() ) {
-				$q = wp_parse_args( $q, array(
-					'connected_orderby' => $orderby_key,
-					'connected_order' => 'ASC',
-					'connected_order_num' => true,
-				) );
-			}
-
-			$q = array_merge_recursive( $q, array(
-				'connected_meta' => $directed->data
-			) );
-
-			$q = $directed->get_final_qv( $q, 'opposite' );
-
-			$q = apply_filters( 'p2p_connected_args', $q, $directed, $item );
+			$q = self::finalize_query_vars( $q, $p2p_types[0], $item );
 		}
 
 		$p2p_q = new P2P_Query;
