@@ -5,16 +5,7 @@ class P2P_Query {
 	protected $ctypes, $items, $query, $meta;
 	protected $orderby, $order, $order_num;
 
-	/**
-	 * Create instance from mixed query vars
-	 *
-	 * @param array Query vars to collect parameters from
-	 * @return:
-	 * - null means ignore current query
-	 * - WP_Error instance if the query is invalid
-	 * - P2P_Query instance on success
-	 */
-	public static function create_from_qv( &$q, $object_type ) {
+	private static function expand_shortcuts( $q ) {
 		$shortcuts = array(
 			'connected' => 'any',
 			'connected_to' => 'to',
@@ -28,23 +19,10 @@ class P2P_Query {
 			}
 		}
 
-		if ( !isset( $q['connected_type'] ) ) {
-			if ( isset( $q['connected_items'] ) ) {
-				return new WP_Error( 'no_connection_type', "Queries without 'connected_type' are no longer supported." );
-			}
+		return $q;
+	}
 
-			return;
-		}
-
-		$ctypes = (array) _p2p_pluck( $q, 'connected_type' );
-
-		if ( isset( $q['connected_direction'] ) )
-			$directions = (array) _p2p_pluck( $q, 'connected_direction' );
-		else
-			$directions = array();
-
-		$item = isset( $q['connected_items'] ) ? $q['connected_items'] : 'any';
-
+	private static function expand_ctypes( $item, $directions, $object_type, $ctypes ) {
 		$p2p_types = array();
 
 		foreach ( $ctypes as $i => $p2p_type ) {
@@ -53,8 +31,8 @@ class P2P_Query {
 			if ( !$ctype )
 				continue;
 
-			if ( isset( $directions[$i] ) ) {
-				$directed = $ctype->set_direction( $directions[$i] );
+			if ( isset( $directions[ $i ] ) ) {
+				$directed = $ctype->set_direction( $directions[ $i ] );
 			} else {
 				$directed = $ctype->find_direction( $item, true, $object_type );
 			}
@@ -65,27 +43,63 @@ class P2P_Query {
 			$p2p_types[] = $directed;
 		}
 
+		return $p2p_types;
+	}
+
+	private static function finalize_query_vars( $q, $directed, $item ) {
+		if ( $orderby_key = $directed->get_orderby_key() ) {
+			$q = wp_parse_args( $q, array(
+				'connected_orderby' => $orderby_key,
+				'connected_order' => 'ASC',
+				'connected_order_num' => true,
+			) );
+		}
+
+		$q = array_merge_recursive( $q, array(
+			'connected_meta' => $directed->data
+		) );
+
+		$q = $directed->get_final_qv( $q, 'opposite' );
+
+		return apply_filters( 'p2p_connected_args', $q, $directed, $item );
+	}
+
+	/**
+	 * Create instance from mixed query vars; also returns the modified query vars.
+	 *
+	 * @param array Query vars to collect parameters from
+	 * @return:
+	 * - null means ignore current query
+	 * - WP_Error instance if the query is invalid
+	 * - array( P2P_Query, array )
+	 */
+	public static function create_from_qv( $q, $object_type ) {
+		$q = self::expand_shortcuts( $q );
+
+		if ( !isset( $q['connected_type'] ) ) {
+			if ( isset( $q['connected_items'] ) ) {
+				return new WP_Error( 'no_connection_type', "Queries without 'connected_type' are no longer supported." );
+			}
+
+			return;
+		}
+
+		if ( isset( $q['connected_direction'] ) )
+			$directions = (array) _p2p_pluck( $q, 'connected_direction' );
+		else
+			$directions = array();
+
+		$item = isset( $q['connected_items'] ) ? $q['connected_items'] : 'any';
+
+		$ctypes = (array) _p2p_pluck( $q, 'connected_type' );
+
+		$p2p_types = self::expand_ctypes( $item, $directions, $object_type, $ctypes );
+
 		if ( empty( $p2p_types ) )
 			return new WP_Error( 'no_direction', "Could not find direction(s)." );
 
 		if ( 1 == count( $p2p_types ) ) {
-			$directed = $p2p_types[0];
-
-			if ( $orderby_key = $directed->get_orderby_key() ) {
-				$q = wp_parse_args( $q, array(
-					'connected_orderby' => $orderby_key,
-					'connected_order' => 'ASC',
-					'connected_order_num' => true,
-				) );
-			}
-
-			$q = array_merge_recursive( $q, array(
-				'connected_meta' => $directed->data
-			) );
-
-			$q = $directed->get_final_qv( $q, 'opposite' );
-
-			$q = apply_filters( 'p2p_connected_args', $q, $directed, $item );
+			$q = self::finalize_query_vars( $q, $p2p_types[0], $item );
 		}
 
 		$p2p_q = new P2P_Query;
@@ -99,7 +113,7 @@ class P2P_Query {
 
 		$p2p_q->query = isset( $q['connected_query'] ) ? $q['connected_query'] : array();
 
-		return $p2p_q;
+		return array( $p2p_q, $q );
 	}
 
 	protected function __construct() {}

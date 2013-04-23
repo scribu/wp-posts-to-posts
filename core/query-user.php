@@ -9,17 +9,19 @@ class P2P_Query_User {
 	static function pre_user_query( $query ) {
 		global $wpdb;
 
-		$p2p_q = P2P_Query::create_from_qv( $query->query_vars, 'user' );
+		$r = P2P_Query::create_from_qv( $query->query_vars, 'user' );
 
-		if ( is_wp_error( $p2p_q ) ) {
-			trigger_error( $p2p_q->get_error_message(), E_USER_WARNING );
+		if ( is_wp_error( $r ) ) {
+			trigger_error( $r->get_error_message(), E_USER_WARNING );
 
 			$query->query_where = " AND 1=0";
 			return;
 		}
 
-		if ( null === $p2p_q )
+		if ( null === $r )
 			return;
+
+		list( $p2p_q, $query->query_vars ) = $r;
 
 		$map = array(
 			'fields' => 'query_fields',
