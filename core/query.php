@@ -5,16 +5,7 @@ class P2P_Query {
 	protected $ctypes, $items, $query, $meta;
 	protected $orderby, $order, $order_num;
 
-	/**
-	 * Create instance from mixed query vars
-	 *
-	 * @param array Query vars to collect parameters from
-	 * @return:
-	 * - null means ignore current query
-	 * - WP_Error instance if the query is invalid
-	 * - P2P_Query instance on success
-	 */
-	public static function create_from_qv( &$q, $object_type ) {
+	private static function expand_shortcuts( $q ) {
 		$shortcuts = array(
 			'connected' => 'any',
 			'connected_to' => 'to',
@@ -27,6 +18,21 @@ class P2P_Query {
 				$q['connected_direction'] = $direction;
 			}
 		}
+
+		return $q;
+	}
+
+	/**
+	 * Create instance from mixed query vars
+	 *
+	 * @param array Query vars to collect parameters from
+	 * @return:
+	 * - null means ignore current query
+	 * - WP_Error instance if the query is invalid
+	 * - P2P_Query instance on success
+	 */
+	public static function create_from_qv( &$q, $object_type ) {
+		$q = self::expand_shortcuts( $q );
 
 		if ( !isset( $q['connected_type'] ) ) {
 			if ( isset( $q['connected_items'] ) ) {
