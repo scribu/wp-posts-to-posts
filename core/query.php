@@ -22,6 +22,30 @@ class P2P_Query {
 		return $q;
 	}
 
+	private static function expand_ctypes( $item, $directions, $object_type, $ctypes ) {
+		$p2p_types = array();
+
+		foreach ( $ctypes as $i => $p2p_type ) {
+			$ctype = p2p_type( $p2p_type );
+
+			if ( !$ctype )
+				continue;
+
+			if ( isset( $directions[ $i ] ) ) {
+				$directed = $ctype->set_direction( $directions[ $i ] );
+			} else {
+				$directed = $ctype->find_direction( $item, true, $object_type );
+			}
+
+			if ( !$directed )
+				continue;
+
+			$p2p_types[] = $directed;
+		}
+
+		return $p2p_types;
+	}
+
 	/**
 	 * Create instance from mixed query vars
 	 *
@@ -42,8 +66,6 @@ class P2P_Query {
 			return;
 		}
 
-		$ctypes = (array) _p2p_pluck( $q, 'connected_type' );
-
 		if ( isset( $q['connected_direction'] ) )
 			$directions = (array) _p2p_pluck( $q, 'connected_direction' );
 		else
@@ -51,25 +73,9 @@ class P2P_Query {
 
 		$item = isset( $q['connected_items'] ) ? $q['connected_items'] : 'any';
 
-		$p2p_types = array();
+		$ctypes = (array) _p2p_pluck( $q, 'connected_type' );
 
-		foreach ( $ctypes as $i => $p2p_type ) {
-			$ctype = p2p_type( $p2p_type );
-
-			if ( !$ctype )
-				continue;
-
-			if ( isset( $directions[$i] ) ) {
-				$directed = $ctype->set_direction( $directions[$i] );
-			} else {
-				$directed = $ctype->find_direction( $item, true, $object_type );
-			}
-
-			if ( !$directed )
-				continue;
-
-			$p2p_types[] = $directed;
-		}
+		$p2p_types = self::expand_ctypes( $item, $directions, $object_type, $ctypes );
 
 		if ( empty( $p2p_types ) )
 			return new WP_Error( 'no_direction', "Could not find direction(s)." );
