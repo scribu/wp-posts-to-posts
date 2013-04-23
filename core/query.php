@@ -65,15 +65,15 @@ class P2P_Query {
 	}
 
 	/**
-	 * Create instance from mixed query vars
+	 * Create instance from mixed query vars; also returns the modified query vars.
 	 *
 	 * @param array Query vars to collect parameters from
 	 * @return:
 	 * - null means ignore current query
 	 * - WP_Error instance if the query is invalid
-	 * - P2P_Query instance on success
+	 * - array( P2P_Query, array )
 	 */
-	public static function create_from_qv( &$q, $object_type ) {
+	public static function create_from_qv( $q, $object_type ) {
 		$q = self::expand_shortcuts( $q );
 
 		if ( !isset( $q['connected_type'] ) ) {
@@ -113,7 +113,7 @@ class P2P_Query {
 
 		$p2p_q->query = isset( $q['connected_query'] ) ? $q['connected_query'] : array();
 
-		return $p2p_q;
+		return array( $p2p_q, $q );
 	}
 
 	protected function __construct() {}

@@ -10,19 +10,19 @@ class P2P_Query_Post {
 	}
 
 	static function parse_query( $wp_query ) {
-		$p2p_q = P2P_Query::create_from_qv( $wp_query->query_vars, 'post' );
+		$r = P2P_Query::create_from_qv( $wp_query->query_vars, 'post' );
 
-		if ( is_wp_error( $p2p_q ) ) {
-			trigger_error( $p2p_q->get_error_message(), E_USER_WARNING );
+		if ( is_wp_error( $r ) ) {
+			trigger_error( $r->get_error_message(), E_USER_WARNING );
 
 			$wp_query->set( 'year', 2525 );
 			return;
 		}
 
-		if ( null === $p2p_q )
+		if ( null === $r )
 			return;
 
-		$wp_query->_p2p_query = $p2p_q;
+		list( $wp_query->_p2p_query, $wp_query->query_vars ) = $r;
 
 		$wp_query->is_home = false;
 		$wp_query->is_archive = true;
