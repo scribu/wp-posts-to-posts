@@ -288,7 +288,7 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 			'connected_order' => 'desc',
 		);
 
-		$p2p_query = P2P_Query::create_from_qv( $qv, 'post' );
+		list( $p2p_query, $qv ) = P2P_Query::create_from_qv( $qv, 'post' );
 
 		// 'to_query_vars' should automatically be added
 		$this->assertEquals( 'publish', $qv['post_status'] );
