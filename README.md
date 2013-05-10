@@ -25,6 +25,12 @@ Additionally, you can create many-to-many relationships between posts and users.
 * multiple authors per post
 * etc.
 
+### Support & Maintenance
+
+I, scribu, will not be offering support (either free or paid) for this plugin anymore.
+
+If you want to help maintain the plugin, fork it [on github](https://github.com/scribu/wp-posts-to-posts) and open pull requests.
+
 Links: [**Documentation**](http://github.com/scribu/wp-posts-to-posts/wiki) | [Plugin News](http://scribu.net/wordpress/posts-to-posts) | [Author's Site](http://scribu.net)
 
 ## Installation
