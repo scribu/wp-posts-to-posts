@@ -51,6 +51,12 @@ Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-
 
 ## Changelog
 
+### 1.6
+* introduced `p2p_candidate_title` filter
+* introduced JavaScript API
+* added Japanese translation
+* various refactorings
+
 ### 1.5.2
 * fixed get_prev() and get_next()
 * introduced get_adjacent_items()
