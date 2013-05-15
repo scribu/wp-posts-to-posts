@@ -1,0 +1,156 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts 2 Posts\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
+"POT-Creation-Date: 2013-02-17 08:06:11+00:00\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Daniel Koskinen <daniel.koskinen@gmail.com>\n"
+"Language-Team: Daniel Koskinen <dani@dani.fi>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: Finnish\n"
+"X-Poedit-Country: FINLAND\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: admin/box.php:45
+msgid "Are you sure you want to delete all connections?"
+msgstr "Haluatko varmasti poistaa kaikki yhteydet?"
+
+#: admin/box.php:136
+msgid "Search"
+msgstr "Hae"
+
+#: admin/box.php:213
+msgid "previous"
+msgstr "edellinen"
+
+#: admin/box.php:214
+msgid "next"
+msgstr "seuraava"
+
+#: admin/box.php:215
+msgid "of"
+msgstr "/"
+
+#: admin/dropdown-user.php:32
+msgid "Filter"
+msgstr "Suodata"
+
+#: admin/factory.php:88
+msgid " (from)"
+msgstr " (lähde)"
+
+#: admin/factory.php:89
+msgid " (to)"
+msgstr " (kohde)"
+
+#: admin/field-delete.php:7
+msgid "Delete all connections"
+msgstr "Poista kaikki yhteydet"
+
+#: admin/field-delete.php:16
+msgid "Delete connection"
+msgstr "Poista yhteys"
+
+#: admin/tools-page.php:7
+msgid "Connection Types"
+msgstr "Yhteystyyppi"
+
+#: admin/tools-page.php:41
+msgid "<em>%s</em> is not a registered connection type."
+msgstr "<em>%s</em> ei ole rekisteröity yhteystyyppi."
+
+#: admin/tools-page.php:50
+msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
+msgstr "%1$s yhteyden tyyppi on vaihdettu. Alkuperäinen tyyppi: <em>%2$s</em>. Uusi tyyppi: <em>%3$s</em>."
+
+#: admin/tools-page.php:64
+msgid "Name"
+msgstr "Nimi"
+
+#: admin/tools-page.php:65
+msgid "Information"
+msgstr "Tiedot"
+
+#: admin/tools-page.php:66
+msgid "Connections"
+msgstr "Yhteydet"
+
+#: admin/tools-page.php:74
+msgid "No connection types registered."
+msgstr "Yhteystyyppejä ei ole rekisteröity"
+
+#: admin/tools-page.php:76
+msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
+msgstr "Katso <a href=\"%s\">wikistä</a> ohjeet yhteystyyppien rekisteröimiseen."
+
+#: admin/tools-page.php:93
+msgid "Convert to registered connection type:"
+msgstr "Vaihda rekisteröityyn yhteystyyppiin:"
+
+#: admin/tools-page.php:129
+msgid "Go"
+msgstr "OK"
+
+#: core/connection-type.php:102
+msgid "Create connections"
+msgstr "Lisää yhteys"
+
+#: core/connection-type.php:120
+msgid "Connected %s"
+msgstr "Liitetyt %s"
+
+#: core/side-user.php:16
+msgid "Users"
+msgstr "Käyttäjät"
+
+#: core/side-user.php:25
+msgid "User"
+msgstr "Käyttäjä"
+
+#: core/side-user.php:26
+msgid "Search Users"
+msgstr "Hae käyttäjiä"
+
+#: core/side-user.php:27
+msgid "No users found."
+msgstr "Käyttäjiä ei löytynyt"
+
+#: core/widget.php:16
+msgid "Posts 2 Posts"
+msgstr "Posts 2 Posts"
+
+#: core/widget.php:17
+msgid "A list of posts connected to the current post"
+msgstr "Tähän artikkeliin liitetyt sisällöt"
+
+#: core/widget.php:34
+msgid "Title:"
+msgstr "Otsikko:"
+
+#: core/widget.php:41
+msgid "Connection type:"
+msgstr "Yhteystyyppi:"
+
+#: core/widget.php:46
+msgid "Connection listing:"
+msgstr "Listan sisältö:"
+
+#: core/widget.php:52
+msgid "connected"
+msgstr "yhteydet"
+
+#: core/widget.php:53
+msgid "related"
+msgstr "rinnakkaiset"
+
+#: scb/AdminPage.php:227
+msgid "Settings <strong>saved</strong>."
+msgstr "Asetukset <strong>tallennettu</strong>."
+
+#: scb/AdminPage.php:466
+msgid "Settings"
+msgstr "Asetukset"
+
