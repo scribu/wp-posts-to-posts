@@ -1,0 +1,233 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts 2 Posts v1.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2013-05-17 22:15:56+0000\n"
+"Last-Translator: admin <risto.niinemets@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: Estonian\n"
+"X-Poedit-Country: ESTONIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: admin/box.php:45
+#@ posts-to-posts
+msgid "Are you sure you want to delete all connections?"
+msgstr "Kas oled kindel, et soovid kõik ühendused eemaldada?"
+
+#: admin/box.php:137
+#@ posts-to-posts
+msgid "Search"
+msgstr "Otsi"
+
+#: admin/box.php:224
+#@ posts-to-posts
+msgid "previous"
+msgstr "eelmine"
+
+#: admin/box.php:225
+#@ posts-to-posts
+msgid "next"
+msgstr "järgmine"
+
+#: admin/box.php:226
+#@ posts-to-posts
+msgid "of"
+msgstr ""
+
+#: admin/dropdown-user.php:32
+#@ posts-to-posts
+msgid "Filter"
+msgstr "Filtreeri"
+
+#: admin/factory.php:88
+#@ posts-to-posts
+msgid " (from)"
+msgstr "(algus)"
+
+#: admin/factory.php:89
+#@ posts-to-posts
+msgid " (to)"
+msgstr "(lõpp)"
+
+#: admin/field-delete.php:7
+#@ posts-to-posts
+msgid "Delete all connections"
+msgstr "Eemalda ühendused"
+
+#: admin/field-delete.php:16
+#@ posts-to-posts
+msgid "Delete connection"
+msgstr "Eemalda ühendus"
+
+#: admin/tools-page.php:7
+#@ posts-to-posts
+msgid "Connection Types"
+msgstr "Ühenduse tüübid"
+
+#: admin/tools-page.php:41
+#, php-format
+#@ posts-to-posts
+msgid "<em>%s</em> is not a registered connection type."
+msgstr "<em>%s</em> ei ole registreeritud ühenduse tüüp."
+
+#: admin/tools-page.php:50
+#, php-format
+#@ posts-to-posts
+msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
+msgstr "Muuda %1$s ühendused <em>%2$s</em> -> <em>%3$s</em>."
+
+#: admin/tools-page.php:64
+#@ posts-to-posts
+msgid "Name"
+msgstr "Nimetus"
+
+#: admin/tools-page.php:65
+#@ posts-to-posts
+msgid "Information"
+msgstr "Informatsioon"
+
+#: admin/tools-page.php:66
+#@ posts-to-posts
+msgid "Connections"
+msgstr "Ühenduste arv"
+
+#: admin/tools-page.php:74
+#@ posts-to-posts
+msgid "No connection types registered."
+msgstr "Ühenduse tüüpe ei ole registreeritud."
+
+#: admin/tools-page.php:76
+#, php-format
+#@ posts-to-posts
+msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
+msgstr "Uue ühenduse registreerimiseks vaata <a href=\"%s\">wikit</a>."
+
+#: admin/tools-page.php:93
+#@ posts-to-posts
+msgid "Convert to registered connection type:"
+msgstr "Muuda regisreeritud ühenduse tüübiks:"
+
+#: admin/tools-page.php:129
+#@ posts-to-posts
+msgid "Go"
+msgstr "Mine"
+
+#: core/connection-type.php:91
+#@ posts-to-posts
+msgid "Create connections"
+msgstr "Loo ühendus"
+
+#: core/connection-type.php:109
+#, php-format
+#@ posts-to-posts
+msgid "Connected %s"
+msgstr "Ühendused: %s"
+
+#: core/side-user.php:16
+#@ posts-to-posts
+msgid "Users"
+msgstr "Kasutajad"
+
+#: core/side-user.php:25
+#@ posts-to-posts
+msgid "User"
+msgstr "Kasutaja"
+
+#: core/side-user.php:26
+#@ posts-to-posts
+msgid "Search Users"
+msgstr "Otsi kasutajaid"
+
+#: core/side-user.php:27
+#@ posts-to-posts
+msgid "No users found."
+msgstr "Kasutajaid ei leitud."
+
+#. translators: plugin header field 'Name'
+#: core/widget.php:16
+#: posts-to-posts.php:0
+#@ posts-to-posts
+msgid "Posts 2 Posts"
+msgstr "Posts 2 Posts"
+
+#: core/widget.php:17
+#@ posts-to-posts
+msgid "A list of posts connected to the current post"
+msgstr "Nimekiri selle postituse külge ühendatud postitustest"
+
+#: core/widget.php:34
+#@ posts-to-posts
+msgid "Title:"
+msgstr "Pealkiri:"
+
+#: core/widget.php:41
+#@ posts-to-posts
+msgid "Connection type:"
+msgstr "Ühenduse tüüp:"
+
+#: core/widget.php:46
+#@ posts-to-posts
+msgid "Connection listing:"
+msgstr "Ühendused:"
+
+#: core/widget.php:52
+#@ posts-to-posts
+msgid "connected"
+msgstr "ühendatud"
+
+#: core/widget.php:53
+#@ posts-to-posts
+msgid "related"
+msgstr "seotud"
+
+#. translators: plugin header field 'PluginURI'
+#: posts-to-posts.php:0
+#@ posts-to-posts
+msgid "http://scribu.net/wordpress/posts-to-posts"
+msgstr "http://scribu.net/wordpress/posts-to-posts"
+
+#. translators: plugin header field 'Description'
+#: posts-to-posts.php:0
+#@ posts-to-posts
+msgid "Create many-to-many relationships between all types of posts."
+msgstr "Loo mitmeid ühendusi kõikide postituste tüüpide vahel."
+
+#. translators: plugin header field 'Author'
+#: posts-to-posts.php:0
+#@ posts-to-posts
+msgid "scribu"
+msgstr "scribu"
+
+#. translators: plugin header field 'AuthorURI'
+#: posts-to-posts.php:0
+#@ posts-to-posts
+msgid "http://scribu.net/"
+msgstr "http://scribu.net/"
+
+#. translators: plugin header field 'Version'
+#: posts-to-posts.php:0
+#@ posts-to-posts
+msgid "1.6"
+msgstr "1.6"
+
+#: scb/AdminPage.php:227
+#@ posts-to-posts
+msgid "Settings <strong>saved</strong>."
+msgstr "Seaded <strong>salvestatud</strong>."
+
+#: scb/AdminPage.php:466
+#@ posts-to-posts
+msgid "Settings"
+msgstr "Seaded"
+
