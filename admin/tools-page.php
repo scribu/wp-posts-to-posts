@@ -47,7 +47,7 @@ class P2P_Tools_Page extends scbAdminPage {
 			array( 'p2p_type' => $old_p2p_type )
 		);
 
-		$this->admin_msg( sprintf( __( 'Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>.' ),
+		$this->admin_msg( sprintf( __( 'Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>.', 'posts-to-posts' ),
 			number_format_i18n( $count ),
 			esc_html( $old_p2p_type ),
 			esc_html( $new_p2p_type )
