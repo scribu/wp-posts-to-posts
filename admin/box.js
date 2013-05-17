@@ -172,6 +172,7 @@
     },
     initialize: function(options) {
       this.spinner = options.spinner;
+      this.createButton = this.$('button');
       options.connections.on('delete', this.afterCandidatesRefreshed, this);
       options.connections.on('clear', this.afterCandidatesRefreshed, this);
       this.collection.on('sync', this.afterCandidatesRefreshed, this);
@@ -200,6 +201,7 @@
     handleReturn: function(ev) {
       if (ev.keyCode === ENTER_KEY) {
         ev.preventDefault();
+        jQuery(ev.target).parent().parent().find('.button').click();
       }
       return null;
     },
@@ -284,7 +286,7 @@
       this.createButton.addClass('inactive');
       req = this.collection.createItemAndConnect(title);
       req.done(function() {
-        _this.createInput.val('');
+        _this.createInput.val('').trigger('keyup');
         return _this.createButton.removeClass('inactive');
       });
       return null;
@@ -429,7 +431,7 @@
         duplicate_connections: $metabox.data('duplicate_connections')
       });
       createPostView = new CreatePostView({
-        el: $metabox.find('.p2p-tab-create-post'),
+        el: $metabox.find('.p2p-tab-search'),
         collection: connections
       });
       metaboxView = new MetaboxView({

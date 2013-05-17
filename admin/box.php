@@ -139,19 +139,6 @@ class P2P_Box {
 			'tab-content' => $tab_content
 		);
 
-		// "Create post" tab
-		if ( $this->can_create_post() ) {
-			$tab_content = P2P_Mustache::render( 'tab-create-post', array(
-				'title' => $this->labels->add_new_item
-			) );
-
-			$data['tabs'][] = array(
-				'tab-id' => 'create-post',
-				'tab-title' => $this->labels->new_item,
-				'tab-content' => $tab_content
-			);
-		}
-
 		$data['show-tab-headers'] = count( $data['tabs'] ) > 1 ? array(true) : false;
 
 		return $data;
@@ -202,7 +189,14 @@ class P2P_Box {
 		$candidate = $this->ctype->get_connectable( $current_post_id, $extra_qv, 'abstract' );
 
 		if ( empty( $candidate->items ) ) {
-			return html( 'div class="p2p-notice"', $this->labels->not_found );
+			if ( $this->can_create_post() ) {
+				// Show "Add New" button
+				return html( 'button class="button"', $this->labels->add_new_item );
+			}
+			else {
+				// Not found
+				return html( 'div class="p2p-notice"', $this->labels->not_found );
+			}
 		}
 
 		$data = array();
