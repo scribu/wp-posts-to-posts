@@ -58,8 +58,10 @@ Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-
 ## Changelog
 
 ### 1.6.1 (next)
-* added Estonian translation
-* added Finnish translation
+* fixed user column handling. props versusbassz
+* fixed PHP strict standards warnings. props meloniq
+* added Estonian translation. props RistoNiinemets
+* added Finnish translation. props danielck
 
 ### 1.6
 * introduced `p2p_candidate_title` filter
