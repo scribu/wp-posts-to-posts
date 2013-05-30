@@ -40,7 +40,7 @@ class P2P_Column_User extends P2P_Column {
 	}
 
 	function display_column( $content, $column, $item_id ) {
-		return parent::render_column( $column, $item_id );
+		return $content . parent::render_column( $column, $item_id );
 	}
 }
 
