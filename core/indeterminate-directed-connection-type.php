@@ -2,7 +2,7 @@
 
 class P2P_Indeterminate_Directed_Connection_Type extends P2P_Directed_Connection_Type {
 
-	protected function recognize( $arg ) {
+	protected function recognize( $arg, $unused = null ) {
 		foreach ( array( 'current', 'opposite' ) as $side ) {
 			$item = $this->get( $side, 'side' )->item_recognize( $arg );
 			if ( $item )
@@ -12,7 +12,7 @@ class P2P_Indeterminate_Directed_Connection_Type extends P2P_Directed_Connection
 		return false;
 	}
 
-	public function get_final_qv( $q ) {
+	public function get_final_qv( $q, $unused = null ) {
 		$side = $this->get( 'current', 'side' );
 
 		// the sides are of the same type, so just use one for translating

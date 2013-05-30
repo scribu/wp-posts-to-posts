@@ -8,8 +8,11 @@ class P2P_Widget extends scbWidget {
 		'title' => ''
 	);
 
-	static function init() {
-		parent::init( __CLASS__, false, 'p2p' );
+	static function init( $class = '', $file = false, $base = 'p2p' ) {
+		if ( empty( $class ) )
+			$class = __CLASS__;
+
+		parent::init( $class, $file, $base );
 	}
 
 	function __construct() {
