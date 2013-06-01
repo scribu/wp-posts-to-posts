@@ -318,7 +318,7 @@ class P2P_Connection_Type {
 	}
 
 	/**
-	 * Get the previous, next and parent items, in an ordered connection type.
+	 * Get the previous, next and parent items
 	 *
 	 * @param mixed The current item
 	 *
@@ -337,106 +337,135 @@ class P2P_Connection_Type {
 			'next' => false,
 		);
 
-		$r = $this->direction_from_item( $item );
-		if ( !$r )
-			return false;
+    $r = $this->direction_from_item( $item );
+    if (!$r )
+      return;
 
-		list( $direction, $item ) = $r;
+      list( $direction, $item ) = $r;
 
-		$connected_series = $this->set_direction( $direction )->get_connected( $item,
-			array(), 'abstract' )->items;
+      $connected_series = $this->set_direction( $direction )->get_connected( $item,
+          array(), 'abstract' )->items;
 
-		if ( empty( $connected_series ) )
-			return $r;
+      if ( empty( $connected_series ) )
+        return $r;
 
-		if ( count( $connected_series ) > 1 ) {
-			trigger_error( 'More than one connected parents found.', E_USER_WARNING );
-		}
+      if ( count( $connected_series ) > 1 ) {
+        trigger_error( 'More than one connected parents found.', E_USER_WARNING );
+      }
 
-		$parent = $connected_series[0];
+      $parent = $connected_series[0];
 
-		$result['parent'] = $parent->get_object();
-		$result['previous'] = $this->get_previous( $item->ID, $parent->ID );
-		$result['next'] = $this->get_next( $item, $parent );
+      $result['parent'] = $parent->get_object();
+      
+      /*
+      if connection is ordered...
+      $result['previous'] = $this->get_previous( $item->ID, $parent->ID );
+      $result['next'] = $this->get_next( $item, $parent );
+      */
+        
+      global $wpdb;
+      // select p2p_from from wp_p2p LEFT JOIN wp_posts ON wp_p2p.p2p_from = wp_posts.id WHERE p2p_type = 'posts_to_pages' AND p2p_to = '2' ORDER BY wp_posts.post_date DESC;
+      $relatives = $wpdb->get_results('SELECT p2p_from FROM '.$wpdb->p2p.' LEFT JOIN '.$wpdb->posts.' ON '.$wpdb->p2p.'.p2p_from = '.$wpdb->posts.'.id WHERE p2p_type = "' . $this->name . '" AND p2p_to = "' . $result['parent']->ID . '" ORDER BY '.$wpdb->posts.'.post_date DESC');
 
-		return $result;
-	}
+      $last2 = FALSE;
+      $last = FALSE;
+      $current = FALSE;
+      $i = 0;
+      $length = count ($relatives);
+      while ($i < $length AND $last != $item->ID)
+      {
+        if ($last) $last2 = $last;
+        $last = $current;
+        $current = $relatives[$i]->p2p_from;
+        $i++;
+      }
+      if ($last == $item->ID)
+      {
+        if ($last2) $result['previous'] = get_post($last2);
+        $result['next'] = get_post($current);
+      }
+      if ($current == $item->ID)
+      {
+        $result['previous'] = get_post($last);
+      }
+    return $result;
+  }
 
-	/**
-	 * Optimized inner query, after the outer query was executed.
-	 *
-	 * Populates each of the outer querie's $post objects with a 'connected' property, containing a list of connected posts
-	 *
-	 * @param object|array $items WP_Query instance or list of post objects
-	 * @param string|array $extra_qv Additional query vars for the inner query.
-	 * @param string $prop_name The name of the property used to store the list of connected items on each post object.
-	 */
-	public function each_connected( $items, $extra_qv = array(), $prop_name = 'connected' ) {
-		if ( is_a( $items, 'WP_Query' ) )
-			$items =& $items->posts;
+  /**
+   * Optimized inner query, after the outer query was executed.
+   *
+   * Populates each of the outer querie's $post objects with a 'connected' property, containing a list of connected posts
+   *
+   * @param object|array $items WP_Query instance or list of post objects
+   * @param string|array $extra_qv Additional query vars for the inner query.
+   * @param string $prop_name The name of the property used to store the list of connected items on each post object.
+   */
+  public function each_connected( $items, $extra_qv = array(), $prop_name = 'connected' ) {
+    if ( is_a( $items, 'WP_Query' ) )
+      $items =& $items->posts;
 
-		if ( empty( $items ) || !is_object( $items[0] ) )
-			return;
+    if ( empty( $items ) || !is_object( $items[0] ) )
+      return;
 
-		$post_types = array_unique( wp_list_pluck( $items, 'post_type' ) );
+    $post_types = array_unique( wp_list_pluck( $items, 'post_type' ) );
 
-		if ( count( $post_types ) > 1 ) {
-			$extra_qv['post_type'] = 'any';
-		}
+    if ( count( $post_types ) > 1 ) {
+      $extra_qv['post_type'] = 'any';
+    }
 
-		$possible_directions = array();
+    $possible_directions = array();
 
-		foreach ( array( 'from', 'to' ) as $direction ) {
-			$side = $this->side[ $direction ];
+    foreach ( array( 'from', 'to' ) as $direction ) {
+      $side = $this->side[ $direction ];
 
-			if ( 'post' == $side->get_object_type() ) {
-				foreach ( $post_types as $post_type ) {
-					if ( $side->recognize_post_type( $post_type ) ) {
-						$possible_directions[] = $direction;
-					}
-				}
-			}
-		}
+      if ( 'post' == $side->get_object_type() ) {
+        foreach ( $post_types as $post_type ) {
+          if ( $side->recognize_post_type( $post_type ) ) {
+            $possible_directions[] = $direction;
+          }
+        }
+      }
+    }
 
-		$direction = _p2p_compress_direction( $possible_directions );
+    $direction = _p2p_compress_direction( $possible_directions );
 
-		if ( !$direction )
-			return false;
+    if ( !$direction )
+      return false;
 
-		$directed = $this->set_direction( $direction );
+    $directed = $this->set_direction( $direction );
 
-		// ignore pagination
-		foreach ( array( 'showposts', 'posts_per_page', 'posts_per_archive_page' ) as $disabled_qv ) {
-			if ( isset( $extra_qv[ $disabled_qv ] ) ) {
-				trigger_error( "Can't use '$disabled_qv' in an inner query", E_USER_WARNING );
-			}
-		}
-		$extra_qv['nopaging'] = true;
+    // ignore pagination
+    foreach ( array( 'showposts', 'posts_per_page', 'posts_per_archive_page' ) as $disabled_qv ) {
+      if ( isset( $extra_qv[ $disabled_qv ] ) ) {
+        trigger_error( "Can't use '$disabled_qv' in an inner query", E_USER_WARNING );
+      }
+    }
+    $extra_qv['nopaging'] = true;
 
-		$q = $directed->get_connected( $items, $extra_qv, 'abstract' );
+    $q = $directed->get_connected( $items, $extra_qv, 'abstract' );
 
-		$raw_connected = array();
-		foreach ( $q->items as $item )
-			$raw_connected[] = $item->get_object();
+    $raw_connected = array();
+    foreach ( $q->items as $item )
+      $raw_connected[] = $item->get_object();
 
-		p2p_distribute_connected( $items, $raw_connected, $prop_name );
-	}
+    p2p_distribute_connected( $items, $raw_connected, $prop_name );
+  }
 
-	public function get_desc() {
-		$desc = array();
+  public function get_desc() {
+    $desc = array();
 
-		foreach ( array( 'from', 'to' ) as $key ) {
-			$desc[ $key ] = $this->side[ $key ]->get_desc();
-		}
+    foreach ( array( 'from', 'to' ) as $key ) {
+      $desc[ $key ] = $this->side[ $key ]->get_desc();
+    }
 
-		$label = sprintf( '%s %s %s', $desc['from'], $this->strategy->get_arrow(), $desc['to'] );
+    $label = sprintf( '%s %s %s', $desc['from'], $this->strategy->get_arrow(), $desc['to'] );
 
-		$title = $this->get_field( 'title', 'from' );
+    $title = $this->get_field( 'title', 'from' );
 
-		if ( $title )
-			$label .= " ($title)";
+    if ( $title )
+      $label .= " ($title)";
 
-		return $label;
-	}
+    return $label;
+  }
 }
 
