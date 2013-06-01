@@ -317,6 +317,16 @@ class P2P_Connection_Type {
 		return $item->get_object();
 	}
 
+  /**
+   * Default WP sort - by date DESC
+   **/
+  public static function default_sort($a, $b)
+  {
+    if ($a == $b)
+      return 0;
+    return (strtotime($a->post_date) > strtotime($b->post_date)) ? +1 : -1;
+  }
+
 	/**
 	 * Get the previous, next and parent items
 	 *
@@ -356,39 +366,47 @@ class P2P_Connection_Type {
       $parent = $connected_series[0];
 
       $result['parent'] = $parent->get_object();
-      
-      /*
-      if connection is ordered...
-      $result['previous'] = $this->get_previous( $item->ID, $parent->ID );
-      $result['next'] = $this->get_next( $item, $parent );
-      */
-        
-      global $wpdb;
-      // select p2p_from from wp_p2p LEFT JOIN wp_posts ON wp_p2p.p2p_from = wp_posts.id WHERE p2p_type = 'posts_to_pages' AND p2p_to = '2' ORDER BY wp_posts.post_date DESC;
-      $relatives = $wpdb->get_results('SELECT p2p_from FROM '.$wpdb->p2p.' LEFT JOIN '.$wpdb->posts.' ON '.$wpdb->p2p.'.p2p_from = '.$wpdb->posts.'.id WHERE p2p_type = "' . $this->name . '" AND p2p_to = "' . $result['parent']->ID . '" ORDER BY '.$wpdb->posts.'.post_date DESC');
 
-      $last2 = FALSE;
-      $last = FALSE;
-      $current = FALSE;
-      $i = 0;
-      $length = count ($relatives);
-      while ($i < $length AND $last != $item->ID)
+      $directed = $this->set_direction( $direction );
+
+      $key = $directed->get_orderby_key();
+      if ( $key )
       {
-        if ($last) $last2 = $last;
-        $last = $current;
-        $current = $relatives[$i]->p2p_from;
-        $i++;
+        $result['previous'] = $this->get_previous( $item->ID, $parent->ID );
+        $result['next'] = $this->get_next( $item, $parent );
       }
-      if ($last == $item->ID)
+      else  // connection is unsorted
       {
-        if ($last2) $result['previous'] = get_post($last2);
-        $result['next'] = get_post($current);
+        $relatives = $this->get_connected( $result['parent'],
+            array(), 'abstract' )->items;
+
+        // sort it by post_date DESC
+
+        usort($relatives, array('P2P_Connection_Type', 'default_sort'));
+
+        $last2 = FALSE;
+        $last = FALSE;
+        $current = FALSE;
+        $i = 0;
+        $length = count ($relatives);
+        while ($i < $length AND $last != $item->ID)
+        {
+          if ($last) $last2 = $last;
+          $last = $current;
+          $current = $relatives[$i]->ID;
+          $i++;
+        }
+        if ($last == $item->ID)
+        {
+          if ($last2) $result['previous'] = get_post($last2);
+          $result['next'] = get_post($current);
+        }
+        if ($current == $item->ID)
+        {
+          $result['previous'] = get_post($last);
+        }
       }
-      if ($current == $item->ID)
-      {
-        $result['previous'] = get_post($last);
-      }
-    return $result;
+      return $result;
   }
 
   /**
