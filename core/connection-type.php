@@ -317,16 +317,6 @@ class P2P_Connection_Type {
 		return $item->get_object();
 	}
 
-  /**
-   * Default WP sort - by date DESC
-   **/
-  public static function default_sort($a, $b)
-  {
-    if ($a == $b)
-      return 0;
-    return (strtotime($a->post_date) > strtotime($b->post_date)) ? +1 : -1;
-  }
-
 	/**
 	 * Get the previous, next and parent items
 	 *
@@ -381,8 +371,6 @@ class P2P_Connection_Type {
             array(), 'abstract' )->items;
 
         // sort it by post_date DESC
-
-        usort($relatives, array('P2P_Connection_Type', 'default_sort'));
 
         $last2 = FALSE;
         $last = FALSE;
