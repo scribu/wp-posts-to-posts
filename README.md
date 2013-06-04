@@ -57,6 +57,9 @@ Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-
 
 ## Changelog
 
+### 1.6.2 (next)
+* fixed URL query handling. props ntns
+
 ### 1.6.1
 * fixed user column handling. props versusbassz
 * fixed PHP strict standards warnings. props meloniq
