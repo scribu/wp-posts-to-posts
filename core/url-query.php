@@ -16,5 +16,3 @@ class P2P_URL_Query {
 	}
 }
 
-P2P_URL_Query::init();
-
