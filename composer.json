@@ -1,5 +1,14 @@
 {
-	"require-dev": {
-		"phpunit/phpunit": "3.7.x"
-	}
+    "name": "scribu/posts-to-posts",
+    "type": "wordpress-plugin",
+    "homepage": "http://wordpress.org/plugins/posts-to-posts",
+    "license": "GPL-2.0+",
+    "minimum-stability": "dev",
+    "require": {
+        "composer/installers": "~1.0",
+        "scribu/scb-framework": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.x"
+    }
 }

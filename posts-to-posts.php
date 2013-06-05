@@ -14,7 +14,10 @@ define( 'P2P_PLUGIN_VERSION', '1.6.1' );
 
 define( 'P2P_TEXTDOMAIN', 'posts-to-posts' );
 
-require_once dirname( __FILE__ ) . '/scb/load.php';
+$scb_loader = dirname( __FILE__ ) . '/vendor/scribu/scb-framework/load.php';
+if ( is_readable( $scb_loader ) )
+	require_once $scb_loader;
+unset( $scb_loader );
 
 function _p2p_load() {
 	load_plugin_textdomain( P2P_TEXTDOMAIN, '', basename( dirname( __FILE__ ) ) . '/lang' );
