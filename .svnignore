@@ -1,6 +1,6 @@
-mustache/examples
-mustache/test
-mustache/bin
+vendor/mustache/mustache/examples
+vendor/mustache/mustache/test
+vendor/mustache/mustache/bin
 
 admin/box.coffee
 
