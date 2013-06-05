@@ -1,3 +1,8 @@
+composer.lock
+
+vendor/bin
+vendor/composer
+vendor/autoload.php
 vendor/mustache/mustache/examples
 vendor/mustache/mustache/test
 vendor/mustache/mustache/bin
@@ -11,14 +16,5 @@ tests
 phpunit.xml
 .travis.yml
 
-vendor/bin
-vendor/composer
-vendor/phpunit
-vendor/symfony
-
-composer.json
-composer.lock
-
 docblox.dist.xml
 diagrams
-tags
