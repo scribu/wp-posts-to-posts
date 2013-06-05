@@ -11,7 +11,11 @@ tests
 phpunit.xml
 .travis.yml
 
-vendor
+vendor/bin
+vendor/composer
+vendor/phpunit
+vendor/symfony
+
 composer.json
 composer.lock
 
