@@ -59,15 +59,15 @@ class P2P_Connection_Type {
 		foreach ( $fields as &$field_args )
 		{
 			if ( !is_array( $field_args ) )
-			$field_args = array( 'title' => $field_args );
+				$field_args = array( 'title' => $field_args );
 
 			if ( !isset( $field_args['type'] ) )
 			{
-			$field_args['type'] = isset( $field_args['values'] ) ? 'select' : 'text';
+				$field_args['type'] = isset( $field_args['values'] ) ? 'select' : 'text';
 			}
 			elseif ( 'checkbox' == $field_args['type'] && !isset( $field_args['values'] ) )
 			{
-			$field_args['values'] = array( true => ' ' );
+				$field_args['values'] = array( true => ' ' );
 			}
 		}
 
@@ -82,7 +82,7 @@ class P2P_Connection_Type {
 
 		foreach ( $this->cardinality as $key => &$value ) {
 			if ( 'one' != $value )
-			$value = 'many';
+				$value = 'many';
 		}
 	}
 
@@ -140,7 +140,7 @@ class P2P_Connection_Type {
 	 */
 	public function set_direction( $direction, $instantiate = true ) {
 		if ( !in_array( $direction, array( 'from', 'to', 'any' ) ) )
-		return false;
+			return false;
 
 		if ( $instantiate ) {
 			$class = $this->strategy->get_directed_class();
@@ -161,18 +161,18 @@ class P2P_Connection_Type {
 	 * @return bool|object|string False on failure, P2P_Directed_Connection_Type instance or direction on success.
 	 */
 	public function find_direction( $arg, $instantiate = true, $object_type = null ) {
-	if ( $object_type ) {
-		$direction = $this->direction_from_object_type( $object_type );
-		if ( !$direction )
-		return false;
+		if ( $object_type ) {
+			$direction = $this->direction_from_object_type( $object_type );
+			if ( !$direction )
+				return false;
 
-		if ( in_array( $direction, array( 'from', 'to' ) ) )
-		return $this->set_direction( $direction, $instantiate );
+			if ( in_array( $direction, array( 'from', 'to' ) ) )
+				return $this->set_direction( $direction, $instantiate );
 		}
 
 		$r = $this->direction_from_item( $arg );
 		if ( !$r )
-		return false;
+			return false;
 
 		list( $direction, $item ) = $r;
 
@@ -181,7 +181,7 @@ class P2P_Connection_Type {
 
 	protected function direction_from_item( $arg ) {
 		if ( is_array( $arg ) )
-		$arg = reset( $arg );
+			$arg = reset( $arg );
 
 		foreach ( array( 'from', 'to' ) as $direction ) {
 			$item = $this->side[ $direction ]->item_recognize( $arg );
@@ -214,7 +214,7 @@ class P2P_Connection_Type {
 	public function direction_from_types( $object_type, $post_types = null ) {
 		foreach ( array( 'from', 'to' ) as $direction ) {
 			if ( !$this->_type_check( $direction, $object_type, $post_types ) )
-			continue;
+				continue;
 
 			return $this->strategy->choose_direction( $direction );
 		}
@@ -302,10 +302,10 @@ class P2P_Connection_Type {
 
 		$adjacent = $directed->get_connected( $to, array(
 			'connected_meta' => array(
-			array(
-				'key' => $key,
-				'value' => $order + $which
-			)
+				array(
+					'key' => $key,
+					'value' => $order + $which
+				)
 			)
 		), 'abstract' );
 
@@ -338,13 +338,13 @@ class P2P_Connection_Type {
 		);
 
 		$r = $this->direction_from_item( $item );
-		if (!$r )
+		if ( !$r )
 			return false;
 
 		list( $direction, $item ) = $r;
 
 		$connected_series = $this->set_direction( $direction )->get_connected( $item,
-				array(), 'abstract' )->items;
+			array(), 'abstract' )->items;
 
 		if ( empty( $connected_series ) )
 			return $r;
