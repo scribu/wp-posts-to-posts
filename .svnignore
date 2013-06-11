@@ -1,6 +1,11 @@
-mustache/examples
-mustache/test
-mustache/bin
+composer.lock
+
+vendor/bin
+vendor/composer
+vendor/autoload.php
+vendor/mustache/mustache/examples
+vendor/mustache/mustache/test
+vendor/mustache/mustache/bin
 
 admin/box.coffee
 
@@ -11,10 +16,5 @@ tests
 phpunit.xml
 .travis.yml
 
-vendor
-composer.json
-composer.lock
-
 docblox.dist.xml
 diagrams
-tags
