@@ -28,7 +28,7 @@ and edit the `admin/box.coffee` file. To compile it, run:
 coffee -c admin
 ```
 
-### Testing
+### Unit Tests
 
 If you want to add a new feature, please consider adding a new test for it as well.
 
@@ -53,7 +53,7 @@ Note that all data in the test DB will be _deleted_ once you run the tests.
 Step 4: Install PHPUnit via [Composer](https://getcomposer.org):
 
 ```bash
-composer install --dev
+php composer.phar install --dev
 ```
 
 Step 5: Run the tests:
