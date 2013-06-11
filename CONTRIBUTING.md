@@ -30,8 +30,34 @@ coffee -c admin
 
 ### Testing
 
-The plugin comes with a few unit tests.
+If you want to add a new feature, please consider adding a new test for it as well.
 
-1. Install [Composer](https://getcomposer.org).
-2. Run `composer install --dev`.
-3. Run `vendor/bin/phpunit`.
+The following instructions assume a UNIX-like environment (OS X, Linux, etc.).
+
+Step 1: Set un an environemt variable that defines the path to the test suite:
+
+```bash
+export WP_TESTS_DIR=/tmp/wordpress-tests/
+```
+
+This step will be needed each time you want to run the tests, so you might want to put it in your `.bashrc` file, to be executed automatically.
+
+Step 2: Install and configure the official WordPress testing suite:
+
+```bash
+./bin/install-wp-tests
+```
+
+Note that all data in the test DB will be _deleted_ once you run the tests.
+
+Step 4: Install PHPUnit via [Composer](https://getcomposer.org):
+
+```bash
+composer install --dev
+```
+
+Step 5: Run the tests:
+
+```bash
+./vendor/bin/phpunit
+```
