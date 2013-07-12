@@ -12,7 +12,7 @@ class P2P_Query_User {
 		$r = P2P_Query::create_from_qv( $query->query_vars, 'user' );
 
 		if ( is_wp_error( $r ) ) {
-			trigger_error( $r->get_error_message(), E_USER_WARNING );
+			$query->_p2p_error = $r;
 
 			$query->query_where = " AND 1=0";
 			return;
