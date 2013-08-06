@@ -4,6 +4,6 @@
 
 rm -rf /tmp/p2p-coverage
 
-phpunit --coverage-html /tmp/p2p-coverage
+vendor/bin/phpunit --coverage-html /tmp/p2p-coverage
 
 x-www-browser /tmp/p2p-coverage/index.html
