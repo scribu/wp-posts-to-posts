@@ -97,6 +97,9 @@ class P2P_Box_Factory extends P2P_Factory {
 
 				$connection = p2p_get_connection( $p2p_id );
 
+				if ( ! $connection )
+					continue;
+
 				$fields = p2p_type( $connection->p2p_type )->fields;
 
 				foreach ( $fields as $key => &$field ) {
