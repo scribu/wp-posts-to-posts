@@ -59,7 +59,8 @@ Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-
 
 ### 1.6.2 (next)
 * fixed URL query handling. props ntns
-* store WP_Error instance instead of calling trigger_error(). props MZAWeb
+* store `WP_Error` instance instead of calling `trigger_error()`. props MZAWeb
+* fixed warning when used with Multilingual Press. props dimadin
 
 ### 1.6.1
 * fixed user column handling. props versusbassz
