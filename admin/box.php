@@ -158,6 +158,8 @@ class P2P_Box {
 	}
 
 	protected function connection_row( $p2p_id, $item, $render = false ) {
+		$item->post_title = apply_filters( 'p2p_connection_title', $item->get_title(), $item->get_object(), $this->ctype );
+		
 		$data = array();
 
 		foreach ( $this->columns as $key => $field ) {
