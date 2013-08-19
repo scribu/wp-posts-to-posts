@@ -3,8 +3,8 @@
 Contributors: scribu, ciobi  
 Tags: connections, custom post types, relationships, many-to-many, users  
 Requires at least: 3.5  
-Tested up to: 3.5  
-Stable tag: 1.6.1
+Tested up to: 3.6  
+Stable tag: 1.6.2
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -57,10 +57,11 @@ Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-
 
 ## Changelog
 
-### 1.6.2 (next)
+### 1.6.2
 * fixed URL query handling. props ntns
 * store `WP_Error` instance instead of calling `trigger_error()`. props MZAWeb
 * fixed warning when used with Multilingual Press. props dimadin
+* introduced `p2p_connected_title` filter. props petitphp
 
 ### 1.6.1
 * fixed user column handling. props versusbassz
