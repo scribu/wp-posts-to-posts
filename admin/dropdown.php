@@ -18,7 +18,12 @@ abstract class P2P_Dropdown {
 		$direction = $this->ctype->flip_direction()->get_direction();
 		
 		$labels = $this->ctype->get( 'current', 'labels' );
-		$title = isset( $labels->dropdown_title ) ? $labels->dropdown_title : $this->title;
+		if ( isset( $labels->dropdown_title ) )
+			$title = $labels->dropdown_title;
+		elseif( isset( $labels->column_title ) )
+			$title = $labels->column_title;
+		else
+			$title = $this->title;
 
 		return scbForms::input( array(
 			'type' => 'select',
