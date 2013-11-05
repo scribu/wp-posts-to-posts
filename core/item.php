@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * A uniform wrapper for various types of WP objects, i.e. posts or users.
+ */
 abstract class P2P_Item {
 
 	protected $item;

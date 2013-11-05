@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * A dropdown above a list table in wp-admin
+ */
 abstract class P2P_Dropdown {
 
 	protected $ctype;

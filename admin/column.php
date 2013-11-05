@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * A column in a list table in wp-admin
+ */
 abstract class P2P_Column {
 
 	protected $ctype;

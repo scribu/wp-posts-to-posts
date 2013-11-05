@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * A metabox in wp-admin
+ */
 class P2P_Box {
 	private $ctype;
 
