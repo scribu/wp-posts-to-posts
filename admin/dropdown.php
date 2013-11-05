@@ -16,11 +16,12 @@ abstract class P2P_Dropdown {
 
 	protected function render_dropdown() {
 		$direction = $this->ctype->flip_direction()->get_direction();
-		
+
 		$labels = $this->ctype->get( 'current', 'labels' );
+
 		if ( isset( $labels->dropdown_title ) )
 			$title = $labels->dropdown_title;
-		elseif( isset( $labels->column_title ) )
+		elseif ( isset( $labels->column_title ) )
 			$title = $labels->column_title;
 		else
 			$title = $this->title;
