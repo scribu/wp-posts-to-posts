@@ -16,12 +16,20 @@ abstract class P2P_Dropdown {
 
 	protected function render_dropdown() {
 		$direction = $this->ctype->flip_direction()->get_direction();
+		
+		$labels = $this->ctype->get( 'current', 'labels' );
+		if ( isset( $labels->dropdown_title ) )
+			$title = $labels->dropdown_title;
+		elseif( isset( $labels->column_title ) )
+			$title = $labels->column_title;
+		else
+			$title = $this->title;
 
 		return scbForms::input( array(
 			'type' => 'select',
 			'name' => array( 'p2p', $this->ctype->name, $direction ),
 			'choices' => self::get_choices( $this->ctype ),
-			'text' => $this->title,
+			'text' => $title,
 		), $_GET );
 	}
 
