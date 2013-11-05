@@ -176,6 +176,7 @@ class P2P_Debug {
 			'data' => array( 'type' => 'doubles' ),
 			'sortable' => 'order',
 			'admin_column' => 'any',
+			'admin_dropdown' => 'any',
 			'can_create_post' => false,
 			'from_labels' => array(
 				'help' => 'The main actor this actor was doubling for.',
