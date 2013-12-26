@@ -93,10 +93,14 @@ class P2P_Directed_Connection_Type {
 	 */
 	public function get_related( $item, $extra_qv = array(), $output = 'raw' ) {
 		$extra_qv['fields'] = 'ids';
+		$extra_qv['p2p:per_page'] = -1;
 
 		$connected = $this->get_connected( $item, $extra_qv, 'abstract' );
 
-		$additional_qv = array( 'p2p:exclude' => _p2p_normalize( $item ) );
+		$additional_qv = array(
+			'p2p:exclude' => _p2p_normalize( $item ),
+			'p2p:per_page' => -1
+		);
 
 		return $this->flip_direction()->get_connected( $connected->items, $additional_qv, $output );
 	}
