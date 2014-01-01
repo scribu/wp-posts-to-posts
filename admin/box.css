@@ -83,7 +83,7 @@ td.p2p-col-create {
 	text-align: left;
 }
 
-.p2p-connections td input {
+.p2p-connections td input[type="text"] {
 	width: 100%;
 }
 
