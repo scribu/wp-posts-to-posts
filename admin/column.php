@@ -16,10 +16,6 @@ abstract class P2P_Column {
 			$this->ctype->get_direction(),
 			$this->ctype->name
 		);
-
-		$screen = get_current_screen();
-
-		add_filter( "manage_{$screen->id}_columns", array( $this, 'add_column' ) );
 	}
 
 	function add_column( $columns ) {

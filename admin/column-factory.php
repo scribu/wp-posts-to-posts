@@ -15,6 +15,9 @@ class P2P_Column_Factory extends P2P_Factory {
 		$class = 'P2P_Column_' . ucfirst( $object_type );
 		$column = new $class( $directed );
 
+		$screen = get_current_screen();
+
+		add_filter( "manage_{$screen->id}_columns", array( $column, 'add_column' ) );
 		add_action( 'admin_print_styles', array( $column, 'styles' ) );
 	}
 }
