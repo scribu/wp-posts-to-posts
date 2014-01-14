@@ -1,72 +1,153 @@
-# Translation of the WordPress plugin Posts 2 Posts 0.3 by scribu.
-# Copyright (C) 2010 scribu
-# This file is distributed under the same license as the Posts 2 Posts package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
-#
+# Copyright (C) 2013 
+# This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Posts 2 Posts 0.4\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-to-posts\n"
-"POT-Creation-Date: 2010-10-11 13:40+0300\n"
-"PO-Revision-Date: 2010-10-18 22:03-0500\n"
-"Last-Translator: \n"
-"Language-Team: wikichaves.com <info@wikichaves.com>\n"
-"Language: \n"
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
+"POT-Creation-Date: 2013-02-17 08:06:11+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Spanish\n"
-"X-Poedit-Country: ARGENTINA\n"
-"X-Poedit-Basepath: ..\n"
+"PO-Revision-Date: 2013-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Alejandro Schwartz <alejandro@alejandroschwartz.com>\n"
+"Language-Team: Español <LL@li.org>\n"
 
-#: scb/AdminPage.php:164
-msgid "Settings <strong>saved</strong>."
-msgstr "Preferencias <strong>guardado</strong>."
+#: admin/box.php:45
+msgid "Are you sure you want to delete all connections?"
+msgstr "¿Está seguro de que desea borrar todas las conexiones?"
 
-#: scb/AdminPage.php:176
-#: scb/AdminPage.php:186
-msgid "Save Changes"
-msgstr "Guardar Cambios"
-
-#: scb/AdminPage.php:368
-msgid "Settings"
-msgstr "Preferencias"
-
-#: ui/boxes.php:59
-msgid "No connections."
-msgstr "Sin conexiones."
-
-#: ui/boxes.php:71
+#: admin/box.php:136
 msgid "Search"
 msgstr "Buscar"
 
-#: ui/boxes.php:79
-msgid "Start typing the title of a post you want to connect and then click on to connect it."
-msgstr "Comenzar a escribir el título de la entrada a la que se quiera conectar y luego clickear para conectarla."
+#: admin/box.php:213
+msgid "previous"
+msgstr "anterior"
 
-#: ui/boxes.php:89
-msgid "Enter IDs of posts to connect, separated by commas."
-msgstr "Ingresar los IDs de las entradas a conectar, separadas por comas."
+#: admin/box.php:214
+msgid "next"
+msgstr "siguiente"
 
-#. Plugin Name of the plugin/theme
+#: admin/box.php:215
+msgid "of"
+msgstr "desactivado"
+
+#: admin/dropdown-user.php:32
+msgid "Filter"
+msgstr "Filtrar"
+
+#: admin/factory.php:88
+msgid " (from)"
+msgstr " (desde)"
+
+#: admin/factory.php:89
+msgid " (to)"
+msgstr " (hasta)"
+
+#: admin/field-delete.php:7
+msgid "Delete all connections"
+msgstr "Borrar todas las conexiones"
+
+#: admin/field-delete.php:16
+msgid "Delete connection"
+msgstr "Borrar conexión"
+
+#: admin/tools-page.php:7
+msgid "Connection Types"
+msgstr "Tipos de conexiones"
+
+#: admin/tools-page.php:41
+msgid "<em>%s</em> is not a registered connection type."
+msgstr "<em>%s</em> no es un tipo de conexión registrada."
+
+#: admin/tools-page.php:50
+msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
+msgstr "Se han convertido %1$s conexiones de <em>%2$s</em> a <em>%3$s</em>."
+
+#: admin/tools-page.php:64
+msgid "Name"
+msgstr "Nombre"
+
+#: admin/tools-page.php:65
+msgid "Information"
+msgstr "Información"
+
+#: admin/tools-page.php:66
+msgid "Connections"
+msgstr "Conexiones"
+
+#: admin/tools-page.php:74
+msgid "No connection types registered."
+msgstr "No hay ningún tipo de conexiones registradas"
+
+#: admin/tools-page.php:76
+msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
+msgstr "Para registrar un tipo de conexión, vea <a href=\"%s\">the wiki</a>."
+
+#: admin/tools-page.php:93
+msgid "Convert to registered connection type:"
+msgstr "Convertir a un tipo de conexión registrada:"
+
+#: admin/tools-page.php:129
+msgid "Go"
+msgstr "Ir"
+
+#: core/connection-type.php:102
+msgid "Create connections"
+msgstr "Crear conexiones"
+
+#: core/connection-type.php:120
+msgid "Connected %s"
+msgstr "Conexiones de %s"
+
+#: core/side-user.php:16
+msgid "Users"
+msgstr "Usuarios"
+
+#: core/side-user.php:25
+msgid "User"
+msgstr "Usuario"
+
+#: core/side-user.php:26
+msgid "Search Users"
+msgstr "Buscar usuarios"
+
+#: core/side-user.php:27
+msgid "No users found."
+msgstr "No se encontraron usuarios"
+
+#: core/widget.php:16
 msgid "Posts 2 Posts"
-msgstr ""
+msgstr "Posts 2 Posts"
 
-#. Plugin URI of the plugin/theme
-msgid "http://scribu.net/wordpress/posts-to-posts"
-msgstr ""
+#: core/widget.php:17
+msgid "A list of posts connected to the current post"
+msgstr "Una lista de los posts conectados al post actual"
 
-#. Description of the plugin/theme
-msgid "Create many-to-many relationships between all types of posts"
-msgstr ""
+#: core/widget.php:34
+msgid "Title:"
+msgstr "Título"
 
-#. Author of the plugin/theme
-msgid "scribu"
-msgstr ""
+#: core/widget.php:41
+msgid "Connection type:"
+msgstr "Tipo de conexión:"
 
-#. Author URI of the plugin/theme
-msgid "http://scribu.net/"
-msgstr ""
+#: core/widget.php:46
+msgid "Connection listing:"
+msgstr "Lista de conexiones:"
 
-#~ msgid "Connected"
-#~ msgstr "Conectat"
+#: core/widget.php:52
+msgid "connected"
+msgstr "Conectado"
+
+#: core/widget.php:53
+msgid "related"
+msgstr "relacionados"
+
+#: scb/AdminPage.php:227
+msgid "Settings <strong>saved</strong>."
+msgstr "Configuración <strong>guardada</strong>."
+
+#: scb/AdminPage.php:466
+msgid "Settings"
+msgstr "Configuración"
