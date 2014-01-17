@@ -1,0 +1,190 @@
+# Translation of the WordPress plugin Posts 2 Posts by scribu.
+# Copyright (C) 2012
+# This file is distributed under the same license as the Posts 2 Posts package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts 2 Posts\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
+"POT-Creation-Date: 2011-12-01 16:28:04+00:00\n"
+"PO-Revision-Date: 2014-01-09 13:46+0100\n"
+"Last-Translator: Borisa Djuraskovic <borisad@webhostinghub.com>\n"
+"Language-Team: \n"
+"Language: Serbian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+
+#: admin/box.php:38
+msgid "Are you sure you want to delete all connections?"
+msgstr "Da li ste sigurni da želite da izbrišete sve konekcije?"
+
+#: admin/box.php:114
+msgid "Search"
+msgstr "Pretraga"
+
+#: admin/box.php:191
+msgid "previous"
+msgstr "prethodno"
+
+#: admin/box.php:192
+msgid "next"
+msgstr "sledeće"
+
+#: admin/box.php:193
+msgid "of"
+msgstr "od"
+
+#: admin/box.php:236
+msgid "Can't create connection: %s"
+msgstr "Ne može se povezati sa: %s"
+
+#: admin/factory.php:30
+msgid " (from)"
+msgstr "(od)"
+
+#: admin/factory.php:31
+msgid " (to)"
+msgstr "(za)"
+
+#: admin/fields.php:30
+msgid "Delete all connections"
+msgstr "Obrisati sve konekcije"
+
+#: admin/fields.php:39
+msgid "Delete connection"
+msgstr "Obrisati konekciju"
+
+#: admin/tools.php:7
+msgid "Connection Types"
+msgstr "Tipovi konekcija"
+
+#: admin/tools.php:41
+#, php-format
+msgid "<em>%s</em> is not a registered connection type."
+msgstr "<em>%s</em>nije registrovan tip konekcije."
+
+#: admin/tools.php:50
+msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
+msgstr "Konvertovano %1$s konekcija od<em>%2$s</em>do<em>%3$s</em>."
+
+#: admin/tools.php:64
+msgid "Name"
+msgstr "Ime"
+
+#: admin/tools.php:65
+msgid "Information"
+msgstr "Informacija"
+
+#: admin/tools.php:66
+msgid "Connections"
+msgstr "Konekcije"
+
+#: admin/tools.php:74
+msgid "No connection types registered."
+msgstr "Nijedan tip konekcija nije registrovan."
+
+#: admin/tools.php:76
+#, php-format
+msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
+msgstr ""
+"Da biste registrovali tip konekcije, pogledajte<a href=\"%s\">the wiki</a>."
+
+#: admin/tools.php:93
+msgid "Convert to registered connection type:"
+msgstr "Konvertuj na registrovani tip konekcije:"
+
+#: admin/tools.php:129
+msgid "Go"
+msgstr "Kreni"
+
+#: core/widget.php:15
+msgid "Posts 2 Posts"
+msgstr "Posts 2 Posts"
+
+#: core/widget.php:16
+msgid "A list of posts connected to the current post"
+msgstr "Lista postova konektovanih sa trenutnim postom"
+
+#: core/extra.php:34
+msgid "Title:"
+msgstr "Naslov:"
+
+#: admin/box.php:115
+msgid "Create connections:"
+msgstr "Kreiraj konekcije:"
+
+#: core/type.php:79
+msgid "Create connections"
+msgstr "Kreiraj konekcije"
+
+#: admin/box.php:136
+msgid "View All"
+msgstr "Pregledaj sve"
+
+#: admin/fields.php:16
+msgid "Create connection"
+msgstr "Napraviti konekciju"
+
+#: scb/AdminPage.php:165
+msgid "Settings <strong>saved</strong>."
+msgstr "Postavke<strong> sačuvane</strong>."
+
+#: scb/AdminPage.php:178 scb/AdminPage.php:189
+msgid "Save Changes"
+msgstr "Sačuvaj promene"
+
+#: scb/AdminPage.php:350
+msgid "Settings"
+msgstr "Postavke"
+
+#: core/type.php:65
+msgid "Connected %s"
+msgstr "Konektovano  %s"
+
+#: core/widget.php:37
+msgid "Connection type:"
+msgstr "Tip konekcija:"
+
+#: core/widget.php:41
+msgid "Connection listing:"
+msgstr "Listing konekcija:"
+
+#: core/widget.php:47
+msgid "connected"
+msgstr "konektovano"
+
+#: core/widget.php:48
+msgid "related"
+msgstr "vezano za"
+
+#: core/widget.php:73
+msgid "Related %s"
+msgstr "Vezano za %s"
+
+#: core/storage.php:35
+msgid "Upgraded %d connections."
+msgstr "Upgrade-ovano %d konekcija"
+
+#: core/storage.php:38
+msgid ""
+"The Posts 2 Posts connections need to be upgraded. <a href=\"%s\">Proceed.</"
+"a>"
+msgstr ""
+" Posts 2 Posts konekcije treba da se upgrade-uju.<a href=\"%s\"> Nastavi.</a>"
+
+#: core/side.php:110
+msgid "Users"
+msgstr "Korisnici"
+
+#: core/side.php:115
+msgid "User"
+msgstr "Korisnik"
+
+#: core/side.php:116
+msgid "Search Users"
+msgstr "Pretraga korisnika"
+
+#: core/side.php:117
+msgid "No users found."
+msgstr "Nijedan korisnik nije pronadjen"

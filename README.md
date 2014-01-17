@@ -57,6 +57,9 @@ Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-
 
 ## Changelog
 
+### 1.6.3 (unreleased)
+* added Serbian translation. props Borisa Djuraskovic
+
 ### 1.6.2
 * fixed URL query handling. props ntns
 * store `WP_Error` instance instead of calling `trigger_error()`. props MZAWeb
