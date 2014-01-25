@@ -5,8 +5,10 @@ php:
     - 5.4
 
 env:
-    - WP_VERSION=latest
-    - WP_VERSION=3.8
+    - WP_VERSION=latest WP_MULTISITE=0
+    - WP_VERSION=latest WP_MULTISITE=1
+    - WP_VERSION=3.6.1 WP_MULTISITE=0
+    - WP_VERSION=3.6.1 WP_MULTISITE=1
 
 before_script:
     - bash bin/install-wp-tests.sh wordpress_test travis '' localhost $WP_VERSION 
