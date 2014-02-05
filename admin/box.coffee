@@ -148,6 +148,8 @@ CandidatesView = Backbone.View.extend {
 	initialize: (options) ->
 		@spinner = options.spinner
 
+		@createButton = @$('button')
+
 		options.connections.on('delete', @afterCandidatesRefreshed, this)
 		options.connections.on('clear', @afterCandidatesRefreshed, this)
 
@@ -178,6 +180,8 @@ CandidatesView = Backbone.View.extend {
 	handleReturn: (ev) ->
 		if ev.keyCode is ENTER_KEY
 			ev.preventDefault()
+
+			jQuery(ev.target).parent().parent().find('.button').click()
 
 		null
 
@@ -267,7 +271,7 @@ CreatePostView = Backbone.View.extend {
 		req = @collection.createItemAndConnect title
 
 		req.done =>
-			@createInput.val('')
+			@createInput.val('').trigger('keyup')
 
 			@createButton.removeClass('inactive')
 
@@ -421,7 +425,7 @@ jQuery ->
 		}
 
 		createPostView = new CreatePostView {
-			el: $metabox.find('.p2p-tab-create-post')
+			el: $metabox.find('.p2p-tab-search')
 			collection: connections
 		}
 
