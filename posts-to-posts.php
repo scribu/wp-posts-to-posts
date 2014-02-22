@@ -19,6 +19,7 @@ require_once dirname( __FILE__ ) . '/scb/load.php';
 function _p2p_load() {
 	load_plugin_textdomain( P2P_TEXTDOMAIN, '', basename( dirname( __FILE__ ) ) . '/lang' );
 
+	// Prevent activation issues if a bundled version of P2P core is already loaded.
 	if ( function_exists( 'p2p_register_connection_type' ) ) {
 		return;
 	}
