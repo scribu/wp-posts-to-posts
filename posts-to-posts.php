@@ -19,6 +19,10 @@ require_once dirname( __FILE__ ) . '/scb/load.php';
 function _p2p_load() {
 	load_plugin_textdomain( P2P_TEXTDOMAIN, '', basename( dirname( __FILE__ ) ) . '/lang' );
 
+	if ( function_exists( 'p2p_register_connection_type' ) ) {
+		return;
+	}
+
 	require_once dirname( __FILE__ ) . '/core/init.php';
 
 	register_uninstall_hook( __FILE__, array( 'P2P_Storage', 'uninstall' ) );
