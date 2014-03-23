@@ -14,8 +14,8 @@ abstract class P2P_Field_Title implements P2P_Field {
 
 	function render( $p2p_id, $item ) {
 		$data = array_merge( $this->get_data( $item ), array(
-			'title' => $item->get_title(),
-			'url' => $item->get_editlink(),
+			'title' => $item->title,
+			'url'   => $item->get_editlink(),
 		) );
 
 		return P2P_Mustache::render( 'column-title', $data );
