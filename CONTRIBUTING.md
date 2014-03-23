@@ -5,7 +5,7 @@ This guide is meant for developers wanting to work on the plugin code.
 Make a fork and clone it:
 
 ```
-git clone --recurse-submodules git@github.com:{YOUR GITHUB USERNAME}/wp-posts-to-posts.git posts-to-posts
+git clone --recursive git@github.com:{YOUR GITHUB USERNAME}/wp-posts-to-posts.git posts-to-posts
 ```
 
 You can now work on the PHP and CSS files. Please follow the [WordPress Coding Standards](http://make.wordpress.org/core/handbook/coding-standards/).
