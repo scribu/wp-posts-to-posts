@@ -193,7 +193,7 @@ CandidatesView = Backbone.View.extend {
 			if searchStr is @collection.get 's'
 				return
 
-			@spinner.insertAfter(@searchInput).show()
+			@spinner.insertAfter($searchInput).show()
 
 			@collection.save {
 				's': searchStr,

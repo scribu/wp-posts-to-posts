@@ -59,6 +59,7 @@ Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-
 
 ### 1.6.3 (unreleased)
 * added Serbian translation. props Borisa Djuraskovic
+* fixed spinner in admin box. props yamablam
 
 ### 1.6.2
 * fixed URL query handling. props ntns
