@@ -94,6 +94,7 @@
       'click td.p2p-col-delete .p2p-icon': 'delete'
     },
     initialize: function(options) {
+      this.options = options;
       this.maybe_make_sortable();
       this.collection.on('create', this.afterCreate, this);
       this.collection.on('clear', this.afterClear, this);
@@ -153,6 +154,7 @@
       'click td.p2p-col-create div': 'promote'
     },
     initialize: function(options) {
+      this.options = options;
       this.spinner = options.spinner;
       options.connections.on('delete', this.afterCandidatesRefreshed, this);
       options.connections.on('clear', this.afterCandidatesRefreshed, this);
@@ -233,6 +235,7 @@
       'keypress :text': 'handleReturn'
     },
     initialize: function(options) {
+      this.options = options;
       this.createButton = this.$('button');
       this.createInput = this.$(':text');
     },
@@ -268,6 +271,7 @@
       'click .wp-tab-bar li': 'setActiveTab'
     },
     initialize: function(options) {
+      this.options = options;
       this.spinner = options.spinner;
       this.initializedCandidates = false;
       options.connections.on('append', this.afterConnectionAppended, this);
