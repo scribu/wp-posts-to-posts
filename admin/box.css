@@ -13,8 +13,7 @@
 /* Tabs */
 
 .p2p-box .tabs-panel {
-	border-width: 1px;
-	border-style: solid;
+	border: 1px solid #DFDFDF;
 	display: none;
 	padding: 10px;
 }
