@@ -3,8 +3,8 @@
 Contributors: scribu, ciobi  
 Tags: connections, custom post types, relationships, many-to-many, users  
 Requires at least: 3.5  
-Tested up to: 3.8  
-Stable tag: 1.6.2  
+Tested up to: 3.9  
+Stable tag: 1.6.3  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -57,9 +57,13 @@ Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-
 
 ## Changelog
 
-### 1.6.3 (unreleased)
+### 1.6.3
 * added Serbian translation. props Borisa Djuraskovic
 * fixed spinner in admin box. props yamablam
+* fixed JavaScript error related to Backbone. props ericandrewlewis
+* made 'p2p_connected_title' filter work for users too. props MZAWeb
+* added support for 'dropdown_title' labels. props GaryJones
+* made `get_related()` consider all connected items
 
 ### 1.6.2
 * fixed URL query handling. props ntns
