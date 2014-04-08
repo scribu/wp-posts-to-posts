@@ -22,7 +22,9 @@ class P2P_Query_Post {
 		if ( null === $r )
 			return;
 
-		list( $wp_query->_p2p_query, $wp_query->query_vars ) = $r;
+		list( $wp_query->_p2p_query, $query_vars ) = $r;
+                
+                $wp_query->query_vars = array_merge( $wp_query->query_vars, $query_vars );
 
 		$wp_query->is_home = false;
 		$wp_query->is_archive = true;
