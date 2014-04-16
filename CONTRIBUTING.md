@@ -27,11 +27,11 @@ Note that all data in the test DB will be _deleted_ once you run the tests.
 Step 2: Install PHPUnit via [Composer](https://getcomposer.org):
 
 ```bash
-php composer.phar install --dev
+php composer.phar install
 ```
 
 Step 3: Run the tests:
 
 ```bash
-./vendor/bin/phpunit
+phpunit
 ```
