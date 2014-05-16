@@ -364,14 +364,23 @@ class P2P_Tests_Core extends WP_UnitTestCase {
 			'order' => 'ASC'
 		) );
 
-		$ctype->each_connected( $query );
+		$connected = $ctype->connected_many( $query );
+		if ( is_wp_error( $connected ) )
+			throw new Exception('WTF');
 
-		$this->assertEquals( $query->posts[0]->connected[0]->ID, $movie->ID );
-		$this->assertEquals( $query->posts[1]->connected[0]->p2p_id, $p2p_id_1 );
-		$this->assertEmpty( $query->posts[2]->connected );
+		var_dump( wp_list_pluck( $query->posts, 'ID' ) );
+		var_dump( $connected );
+
+		$connected_for_0 = $connected->_for( $query->posts[0] );
+		$connected_for_1 = $connected->_for( $query->posts[1] );
+		$connected_for_2 = $connected->_for( $query->posts[2] );
+
+		$this->assertEquals( $connected_for_0[0]->ID, $movie->ID );
+		$this->assertEquals( $connected_for_0[1]->p2p_id, $p2p_id_1 );
+		$this->assertEmpty( $connected_for_2 );
 
 		// Test that connected posts have real properties
-		$properties = get_object_vars( $query->posts[0]->connected[0] );
+		$properties = get_object_vars( $connected_for_0[0] );
 		$this->assertTrue( isset( $properties['post_type'] ) );
 	}
 
