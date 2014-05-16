@@ -318,7 +318,7 @@ class P2P_Connection_Type {
 	}
 
 	/**
-	 * Get the previous, next and parent items, in an ordered connection type.
+	 * Get the previous, next and parent items
 	 *
 	 * @param mixed The current item
 	 *
@@ -356,9 +356,44 @@ class P2P_Connection_Type {
 		$parent = $connected_series[0];
 
 		$result['parent'] = $parent->get_object();
-		$result['previous'] = $this->get_previous( $item->ID, $parent->ID );
-		$result['next'] = $this->get_next( $item, $parent );
 
+		$directed = $this->set_direction( $direction );
+
+		$key = $directed->get_orderby_key();
+		if ( $key )
+		{
+			$result['previous'] = $this->get_previous( $item->ID, $parent->ID );
+			$result['next'] = $this->get_next( $item, $parent );
+		}
+		else // connection is unsorted
+		{
+			$relatives = $this->get_connected( $result['parent'],
+				array( 'p2p:per_page' => -1 ), 'abstract' )->items;
+
+			// sort it by post_date DESC
+
+			$last2 = FALSE;
+			$last = FALSE;
+			$current = FALSE;
+			$i = 0;
+			$length = count ($relatives);
+			while ($i < $length AND $last != $item->ID)
+			{
+				if ($last) $last2 = $last;
+				$last = $current;
+				$current = $relatives[$i]->ID;
+				$i++;
+			}
+			if ($last == $item->ID)
+			{
+				if ($last2) $result['previous'] = get_post($last2);
+				$result['next'] = get_post($current);
+			}
+			if ($current == $item->ID)
+			{
+				$result['previous'] = get_post($last);
+			}
+		}
 		return $result;
 	}
 
