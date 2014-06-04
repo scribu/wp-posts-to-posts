@@ -21,10 +21,16 @@ class P2P_Column_Post extends P2P_Column {
 			'connected_type' => $this->ctype->name,
 			'connected_direction' => $this->ctype->flip_direction()->get_direction(),
 			'connected_items' => $item->get_id(),
-			'post_type' => get_current_screen()->post_type
+			'action' => 'edit'
 		);
 
-		return add_query_arg( $args, admin_url( 'edit.php' ) );
+		if($item instanceof P2P_Item_User) {
+			$args['user_id'] = $item->get_id();
+			return add_query_arg($args, admin_url('user-edit.php'));
+		} else {
+			$args['post'] = $item->get_id();
+			return add_query_arg( $args, admin_url( 'post.php' ) );
+		}
 	}
 
 	function display_column( $column, $item_id ) {
