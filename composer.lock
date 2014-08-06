@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "5d8c77528027ac431b6e446b80400181",
+    "hash": "dd58fca4238794bc1d6c9f164ae765db",
     "packages": [
         {
             "name": "composer/installers",
@@ -11,20 +12,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "df19b48f557987e0a9bddff0c12dde37d5bcb757"
+                "reference": "41cf781ed1271e25bf31b715416a349996aa2527"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/df19b48f557987e0a9bddff0c12dde37d5bcb757",
-                "reference": "df19b48f557987e0a9bddff0c12dde37d5bcb757",
+                "url": "https://api.github.com/repos/composer/installers/zipball/41cf781ed1271e25bf31b715416a349996aa2527",
+                "reference": "41cf781ed1271e25bf31b715416a349996aa2527",
                 "shasum": ""
             },
             "replace": {
+                "roundcube/plugin-installer": "*",
                 "shama/baton": "*"
             },
             "require-dev": {
                 "composer/composer": "1.0.*@dev",
-                "phpunit/phpunit": "3.7.*"
+                "phpunit/phpunit": "4.1.*"
             },
             "type": "composer-installer",
             "extra": {
@@ -46,21 +48,23 @@
                 {
                     "name": "Kyle Robinson Young",
                     "email": "kyle@dontkry.com",
-                    "homepage": "http://dontkry.com",
-                    "role": "Developer"
+                    "homepage": "https://github.com/shama"
                 }
             ],
             "description": "A multi-framework Composer library installer",
             "homepage": "http://composer.github.com/installers/",
             "keywords": [
                 "Craft",
+                "Dolibarr",
                 "Hurad",
                 "MODX Evo",
                 "OXID",
                 "WolfCMS",
                 "agl",
                 "annotatecms",
+                "bitrix",
                 "cakephp",
+                "chef",
                 "codeigniter",
                 "concrete5",
                 "croogo",
@@ -76,9 +80,12 @@
                 "mako",
                 "mediawiki",
                 "modulework",
+                "moodle",
                 "phpbb",
                 "piwik",
                 "ppi",
+                "puppet",
+                "roundcube",
                 "shopware",
                 "silverstripe",
                 "symfony",
@@ -87,7 +94,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2014-04-15 03:26:48"
+            "time": "2014-07-22 17:04:15"
         },
         {
             "name": "mustache/mustache",
@@ -132,6 +139,33 @@
             "time": "2013-04-25 15:23:30"
         },
         {
+            "name": "scribu/lib-posts-to-posts",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/scribu/wp-lib-posts-to-posts.git",
+                "reference": "8d5e24a006f1b105bd95ef9f4b13e60a84fecd33"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/scribu/wp-lib-posts-to-posts/zipball/8d5e24a006f1b105bd95ef9f4b13e60a84fecd33",
+                "reference": "8d5e24a006f1b105bd95ef9f4b13e60a84fecd33",
+                "shasum": ""
+            },
+            "require": {
+                "scribu/scb-framework": "dev-master"
+            },
+            "type": "library",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "homepage": "https://github.com/scribu/wp-lib-posts-to-posts",
+            "support": {
+                "source": "https://github.com/scribu/wp-lib-posts-to-posts/tree/master"
+            },
+            "time": "2014-08-06 16:45:51"
+        },
+        {
             "name": "scribu/scb-framework",
             "version": "dev-master",
             "source": {
@@ -173,20 +207,13 @@
             "time": "2014-01-23 13:57:58"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "scribu/scb-framework": 20
+        "scribu/lib-posts-to-posts": 20
     },
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "prefer-stable": false,
+    "platform": [],
+    "platform-dev": []
 }
