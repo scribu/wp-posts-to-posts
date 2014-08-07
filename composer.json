@@ -6,7 +6,13 @@
     "minimum-stability": "dev",
     "require": {
         "composer/installers": "~1.0",
-        "scribu/scb-framework": "dev-master",
+        "scribu/lib-posts-to-posts": "dev-master",
         "mustache/mustache": "2.3.x"
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/scribu/wp-lib-posts-to-posts"
+        }
+    ]
 }
