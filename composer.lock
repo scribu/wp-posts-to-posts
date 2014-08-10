@@ -147,18 +147,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scribu/wp-lib-posts-to-posts.git",
-                "reference": "ed16b277b5b1a03e4570eab196682d0d41bed535"
+                "reference": "f6bafd5c4d93af0197f5690574cfe3c073b2f938"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scribu/wp-lib-posts-to-posts/zipball/ed16b277b5b1a03e4570eab196682d0d41bed535",
-                "reference": "ed16b277b5b1a03e4570eab196682d0d41bed535",
+                "url": "https://api.github.com/repos/scribu/wp-lib-posts-to-posts/zipball/f6bafd5c4d93af0197f5690574cfe3c073b2f938",
+                "reference": "f6bafd5c4d93af0197f5690574cfe3c073b2f938",
                 "shasum": ""
             },
             "require": {
                 "scribu/scb-framework": "dev-master"
             },
             "type": "library",
+            "autoload": {
+                "files": [
+                    "autoload.php"
+                ]
+            },
             "license": [
                 "GPL-2.0+"
             ],
@@ -167,7 +172,7 @@
             "support": {
                 "source": "https://github.com/scribu/wp-lib-posts-to-posts/tree/master"
             },
-            "time": "2014-08-10 15:04:50"
+            "time": "2014-08-10 18:54:49"
         },
         {
             "name": "scribu/scb-framework",
