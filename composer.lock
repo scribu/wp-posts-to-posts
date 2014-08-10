@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dd58fca4238794bc1d6c9f164ae765db",
+    "hash": "8f74c4809c15b7242bbc0af3abd9be8c",
     "packages": [
         {
             "name": "composer/installers",
@@ -98,20 +98,23 @@
         },
         {
             "name": "mustache/mustache",
-            "version": "v2.3.1",
+            "version": "v2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/mustache.php.git",
-                "reference": "v2.3.1"
+                "reference": "1430ca884912eaba2b3830856b45685733b16789"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/v2.3.1",
-                "reference": "v2.3.1",
+                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/1430ca884912eaba2b3830856b45685733b16789",
+                "reference": "1430ca884912eaba2b3830856b45685733b16789",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
             },
             "type": "library",
             "autoload": {
@@ -127,7 +130,7 @@
                 {
                     "name": "Justin Hileman",
                     "email": "justin@justinhileman.info",
-                    "homepage": "http://justinhileman.com/"
+                    "homepage": "http://justinhileman.com"
                 }
             ],
             "description": "A Mustache implementation in PHP.",
@@ -136,7 +139,7 @@
                 "mustache",
                 "templating"
             ],
-            "time": "2013-04-25 15:23:30"
+            "time": "2014-06-20 19:34:49"
         },
         {
             "name": "scribu/lib-posts-to-posts",
@@ -144,12 +147,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scribu/wp-lib-posts-to-posts.git",
-                "reference": "8d5e24a006f1b105bd95ef9f4b13e60a84fecd33"
+                "reference": "ed16b277b5b1a03e4570eab196682d0d41bed535"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scribu/wp-lib-posts-to-posts/zipball/8d5e24a006f1b105bd95ef9f4b13e60a84fecd33",
-                "reference": "8d5e24a006f1b105bd95ef9f4b13e60a84fecd33",
+                "url": "https://api.github.com/repos/scribu/wp-lib-posts-to-posts/zipball/ed16b277b5b1a03e4570eab196682d0d41bed535",
+                "reference": "ed16b277b5b1a03e4570eab196682d0d41bed535",
                 "shasum": ""
             },
             "require": {
@@ -159,11 +162,12 @@
             "license": [
                 "GPL-2.0+"
             ],
+            "description": "A library for many-to-many relationships in WordPress",
             "homepage": "https://github.com/scribu/wp-lib-posts-to-posts",
             "support": {
                 "source": "https://github.com/scribu/wp-lib-posts-to-posts/tree/master"
             },
-            "time": "2014-08-06 16:45:51"
+            "time": "2014-08-10 15:04:50"
         },
         {
             "name": "scribu/scb-framework",

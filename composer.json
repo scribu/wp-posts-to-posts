@@ -7,7 +7,7 @@
     "require": {
         "composer/installers": "~1.0",
         "scribu/lib-posts-to-posts": "dev-master",
-        "mustache/mustache": "2.3.x"
+        "mustache/mustache": "~2.6"
     },
     "repositories": [
         {
