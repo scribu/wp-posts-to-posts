@@ -54,7 +54,7 @@ class P2P_Connection_Type_Factory {
 	private static function create_side( &$args, $direction ) {
 		$object = _p2p_pluck( $args, $direction );
 
-		if ( in_array( $object, array( 'user', 'attachment' ) ) )
+		if ( in_array( $object, array( 'user', 'attachment', 'bpgroup' ) ) )
 			$object_type = $object;
 		else
 			$object_type = 'post';
