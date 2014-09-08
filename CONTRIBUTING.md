@@ -2,19 +2,21 @@ This guide is meant for developers wanting to work on the plugin code.
 
 ### Setup
 
-Make a fork and clone it:
+Step 1: Make a fork and clone it:
 
 ```
 git clone git@github.com:{YOUR GITHUB USERNAME}/wp-posts-to-posts.git posts-to-posts
 ```
 
-Install the dependencies via [Composer](https://getcomposer.org):
+Step 2: Install the dependencies via [Composer](https://getcomposer.org):
 
 ```bash
 php composer.phar install
 ```
 
 You can now work on the PHP and CSS files. Please follow the [WordPress Coding Standards](http://make.wordpress.org/core/handbook/coding-standards/).
+
+Step 3: Open a pull request.
 
 ### Unit Tests
 
