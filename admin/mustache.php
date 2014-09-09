@@ -5,25 +5,20 @@
  */
 abstract class P2P_Mustache {
 
-	private static $loader;
 	private static $mustache;
 
 	public static function init() {
-		if ( !class_exists( 'Mustache' ) )
-			require dirname(__FILE__) . '/../mustache/Mustache.php';
+		$loader = new Mustache_Loader_FilesystemLoader(
+			dirname(__FILE__) . '/templates', array( 'extension' => 'html' ) );
 
-		if ( !class_exists( 'MustacheLoader' ) )
-			require dirname(__FILE__) . '/../mustache/MustacheLoader.php';
-
-		self::$loader = new MustacheLoader( dirname(__FILE__) . '/templates', 'html' );
-
-		self::$mustache = new Mustache( null, null, self::$loader );
+		self::$mustache = new Mustache_Engine( array(
+			'loader' => $loader,
+			'partials_loader' => $loader
+		) );
 	}
 
 	public static function render( $template, $data ) {
-		return self::$mustache->render( self::$loader[$template], $data );
+		return self::$mustache->render( $template, $data );
 	}
 }
-
-P2P_Mustache::init();
 

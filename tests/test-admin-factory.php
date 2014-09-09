@@ -10,6 +10,7 @@ class P2P_Tests_Admin_Factory extends WP_UnitTestCase {
 
 	function setUp() {
 		$this->mock = new P2P_Factory_Mock;
+		parent::setUp();
 	}
 
 	function test_factory_none() {

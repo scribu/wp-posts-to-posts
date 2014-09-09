@@ -2,13 +2,21 @@ This guide is meant for developers wanting to work on the plugin code.
 
 ### Setup
 
-Make a fork and clone it:
+Step 1: Make a fork and clone it:
 
 ```
-git clone --recursive git@github.com:{YOUR GITHUB USERNAME}/wp-posts-to-posts.git posts-to-posts
+git clone git@github.com:{YOUR GITHUB USERNAME}/wp-posts-to-posts.git posts-to-posts
+```
+
+Step 2: Install the dependencies via [Composer](https://getcomposer.org):
+
+```bash
+php composer.phar install
 ```
 
 You can now work on the PHP and CSS files. Please follow the [WordPress Coding Standards](http://make.wordpress.org/core/handbook/coding-standards/).
+
+Step 3: Open a pull request.
 
 ### Unit Tests
 
@@ -24,14 +32,8 @@ Step 1: Install and configure the official WordPress testing suite:
 
 Note that all data in the test DB will be _deleted_ once you run the tests.
 
-Step 2: Install PHPUnit via [Composer](https://getcomposer.org):
+Step 2: Run the tests:
 
 ```bash
-php composer.phar install --dev
-```
-
-Step 3: Run the tests:
-
-```bash
-./vendor/bin/phpunit
+phpunit
 ```

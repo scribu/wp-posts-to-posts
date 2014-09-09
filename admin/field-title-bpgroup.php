@@ -7,11 +7,7 @@ class P2P_Field_Title_Bpgroup extends P2P_Field_Title {
 			'title-attr' => $item->get_permalink()
 		);
 
-		$group = $item->get_object();
-
-		if ( $group ) {
-			$data['status']['text'] = __(ucwords($group->status),'clariner');
-		}
+		$data['status']['text'] = __(ucwords($item->status),'clariner');
 
 		return $data;
 	}

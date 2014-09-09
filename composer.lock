@@ -1,0 +1,228 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "8f74c4809c15b7242bbc0af3abd9be8c",
+    "packages": [
+        {
+            "name": "composer/installers",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/installers.git",
+                "reference": "41cf781ed1271e25bf31b715416a349996aa2527"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/installers/zipball/41cf781ed1271e25bf31b715416a349996aa2527",
+                "reference": "41cf781ed1271e25bf31b715416a349996aa2527",
+                "shasum": ""
+            },
+            "replace": {
+                "roundcube/plugin-installer": "*",
+                "shama/baton": "*"
+            },
+            "require-dev": {
+                "composer/composer": "1.0.*@dev",
+                "phpunit/phpunit": "4.1.*"
+            },
+            "type": "composer-installer",
+            "extra": {
+                "class": "Composer\\Installers\\Installer",
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Composer\\Installers\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kyle Robinson Young",
+                    "email": "kyle@dontkry.com",
+                    "homepage": "https://github.com/shama"
+                }
+            ],
+            "description": "A multi-framework Composer library installer",
+            "homepage": "http://composer.github.com/installers/",
+            "keywords": [
+                "Craft",
+                "Dolibarr",
+                "Hurad",
+                "MODX Evo",
+                "OXID",
+                "WolfCMS",
+                "agl",
+                "annotatecms",
+                "bitrix",
+                "cakephp",
+                "chef",
+                "codeigniter",
+                "concrete5",
+                "croogo",
+                "drupal",
+                "elgg",
+                "fuelphp",
+                "installer",
+                "joomla",
+                "kohana",
+                "laravel",
+                "lithium",
+                "magento",
+                "mako",
+                "mediawiki",
+                "modulework",
+                "moodle",
+                "phpbb",
+                "piwik",
+                "ppi",
+                "puppet",
+                "roundcube",
+                "shopware",
+                "silverstripe",
+                "symfony",
+                "typo3",
+                "wordpress",
+                "zend",
+                "zikula"
+            ],
+            "time": "2014-07-22 17:04:15"
+        },
+        {
+            "name": "mustache/mustache",
+            "version": "v2.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bobthecow/mustache.php.git",
+                "reference": "1430ca884912eaba2b3830856b45685733b16789"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/1430ca884912eaba2b3830856b45685733b16789",
+                "reference": "1430ca884912eaba2b3830856b45685733b16789",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Mustache": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Justin Hileman",
+                    "email": "justin@justinhileman.info",
+                    "homepage": "http://justinhileman.com"
+                }
+            ],
+            "description": "A Mustache implementation in PHP.",
+            "homepage": "https://github.com/bobthecow/mustache.php",
+            "keywords": [
+                "mustache",
+                "templating"
+            ],
+            "time": "2014-06-20 19:34:49"
+        },
+        {
+            "name": "scribu/lib-posts-to-posts",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/scribu/wp-lib-posts-to-posts.git",
+                "reference": "f6bafd5c4d93af0197f5690574cfe3c073b2f938"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/scribu/wp-lib-posts-to-posts/zipball/f6bafd5c4d93af0197f5690574cfe3c073b2f938",
+                "reference": "f6bafd5c4d93af0197f5690574cfe3c073b2f938",
+                "shasum": ""
+            },
+            "require": {
+                "scribu/scb-framework": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "autoload.php"
+                ]
+            },
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "A library for many-to-many relationships in WordPress",
+            "homepage": "https://github.com/scribu/wp-lib-posts-to-posts",
+            "support": {
+                "source": "https://github.com/scribu/wp-lib-posts-to-posts/tree/master"
+            },
+            "time": "2014-08-10 18:54:49"
+        },
+        {
+            "name": "scribu/scb-framework",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/scribu/wp-scb-framework.git",
+                "reference": "6ea9861db28fcd3722c1a726446ecf60f048409c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/scribu/wp-scb-framework/zipball/6ea9861db28fcd3722c1a726446ecf60f048409c",
+                "reference": "6ea9861db28fcd3722c1a726446ecf60f048409c",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "."
+                ],
+                "files": [
+                    "load-composer.php",
+                    "Util.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Cristi Burcă",
+                    "homepage": "http://scribu.net/"
+                }
+            ],
+            "description": "A set of useful classes for faster plugin development",
+            "homepage": "https://github.com/scribu/wp-scb-framework",
+            "keywords": [
+                "wordpress"
+            ],
+            "time": "2014-01-23 13:57:58"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "scribu/lib-posts-to-posts": 20
+    },
+    "prefer-stable": false,
+    "platform": [],
+    "platform-dev": []
+}
