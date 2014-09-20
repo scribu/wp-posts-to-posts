@@ -5,9 +5,9 @@ class P2P_Dropdown_Bpgroup extends P2P_Dropdown {
 	function __construct( $directed, $title ) {
 		parent::__construct( $directed, $title );
 
-		add_action( 'request', array( __CLASS__, 'massage_query' ), 9 );
+		add_action( 'pre_bpgroup_query', array( __CLASS__, 'massage_query' ), 9 );
 
-		add_action( 'restrict_manage_bpgroups', array( $this, 'show_dropdown' ) );
+		add_action( 'restrict_manage_bpgroup', array( $this, 'show_dropdown' ) );
 	}
 
 	static function massage_query( $query ) {
@@ -34,4 +34,5 @@ class P2P_Dropdown_Bpgroup extends P2P_Dropdown {
 		);
 	}
 }
+
 

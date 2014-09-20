@@ -25,6 +25,7 @@ function _p2p_load() {
 
 	P2P_Query_Post::init();
 	P2P_Query_User::init();
+	P2P_Query_Bpgroup::init();
 
 	P2P_URL_Query::init();
 
