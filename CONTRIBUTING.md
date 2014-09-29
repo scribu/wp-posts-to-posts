@@ -16,6 +16,8 @@ php composer.phar install
 
 You can now work on the PHP and CSS files. Please follow the [WordPress Coding Standards](http://make.wordpress.org/core/handbook/coding-standards/).
 
+**Note:** This repository only contains the admin UI; the core functionality is in [lib-posts-to-posts](https://github.com/scribu/wp-lib-posts-to-posts).
+
 Step 3: Open a pull request.
 
 ### Unit Tests
