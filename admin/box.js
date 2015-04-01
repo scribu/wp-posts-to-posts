@@ -56,7 +56,7 @@
   Connections = Backbone.Collection.extend({
     model: Connection,
 
-    // Creates both a candidate item and a connection
+    // Create both a candidate item and a connection
     createItemAndConnect: function(title) {
       var data, _this = this;
       data = {
@@ -68,7 +68,7 @@
       });
     },
 
-    // Creates a connection from a candidate
+    // Create a connection from a candidate
     create: function(candidate) {
       var data, _this = this;
       data = {
@@ -79,6 +79,8 @@
         _this.trigger('create', response);
       });
     },
+
+    // Delete a connection
     "delete": function(connection) {
       var data, _this = this;
       data = {
