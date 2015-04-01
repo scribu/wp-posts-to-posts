@@ -20,11 +20,16 @@
     return jQuery('#p2p-template-' + name).html();
   };
 
+  // Class for representing a single connection candidate
   Candidate = Backbone.Model.extend({});
 
+  // Class for representing a single connection
   Connection = Backbone.Model.extend({});
 
+  // Class for holding search parameters; not really a model
   Candidates = Backbone.Model.extend({
+    
+    // (Re)perform a search with the current parameters
     sync: function() {
       var params, _this = this;
       params = {
@@ -36,6 +41,8 @@
         _this.trigger('sync', response);
       });
     },
+
+    // Validation function, called by Backbone when parameters are changed
     validate: function(attrs) {
       var _ref = attrs.paged;
       if (0 < _ref && _ref <= this.total_pages) {
@@ -45,8 +52,11 @@
     }
   });
 
+  // Class for holding a list of connections
   Connections = Backbone.Collection.extend({
     model: Connection,
+
+    // Creates both a candidate item and a connection
     createItemAndConnect: function(title) {
       var data, _this = this;
       data = {
@@ -57,6 +67,8 @@
         _this.trigger('create', response);
       });
     },
+
+    // Creates a connection from a candidate
     create: function(candidate) {
       var data, _this = this;
       data = {
@@ -77,6 +89,8 @@
         _this.trigger('delete', response, connection);
       });
     },
+
+    // Delete all connections
     clear: function() {
       var data, _this = this;
       data = {
@@ -88,17 +102,21 @@
     }
   });
 
+  // View responsible for the connection list
   ConnectionsView = Backbone.View.extend({
+
     events: {
       'click th.p2p-col-delete .p2p-icon': 'clear',
       'click td.p2p-col-delete .p2p-icon': 'delete'
     },
+
     initialize: function(options) {
       this.options = options;
       this.maybe_make_sortable();
       this.collection.on('create', this.afterCreate, this);
       this.collection.on('clear', this.afterClear, this);
     },
+
     maybe_make_sortable: function() {
       if (this.$('th.p2p-col-order').length) {
         this.$('tbody').sortable({
@@ -114,6 +132,7 @@
         });
       }
     },
+
     clear: function(ev) {
       var $td;
       ev.preventDefault();
@@ -124,9 +143,11 @@
       row_wait($td);
       this.collection.clear();
     },
+
     afterClear: function() {
       this.$el.hide().find('tbody').html('');
     },
+
     "delete": function(ev) {
       var $td, req;
       ev.preventDefault();
@@ -139,20 +160,25 @@
         remove_row($td);
       });
     },
+
     afterCreate: function(response) {
       this.$el.show().find('tbody').append(response.row);
       this.collection.trigger('append', response);
     }
   });
 
+  // View responsible for the candidate list
   CandidatesView = Backbone.View.extend({
+
     template: Mustache.compile(get_mustache_template('tab-list')),
+
     events: {
       'keypress :text': 'handleReturn',
       'keyup :text': 'handleSearch',
       'click .p2p-prev, .p2p-next': 'changePage',
       'click td.p2p-col-create div': 'promote'
     },
+
     initialize: function(options) {
       this.options = options;
       this.spinner = options.spinner;
@@ -162,6 +188,7 @@
       this.collection.on('error', this.afterInvalid, this);
       this.collection.on('invalid', this.afterInvalid, this);
     },
+
     promote: function(ev) {
       var $td, req, _this = this;
       ev.preventDefault();
@@ -179,11 +206,13 @@
         }
       });
     },
+
     handleReturn: function(ev) {
       if (ev.keyCode === ENTER_KEY) {
         ev.preventDefault();
       }
     },
+
     handleSearch: function(ev) {
       var $searchInput, delayed,
         _this = this;
@@ -204,6 +233,7 @@
         });
       }, 400);
     },
+
     changePage: function(ev) {
       var $navButton, new_page;
       $navButton = jQuery(ev.currentTarget);
@@ -216,6 +246,7 @@
       this.spinner.appendTo(this.$('.p2p-navigation'));
       this.collection.save('paged', new_page);
     },
+
     afterCandidatesRefreshed: function(response) {
       this.spinner.remove();
       this.$('button, .p2p-results, .p2p-navigation, .p2p-notice').remove();
@@ -229,22 +260,27 @@
     }
   });
 
+  // View responsible for the post creation UI
   CreatePostView = Backbone.View.extend({
+
     events: {
       'click button': 'createItem',
       'keypress :text': 'handleReturn'
     },
+
     initialize: function(options) {
       this.options = options;
       this.createButton = this.$('button');
       this.createInput = this.$(':text');
     },
+
     handleReturn: function(ev) {
       if (ev.keyCode === ENTER_KEY) {
         this.createButton.click();
         ev.preventDefault();
       }
     },
+
     createItem: function(ev) {
       var req, title, _this = this;
       ev.preventDefault();
@@ -265,11 +301,14 @@
     }
   });
 
+  // View responsible for the entire metabox
   MetaboxView = Backbone.View.extend({
+
     events: {
       'click .p2p-toggle-tabs': 'toggleTabs',
       'click .wp-tab-bar li': 'setActiveTab'
     },
+
     initialize: function(options) {
       this.options = options;
       this.spinner = options.spinner;
@@ -278,6 +317,7 @@
       options.connections.on('clear', this.afterConnectionDeleted, this);
       options.connections.on('delete', this.afterConnectionDeleted, this);
     },
+
     toggleTabs: function(ev) {
       var $tabs;
       ev.preventDefault();
@@ -288,6 +328,7 @@
         this.initializedCandidates = true;
       }
     },
+
     setActiveTab: function(ev) {
       var $tab;
       ev.preventDefault();
@@ -296,11 +337,13 @@
       $tab.addClass('wp-tab-active');
       this.$el.find('.tabs-panel').hide().end().find($tab.data('ref')).show().find(':text').focus();
     },
+
     afterConnectionAppended: function(response) {
       if ('one' === this.options.cardinality) {
         this.$('.p2p-create-connections').hide();
       }
     },
+
     afterConnectionDeleted: function(response) {
       if ('one' === this.options.cardinality) {
         this.$('.p2p-create-connections').show();
@@ -315,9 +358,9 @@
   };
 
   jQuery(function() {
-    var clearVal, setVal;
+    // Polyfill for browsers that don't support the placeholder attribute
     if (!jQuery('<input placeholder="1" />')[0].placeholder) {
-      setVal = function() {
+      function setVal() {
         var $this;
         $this = jQuery(this);
         if (!$this.val()) {
@@ -325,7 +368,8 @@
           $this.addClass('p2p-placeholder');
         }
       };
-      clearVal = function() {
+
+      function clearVal() {
         var $this;
         $this = jQuery(this);
         if ($this.hasClass('p2p-placeholder')) {
@@ -340,22 +384,27 @@
 
     jQuery('.p2p-box').each(function() {
       var $metabox, $spinner, candidates, candidatesView, connections, connectionsView, createPostView, ctype, metaboxView;
+
       $metabox = jQuery(this);
+
       $spinner = jQuery('<img>', {
         'src': P2PAdminL10n.spinner,
         'class': 'p2p-spinner'
       });
+
       candidates = new Candidates({
         's': '',
         'paged': 1
       });
       candidates.total_pages = $metabox.find('.p2p-total').data('num') || 1;
+
       ctype = {
         p2p_type: $metabox.data('p2p_type'),
         direction: $metabox.data('direction'),
         from: jQuery('#post_ID').val()
       };
 
+      // All ajax requests should be done through this function
       function ajax_request(options, callback) {
         var params = _.extend({}, options, candidates.attributes, ctype, {
           action: 'p2p_box',
@@ -385,6 +434,7 @@
 
       connections = new Connections();
       connections.ajax_request = ajax_request;
+
       connectionsView = new ConnectionsView({
         el: $metabox.find('.p2p-connections'),
         collection: connections,
