@@ -24,7 +24,9 @@ class P2P_Column_Post extends P2P_Column {
 			'post_type' => get_current_screen()->post_type
 		);
 
-		return add_query_arg( $args, admin_url( 'edit.php' ) );
+		$admin_link = apply_filters( "p2p_post_admin_column_link", add_query_arg( $args, admin_url( 'edit.php' ) ), $item );
+
+		return $admin_link;
 	}
 
 	function display_column( $column, $item_id ) {
