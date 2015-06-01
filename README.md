@@ -3,8 +3,8 @@
 Contributors: scribu, ciobi  
 Tags: connections, custom post types, relationships, many-to-many, users  
 Requires at least: 3.5  
-Tested up to: 3.9  
-Stable tag: 1.6.3  
+Tested up to: 4.2  
+Stable tag: 1.6.4  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -56,6 +56,12 @@ Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-
 5. Connection Types screen
 
 ## Changelog
+
+### 1.6.4
+* added Danish translation. props phh
+* updated Swedish translation. props EyesX
+* fixed issue with multiple `parse_query` calls. props hezachenary
+* added `p2p_post_admin_column_link` and `p2p_user_admin_column_link` filters. props PareshRadadiya
 
 ### 1.6.3
 * added Serbian translation. props Borisa Djuraskovic
