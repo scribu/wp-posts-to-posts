@@ -36,7 +36,9 @@ class P2P_Column_User extends P2P_Column {
 			'connected_items' => $item->get_id(),
 		);
 
-		return add_query_arg( $args, admin_url( 'users.php' ) );
+		$admin_link = apply_filters( "p2p_user_admin_column_link", add_query_arg( $args, admin_url( 'users.php' ) ), $item );
+
+		return $admin_link;
 	}
 
 	function display_column( $content, $column, $item_id ) {
