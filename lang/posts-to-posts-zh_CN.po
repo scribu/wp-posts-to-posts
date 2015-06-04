@@ -1,0 +1,155 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Posts 2 Posts\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
+"POT-Creation-Date: 2013-02-17 08:06:11+00:00\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Daniel Koskinen <daniel.koskinen@gmail.com>\n"
+"Language-Team: Amos Lee <4626395@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Language: zh_CN\n"
+"X-Generator: Poedit 1.7.5\n"
+
+#: admin/box.php:45
+msgid "Are you sure you want to delete all connections?"
+msgstr "确定要删除所有连接吗？"
+
+#: admin/box.php:136
+msgid "Search"
+msgstr "搜索."
+
+#: admin/box.php:213
+msgid "previous"
+msgstr "上一个"
+
+#: admin/box.php:214
+msgid "next"
+msgstr "下一个"
+
+#: admin/box.php:215
+msgid "of"
+msgstr "/"
+
+#: admin/dropdown-user.php:32
+msgid "Filter"
+msgstr "筛选"
+
+#: admin/factory.php:88
+msgid " (from)"
+msgstr "从"
+
+#: admin/factory.php:89
+msgid " (to)"
+msgstr "到"
+
+#: admin/field-delete.php:7
+msgid "Delete all connections"
+msgstr "删除所有连接"
+
+#: admin/field-delete.php:16
+msgid "Delete connection"
+msgstr "删除连接"
+
+#: admin/tools-page.php:7
+msgid "Connection Types"
+msgstr "连接类型"
+
+#: admin/tools-page.php:41
+msgid "<em>%s</em> is not a registered connection type."
+msgstr "<em>%s</em> 不是一个注册的连接类型"
+
+#: admin/tools-page.php:50
+msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
+msgstr "从 <em>%2$s</em> 到 <em>%3$s</em>转换了 %1$s 个连接"
+
+#: admin/tools-page.php:64
+msgid "Name"
+msgstr "名称"
+
+#: admin/tools-page.php:65
+msgid "Information"
+msgstr "信息"
+
+#: admin/tools-page.php:66
+msgid "Connections"
+msgstr "连接"
+
+#: admin/tools-page.php:74
+msgid "No connection types registered."
+msgstr "没有注册连接类型"
+
+#: admin/tools-page.php:76
+msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
+msgstr "需要注册连接类型，查看 <a href=\"%s\">wiki</a>."
+
+#: admin/tools-page.php:93
+msgid "Convert to registered connection type:"
+msgstr "转换到已注册的连接类型："
+
+#: admin/tools-page.php:129
+msgid "Go"
+msgstr "转到"
+
+#: core/connection-type.php:102
+msgid "Create connections"
+msgstr "创建连接"
+
+#: core/connection-type.php:120
+msgid "Connected %s"
+msgstr "%s 已连接"
+
+#: core/side-user.php:16
+msgid "Users"
+msgstr "用户"
+
+#: core/side-user.php:25
+msgid "User"
+msgstr "用户"
+
+#: core/side-user.php:26
+msgid "Search Users"
+msgstr "搜索用户"
+
+#: core/side-user.php:27
+msgid "No users found."
+msgstr "没有找到用户"
+
+#: core/widget.php:16
+msgid "Posts 2 Posts"
+msgstr "Posts 2 Posts"
+
+#: core/widget.php:17
+msgid "A list of posts connected to the current post"
+msgstr "连接到本文的文章"
+
+#: core/widget.php:34
+msgid "Title:"
+msgstr "标题："
+
+#: core/widget.php:41
+msgid "Connection type:"
+msgstr "连接类型："
+
+#: core/widget.php:46
+msgid "Connection listing:"
+msgstr "连接列表："
+
+#: core/widget.php:52
+msgid "connected"
+msgstr "已连接"
+
+#: core/widget.php:53
+msgid "related"
+msgstr "相关"
+
+#: scb/AdminPage.php:227
+msgid "Settings <strong>saved</strong>."
+msgstr "设置 <strong>已保存</strong>."
+
+#: scb/AdminPage.php:466
+msgid "Settings"
+msgstr "设置"
