@@ -146,8 +146,8 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/scribu/wp-lib-posts-to-posts.git",
-                "reference": "f6bafd5c4d93af0197f5690574cfe3c073b2f938"
+                "url": "https://github.com/clariner/wp-lib-posts-to-posts.git",
+                "reference": "490aa6785e67cc360dd95f4d2b20843de56302bb"
             },
             "dist": {
                 "type": "zip",
