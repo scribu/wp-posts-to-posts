@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "41cf781ed1271e25bf31b715416a349996aa2527"
+                "reference": "e420b539e8d7b38b7c6f3f99dccc0386bd3dfe41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/41cf781ed1271e25bf31b715416a349996aa2527",
-                "reference": "41cf781ed1271e25bf31b715416a349996aa2527",
+                "url": "https://api.github.com/repos/composer/installers/zipball/e420b539e8d7b38b7c6f3f99dccc0386bd3dfe41",
+                "reference": "e420b539e8d7b38b7c6f3f99dccc0386bd3dfe41",
                 "shasum": ""
             },
             "replace": {
@@ -59,8 +59,11 @@
                 "Hurad",
                 "MODX Evo",
                 "OXID",
+                "SMF",
+                "Thelia",
                 "WolfCMS",
                 "agl",
+                "aimeos",
                 "annotatecms",
                 "bitrix",
                 "cakephp",
@@ -68,9 +71,11 @@
                 "codeigniter",
                 "concrete5",
                 "croogo",
+                "dokuwiki",
                 "drupal",
                 "elgg",
                 "fuelphp",
+                "grav",
                 "installer",
                 "joomla",
                 "kohana",
@@ -94,27 +99,28 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2014-07-22 17:04:15"
+            "time": "2015-06-13 15:30:38"
         },
         {
             "name": "mustache/mustache",
-            "version": "v2.6.1",
+            "version": "v2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/mustache.php.git",
-                "reference": "1430ca884912eaba2b3830856b45685733b16789"
+                "reference": "64c28cc73e01d5edcef7de8cb2b16782615f648a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/1430ca884912eaba2b3830856b45685733b16789",
-                "reference": "1430ca884912eaba2b3830856b45685733b16789",
+                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/64c28cc73e01d5edcef7de8cb2b16782615f648a",
+                "reference": "64c28cc73e01d5edcef7de8cb2b16782615f648a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
             "require-dev": {
-                "phpunit/phpunit": "*"
+                "fabpot/php-cs-fixer": "~1.6",
+                "phpunit/phpunit": "~3.7|~4.0"
             },
             "type": "library",
             "autoload": {
@@ -139,7 +145,7 @@
                 "mustache",
                 "templating"
             ],
-            "time": "2014-06-20 19:34:49"
+            "time": "2015-04-01 06:37:33"
         },
         {
             "name": "scribu/lib-posts-to-posts",
@@ -147,12 +153,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scribu/wp-lib-posts-to-posts.git",
-                "reference": "f6bafd5c4d93af0197f5690574cfe3c073b2f938"
+                "reference": "baefe121458b5d4d333b29e0c0b8cb8fad0fa4a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scribu/wp-lib-posts-to-posts/zipball/f6bafd5c4d93af0197f5690574cfe3c073b2f938",
-                "reference": "f6bafd5c4d93af0197f5690574cfe3c073b2f938",
+                "url": "https://api.github.com/repos/scribu/wp-lib-posts-to-posts/zipball/baefe121458b5d4d333b29e0c0b8cb8fad0fa4a2",
+                "reference": "baefe121458b5d4d333b29e0c0b8cb8fad0fa4a2",
                 "shasum": ""
             },
             "require": {
@@ -172,7 +178,7 @@
             "support": {
                 "source": "https://github.com/scribu/wp-lib-posts-to-posts/tree/master"
             },
-            "time": "2014-08-10 18:54:49"
+            "time": "2015-08-19 09:04:19"
         },
         {
             "name": "scribu/scb-framework",
@@ -180,12 +186,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scribu/wp-scb-framework.git",
-                "reference": "6ea9861db28fcd3722c1a726446ecf60f048409c"
+                "reference": "e766eda522230858d1c6a3928d3b12da643cb690"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scribu/wp-scb-framework/zipball/6ea9861db28fcd3722c1a726446ecf60f048409c",
-                "reference": "6ea9861db28fcd3722c1a726446ecf60f048409c",
+                "url": "https://api.github.com/repos/scribu/wp-scb-framework/zipball/e766eda522230858d1c6a3928d3b12da643cb690",
+                "reference": "e766eda522230858d1c6a3928d3b12da643cb690",
                 "shasum": ""
             },
             "type": "library",
@@ -213,7 +219,7 @@
             "keywords": [
                 "wordpress"
             ],
-            "time": "2014-01-23 13:57:58"
+            "time": "2015-05-11 17:14:48"
         }
     ],
     "packages-dev": [],
@@ -223,6 +229,7 @@
         "scribu/lib-posts-to-posts": 20
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": [],
     "platform-dev": []
 }
