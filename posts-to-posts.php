@@ -57,8 +57,10 @@ function _p2p_init() {
 if ( is_dir( dirname( __FILE__ ) . '/vendor' ) ) {
 	// Not using vendor/autload.php because scb-framework/load.php has better compatibility
 
-	require_once dirname( __FILE__ ) . '/vendor/mustache/mustache/src/Mustache/Autoloader.php';
-	Mustache_Autoloader::register();
+	if (!class_exists('Mustache_Autoloader')) {
+		require_once dirname( __FILE__ ) . '/vendor/mustache/mustache/src/Mustache/Autoloader.php';
+		Mustache_Autoloader::register();
+	}
 
 	require_once dirname( __FILE__ ) . '/vendor/scribu/scb-framework/load.php';
 }
