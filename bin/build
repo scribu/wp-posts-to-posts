@@ -1,2 +1,2 @@
 rm -rf vendor/
-composer install --no-dev
+composer install
