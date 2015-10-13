@@ -3,8 +3,8 @@
 Contributors: scribu, ciobi  
 Tags: connections, custom post types, relationships, many-to-many, users  
 Requires at least: 3.9  
-Tested up to: 4.2  
-Stable tag: 1.6.4  
+Tested up to: 4.3  
+Stable tag: 1.6.5  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -56,6 +56,11 @@ Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-
 5. Connection Types screen
 
 ## Changelog
+
+### 1.6.5
+* fixed error when Mustache is already loaded. props ApatheticG
+* fixed WP_User_Query warning. props PatelUtkarsh
+* added Chinese translation. props iwillhappy1314
 
 ### 1.6.4
 * added Danish translation. props phh
