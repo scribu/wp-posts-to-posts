@@ -10,6 +10,10 @@ Text Domain: posts-to-posts
 Domain Path: /lang
 */
 
+if ( class_exists( 'WP_CLI' ) ) {
+  include 'command.php';
+}
+
 define( 'P2P_PLUGIN_VERSION', '1.6.5' );
 
 define( 'P2P_TEXTDOMAIN', 'posts-to-posts' );
