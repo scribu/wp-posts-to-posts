@@ -187,12 +187,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scribu/wp-scb-framework.git",
-                "reference": "e766eda522230858d1c6a3928d3b12da643cb690"
+                "reference": "ed5a251714b4b9e9ff9ad4dd9cd3f01b4fc3fae8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scribu/wp-scb-framework/zipball/e766eda522230858d1c6a3928d3b12da643cb690",
-                "reference": "e766eda522230858d1c6a3928d3b12da643cb690",
+                "url": "https://api.github.com/repos/scribu/wp-scb-framework/zipball/ed5a251714b4b9e9ff9ad4dd9cd3f01b4fc3fae8",
+                "reference": "ed5a251714b4b9e9ff9ad4dd9cd3f01b4fc3fae8",
                 "shasum": ""
             },
             "type": "library",
@@ -220,7 +220,7 @@
             "keywords": [
                 "wordpress"
             ],
-            "time": "2015-05-11 17:14:48"
+            "time": "2015-10-25 20:06:42"
         }
     ],
     "packages-dev": [],

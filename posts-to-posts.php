@@ -32,9 +32,6 @@ function _p2p_load() {
 	P2P_Shortcodes::init();
 
 	register_uninstall_hook( __FILE__, array( 'P2P_Storage', 'uninstall' ) );
-
-	if ( is_admin() )
-		_p2p_load_admin();
 }
 
 function _p2p_load_admin() {
@@ -49,22 +46,19 @@ function _p2p_load_admin() {
 	new P2P_Tools_Page;
 }
 
+if ( is_dir( dirname( __FILE__ ) . '/vendor' ) ) {
+	require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+}
+
+_p2p_load();
+
+if ( is_admin() )
+	_p2p_load_admin();
+
 function _p2p_init() {
 	// Safe hook for calling p2p_register_connection_type()
 	do_action( 'p2p_init' );
 }
 
-if ( is_dir( dirname( __FILE__ ) . '/vendor' ) ) {
-	// Not using vendor/autload.php because scb-framework/load.php has better compatibility
-
-	if (!class_exists('Mustache_Autoloader')) {
-		require_once dirname( __FILE__ ) . '/vendor/mustache/mustache/src/Mustache/Autoloader.php';
-		Mustache_Autoloader::register();
-	}
-
-	require_once dirname( __FILE__ ) . '/vendor/scribu/scb-framework/load.php';
-}
-
-scb_init( '_p2p_load' );
 add_action( 'wp_loaded', '_p2p_init' );
 
