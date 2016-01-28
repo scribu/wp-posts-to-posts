@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Posts 2 Posts\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
 "POT-Creation-Date: 2015-10-15 10:55+0100\n"
-"PO-Revision-Date: 2015-10-15 11:12+0100\n"
+"PO-Revision-Date: 2016-01-28 12:42+0000\n"
 "Last-Translator: Pedro Mendonça <ped.gaspar@gmail.com>\n"
 "Language-Team: Pedro Mendonça <ped.gaspar@gmail.com>\n"
 "Language: pt_PT\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.5\n"
+"X-Generator: Poedit 1.8.6\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;"
 "esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: admin/box.php:45
 msgid "Are you sure you want to delete all connections?"
-msgstr "Tem a certeza que quer apagar todas as conexões?"
+msgstr "Tem a certeza que quer eliminar todas as conexões?"
 
 #: admin/box.php:136
 msgid "Search"
@@ -56,11 +56,11 @@ msgstr " (para)"
 
 #: admin/field-delete.php:7
 msgid "Delete all connections"
-msgstr "Apagar todas as conexões"
+msgstr "Eliminar todas as conexões"
 
 #: admin/field-delete.php:16
 msgid "Delete connection"
-msgstr "Apagar conexão"
+msgstr "Eliminar conexão"
 
 #: admin/tools-page.php:7
 msgid "Connection Types"
