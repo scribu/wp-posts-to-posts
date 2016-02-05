@@ -8,10 +8,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2014-10-07 15:48+0100\n"
-"Last-Translator: Phh <phh@peytz.dk>\n"
+"PO-Revision-Date: 2016-02-05 09:07+0100\n"
+"Last-Translator: Rasmus Taarnby <rt@peytz.dk>\n"
 "Language-Team: \n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Poedit 1.7.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: da\n"
 
@@ -101,7 +101,7 @@ msgstr "Opret forbindelser"
 
 #: core/connection-type.php:120
 msgid "Connected %s"
-msgstr "Forbandt %s"
+msgstr "Forbundne %s"
 
 #: core/side-user.php:16
 msgid "Users"
