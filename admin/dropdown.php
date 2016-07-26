@@ -61,7 +61,9 @@ abstract class P2P_Dropdown {
 			'p2p:context' => 'admin_dropdown'
 		);
 
-		$connected = $directed->get_connected( 'any', $extra_qv, 'abstract' );
+		$filtered_qv = apply_filters( 'p2p_post_admin_dropdown_query', $extra_qv );
+
+		$connected = $directed->get_connected( 'any', $filtered_qv, 'abstract' );
 
 		$options = array();
 		foreach ( $connected->items as $item )
