@@ -10,8 +10,7 @@ env:
     - WP_VERSION=3.9.8 WP_MULTISITE=0
     - WP_VERSION=3.9.8 WP_MULTISITE=1
 
-install:
-    - composer install
+install: bin/build
 
 before_script:
     - bash bin/install-wp-tests.sh wordpress_test travis '' localhost $WP_VERSION 

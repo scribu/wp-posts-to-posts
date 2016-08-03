@@ -1,2 +1,6 @@
+#!/usr/bin/env bash
+
 rm -rf vendor/
 composer install
+
+vendor/scribu/scb-framework/bin/vendorize P2P
