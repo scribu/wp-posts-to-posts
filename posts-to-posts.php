@@ -35,10 +35,16 @@ function _p2p_load() {
 	P2P_Widget::init();
 	P2P_Shortcodes::init();
 
-	register_uninstall_hook( __FILE__, array( 'P2P_Storage', 'uninstall' ) );
+	register_activation_hook( __FILE__, '_p2p_activation_hook' );
 
 	if ( is_admin() )
 		_p2p_load_admin();
+}
+
+function _p2p_activation_hook(){
+	if ( apply_filters( 'p2p_uninstall', true ) ){
+		register_uninstall_hook( __FILE__, array( 'P2P_Storage', 'uninstall' ) );
+	}
 }
 
 function _p2p_load_admin() {
