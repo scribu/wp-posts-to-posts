@@ -9,10 +9,18 @@
   if (typeof exports === "object" && exports) {
     module.exports = factory; // CommonJS
   } else if (typeof define === "function" && define.amd) {
-    define(factory); // AMD
-  } else {
-    root.Mustache = factory; // <script>
+    define('mustache', factory); // AMD
   }
+
+  // Define a local copy of Mustache
+  var Mustache = factory;
+
+  // If there is a window object, that at least has a document property,
+  // define the Mustache identifier
+  if ( typeof root === "object" && typeof root.document === "object" ) {
+    root.Mustache = Mustache;
+  }
+
 }(this, (function () {
 
   var exports = {};
