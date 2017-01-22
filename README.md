@@ -59,6 +59,9 @@ Additional info can be found on the [wiki](http://github.com/scribu/wp-posts-to-
 
 ## Changelog
 
+### 1.6.5.0.1
+* Added ability to use wp post meta as well as the built in posts 2 posts meta.
+
 ### 1.6.5
 * fixed error when Mustache is already loaded. props ApatheticG
 * fixed WP_User_Query warning. props PatelUtkarsh
