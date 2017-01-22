@@ -29,7 +29,9 @@ Additionally, you can create many-to-many relationships between posts and users.
 
 I, scribu, will not be offering support (either free or paid) for this plugin anymore.
 
-If you want to help maintain the plugin, fork it [on github](https://github.com/scribu/wp-posts-to-posts) and open pull requests.
+Furthermore, I will not be doing any development work whatsoever.
+
+If you want to fix a bug in the plugin or add new features, feel free to fork it [on github](https://github.com/scribu/wp-posts-to-posts). <em>I will not be accepting any pull requests</em> though, since ensuring that a code change doesn't break things takes effort, effort which I'm no longer willing to expend.
 
 Links: [**Documentation**](http://github.com/scribu/wp-posts-to-posts/wiki) | [Plugin News](http://scribu.net/wordpress/posts-to-posts) | [Author's Site](http://scribu.net)
 
