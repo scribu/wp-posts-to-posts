@@ -100,15 +100,74 @@ class P2P_Box_Factory extends P2P_Factory {
 				if ( ! $connection )
 					continue;
 
+				
+				
+				//$postmeta_save = p2p_type( $connection->p2p_type )->postmeta_save;
+				//echo '<pre>..........................';
+				//print_r( p2p_type( $connection->p2p_type ));
+				$p2p_connection_info = p2p_type( $connection->p2p_type);	//post type? user/post name
+				//print_r( $p2p_connection_info );
+				//echo $p2p_connection_info->save_meta_type;
+				
+				//echo '<hr /> ';
+
+				//echo '..........................</pre>';
+				//exit('--------------------');
+				
+				if($p2p_connection_info->save_meta_type)
+					$save_as_metatype = $p2p_connection_info->save_meta_type;
+				else
+					$save_as_metatype = '';
+				
+				/*
+				exit ($save_as_metatype);
+				
+
+[fields] => Array
+        (
+            [from_type] => Array
+                (
+                    [title] => usertestar
+                    [p2p_type] => user
+                    [type] => text
+                )
+
+            [to_type] => Array
+                (
+                    [title] => clienttestar
+                    [p2p_type] => client
+                    [type] => text
+                )
+
+        )
+
+    [name] => user_to_client
+    [data] => Array
+        (
+        )
+		
+				*/
+				
 				$fields = p2p_type( $connection->p2p_type )->fields;
 
 				foreach ( $fields as $key => &$field ) {
 					$field['name'] = $key;
 				}
-
+	
 				$data = scbForms::validate_post_data( $fields, $data );
 
-				scbForms::update_meta( $fields, $data, $p2p_id, 'p2p' );
+				/*
+				echo '<pre>';
+				print_r($fields);
+				echo '</pre>';
+				exit();
+				*/
+				if ($save_as_metatype == 'wp')
+					$this->save_post_meta($post_id, $post, $fields, $connection);
+				elseif ($save_as_metatype == 'p2p')
+					scbForms::update_meta( $fields, $data, $p2p_id, 'p2p' );
+				else
+					scbForms::update_meta( $fields, $data, $p2p_id, 'p2p' );
 			}
 		}
 
@@ -148,6 +207,143 @@ class P2P_Box_Factory extends P2P_Factory {
 		$method = 'ajax_' . $_REQUEST['subaction'];
 
 		$box->$method();
+	}
+	
+	/**
+	 * Save p2p connection, from and to, as post meta if save_wp_meta is set to true
+	 */
+	 
+	
+	function save_post_meta($post_id, $post, $fields, $connection = array()) {
+		/*
+		echo '<hr />';
+		
+		echo '<pre>';
+		print_r( ( $connection ));
+		echo '</pre>';
+		
+				
+		echo '<hr />';
+		//print_r($connection);
+		echo '<hr />';
+		echo $post->ID;
+		echo '<pre>';
+		echo $connection->p2p_type;
+		echo '</pre>';
+		
+		echo '<hr /><hr />';
+		echo '<pre>';
+		print_r($fields);
+		echo '<pre>';
+		echo '<hr />';
+		echo '<pre>';
+		//print_r($data);
+		echo '</pre>';
+		echo '<hr />';
+		exit('-----------------------------------------------------');
+		
+		exit('field - data - '. $p2p_id. ' - p2p');
+		
+		
+		die();
+		
+		if ($fields){
+			if ($connection->p2p_from == $post->ID){
+				update_post_meta($post->ID, 'p2p_'.$connection->p2p_type.'_to', $connection->p2p_to);
+				update_post_meta($connection->p2p_from, 'p2p_'.$connection->p2p_type.'_from', $connection->p2p_from);
+			}
+			if ($connection->p2p_to == $post->ID){
+				update_post_meta($post->ID, 'p2p_'.$connection->p2p_type.'_from', $connection->p2p_from);
+				update_post_meta($connection->p2p_from, 'p2p_'.$connection->p2p_type.'_to', $connection->p2p_to);
+			}
+		}else{
+			scbForms::update_meta( $fields, $data, $p2p_id, 'p2p' );
+		}
+		
+		*/
+		
+		//if ($fields){
+			if ($connection->p2p_from == $post->ID){
+					//Get old meta value
+				$new_meta_value = $connection->p2p_to;
+
+				$old_meta_value = get_post_meta( $post->ID, 'p2p_'.$connection->p2p_type.'_to', true );
+				//check for duplicate values, if so remove them
+				// explode on , and remove spaces
+				//$old_meta_value = implode(',',array_unique(explode(',', $old_meta_value)));
+				
+				$updated_meta_value =  $old_meta_value.', '.$new_meta_value; // save as a comma seperated string
+				
+				
+				$test_arr = array_unique(array_map('trim', explode(',', $updated_meta_value)));
+				$test_arr = array_filter($test_arr);
+				
+				//echo '<pre>';
+				//print_r($test_arr);
+				//echo '</pre>';
+				//exit('----------------');
+				//$save_meta_value = implode(',',);
+				
+				$save_meta_value = implode(',', $test_arr);
+				//$save_meta_arr = array_unique(explode(',', $save_meta_value));
+				
+				update_post_meta($post->ID, 'p2p_'.$connection->p2p_type.'_to', $save_meta_value);
+				
+				//Get old meta value
+				$new_meta_value = $connection->p2p_from;
+				$old_meta_value = get_post_meta( $connection->p2p_from, 'p2p_'.$connection->p2p_type.'_from', true );
+				//$old_meta_value = implode(',',array_unique(explode(',', $old_meta_value)));
+				$updated_meta_value =  $old_meta_value.', '.$new_meta_value; // save as a comma seperated string
+				$test_arr = array_unique(array_map('trim', explode(',', $updated_meta_value)));
+				$test_arr = array_filter($test_arr);
+				
+				//echo '<pre>';
+				//print_r($test_arr);
+				//echo '</pre>';
+				//exit('----------------');
+				
+				$save_meta_value = implode(',', $test_arr);
+
+				update_post_meta($connection->p2p_from, 'p2p_'.$connection->p2p_type.'_from', $save_meta_value);
+			}
+			if ($connection->p2p_to == $post->ID){
+				
+					//Get old meta value
+				$new_meta_value = $connection->p2p_from;
+				$old_meta_value = get_post_meta( $post->ID, 'p2p_'.$connection->p2p_type.'_from', true );
+				//$old_meta_value = implode(',',array_unique(explode(',', $old_meta_value)));
+				$updated_meta_value =  $old_meta_value.', '.$new_meta_value; // save as a comma seperated string
+				$test_arr = array_unique(array_map('trim', explode(',', $updated_meta_value)));
+				$test_arr = array_filter($test_arr);
+				
+				//echo '<pre>';
+				//print_r($test_arr);
+				//echo '</pre>';
+				//exit('----------------');
+				
+				$save_meta_value = implode(',', $test_arr);
+				
+				update_post_meta($post->ID, 'p2p_'.$connection->p2p_type.'_from', $save_meta_value);
+				
+					//Get old meta value
+				$new_meta_value = $connection->p2p_to;
+				$old_meta_value = get_post_meta( $connection->p2p_from, 'p2p_'.$connection->p2p_type.'_to', true );
+				
+				$updated_meta_value =  $old_meta_value.', '.$new_meta_value; // save as a comma seperated string
+				
+				$test_arr = array_unique(array_map('trim', explode(',', $updated_meta_value)));
+				$test_arr = array_filter($test_arr);
+				
+				//echo '<pre>';
+				//print_r($test_arr);
+				//echo '</pre>';
+				//exit('----------------');
+				
+				$save_meta_value = implode(',', $test_arr);
+				
+				update_post_meta($connection->p2p_from, 'p2p_'.$connection->p2p_type.'_to', $save_meta_value);
+			}
+		//}
 	}
 }
 
