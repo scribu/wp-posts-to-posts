@@ -10,27 +10,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Poedit-Language: Finnish\n"
-"X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"Language: fi_FI\n"
+"X-Generator: Poedit 2.0.2\n"
 
-#: admin/box.php:45
+#: admin/box.php:48
 msgid "Are you sure you want to delete all connections?"
 msgstr "Haluatko varmasti poistaa kaikki yhteydet?"
 
-#: admin/box.php:136
+#: admin/box.php:140
 msgid "Search"
 msgstr "Hae"
 
-#: admin/box.php:213
+#: admin/box.php:230
 msgid "previous"
 msgstr "edellinen"
 
-#: admin/box.php:214
+#: admin/box.php:231
 msgid "next"
 msgstr "seuraava"
 
-#: admin/box.php:215
+#: admin/box.php:232
 msgid "of"
 msgstr "/"
 
@@ -94,11 +94,11 @@ msgstr "Vaihda rekisteröityyn yhteystyyppiin:"
 msgid "Go"
 msgstr "OK"
 
-#: core/connection-type.php:102
+#: core/connection-type.php:91
 msgid "Create connections"
 msgstr "Lisää yhteys"
 
-#: core/connection-type.php:120
+#: core/connection-type.php:109
 msgid "Connected %s"
 msgstr "Liitetyt %s"
 
@@ -118,39 +118,38 @@ msgstr "Hae käyttäjiä"
 msgid "No users found."
 msgstr "Käyttäjiä ei löytynyt"
 
-#: core/widget.php:16
+#: core/widget.php:19
 msgid "Posts 2 Posts"
 msgstr "Posts 2 Posts"
 
-#: core/widget.php:17
+#: core/widget.php:20
 msgid "A list of posts connected to the current post"
 msgstr "Tähän artikkeliin liitetyt sisällöt"
 
-#: core/widget.php:34
+#: core/widget.php:37
 msgid "Title:"
 msgstr "Otsikko:"
 
-#: core/widget.php:41
+#: core/widget.php:44
 msgid "Connection type:"
 msgstr "Yhteystyyppi:"
 
-#: core/widget.php:46
+#: core/widget.php:49
 msgid "Connection listing:"
 msgstr "Listan sisältö:"
 
-#: core/widget.php:52
+#: core/widget.php:55
 msgid "connected"
 msgstr "yhteydet"
 
-#: core/widget.php:53
+#: core/widget.php:56
 msgid "related"
 msgstr "rinnakkaiset"
 
-#: scb/AdminPage.php:227
+#: scb/AdminPage.php:261
 msgid "Settings <strong>saved</strong>."
 msgstr "Asetukset <strong>tallennettu</strong>."
 
-#: scb/AdminPage.php:466
+#: scb/AdminPage.php:519
 msgid "Settings"
 msgstr "Asetukset"
-

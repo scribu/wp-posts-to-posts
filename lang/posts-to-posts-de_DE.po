@@ -6,187 +6,155 @@ msgstr ""
 "Project-Id-Version: Posts 2 Posts\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
 "POT-Creation-Date: 2011-12-01 16:28:04+00:00\n"
-"PO-Revision-Date: 2012-08-20 17:37+0100\n"
-"Last-Translator: ms-studio <code@ms-studio.net>\n"
-"Language-Team: \n"
-"Language: German\n"
+"PO-Revision-Date: 2017-08-23 15:08+0300\n"
+"Last-Translator: FULL NAME <petrozavodky@gmail.com>\n"
+"Language-Team: LANGUAGE <web@brodude.ru>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.2\n"
 
-#: admin/box.php:38
+#: admin/box.php:48
 msgid "Are you sure you want to delete all connections?"
 msgstr "Wollen Sie wirklich alle Verbindungen löschen?"
 
-#: admin/box.php:114
+#: admin/box.php:140
 msgid "Search"
 msgstr "Suchen"
 
-#: admin/box.php:191
+#: admin/box.php:230
 msgid "previous"
 msgstr "vorherige"
 
-#: admin/box.php:192
+#: admin/box.php:231
 msgid "next"
 msgstr "folgende"
 
-#: admin/box.php:193
+#: admin/box.php:232
 msgid "of"
 msgstr "von"
 
-#: admin/box.php:236
-msgid "Can't create connection: %s"
-msgstr "Verbindung kann nicht erstellt werden: %s"
+#: admin/dropdown-user.php:32
+msgid "Filter"
+msgstr "Filter"
 
-#: admin/factory.php:30
+#: admin/factory.php:88
 msgid " (from)"
 msgstr " (von)"
 
-#: admin/factory.php:31
+#: admin/factory.php:89
 msgid " (to)"
 msgstr " (zu)"
 
-#: admin/fields.php:30
+#: admin/field-delete.php:7
 msgid "Delete all connections"
 msgstr "Alle Verbindungen löschen"
 
-#: admin/fields.php:39
+#: admin/field-delete.php:16
 msgid "Delete connection"
 msgstr "Verbindung löschen"
 
-#: admin/tools.php:7
+#: admin/tools-page.php:7
 msgid "Connection Types"
 msgstr "Verbindungs-Typen"
 
-#: admin/tools.php:41
-#, php-format
+#: admin/tools-page.php:41
 msgid "<em>%s</em> is not a registered connection type."
 msgstr "Der Verbindungs-Typ <em>%s</em> ist nicht registriert."
 
-#: admin/tools.php:50
+#: admin/tools-page.php:50
 msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
 msgstr ""
 "%1$s Verbindungen wurden von <em>%2$s</em> zu <em>%3$s</em> konvertiert."
 
-#: admin/tools.php:64
+#: admin/tools-page.php:64
 msgid "Name"
 msgstr "Name"
 
-#: admin/tools.php:65
+#: admin/tools-page.php:65
 msgid "Information"
 msgstr "Information"
 
-#: admin/tools.php:66
+#: admin/tools-page.php:66
 msgid "Connections"
 msgstr "Verbindungen"
 
-#: admin/tools.php:74
+#: admin/tools-page.php:74
 msgid "No connection types registered."
 msgstr "Keine Verbindungs-Typen registriert."
 
-#: admin/tools.php:76
+#: admin/tools-page.php:76
 #, php-format
 msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
 msgstr ""
 "Das <a href=\"%s\">Wiki</a> bietet Anweisungen zum Erstellen von Verbindungs-"
 "Typen ."
 
-#: admin/tools.php:93
+#: admin/tools-page.php:93
 msgid "Convert to registered connection type:"
 msgstr "Zu Verbindungs-Typ konvertieren:"
 
-#: admin/tools.php:129
+#: admin/tools-page.php:129
 msgid "Go"
 msgstr ""
 
-#: core/widget.php:15
-msgid "Posts 2 Posts"
-msgstr "Posts 2 Posts"
-
-#: core/widget.php:16
-msgid "A list of posts connected to the current post"
-msgstr "Eine Liste von Artikeln, die mit diesem Artikel verbunden sind"
-
-#: core/extra.php:34
-msgid "Title:"
-msgstr "Titel"
-
-#: admin/box.php:115
-msgid "Create connections:"
+#: core/connection-type.php:91
+msgid "Create connections"
 msgstr "Verbindungen erstellen:"
 
-#: core/type.php:79
-msgid "Create connections"
-msgstr "Neue Verbindung"
-
-#: admin/box.php:136
-msgid "View All"
-msgstr "Alle Verbindungen"
-
-#: admin/fields.php:16
-msgid "Create connection"
-msgstr "Verbindung erstellen"
-
-#: scb/AdminPage.php:165
-msgid "Settings <strong>saved</strong>."
-msgstr "Einstellungen <strong>gespeichert</strong>"
-
-#: scb/AdminPage.php:178 scb/AdminPage.php:189
-msgid "Save Changes"
-msgstr "Änderungen speichern"
-
-#: scb/AdminPage.php:350
-msgid "Settings"
-msgstr "Einstellungen"
-
-#: core/type.php:65
+#: core/connection-type.php:109
 msgid "Connected %s"
 msgstr "Verbundene %s"
 
-#: core/widget.php:37
-msgid "Connection type:"
-msgstr "Verbindungs-Typ:"
-
-#: core/widget.php:41
-msgid "Connection listing:"
-msgstr "Verbindungs-Liste:"
-
-#: core/widget.php:47
-msgid "connected"
-msgstr "verbunden"
-
-#: core/widget.php:48
-msgid "related"
-msgstr "verwandt"
-
-#: core/widget.php:73
-msgid "Related %s"
-msgstr "Verwandte %s"
-
-#: core/storage.php:35
-msgid "Upgraded %d connections."
-msgstr "%d Verbindungen wurden ge-upgradet"
-
-#: core/storage.php:38
-msgid ""
-"The Posts 2 Posts connections need to be upgraded. <a href=\"%s\">Proceed.</"
-"a>"
-msgstr ""
-"Die Posts 2 Posts Verbindungen benötigen ein Upgrade. <a href=\"%s"
-"\">Ausführen.</a>"
-
-#: core/side.php:110
+#: core/side-user.php:16
 msgid "Users"
 msgstr "Benutzer"
 
-#: core/side.php:115
+#: core/side-user.php:25
 msgid "User"
 msgstr "Benutzer"
 
-#: core/side.php:116
+#: core/side-user.php:26
 msgid "Search Users"
 msgstr "Benutzer suchen"
 
-#: core/side.php:117
+#: core/side-user.php:27
 msgid "No users found."
 msgstr "Keine Benutzer gefunden."
+
+#: core/widget.php:19
+msgid "Posts 2 Posts"
+msgstr "Posts 2 Posts"
+
+#: core/widget.php:20
+msgid "A list of posts connected to the current post"
+msgstr "Eine Liste von Artikeln, die mit diesem Artikel verbunden sind"
+
+#: core/widget.php:37
+msgid "Title:"
+msgstr "Titel"
+
+#: core/widget.php:44
+msgid "Connection type:"
+msgstr "Verbindungs-Typ:"
+
+#: core/widget.php:49
+msgid "Connection listing:"
+msgstr "Verbindungs-Liste:"
+
+#: core/widget.php:55
+msgid "connected"
+msgstr "verbunden"
+
+#: core/widget.php:56
+msgid "related"
+msgstr "verwandt"
+
+#: scb/AdminPage.php:261
+msgid "Settings <strong>saved</strong>."
+msgstr "Einstellungen <strong>gespeichert</strong>"
+
+#: scb/AdminPage.php:519
+msgid "Settings"
+msgstr "Einstellungen"

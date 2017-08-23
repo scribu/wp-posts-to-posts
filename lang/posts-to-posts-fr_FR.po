@@ -10,171 +10,151 @@ msgstr ""
 "Project-Id-Version: Posts 2 Posts\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/posts-to-posts\n"
 "POT-Creation-Date: 2011-03-30 21:56+0300\n"
-"PO-Revision-Date: 2012-08-20 18:21+0100\n"
+"PO-Revision-Date: 2017-08-23 15:08+0300\n"
 "Last-Translator: ms-studio <code@ms-studio.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr_FR\n"
+"X-Generator: Poedit 2.0.2\n"
 
-#: admin/box.php:114
-msgid "Search"
-msgstr "Recherche"
-
-#: ui/boxes.php:108
-msgid "Previous"
-msgstr "Précédent"
-
-#: ui/boxes.php:109
-msgid "of"
-msgstr "sur"
-
-#: ui/boxes.php:110
-msgid "Next"
-msgstr "Suivant"
-
-#: scb/AdminPage.php:164
-msgid "Settings <strong>saved</strong>."
-msgstr "Réglages <strong>Enregistrés</strong>"
-
-#: scb/AdminPage.php:176 scb/AdminPage.php:186
-msgid "Save Changes"
-msgstr "Enregistrer Modifications"
-
-#: scb/AdminPage.php:368
-msgid "Settings"
-msgstr "Réglages"
-
-#: ui/boxes.php:88
-msgid "Create connections:"
-msgstr "Créer une connexion:"
-
-#: ui/boxes.php:114
-msgid "Recent"
-msgstr "Récent"
-
-#: ui/boxes.php:174 ui/boxes.php:175
-msgid "Create connection"
-msgstr "Nouvelle connexion"
-
-#: ui/boxes.php:182 ui/boxes.php:183
-msgid "Delete connection"
-msgstr "Supprimer la connexion"
-
-#: ui/boxes.php:189 ui/boxes.php:190
-msgid "Delete all connections"
-msgstr "Supprimer toutes les connexions"
-
-#: ui/ui.php:40
-#, php-format
-msgid "Connected %s"
-msgstr "%s Connectées"
-
-#: ui/ui.php:87
+#: admin/box.php:48
 msgid "Are you sure you want to delete all connections?"
 msgstr "Etes-vous sûr de vouloir supprimer toutes les connexions?"
 
-#. Plugin Name of the plugin/theme
-msgid "Posts 2 Posts"
-msgstr "Posts 2 Posts"
+#: admin/box.php:140
+msgid "Search"
+msgstr "Recherche"
 
-#. Description of the plugin/theme
-msgid "Create many-to-many relationships between all types of posts"
-msgstr "Créer des relations multiples entre tous types d’articles et de pages"
+#: admin/box.php:230
+msgid "previous"
+msgstr "précédent"
 
-#: admin/box.php:236
-msgid "Can't create connection: %s"
-msgstr "Impossible de créer la connexion: %s"
+#: admin/box.php:231
+msgid "next"
+msgstr "suivant"
 
-#: admin/factory.php:30
+#: admin/box.php:232
+msgid "of"
+msgstr "sur"
+
+#: admin/dropdown-user.php:32
+msgid "Filter"
+msgstr "Filtre"
+
+#: admin/factory.php:88
 msgid " (from)"
 msgstr " (de)"
 
-#: admin/factory.php:31
+#: admin/factory.php:89
 msgid " (to)"
 msgstr " (à)"
 
-#: admin/tools.php:7
-msgid "Connection Types"
-msgstr "Types de Connexion"
+#: admin/field-delete.php:7
+msgid "Delete all connections"
+msgstr "Supprimer toutes les connexions"
 
-#: admin/tools.php:41
+#: admin/field-delete.php:16
+msgid "Delete connection"
+msgstr "Supprimer la connexion"
+
+#: admin/tools-page.php:7
+msgid "Les Types De Connexion"
+msgstr ""
+
+#: admin/tools-page.php:41
 msgid "<em>%s</em> is not a registered connection type."
 msgstr "<em>%s</em> n'est pas un type de connexion enregistré."
 
-#: admin/tools.php:50
+#: admin/tools-page.php:50
 msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
 msgstr "%1$s connexions converties de <em>%2$s</em> à <em>%3$s</em>."
 
-#: admin/tools.php:64
+#: admin/tools-page.php:64
 msgid "Name"
 msgstr "Nom"
 
-#: admin/tools.php:65
+#: admin/tools-page.php:65
 msgid "Information"
 msgstr "Information"
 
-#: admin/tools.php:66
+#: admin/tools-page.php:66
 msgid "Connections"
 msgstr "Connexions"
 
-#: admin/tools.php:74
+#: admin/tools-page.php:74
 msgid "No connection types registered."
 msgstr "Aucun type de connexion enregistré."
 
-#: admin/tools.php:76
+#: admin/tools-page.php:76
 msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
-msgstr ""
-"Pour enregistrer un type de connexion, consulter <a href=\"%s\">le wiki</a>."
+msgstr "Pour enregistrer un type de connexion, consulter <a href=\"%s\">le wiki</a>."
 
-#: admin/tools.php:93
+#: admin/tools-page.php:93
 msgid "Convert to registered connection type:"
 msgstr "Convertir en type de connexion:"
 
-#: admin/tools.php:129
+#: admin/tools-page.php:129
 msgid "Go"
 msgstr "Go"
 
-#: core/extra.php:17
-msgid "A list of posts connected to the current post"
-msgstr "Une liste d'articles connectés à l'article courant"
+#: core/connection-type.php:91
+msgid "Create connections"
+msgstr "Nouvelle connexion"
 
-#: core/extra.php:34
-msgid "Title:"
-msgstr "Titre:"
+#: core/connection-type.php:109
+msgid "Connected %s"
+msgstr "%s Connectées"
 
-#: core/extra.php:41
-msgid "Connection type:"
-msgstr "Type de connexion:"
-
-#: core/extra.php:46
-msgid "Connection listing:"
-msgstr "Liste de connexions:"
-
-#: core/extra.php:52
-msgid "connected"
-msgstr "relié"
-
-#: core/extra.php:53
-msgid "related"
-msgstr "lié"
-
-#: core/side.php:210
+#: core/side-user.php:16
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: core/side.php:219
+#: core/side-user.php:25
 msgid "User"
 msgstr "Utilisateur"
 
-#: core/side.php:220
+#: core/side-user.php:26
 msgid "Search Users"
 msgstr "Rechercher les utilisateurs"
 
-#: core/side.php:221
+#: core/side-user.php:27
 msgid "No users found."
 msgstr "Aucun utilisateur trouvé."
 
-#: core/type.php:79
-msgid "Create connections"
-msgstr "Nouvelle connexion"
+#: core/widget.php:19
+msgid "Posts 2 Posts"
+msgstr "Posts 2 Posts"
+
+#: core/widget.php:20
+msgid "A list of posts connected to the current post"
+msgstr "Une liste d'articles connectés à l'article courant"
+
+#: core/widget.php:37
+msgid "Title:"
+msgstr "Titre:"
+
+#: core/widget.php:44
+msgid "Connection type:"
+msgstr "Type de connexion:"
+
+#: core/widget.php:49
+msgid "Connection listing:"
+msgstr "Liste de connexions:"
+
+#: core/widget.php:55
+msgid "connected"
+msgstr "relié"
+
+#: core/widget.php:56
+msgid "related"
+msgstr "lié"
+
+#: scb/AdminPage.php:261
+msgid "Settings <strong>saved</strong>."
+msgstr "Réglages <strong>Enregistrés</strong>"
+
+#: scb/AdminPage.php:519
+msgid "Settings"
+msgstr "Réglages"
