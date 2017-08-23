@@ -8,126 +8,148 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2012-06-21 22:25+0200\n"
-"Last-Translator: Andrea Bersi\n"
-"Language-Team: \n"
-"X-Poedit-Language: Italian\n"
-"X-Poedit-Country: ITALY\n"
+"PO-Revision-Date: 2017-08-23 15:09+0300\n"
+"Last-Translator: FULL NAME <petrozavodky@gmail.com>\n"
+"Language-Team: LANGUAGE <web@brodude.ru>\n"
+"Language: it_IT\n"
+"X-Generator: Poedit 2.0.2\n"
 
-#: admin/box-factory.php:56
-msgid " (from)"
-msgstr " (da)"
-
-#: admin/box-factory.php:57
-msgid " (to)"
-msgstr " (a)"
-
-#: admin/box.php:42
+#: admin/box.php:48
 msgid "Are you sure you want to delete all connections?"
 msgstr "Confermi la rimozione di tutte le relazioni?"
 
-#: admin/box.php:115
-msgid "Create connections:"
-msgstr "Crea relazioni:"
-
-#: admin/box.php:128
+#: admin/box.php:140
 msgid "Search"
 msgstr "Cerca"
 
-#: admin/box.php:136
-msgid "View All"
-msgstr "Vedi tutti"
-
-#: admin/box.php:204
+#: admin/box.php:230
 msgid "previous"
 msgstr "precedente"
 
-#: admin/box.php:205
+#: admin/box.php:231
 msgid "next"
 msgstr "successivo"
 
-#: admin/box.php:206
+#: admin/box.php:232
 msgid "of"
 msgstr "di"
 
-#: admin/fields.php:16
-msgid "Create connection"
-msgstr "Crea relazione"
+#: admin/dropdown-user.php:32
+msgid "Filter"
+msgstr "Filtro"
 
-#: admin/fields.php:30
+#: admin/factory.php:88
+msgid " (from)"
+msgstr " (da)"
+
+#: admin/factory.php:89
+msgid " (to)"
+msgstr " (a)"
+
+#: admin/field-delete.php:7
 msgid "Delete all connections"
 msgstr "Cancella tutte le relazioni"
 
-#: admin/fields.php:39
+#: admin/field-delete.php:16
 msgid "Delete connection"
 msgstr "Cancella relazione"
 
-#: scb/AdminPage.php:165
-msgid "Settings <strong>saved</strong>."
-msgstr "Impostazioni <strong>salvate</strong>"
+#: admin/tools-page.php:7
+msgid "Connection Types"
+msgstr "Tipo di connessione"
 
-#: scb/AdminPage.php:178
-#: scb/AdminPage.php:189
-msgid "Save Changes"
-msgstr "Salva"
+#: admin/tools-page.php:41
+msgid "<em>%s</em> is not a registered connection type."
+msgstr "<em>%s</em> non è registrato tipo di connessione."
 
-#: scb/AdminPage.php:350
-msgid "Settings"
-msgstr "Impostazioni"
+#: admin/tools-page.php:50
+msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
+msgstr "Convertito %1$s, connessioni da <em>%2$s</em> a <em>%3$s</em>."
 
-#: core/type.php:65
+#: admin/tools-page.php:64
+msgid "Name"
+msgstr "Nome"
+
+#: admin/tools-page.php:65
+msgid "Information"
+msgstr "Informazioni"
+
+#: admin/tools-page.php:66
+msgid "Connections"
+msgstr "Connessioni"
+
+#: admin/tools-page.php:74
+msgid "No connection types registered."
+msgstr "No tipi di connessione registrati."
+
+#: admin/tools-page.php:76
+msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
+msgstr "Per registrare un tipo di connessione, vedere <a href=\"%s\">wiki</a>."
+
+#: admin/tools-page.php:93
+msgid "Convert to registered connection type:"
+msgstr "La conversione registrato il tipo di connessione:"
+
+#: admin/tools-page.php:129
+msgid "Go"
+msgstr "Andare"
+
+#: core/connection-type.php:91
+msgid "Create connections"
+msgstr "Crea relazioni"
+
+#: core/connection-type.php:109
 msgid "Connected %s"
 msgstr "Collegato %s"
 
-#: core/widget.php:15
+#: core/side-user.php:16
+msgid "Users"
+msgstr "Utenti"
+
+#: core/side-user.php:25
+msgid "User"
+msgstr "Utente"
+
+#: core/side-user.php:26
+msgid "Search Users"
+msgstr "Cerca utenti"
+
+#: core/side-user.php:27
+msgid "No users found."
+msgstr "Nessun utente trovato."
+
+#: core/widget.php:19
 msgid "Posts 2 Posts"
 msgstr "Posts 2 Posts"
 
-#: core/widget.php:16
+#: core/widget.php:20
 msgid "A list of posts connected to the current post"
 msgstr "Elenco dei contenuti collegati"
 
 #: core/widget.php:37
+msgid "Title:"
+msgstr "Titolo:"
+
+#: core/widget.php:44
 msgid "Connection type:"
 msgstr "Tipo relazione:"
 
-#: core/widget.php:41
+#: core/widget.php:49
 msgid "Connection listing:"
 msgstr "Elenco relazioni:"
 
-#: core/widget.php:47
+#: core/widget.php:55
 msgid "connected"
 msgstr "connesso"
 
-#: core/widget.php:48
+#: core/widget.php:56
 msgid "related"
 msgstr "in relazione"
 
-#: core/widget.php:73
-msgid "Related %s"
-msgstr "In relazione %s"
+#: scb/AdminPage.php:261
+msgid "Settings <strong>saved</strong>."
+msgstr "Impostazioni <strong>salvate</strong>."
 
-#: core/storage.php:35
-msgid "Upgraded %d connections."
-msgstr "Aggiornato %d relazioni"
-
-#: core/storage.php:38
-msgid "The Posts 2 Posts connections need to be upgraded. <a href=\"%s\">Proceed.</a>"
-msgstr "Posts 2 Posts ha un Upgrade. <a href=\"%s\">Procedi.</a>"
-
-#: core/side.php:110
-msgid "Users"
-msgstr "Utenti"
-
-#: core/side.php:115
-msgid "User"
-msgstr "Utente"
-
-#: core/side.php:116
-msgid "Search Users"
-msgstr "Cerca utenti"
-
-#: core/side.php:117
-msgid "No users found."
-msgstr "Nessun utente trovato."
-
+#: scb/AdminPage.php:519
+msgid "Settings"
+msgstr "Impostazioni"

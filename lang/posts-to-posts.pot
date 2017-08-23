@@ -1,4 +1,4 @@
-# Copyright (C) 2013 
+# Copyright (C) 2017
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
@@ -8,27 +8,27 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2013-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2017-08-23 12:30+0300\n"
+"Last-Translator: FULL NAME <petrozavodky@gmail.com>\n"
+"Language-Team: LANGUAGE <web@brodude.ru>\n"
 
-#: admin/box.php:45
+#: admin/box.php:48
 msgid "Are you sure you want to delete all connections?"
 msgstr ""
 
-#: admin/box.php:136
+#: admin/box.php:140
 msgid "Search"
 msgstr ""
 
-#: admin/box.php:213
+#: admin/box.php:230
 msgid "previous"
 msgstr ""
 
-#: admin/box.php:214
+#: admin/box.php:231
 msgid "next"
 msgstr ""
 
-#: admin/box.php:215
+#: admin/box.php:232
 msgid "of"
 msgstr ""
 
@@ -92,11 +92,11 @@ msgstr ""
 msgid "Go"
 msgstr ""
 
-#: core/connection-type.php:102
+#: core/connection-type.php:91
 msgid "Create connections"
 msgstr ""
 
-#: core/connection-type.php:120
+#: core/connection-type.php:109
 msgid "Connected %s"
 msgstr ""
 
@@ -116,38 +116,38 @@ msgstr ""
 msgid "No users found."
 msgstr ""
 
-#: core/widget.php:16
+#: core/widget.php:19
 msgid "Posts 2 Posts"
 msgstr ""
 
-#: core/widget.php:17
+#: core/widget.php:20
 msgid "A list of posts connected to the current post"
 msgstr ""
 
-#: core/widget.php:34
+#: core/widget.php:37
 msgid "Title:"
 msgstr ""
 
-#: core/widget.php:41
+#: core/widget.php:44
 msgid "Connection type:"
 msgstr ""
 
-#: core/widget.php:46
+#: core/widget.php:49
 msgid "Connection listing:"
 msgstr ""
 
-#: core/widget.php:52
+#: core/widget.php:55
 msgid "connected"
 msgstr ""
 
-#: core/widget.php:53
+#: core/widget.php:56
 msgid "related"
 msgstr ""
 
-#: scb/AdminPage.php:227
+#: scb/AdminPage.php:261
 msgid "Settings <strong>saved</strong>."
 msgstr ""
 
-#: scb/AdminPage.php:466
+#: scb/AdminPage.php:519
 msgid "Settings"
 msgstr ""

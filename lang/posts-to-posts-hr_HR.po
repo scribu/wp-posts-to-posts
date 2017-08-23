@@ -1,157 +1,155 @@
+# Copyright (C) 2010 
+# This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/p2p\n"
-"POT-Creation-Date: 2013-02-17 08:06:11+00:00\n"
+"POT-Creation-Date: 2011-09-18 21:35:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2017-08-23 15:08+0300\n"
 "Last-Translator: FULL NAME <petrozavodky@gmail.com>\n"
 "Language-Team: LANGUAGE <web@brodude.ru>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
-"X-Textdomain-Support: yes\n"
-"Language: fa_IR\n"
+"Language: hr\n"
 "X-Generator: Poedit 2.0.2\n"
 
 #: admin/box.php:48
 msgid "Are you sure you want to delete all connections?"
-msgstr "از پاک‌کردن همه ارتباط‌ها اطمینان دارید؟"
+msgstr "Sigurno želiš obrisati sve poveznice"
 
 #: admin/box.php:140
 msgid "Search"
-msgstr "جست‌وجو"
+msgstr "Pretraži"
 
 #: admin/box.php:230
 msgid "previous"
-msgstr "قبلی"
+msgstr "prethodna"
 
 #: admin/box.php:231
 msgid "next"
-msgstr "بعدی"
+msgstr "slijedeća"
 
 #: admin/box.php:232
 msgid "of"
-msgstr "از"
+msgstr "od"
 
 #: admin/dropdown-user.php:32
 msgid "Filter"
-msgstr "فیلتر"
+msgstr "Filter"
 
 #: admin/factory.php:88
 msgid " (from)"
-msgstr " از (از)"
+msgstr " (s)"
 
 #: admin/factory.php:89
 msgid " (to)"
-msgstr " (از)"
+msgstr " (k)"
 
 #: admin/field-delete.php:7
 msgid "Delete all connections"
-msgstr "پاک‌کردن همه ارتباط‌ها"
+msgstr "Izbriši sve poveznice"
 
 #: admin/field-delete.php:16
 msgid "Delete connection"
-msgstr "پاک‌کردن ارتباط"
+msgstr "Obriši poveznicu"
 
 #: admin/tools-page.php:7
 msgid "Connection Types"
-msgstr "نوع ارتباط:"
+msgstr "Vrsta Veze"
 
 #: admin/tools-page.php:41
 msgid "<em>%s</em> is not a registered connection type."
-msgstr "<em>%s</em> است که یک ثبت نام, نوع اتصال."
+msgstr "<em>%s</em> ne registrirani vrstu veze."
 
 #: admin/tools-page.php:50
 msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
-msgstr "تبدیل شده %1$s اتصالات از <em>%2$s</em> <em>%3$s</em>."
+msgstr "Pretvoren %1$s za tu vezu od <EM>%2$s</em> <em>%3$s</mo>."
 
 #: admin/tools-page.php:64
 msgid "Name"
-msgstr "نام"
+msgstr "Ime"
 
 #: admin/tools-page.php:65
 msgid "Information"
-msgstr "اطلاعات"
+msgstr "Informacije"
 
 #: admin/tools-page.php:66
 msgid "Connections"
-msgstr "اتصالات"
+msgstr "Veze"
 
 #: admin/tools-page.php:74
 msgid "No connection types registered."
-msgstr "هیچ اتصال به انواع ثبت شده است."
+msgstr "Nijedna vrsta veze registriran."
 
 #: admin/tools-page.php:76
 msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
-msgstr "برای ثبت نام یک نوع اتصال را ببینید <a href=\"%s\">ویکی</a>."
+msgstr "Da se registrirate Tip veze potražite u odjeljku <a href=\"%s\">Wiki</a>."
 
 #: admin/tools-page.php:93
 msgid "Convert to registered connection type:"
-msgstr "تبدیل به ثبت نام, نوع اتصال:"
+msgstr "<em>%s</em> ne registrirani vrstu veze."
 
 #: admin/tools-page.php:129
 msgid "Go"
-msgstr "برو"
+msgstr "Ići"
 
 #: core/connection-type.php:91
 msgid "Create connections"
-msgstr "برقراری ارتباط:"
+msgstr "Veze"
 
 #: core/connection-type.php:109
 msgid "Connected %s"
-msgstr "%sی مرتبط"
+msgstr "Povezano %s"
 
 #: core/side-user.php:16
 msgid "Users"
-msgstr "کاربران"
+msgstr "Korisnici"
 
 #: core/side-user.php:25
 msgid "User"
-msgstr "کاربر"
+msgstr "Korisnik"
 
 #: core/side-user.php:26
 msgid "Search Users"
-msgstr "جستجو در کاربران"
+msgstr "Pretraživanje Korisnika"
 
 #: core/side-user.php:27
 msgid "No users found."
-msgstr "هیچ کاربران یافت می شود."
+msgstr "Korisnici nisu našli."
 
 #: core/widget.php:19
 msgid "Posts 2 Posts"
-msgstr "نوشته‌ها به نوشته‌ها"
+msgstr "Posts 2 Posts"
 
 #: core/widget.php:20
 msgid "A list of posts connected to the current post"
-msgstr "فهرستی از همه نوشته‌های مرتبط با این نوشته"
+msgstr "Popis radnih mjesta povezanih s trenutne pozicije"
 
 #: core/widget.php:37
 msgid "Title:"
-msgstr "عنوان:"
+msgstr "Naziv:"
 
 #: core/widget.php:44
 msgid "Connection type:"
-msgstr "نوع ارتباط:"
+msgstr "Tip veze:"
 
 #: core/widget.php:49
 msgid "Connection listing:"
-msgstr "اتصال مثال:"
+msgstr "U oglas veze:"
 
 #: core/widget.php:55
 msgid "connected"
-msgstr "متصل"
+msgstr "povezano"
 
 #: core/widget.php:56
 msgid "related"
-msgstr "مرتبط"
+msgstr "koji je u svezi s"
 
 #: scb/AdminPage.php:261
 msgid "Settings <strong>saved</strong>."
-msgstr "تنظیمات <strong>ذخیره</strong> شد."
+msgstr "<strong>Postavke spremljene!</strong>"
 
 #: scb/AdminPage.php:519
 msgid "Settings"
-msgstr "تنظیمات"
+msgstr "Postavke"
