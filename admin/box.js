@@ -225,7 +225,10 @@
       delayed = setTimeout(function() {
         var searchStr;
         searchStr = $searchInput.val();
-        if (searchStr === _this.collection.get('s')) {
+        if (
+            searchStr === _this.collection.get('s') ||
+            searchStr.length < 3
+        ) {
           return;
         }
         _this.spinner.insertAfter($searchInput).show();
@@ -233,7 +236,7 @@
           's': searchStr,
           'paged': 1
         });
-      }, 400);
+      }, 800);
     },
 
     changePage: function(ev) {
